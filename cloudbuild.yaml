@@ -7,7 +7,6 @@ steps:
     - '-t'
     - 'europe-west3-docker.pkg.dev/$PROJECT_ID/hbt-docker/frontend:$TAG_NAME'
     - '.'
-
 # This step pushes the image to Artifact Registry
 # The PROJECT_ID and SHORT_SHA variables are automatically
 # replaced by Cloud Build.
@@ -16,6 +15,9 @@ steps:
   args:
     - 'push'
     - 'europe-west3-docker.pkg.dev/$PROJECT_ID/hbt-docker/frontend:$TAG_NAME'
+logsBucket: 'gs://triggers_and_builds'
+options:
+  logging: GCS_ONLY
 
 
 #europe-west3-docker.pkg.dev/habitivity-363118/hbt-docker
