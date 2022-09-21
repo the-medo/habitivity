@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+  "scripts":  {
+    "dev":  "vite",
+    "build":  "vite build",
+    "serve":  "vite preview"
   },
   "dependencies": {
     "localforage": "^1.10.0",

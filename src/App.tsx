@@ -5,7 +5,7 @@ import ErrorPage from "./ErrorPage";
 import Contact, { loader as contactLoader, action as contactAction } from "./routes/Contact";
 import EditContact, { action as editAction} from "./routes/Edit";
 import { action as destroyAction} from "./routes/Destroy";
-import Index from "./routes";
+import Index from "./routes/IndexRoute";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
