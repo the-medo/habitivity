@@ -4,7 +4,7 @@ services:
 
   frontend-dev:
     container_name: frontend-dev
-    image: eu.gcr.io/habitivity-363118/habitivity:develop
+    image: europe-west3-docker.pkg.dev/habitivity-363118/hbt-docker/frontend:develop
     build:
       context: .
       dockerfile: Dockerfile

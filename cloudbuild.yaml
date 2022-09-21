@@ -1,0 +1,21 @@
+steps:
+# This step builds the container image.
+- name: 'gcr.io/cloud-builders/docker'
+  id: Build
+  args:
+    - 'build'
+    - '-t'
+    - 'europe-west3-docker.pkg.dev/$PROJECT_ID/hbt-docker/frontend:$SHORT_SHA'
+    - '.'
+
+# This step pushes the image to Artifact Registry
+# The PROJECT_ID and SHORT_SHA variables are automatically
+# replaced by Cloud Build.
+- name: 'gcr.io/cloud-builders/docker'
+  id: Push
+  args:
+    - 'push'
+    - 'europe-west3-docker.pkg.dev/$PROJECT_ID/hbt-docker/frontend:$SHORT_SHA'
+
+
+#europe-west3-docker.pkg.dev/habitivity-363118/hbt-docker
