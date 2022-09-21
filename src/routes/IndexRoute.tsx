@@ -1,4 +1,4 @@
-export default function Index() {
+export default function IndexRoute() {
     return (
         <p id="zero-state">
             This is a demo for React Router.

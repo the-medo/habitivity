@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+
+  frontend-dev:
+    container_name: frontend-dev
+    image: eu.gcr.io/habitivity-363118/habitivity:develop
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/frontend'
+      - '/frontend/node_modules'
+    ports:
+      - "3001:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true

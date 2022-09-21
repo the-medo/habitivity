@@ -1,10 +1,14 @@
-FROM node:alpine
+FROM node:18-alpine AS builder
 
-WORKDIR /app
-COPY package.json ./
+FROM builder AS frontend
+
+WORKDIR /frontend
+
+ENV PATH /frontend/node_modules/.bin:$PATH
+
+COPY package*.json ./
 RUN yarn install
-COPY ./ ./
+
+COPY . ./
 
 CMD ["yarn", "run", "dev"]
-
-EXPOSE 5173
