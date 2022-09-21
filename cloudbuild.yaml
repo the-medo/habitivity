@@ -15,9 +15,8 @@ steps:
   args:
     - 'push'
     - 'europe-west3-docker.pkg.dev/$PROJECT_ID/hbt-docker/frontend:$TAG_NAME'
-logsBucket: 'gs://triggers_and_builds'
 options:
-  logging: GCS_ONLY
+  logging: CLOUD_LOGGING_ONLY
 
 
 #europe-west3-docker.pkg.dev/habitivity-363118/hbt-docker
