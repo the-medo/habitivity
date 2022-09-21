@@ -6,3 +6,5 @@ RUN yarn install
 COPY ./ ./
 
 CMD ["yarn", "run", "dev"]
+
+EXPOSE 5173
