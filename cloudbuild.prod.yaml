@@ -17,6 +17,9 @@ steps:
   args:
     - 'push'
     - 'europe-west3-docker.pkg.dev/$PROJECT_ID/hbt-docker/frontend:${_TAG}'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: [ 'run', 'deploy', 'frontend', '--image', 'europe-west3-docker.pkg.dev/$PROJECT_ID/hbt-docker/frontend:${_TAG}', '--region', 'europe-west1 ' ]
 options:
   logging: CLOUD_LOGGING_ONLY
 
