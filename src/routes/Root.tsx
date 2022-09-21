@@ -98,7 +98,7 @@ export default function Root() {
                         </ul>
                     ) : (
                         <p>
-                            <i>No contacts!!!!!!</i>
+                            <i>Test of automatic deployment</i>
                         </p>
                     )}
                 </nav>
