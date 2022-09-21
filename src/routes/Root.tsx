@@ -98,7 +98,7 @@ export default function Root() {
                         </ul>
                     ) : (
                         <p>
-                            <i>Test of automatic deployment</i>
+                            <i>Another test</i>
                         </p>
                     )}
                 </nav>
