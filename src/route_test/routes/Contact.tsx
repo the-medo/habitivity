@@ -57,12 +57,12 @@ export default function Contact() {
                 {contact.notes && <p>{contact.notes}</p>}
 
                 <div>
-                    <Form action="edit">
+                    <Form action="src/route_test/routes/Edit">
                         <button type="submit">Edit</button>
                     </Form>
                     <Form
                         method="post"
-                        action="destroy"
+                        action="src/route_test/routes/Destroy"
                         onSubmit={(event) => {
                             if (
                                 !confirm(

@@ -4,7 +4,7 @@ export default function IndexRoute() {
             This is a demo for React Router.
             <br />
             Check out{" "}
-            <a href="https://reactrouter.com/">
+            <a href="src/route_test/routes/IndexRoute">
                 the docs at reactrouter.com
             </a>
             .

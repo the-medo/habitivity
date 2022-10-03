@@ -1,61 +1,32 @@
-import React from 'react';
-import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from "react-router-dom";
-import Root, { loader as rootLoader, action as rootAction } from "./routes/Root";
-import ErrorPage from "./ErrorPage";
-import Contact, { loader as contactLoader, action as contactAction } from "./routes/Contact";
-import EditContact, { action as editAction} from "./routes/Edit";
-import { action as destroyAction} from "./routes/Destroy";
-import Index from "./routes/IndexRoute";
-
-const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route
-            path="/"
-            element={<Root />}
-            errorElement={<ErrorPage />}
-            loader={rootLoader}
-        >
-            <Route
-                action={rootAction}
-                errorElement={<ErrorPage />}
-            >
-                <Route
-                    index
-                    element={<Index />}
-                />
-                <Route
-                    path="contacts/:contactId"
-                    element={<Contact />}
-                    loader={contactLoader}
-                    action={contactAction}
-                >
-                </Route>
-                <Route
-                    path="contacts/:contactId/edit"
-                    element={<EditContact />}
-                    loader={contactLoader}
-                    action={editAction}
-                >
-                </Route>
-                <Route
-                    path="contacts/:contactId/destroy"
-                    element={null}
-                    action={destroyAction}
-                    // errorElement={<div>Oops! There was an error.</div>}
-                >
-                </Route>
-            </Route>
-        </Route>
-    )
-)
+import React, {useEffect} from 'react';
+import { RouterProvider} from "react-router-dom";
+import {router} from "./routes/router";
+import GlobalStyleAndTheme from "./styles/GlobalStyleAndTheme";
+import firebase from "firebase/compat";
+import {setUser} from "./store/localStore";
+import {firebaseUserToLocalUser, signIn, signOut} from "./store/userSlice";
+import {useDispatch} from "react-redux";
+import {ReduxDispatch} from "./store";
 
 function App() {
+    const dispatch: ReduxDispatch = useDispatch();
 
-  return (
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
-  )
+    // Listen to the Firebase Auth state and set the local state.
+    useEffect(() => {
+        const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async user => {
+            const appUser = await firebaseUserToLocalUser(user);
+            setUser(appUser);
+            dispatch(appUser ? signIn(appUser) : signOut() );
+        });
+
+        return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+    }, []);
+
+    return (
+        <GlobalStyleAndTheme>
+            <RouterProvider router={router} />
+        </GlobalStyleAndTheme>
+    )
 }
 
-export default App
+export default App;
