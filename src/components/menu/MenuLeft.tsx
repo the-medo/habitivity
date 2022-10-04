@@ -12,14 +12,14 @@ const { Sider, } = Layout;
 
 interface MenuLeftProps {
   isCollapsed: boolean;
-  isAutomaticallyCollapsed: boolean;
+  $isAutomaticallyCollapsed: boolean;
   isManuallyCollapsed: boolean;
 }
 
-const StyledSider = styled(Sider)<Pick<MenuLeftProps, 'isAutomaticallyCollapsed'>>`
+const StyledSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyCollapsed'>>`
   background: #fff;
   overflow-y: auto;
-  height: calc(100vh - 64px ${({isAutomaticallyCollapsed}) => !isAutomaticallyCollapsed  && ` - 50px`});
+  height: calc(100vh - 64px ${({$isAutomaticallyCollapsed}) => !$isAutomaticallyCollapsed  && ` - 50px`});
   position: fixed;
   left: 0;
   top: 64px;
@@ -94,7 +94,7 @@ const MenuLeft: React.FC = () => {
                 dispatch(setSliderCollapsed(broken))
             }}
             collapsed={isCollapsed}
-            isAutomaticallyCollapsed={sliderCollapsed}
+            $isAutomaticallyCollapsed={sliderCollapsed}
         >
             {items.length > 0 && <StyledMenu
                 mode="inline"

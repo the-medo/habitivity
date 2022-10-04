@@ -1,8 +1,9 @@
-import React, {ReactNode} from "react";
-import { Layout, Menu } from 'antd';
+import React, {ReactNode, useCallback} from "react";
+import {Button, Layout, Menu, Tooltip} from 'antd';
 import styled from "styled-components";
-import {NavLink, useMatches} from "react-router-dom";
+import {NavLink, useMatches, useNavigate} from "react-router-dom";
 import firebase from "firebase/compat";
+import {LogoutOutlined} from "@ant-design/icons";
 const { Header } = Layout;
 
 
@@ -46,16 +47,31 @@ export const getActiveKeys = (search: string, menuItems: MenuTopItem[]) => menuI
 
 const MenuTop: React.FC = () => {
     const matched = useMatches();
+    const navigate = useNavigate();
+
+    const logoutHandler = useCallback(() => {
+        firebase.auth().signOut();
+        navigate("/");
+    }, []);
 
     return (
         <Header className="header" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
             <Logo />
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, menuTopItems) : menuTopItems.filter(mti => mti.isDefault).map(mti => mti.key)}>
-                {
-                    menuTopItems.map(mti => <Menu.Item key={mti.key}><NavLink to={mti.to}>{mti.label}</NavLink></Menu.Item>)
-                }
-                <Menu.Item key="logout" onClick={() => firebase.auth().signOut()}><NavLink to="/">Logout</NavLink></Menu.Item>
-            </Menu>
+            <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
+            }}>
+                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, menuTopItems) : menuTopItems.filter(mti => mti.isDefault).map(mti => mti.key)}>
+                    {
+                        menuTopItems.map(mti => <Menu.Item key={mti.key}><NavLink to={mti.to}>{mti.label}</NavLink></Menu.Item>)
+                    }
+
+                </Menu>
+                <Tooltip title="Logout">
+                    <Button type="primary" shape="circle" icon={<LogoutOutlined />} onClick={logoutHandler} />
+                </Tooltip>
+            </div>
         </Header>
     );
 }
