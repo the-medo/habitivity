@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@google-cloud/secret-manager": "^4.1.3",
     "@reduxjs/toolkit": "^1.8.5",
     "@types/localforage": "^0.0.34",
     "@types/styled-components": "^5.1.26",

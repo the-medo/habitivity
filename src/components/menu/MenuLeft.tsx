@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import styled from "styled-components";
 import { Layout, Menu } from 'antd';
 import {NavLink, useMatches, useParams} from "react-router-dom";
@@ -100,34 +100,33 @@ const MenuLeft: React.FC<MenuLeftProps> = () => {
                 //onDeselect...
             >
                 {
-                    items.map(mli => {
+                    (items.map(mli => {
                         return (
-                            <>
-                                <Menu.Item
-                                    key={mli.key}
-                                    icon={mli.icon ? icons[mli.icon] : (isCollapsed ? icons[IconType.RightCircleOutlined] : null)}
-                                    style={{
-                                        paddingLeft: isCollapsed ? '1rem' : '1.5rem'
-                                    }}
-                                >
-                                    {mli.to ? <NavLink to={mli.to}>{mli.label}</NavLink> : mli.label}
-                                </Menu.Item>
-                                {
-                                    mli.childItems.map(c =>
-                                        <Menu.Item
-                                            key={c.key}
-                                            icon={c.icon ? icons[c.icon] : (isCollapsed ? icons[IconType.RightCircleOutlined] : null)}
-                                            style={{
-                                                paddingLeft: isCollapsed ? '1rem' : '3rem'
-                                            }}
-                                        >
-                                            {(c.to) ? <NavLink to={combinePaths([mli.to, c.to])}>{c.label}</NavLink> : c.label}
-                                        </Menu.Item>
-                                    )
-                                }
-                            </>
-                        )
-                    })
+                            <Fragment key={mli.key}>
+                            <Menu.Item
+                                key={mli.key}
+                                icon={mli.icon ? icons[mli.icon] : (isCollapsed ? icons[IconType.RightCircleOutlined] : null)}
+                                style={{
+                                    paddingLeft: isCollapsed ? '1rem' : '1.5rem'
+                                }}
+                            >
+                                {mli.to ? <NavLink to={mli.to}>{mli.label}</NavLink> : mli.label}
+                            </Menu.Item>
+                            {
+                                mli.childItems.map(c =>
+                                    <Menu.Item
+                                        key={c.key}
+                                        icon={c.icon ? icons[c.icon] : (isCollapsed ? icons[IconType.RightCircleOutlined] : null)}
+                                        style={{
+                                            paddingLeft: isCollapsed ? '1rem' : '3rem'
+                                        }}
+                                    >
+                                        {(c.to) ? <NavLink to={combinePaths([mli.to, c.to])}>{c.label}</NavLink> : c.label}
+                                    </Menu.Item>
+                                )
+                            }
+                        </Fragment>
+                    )}))
                 }
             </StyledMenu>}
             {!sliderCollapsed && <MenuCollapsor isCollapsed={sliderManuallyCollapsed} onClick={() => dispatch(toggleSliderManuallyCollapsed())}>

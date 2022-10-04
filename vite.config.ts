@@ -6,6 +6,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true
+  },
+  css: {
+    devSourcemap: true
+  },
+  build: {
+    sourcemap: true
   }
 })
 
