@@ -44,12 +44,10 @@ export const getActiveKeys = (search: string, menuItems: MenuTopItem[]) => menuI
 const MenuTop: React.FC = () => {
     const matched = useMatches();
 
-    console.log(getActiveKeys(matched[1].pathname, menuTopItems));
-
     return (
         <Header className="header" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
             <Logo />
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={getActiveKeys(matched[1].pathname, menuTopItems)}>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1] ? getActiveKeys(matched[1].pathname, menuTopItems) : []}>
                 {
                     menuTopItems.map(mti => <Menu.Item key={mti.key}><NavLink to={mti.to}>{mti.label}</NavLink></Menu.Item>)
                 }

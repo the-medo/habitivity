@@ -1,21 +1,30 @@
 import {User} from "../types/User";
 
+export enum LSKey {
+    user = '1',
+    menuCollapsed = '2'
+}
 
-export const setUser = (user: User | undefined): void => {
-    if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
+export interface LSValues {
+    [LSKey.user]?: User,
+    [LSKey.menuCollapsed]?: number,
+}
+
+function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {
+    if (key) {
+        localStorage.setItem(key, JSON.stringify(value));
     } else {
-        localStorage.removeItem('user');
+        localStorage.removeItem(key);
     }
 }
 
-export const getUser = (): User | undefined => {
-    const savedUser = localStorage.getItem('user');
-    console.log(savedUser);
-
-    if (savedUser !== null) {
-        console.log("USR", JSON.parse(savedUser) as User);
-        return JSON.parse(savedUser) as User;
+function getItem<T extends LSKey>(key: T): LSValues[T] | undefined {
+    const savedItem = localStorage.getItem(key);
+    if (savedItem !== null) {
+        return JSON.parse(savedItem) as LSValues[T];
     }
     return undefined;
 }
+
+export const setUser = (user: User | undefined) => setItem(LSKey.user, user);
+export const getUser = () => getItem(LSKey.user);
