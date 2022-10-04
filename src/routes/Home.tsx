@@ -11,6 +11,7 @@ const homeMenuLeftItems: MenuLeftItem[] = [
         key: "home1",
         to: "/home/page-1",
         label: "Home menu item1",
+        isDefault: true,
         icon: IconType.HomeOutlined,
         childItems: [
             {

@@ -1,7 +1,7 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useMemo} from "react";
 import styled from "styled-components";
 import { Layout, Menu } from 'antd';
-import {NavLink, useMatches, useParams} from "react-router-dom";
+import {NavLink, useMatches} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {ReduxState} from "../../store";
 import {icons, IconType} from "../icons/icons";
@@ -11,13 +11,15 @@ import {DoubleLeftOutlined} from "@ant-design/icons";
 const { Sider, } = Layout;
 
 interface MenuLeftProps {
-
+  isCollapsed: boolean;
+  isAutomaticallyCollapsed: boolean;
+  isManuallyCollapsed: boolean;
 }
 
-const StyledSider = styled(Sider)`
+const StyledSider = styled(Sider)<Pick<MenuLeftProps, 'isAutomaticallyCollapsed'>>`
   background: #fff;
   overflow-y: auto;
-  height: calc(100vh - 64px - 50px);
+  height: calc(100vh - 64px ${({isAutomaticallyCollapsed}) => !isAutomaticallyCollapsed  && ` - 50px`});
   position: fixed;
   left: 0;
   top: 64px;
@@ -29,7 +31,7 @@ const StyledSider = styled(Sider)`
 const StyledMenu = styled(Menu)`
 `
 
-const MenuCollapsor = styled.div<{isCollapsed: boolean}>`
+const MenuCollapsor = styled.div<Pick<MenuLeftProps, 'isCollapsed'>>`
   width: 50px;
   height: 50px;
   transition: .3s all;
@@ -52,6 +54,7 @@ export type MenuLeftItem = {
     to: string,
     label: string,
     icon?: IconType,
+    isDefault?: boolean,
     childItems: MenuLeftSubItem[],
 }
 
@@ -60,25 +63,27 @@ export type MenuLeftSubItem = Omit<MenuLeftItem, 'childItems' >;
 const combinePaths = (pathParts: string[]): string => pathParts.map(p => p[0] === "/" ? p : '/' + p).join('');
 export const getActiveKeys = (fullPath: string, menuItems: MenuLeftItem[]) => {
     const keys: string[] = [];
+    const defaultKeys: string[] = []
     menuItems.forEach(mi => {
         if (mi.to === fullPath) keys.push(mi.key);
+        if (mi.isDefault) defaultKeys.push(mi.key);
+
         mi.childItems.forEach(ci => {
             if (combinePaths([mi.to, ci.to]) === fullPath) keys.push(ci.key)
+            if (ci.isDefault) defaultKeys.push(ci.key)
         });
     });
 
-    return keys;
+    return keys.length > 0 ? keys : defaultKeys;
 }
 
-const MenuLeft: React.FC<MenuLeftProps> = () => {
+const MenuLeft: React.FC = () => {
     const matched = useMatches();
-    const params = useParams();
     const dispatch = useDispatch();
     const {multiselect, items, sliderCollapsed, sliderManuallyCollapsed} = useSelector((state: ReduxState) => state.menuLeftReducer);
-
+    const selectedKeys = useMemo(() => getActiveKeys(matched[matched.length - 1].pathname, items), [matched, items]);
     const isCollapsed = sliderCollapsed || sliderManuallyCollapsed;
 
-    console.log(matched, params);
 
     return (
         <StyledSider
@@ -89,12 +94,13 @@ const MenuLeft: React.FC<MenuLeftProps> = () => {
                 dispatch(setSliderCollapsed(broken))
             }}
             collapsed={isCollapsed}
+            isAutomaticallyCollapsed={sliderCollapsed}
         >
             {items.length > 0 && <StyledMenu
                 mode="inline"
                 style={{height: '100%'}}
                 multiple={multiselect}
-                defaultSelectedKeys={getActiveKeys(matched[matched.length - 1].pathname, items)}
+                selectedKeys={selectedKeys}
                 //onClick...
                 //onSelect...
                 //onDeselect...

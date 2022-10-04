@@ -14,6 +14,7 @@ export const router = createBrowserRouter(
             element={<PageLayout />}
             errorElement={<ErrorPage />}
         >
+            <Route index element={<Home />} />
             <Route path="home" element={<Home />} >
                 <Route path=":subpage" element={<PageOneOne />} >
                     <Route path=":subSub" />

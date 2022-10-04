@@ -16,7 +16,7 @@ interface GlobalStyleAndThemeProps {
 
 export const withScrollbar = css`
   &::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
 
   /* Track */
@@ -27,7 +27,7 @@ export const withScrollbar = css`
   /* Handle */
   &::-webkit-scrollbar-thumb {
     background: #888;
-    border-radius: 10px;
+    border-radius: 8px;
   }
 
   /* Handle on hover */

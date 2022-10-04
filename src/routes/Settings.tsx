@@ -10,6 +10,7 @@ export const settingsMenuLeftItems: MenuLeftItem[] = [
         key: "set1",
         to: "/settings/page-1",
         label: "Settings menu item1",
+        isDefault: true,
         icon: IconType.HomeTwoTone,
         childItems: [
             {

@@ -11,7 +11,7 @@ export interface LSValues {
 }
 
 function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {
-    if (key) {
+    if (key && value !== undefined) {
         localStorage.setItem(key, JSON.stringify(value));
     } else {
         localStorage.removeItem(key);
@@ -20,7 +20,7 @@ function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {
 
 function getItem<T extends LSKey>(key: T): LSValues[T] | undefined {
     const savedItem = localStorage.getItem(key);
-    if (savedItem !== null) {
+    if (savedItem && savedItem !== "undefined") {
         return JSON.parse(savedItem) as LSValues[T];
     }
     return undefined;

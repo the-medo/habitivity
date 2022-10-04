@@ -1,7 +1,8 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import { Layout, Menu } from 'antd';
 import styled from "styled-components";
 import {NavLink, useMatches} from "react-router-dom";
+import firebase from "firebase/compat";
 const { Header } = Layout;
 
 
@@ -17,7 +18,8 @@ export type MenuTopItem = {
     key: string;
     to: string,
     label: string,
-    icon?: any;
+    isDefault?: boolean;
+    icon?: ReactNode;
 }
 
 export const menuTopItems = [
@@ -25,6 +27,7 @@ export const menuTopItems = [
         key: "1",
         to: "/home",
         label: "Home",
+        isDefault: true,
     },
     {
         key: "2",
@@ -47,10 +50,11 @@ const MenuTop: React.FC = () => {
     return (
         <Header className="header" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
             <Logo />
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1] ? getActiveKeys(matched[1].pathname, menuTopItems) : []}>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, menuTopItems) : menuTopItems.filter(mti => mti.isDefault).map(mti => mti.key)}>
                 {
                     menuTopItems.map(mti => <Menu.Item key={mti.key}><NavLink to={mti.to}>{mti.label}</NavLink></Menu.Item>)
                 }
+                <Menu.Item key="logout" onClick={() => firebase.auth().signOut()}><NavLink to="/">Logout</NavLink></Menu.Item>
             </Menu>
         </Header>
     );

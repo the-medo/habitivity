@@ -10,6 +10,7 @@ const calendarMenuLeftItems: MenuLeftItem[] = [
         key: "cal1",
         to: "/calendar/page-1",
         label: "Calendar menu item1",
+        isDefault: true,
         icon: IconType.HomeTwoTone,
         childItems: [
             {

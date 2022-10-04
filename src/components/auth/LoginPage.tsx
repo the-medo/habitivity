@@ -19,11 +19,8 @@ const uiConfig = {
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
     ],
-    callbacks: {
-        // Avoid redirects after sign-in.
-        signInSuccessWithAuthResult: () => false,
-    },
 };
+
 
 const LoginPageBackground = styled(Layout)`
   justify-content: center;
@@ -74,8 +71,6 @@ const LoginPageContentImage = styled.div`
 
 function LoginPage() {
     const user = useSelector((state: ReduxState) => state.userReducer.user);
-
-    console.log(user);
 
     if (!user) {
         return (
