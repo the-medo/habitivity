@@ -8,11 +8,12 @@ import {ReduxState} from "../store";
 import MenuTop from "../components/menu/MenuTop";
 import MenuLeft from "../components/menu/MenuLeft";
 import styled from "styled-components";
+import {useSlider} from "../hooks/useSlider";
 
 const StyledContent = styled(Layout.Content)<{$isSliderCollapsed: boolean}>`
   padding: 1.5rem;
   margin-left: ${({$isSliderCollapsed}) => $isSliderCollapsed ? 50 : 207}px;
-  margin-top: 4rem;
+  margin-top: ${({$isSliderCollapsed}) => $isSliderCollapsed ? 3 : 4}rem;
   min-height: 280px;
   transition: .5s all;
   background-color: white;
@@ -20,7 +21,7 @@ const StyledContent = styled(Layout.Content)<{$isSliderCollapsed: boolean}>`
 
 export default function PageLayout() {
     const user = useSelector((state: ReduxState) => state.userReducer.user);
-    const isSliderCollapsed = useSelector((state: ReduxState) => state.menuLeftReducer.sliderCollapsed || state.menuLeftReducer.sliderManuallyCollapsed);
+    const {isCollapsed} = useSlider();
 
     if (!user) {
         return (
@@ -33,7 +34,7 @@ export default function PageLayout() {
             <MenuTop />
             <Layout>
                 <MenuLeft />
-                <StyledContent $isSliderCollapsed={isSliderCollapsed}>
+                <StyledContent $isSliderCollapsed={isCollapsed}>
                     <Outlet />
                 </StyledContent>
             </Layout>

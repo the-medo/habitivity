@@ -3,7 +3,7 @@ import firebase from "firebase/compat/app/";
 import FirebaseAuth from "react-firebaseui/FirebaseAuth";
 import 'firebase/compat/auth';
 import styled from "styled-components";
-import img from "../../assets/login-bg.jpg";
+import img from "../../assets/images/login-bg.jpg";
 import { Layout } from "antd";
 import {useSelector} from "react-redux";
 import {ReduxState} from "../../store";

@@ -6,8 +6,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {ReduxState} from "../../store";
 import {icons, IconType} from "../icons/icons";
 import {SLIDER_COLLAPSED_WIDTH, SLIDER_WIDTH, withScrollbar} from "../../styles/GlobalStyleAndTheme";
-import {setSliderCollapsed, toggleSliderManuallyCollapsed} from "../../store/menuLeftSlice";
+import {setSliderAutomaticallyCollapsed, toggleSliderManuallyCollapsed} from "../../store/menuLeftSlice";
 import {DoubleLeftOutlined} from "@ant-design/icons";
+import {useSlider} from "../../hooks/useSlider";
 const { Sider, } = Layout;
 
 interface MenuLeftProps {
@@ -16,13 +17,17 @@ interface MenuLeftProps {
   isManuallyCollapsed: boolean;
 }
 
-const StyledSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyCollapsed'>>`
+const StyledSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyCollapsed' | 'isCollapsed'>>`
   background: #fff;
   overflow-y: auto;
-  height: calc(100vh - 64px ${({$isAutomaticallyCollapsed}) => !$isAutomaticallyCollapsed  && ` - 50px`});
+  height: calc(
+            100vh
+            ${({isCollapsed}) => isCollapsed ?  ` - 3rem` : ` - 4rem`}
+            ${({$isAutomaticallyCollapsed}) => !$isAutomaticallyCollapsed  && ` - 50px`}
+  );
   position: fixed;
   left: 0;
-  top: 64px;
+  top: ${({isCollapsed}) => isCollapsed ?  `3rem` : `4rem`};
   bottom: 50px;
   
   ${withScrollbar}
@@ -80,9 +85,9 @@ export const getActiveKeys = (fullPath: string, menuItems: MenuLeftItem[]) => {
 const MenuLeft: React.FC = () => {
     const matched = useMatches();
     const dispatch = useDispatch();
-    const {multiselect, items, sliderCollapsed, sliderManuallyCollapsed} = useSelector((state: ReduxState) => state.menuLeftReducer);
+    const {multiselect, items} = useSelector((state: ReduxState) => state.menuLeftReducer);
+    const {isCollapsed, sliderAutomaticallyCollapsed, sliderManuallyCollapsed} = useSlider();
     const selectedKeys = useMemo(() => getActiveKeys(matched[matched.length - 1].pathname, items), [matched, items]);
-    const isCollapsed = sliderCollapsed || sliderManuallyCollapsed;
 
 
     return (
@@ -91,10 +96,11 @@ const MenuLeft: React.FC = () => {
             breakpoint="lg"
             collapsedWidth={SLIDER_COLLAPSED_WIDTH}
             onBreakpoint={broken => {
-                dispatch(setSliderCollapsed(broken))
+                dispatch(setSliderAutomaticallyCollapsed(broken))
             }}
             collapsed={isCollapsed}
-            $isAutomaticallyCollapsed={sliderCollapsed}
+            isCollapsed={isCollapsed}
+            $isAutomaticallyCollapsed={sliderAutomaticallyCollapsed}
         >
             {items.length > 0 && <StyledMenu
                 mode="inline"
@@ -135,7 +141,7 @@ const MenuLeft: React.FC = () => {
                     )}))
                 }
             </StyledMenu>}
-            {!sliderCollapsed && <MenuCollapsor isCollapsed={sliderManuallyCollapsed} onClick={() => dispatch(toggleSliderManuallyCollapsed())}>
+            {!sliderAutomaticallyCollapsed && <MenuCollapsor isCollapsed={sliderManuallyCollapsed} onClick={() => dispatch(toggleSliderManuallyCollapsed())}>
                 <DoubleLeftOutlined rotate={sliderManuallyCollapsed ? 180 : 0} />
             </MenuCollapsor>}
         </StyledSider>

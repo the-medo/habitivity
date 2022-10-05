@@ -3,14 +3,14 @@ import {MenuLeftItem} from "../components/menu/MenuLeft";
 
 export interface MenuLeftState {
     multiselect: boolean,
-    sliderCollapsed: boolean,
+    sliderAutomaticallyCollapsed: boolean,
     sliderManuallyCollapsed: boolean,
     items: MenuLeftItem[],
 }
 
 const initialState: MenuLeftState = {
     multiselect: false,
-    sliderCollapsed: false,
+    sliderAutomaticallyCollapsed: false,
     sliderManuallyCollapsed: false,
     items: [],
 }
@@ -22,8 +22,8 @@ export const menuLeftSlice = createSlice({
         setMultiselect: (state, action: PayloadAction<boolean>) => {
             state.multiselect = action.payload;
         },
-        setSliderCollapsed: (state, action: PayloadAction<boolean>) => {
-            state.sliderCollapsed = action.payload;
+        setSliderAutomaticallyCollapsed: (state, action: PayloadAction<boolean>) => {
+            state.sliderAutomaticallyCollapsed = action.payload;
         },
         toggleSliderManuallyCollapsed: (state) => {
             state.sliderManuallyCollapsed = !state.sliderManuallyCollapsed;
@@ -34,6 +34,6 @@ export const menuLeftSlice = createSlice({
     }
 });
 
-export const { setMultiselect, setSliderCollapsed, toggleSliderManuallyCollapsed, setMenuLeftItems } = menuLeftSlice.actions;
+export const { setMultiselect, setSliderAutomaticallyCollapsed, toggleSliderManuallyCollapsed, setMenuLeftItems } = menuLeftSlice.actions;
 
 export const menuLeftReducer = menuLeftSlice.reducer;

@@ -4,7 +4,11 @@ import {createGlobalStyle, css, ThemeProvider} from 'styled-components';
 const GlobalStyle = createGlobalStyle`
   :root {
     font-size: 16px;
-  } 
+  }
+
+  li.ant-menu-item .ant-menu-item-icon + span:empty {
+    margin-left: 0;
+  }
 `
 
 export const SLIDER_COLLAPSED_WIDTH = 50;
