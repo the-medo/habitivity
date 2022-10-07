@@ -2,12 +2,12 @@ import React, { ReactNode } from 'react';
 import { AnyAction, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import {userReducer} from "./userSlice";
-import {menuLeftReducer} from "./menuLeftSlice";
+import {menuReducer} from "./menuSlice";
 
 export const store = configureStore({
     reducer: {
         userReducer,
-        menuLeftReducer,
+        menuReducer: menuReducer,
     },
 });
 

@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Outlet} from "react-router-dom";
 import {MenuLeftItem} from "../components/menu/MenuLeft";
 import {useDispatch} from "react-redux";
-import {setMenuLeftItems} from "../store/menuLeftSlice";
+import {setMenuLeftItems} from "../store/menuSlice";
 import {IconType} from "../components/icons/icons";
 
 const calendarMenuLeftItems: MenuLeftItem[] = [

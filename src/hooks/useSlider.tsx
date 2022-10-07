@@ -1,18 +1,30 @@
 import {ReduxState} from '../store';
 import {useSelector} from "react-redux";
+import {RightDrawerStatus} from "../components/menu/RightDrawer";
 
 interface SliderState {
-    sliderAutomaticallyCollapsed: boolean;
-    sliderManuallyCollapsed: boolean;
-    isCollapsed: boolean;
+    leftMenuAutomaticallyCollapsed: boolean;
+    leftMenuManuallyCollapsed: boolean;
+    isLeftMenuCollapsed: boolean;
+
+    rightDrawerStatus: RightDrawerStatus;
+    isRightDrawerCollapsed: boolean;
+    isRightDrawerHidden: boolean;
 }
 
 export function useSlider(): SliderState {
-    const {sliderAutomaticallyCollapsed, sliderManuallyCollapsed} = useSelector((state: ReduxState) => state.menuLeftReducer);
+    const {
+        leftMenuAutomaticallyCollapsed,
+        leftMenuManuallyCollapsed,
+        rightDrawerStatus,
+    } = useSelector((state: ReduxState) => state.menuReducer);
 
     return {
-        sliderAutomaticallyCollapsed,
-        sliderManuallyCollapsed,
-        isCollapsed: sliderAutomaticallyCollapsed || sliderManuallyCollapsed
+        leftMenuAutomaticallyCollapsed,
+        leftMenuManuallyCollapsed,
+        isLeftMenuCollapsed: leftMenuAutomaticallyCollapsed || leftMenuManuallyCollapsed,
+        rightDrawerStatus,
+        isRightDrawerCollapsed: ["collapsed", "automaticallyCollapsed"].includes(rightDrawerStatus),
+        isRightDrawerHidden: rightDrawerStatus === "hidden"
     };
 }

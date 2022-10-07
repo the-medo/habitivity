@@ -5,30 +5,36 @@ import {NavLink, useMatches} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {ReduxState} from "../../store";
 import {icons, IconType} from "../icons/icons";
-import {SLIDER_COLLAPSED_WIDTH, SLIDER_WIDTH, withScrollbar} from "../../styles/GlobalStyleAndTheme";
-import {setSliderAutomaticallyCollapsed, toggleSliderManuallyCollapsed} from "../../store/menuLeftSlice";
+import {
+    SIDER_COLLAPSED_SIZE,
+    LEFT_MENU_WIDTH,
+    withScrollbar,
+    REM_SIZE,
+    TOP_MENU_SMALL, TOP_MENU_BIG
+} from "../../styles/GlobalStyleAndTheme";
+import {setLeftMenuAutomaticallyCollapsed, toggleLeftMenuManuallyCollapsed} from "../../store/menuSlice";
 import {DoubleLeftOutlined} from "@ant-design/icons";
 import {useSlider} from "../../hooks/useSlider";
 const { Sider, } = Layout;
 
 interface MenuLeftProps {
-  isCollapsed: boolean;
+  $isCollapsed: boolean;
   $isAutomaticallyCollapsed: boolean;
   isManuallyCollapsed: boolean;
 }
 
-const StyledSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyCollapsed' | 'isCollapsed'>>`
+const StyledSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyCollapsed' | '$isCollapsed'>>`
   background: #fff;
   overflow-y: auto;
   height: calc(
             100vh
-            ${({isCollapsed}) => isCollapsed ?  ` - 3rem` : ` - 4rem`}
-            ${({$isAutomaticallyCollapsed}) => !$isAutomaticallyCollapsed  && ` - 50px`}
+            - ${({$isCollapsed}) => $isCollapsed ?  TOP_MENU_SMALL : TOP_MENU_BIG}rem
+            ${({$isAutomaticallyCollapsed}) => !$isAutomaticallyCollapsed  && ` - ${SIDER_COLLAPSED_SIZE}rem`}
   );
   position: fixed;
   left: 0;
-  top: ${({isCollapsed}) => isCollapsed ?  `3rem` : `4rem`};
-  bottom: 50px;
+  top: ${({$isCollapsed}) => $isCollapsed ?  TOP_MENU_SMALL : TOP_MENU_BIG}rem;
+  bottom: ${SIDER_COLLAPSED_SIZE}rem;
   
   ${withScrollbar}
 `
@@ -36,12 +42,12 @@ const StyledSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyCollapsed
 const StyledMenu = styled(Menu)`
 `
 
-const MenuCollapsor = styled.div<Pick<MenuLeftProps, 'isCollapsed'>>`
-  width: 50px;
-  height: 50px;
+const MenuCollapsor = styled.div<Pick<MenuLeftProps, '$isCollapsed'>>`
+  width: ${SIDER_COLLAPSED_SIZE}rem;
+  height: ${SIDER_COLLAPSED_SIZE}rem;
   transition: .3s all;
   position: fixed;
-  left: ${({isCollapsed}) => isCollapsed ? 0 : `calc(${SLIDER_WIDTH}px - 50px)`};
+  left: ${({$isCollapsed}) => $isCollapsed ? 0 : `calc(${LEFT_MENU_WIDTH}rem - ${SIDER_COLLAPSED_SIZE}rem)`};
   cursor: pointer;
   font-size: 1.5rem;
   display: flex;
@@ -85,27 +91,26 @@ export const getActiveKeys = (fullPath: string, menuItems: MenuLeftItem[]) => {
 const MenuLeft: React.FC = () => {
     const matched = useMatches();
     const dispatch = useDispatch();
-    const {multiselect, items} = useSelector((state: ReduxState) => state.menuLeftReducer);
-    const {isCollapsed, sliderAutomaticallyCollapsed, sliderManuallyCollapsed} = useSlider();
+    const {items} = useSelector((state: ReduxState) => state.menuReducer);
+    const {isLeftMenuCollapsed, leftMenuAutomaticallyCollapsed, leftMenuManuallyCollapsed} = useSlider();
     const selectedKeys = useMemo(() => getActiveKeys(matched[matched.length - 1].pathname, items), [matched, items]);
 
 
     return (
         <StyledSider
-            width={SLIDER_WIDTH}
+            width={`${LEFT_MENU_WIDTH}rem`}
+            collapsedWidth={`${SIDER_COLLAPSED_SIZE}rem`}
             breakpoint="lg"
-            collapsedWidth={SLIDER_COLLAPSED_WIDTH}
             onBreakpoint={broken => {
-                dispatch(setSliderAutomaticallyCollapsed(broken))
+                dispatch(setLeftMenuAutomaticallyCollapsed(broken))
             }}
-            collapsed={isCollapsed}
-            isCollapsed={isCollapsed}
-            $isAutomaticallyCollapsed={sliderAutomaticallyCollapsed}
+            collapsed={isLeftMenuCollapsed}
+            $isCollapsed={isLeftMenuCollapsed}
+            $isAutomaticallyCollapsed={leftMenuAutomaticallyCollapsed}
         >
             {items.length > 0 && <StyledMenu
                 mode="inline"
                 style={{height: '100%'}}
-                multiple={multiselect}
                 selectedKeys={selectedKeys}
                 //onClick...
                 //onSelect...
@@ -117,9 +122,9 @@ const MenuLeft: React.FC = () => {
                             <Fragment key={mli.key}>
                             <Menu.Item
                                 key={mli.key}
-                                icon={mli.icon ? icons[mli.icon] : (isCollapsed ? icons[IconType.RightCircleOutlined] : null)}
+                                icon={mli.icon ? icons[mli.icon] : (isLeftMenuCollapsed ? icons[IconType.RightCircleOutlined] : null)}
                                 style={{
-                                    paddingLeft: isCollapsed ? '1rem' : '1.5rem'
+                                    paddingLeft: isLeftMenuCollapsed ? '1rem' : '1.5rem'
                                 }}
                             >
                                 {mli.to ? <NavLink to={mli.to}>{mli.label}</NavLink> : mli.label}
@@ -128,9 +133,9 @@ const MenuLeft: React.FC = () => {
                                 mli.childItems.map(c =>
                                     <Menu.Item
                                         key={c.key}
-                                        icon={c.icon ? icons[c.icon] : (isCollapsed ? icons[IconType.RightCircleOutlined] : null)}
+                                        icon={c.icon ? icons[c.icon] : (isLeftMenuCollapsed ? icons[IconType.RightCircleOutlined] : null)}
                                         style={{
-                                            paddingLeft: isCollapsed ? '1rem' : '3rem'
+                                            paddingLeft: isLeftMenuCollapsed ? '1rem' : '3rem'
                                         }}
                                     >
                                         {(c.to) ? <NavLink to={combinePaths([mli.to, c.to])}>{c.label}</NavLink> : c.label}
@@ -141,8 +146,8 @@ const MenuLeft: React.FC = () => {
                     )}))
                 }
             </StyledMenu>}
-            {!sliderAutomaticallyCollapsed && <MenuCollapsor isCollapsed={sliderManuallyCollapsed} onClick={() => dispatch(toggleSliderManuallyCollapsed())}>
-                <DoubleLeftOutlined rotate={sliderManuallyCollapsed ? 180 : 0} />
+            {!leftMenuAutomaticallyCollapsed && <MenuCollapsor $isCollapsed={leftMenuManuallyCollapsed} onClick={() => dispatch(toggleLeftMenuManuallyCollapsed())}>
+                <DoubleLeftOutlined rotate={leftMenuManuallyCollapsed ? 180 : 0} />
             </MenuCollapsor>}
         </StyledSider>
     );

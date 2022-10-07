@@ -1,9 +1,24 @@
 import React, {ReactNode} from "react";
 import {createGlobalStyle, css, ThemeProvider} from 'styled-components';
 
+
+export let REM_SIZE = 24; //in pixels
+
+/* rest of the sizes are in REM */
+export const SIDER_COLLAPSED_SIZE = 3;
+export const LEFT_MENU_WIDTH = 13;
+export const RIGHT_DRAWER_WIDTH = 13;
+export const TOP_MENU_SMALL = 3;
+export const TOP_MENU_BIG = 4;
+
 const GlobalStyle = createGlobalStyle`
   :root {
-    font-size: 16px;
+    //font-size: ${REM_SIZE}px;
+    font-size: 100%;
+  }
+  
+  html {
+    --ant-primary-color: red;
   }
 
   li.ant-menu-item .ant-menu-item-icon + span:empty {
@@ -11,8 +26,6 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-export const SLIDER_COLLAPSED_WIDTH = 50;
-export const SLIDER_WIDTH = 206;
 
 interface GlobalStyleAndThemeProps {
     children?: ReactNode
@@ -20,7 +33,7 @@ interface GlobalStyleAndThemeProps {
 
 export const withScrollbar = css`
   &::-webkit-scrollbar {
-    width: 8px;
+    width: .5rem;
   }
 
   /* Track */
@@ -31,7 +44,7 @@ export const withScrollbar = css`
   /* Handle */
   &::-webkit-scrollbar-thumb {
     background: #888;
-    border-radius: 8px;
+    border-radius: .5rem;
   }
 
   /* Handle on hover */

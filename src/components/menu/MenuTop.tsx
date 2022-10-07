@@ -8,6 +8,7 @@ import {icons, IconType} from "../icons/icons";
 import {LogoBig, LogoSmall} from "../../assets/svg";
 import Svg from "../../assets/svg/Svg";
 import {useSlider} from "../../hooks/useSlider";
+import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
 
 const { Header } = Layout;
 
@@ -31,11 +32,6 @@ export const menuTopItemsLeft: MenuTopItem[] = [
         key: "2",
         to: "/calendar",
         label: "Calendar",
-    },
-    {
-        key: "3",
-        to: "/settings",
-        label: "Settings",
     },
 ];
 
@@ -72,22 +68,24 @@ const FullMenuWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const TopMenuHeader = styled(Header)<{isCollapsed?: boolean}>`
+const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   position: fixed;
   z-index: 1;
   width: 100%;
   padding: 0;
   transition: .5s all;
+  line-height: ${TOP_MENU_BIG}rem;
+  height: ${TOP_MENU_BIG}rem;
   
-  ${({isCollapsed}) => isCollapsed && css`
-    line-height: 3rem;
-    height: 3rem;
+  ${({$isCollapsed}) => $isCollapsed && css`
+    line-height: ${TOP_MENU_SMALL}rem;
+    height: ${TOP_MENU_SMALL}rem;
   `}
   
 `
 
 const MenuTop: React.FC = () => {
-    const {isCollapsed} = useSlider();
+    const {isLeftMenuCollapsed} = useSlider();
     const matched = useMatches();
     const navigate = useNavigate();
 
@@ -97,10 +95,10 @@ const MenuTop: React.FC = () => {
     }, []);
 
     return (
-        <TopMenuHeader isCollapsed={isCollapsed}>
+        <TopMenuHeader $isCollapsed={isLeftMenuCollapsed}>
             <FullMenuWrapper>
                 <LeftMenuWrapper>
-                    <Svg svgImage={isCollapsed ? LogoSmall : LogoBig} height={isCollapsed ? '2.5rem' : '3rem'} width={isCollapsed ? '50px' : '206px'} />
+                    <Svg svgImage={isLeftMenuCollapsed ? LogoSmall : LogoBig} height={isLeftMenuCollapsed ? '2.5rem' : '3rem'} width={isLeftMenuCollapsed ? `${SIDER_COLLAPSED_SIZE}rem` : `${LEFT_MENU_WIDTH}rem`} />
                     <Menu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, menuTopItemsLeft) : menuTopItemsLeft.filter(mti => mti.isDefault).map(mti => mti.key)}>
                         {menuTopItemsLeft.map(mti => displayMenuItem(mti))}
                     </Menu>
