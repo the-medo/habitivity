@@ -1,3 +1,6 @@
+import firebase from 'firebase/compat';
+
+
 //--------------------------
 
 export type DayModifier = {
@@ -55,26 +58,23 @@ export enum DurationUnits {
 
 type TTTime = TaskShared & {
     taskType: TaskType.TIME,
-    taskUnits: undefined,
+    taskUnits?: undefined,
     taskCheckpoints: TimeCheckpoint[],
 }
 
 type TTDuration = TaskShared & {
     taskType: TaskType.DURATION,
     taskUnits: DurationUnits,
-    taskCheckpoints: undefined,
 }
 
 type TTCheckbox = TaskShared & {
     taskType: TaskType.CHECKBOX,
-    taskUnits: undefined,
-    taskCheckpoints: undefined,
+    taskUnits?: undefined,
 }
 
 type TTUnits = TaskShared & {
     taskType: TaskType.UNITS,
     taskUnits: string,
-    taskCheckpoints: undefined,
 }
 
 type TTUnitCheckpoints = TaskShared & {
@@ -85,25 +85,45 @@ type TTUnitCheckpoints = TaskShared & {
 
 type TTOptions = TaskShared & {
     taskType: TaskType.OPTIONS,
-    taskUnits: undefined,
+    taskUnits?: undefined,
     taskCheckpoints: OptionCheckpoint[],
 }
 
 export type Task = TTTime | TTDuration | TTCheckbox | TTUnits | TTUnitCheckpoints | TTOptions;
 
+export const taskConverter = {
+    toFirestore(task: Task): firebase.firestore.DocumentData {
+        return task;
+    },
+
+    fromFirestore(
+        snapshot: firebase.firestore.QueryDocumentSnapshot,
+        options: firebase.firestore.SnapshotOptions
+    ): Task {
+        const data = snapshot.data(options)!;
+        return data as Task;
+    }
+};
 
 
-const test: Task = {
-    userId: "asd",
-    taskId: "",
-    taskName: "",
+
+export const TaskWakeUp: Task = {
+    userId: "my-user-id",
+    taskId: "task-wake-up-id",
+    taskName: "Actually woke up",
     taskPoints: 0,
     taskModifiers: {
         percentageModifier: false,
         dayModifier: [],
     },
 
-    taskType: TaskType.DURATION,
-    taskCheckpoints: undefined,
-    taskUnits: DurationUnits.MINUTE,
+    taskType: TaskType.TIME,
+    taskCheckpoints: [
+        {time: "5:30", points: 2},
+        {time: "6:00", points: 1},
+        {time: "7:00", points: 0},
+        {time: "8:00", points: -1},
+        {time: "9:00", points: -2},
+    ],
 };
+

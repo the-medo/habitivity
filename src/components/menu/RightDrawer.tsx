@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {useSlider} from "../../hooks/useSlider";
 import {
     SIDER_COLLAPSED_SIZE,
@@ -12,6 +12,11 @@ import {Button, Layout,} from 'antd';
 import {DoubleLeftOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import {useDispatch} from "react-redux";
+import {db} from "../../main";
+import { collection, getDocs } from "firebase/firestore";
+import firebase from "firebase/compat";
+import firestore = firebase.firestore;
+import {taskConverter, TaskWakeUp} from "../../types/Tasks";
 const { Sider } = Layout;
 
 export type RightDrawerStatus = "hidden" | "opened" | "collapsed" | "automaticallyCollapsed" | "openedByForce" | "automaticallyOpened";
@@ -62,6 +67,13 @@ const RightDrawer: React.FC = () => {
 
     if (isRightDrawerHidden) return null;
 
+    const clickHandler = useCallback(async () => {
+        await firestore()
+            .collection('task-testing')
+            .withConverter(taskConverter)
+            .add(TaskWakeUp)
+    }, [])
+
     return (
         <StyledSider
             width={`${RIGHT_DRAWER_WIDTH}rem`}
@@ -74,7 +86,7 @@ const RightDrawer: React.FC = () => {
             $isRightDrawerCollapsed={isRightDrawerCollapsed}
             $isLeftMenuCollapsed={isLeftMenuCollapsed}
         >
-            <Button type={"primary"}>Test</Button>
+            <Button type={"primary"} onClick={clickHandler}>Test</Button>
             {<RightDrawerCollapsor $isRightDrawerCollapsed={isRightDrawerCollapsed} onClick={() => dispatch(setRightDrawerStatus(isRightDrawerCollapsed ? "opened" : "collapsed"))}>
               <DoubleLeftOutlined rotate={isRightDrawerCollapsed ? 0 : 180} />
             </RightDrawerCollapsor>}
