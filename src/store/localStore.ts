@@ -1,4 +1,4 @@
-import {User} from "../types/User";
+import {HabitivityUser} from "../types/HabitivityUser";
 import {RightDrawerStatus} from "../components/menu/RightDrawer";
 
 export enum LSKey {
@@ -8,7 +8,7 @@ export enum LSKey {
 }
 
 export interface LSValues {
-    [LSKey.user]?: User,
+    [LSKey.user]?: HabitivityUser,
     [LSKey.menuCollapsed]?: boolean,
     [LSKey.rightDrawerCollapsed]?: RightDrawerStatus,
 }
@@ -29,5 +29,5 @@ export function getItem<T extends LSKey>(key: T): LSValues[T] | undefined {
     return undefined;
 }
 
-export const setUser = (user: User | undefined) => setItem(LSKey.user, user);
+export const setUser = (user: HabitivityUser | undefined) => setItem(LSKey.user, user);
 export const getUser = () => getItem(LSKey.user);

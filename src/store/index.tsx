@@ -3,11 +3,13 @@ import { AnyAction, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import {userReducer} from "./userSlice";
 import {menuReducer} from "./menuSlice";
+import {taskReducer} from "./taskSlice";
 
 export const store = configureStore({
     reducer: {
         userReducer,
         menuReducer: menuReducer,
+        taskReducer: taskReducer,
     },
 });
 

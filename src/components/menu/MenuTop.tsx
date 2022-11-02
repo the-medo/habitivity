@@ -2,13 +2,14 @@ import React, {useCallback} from "react";
 import {Layout, Menu} from 'antd';
 import styled, {css} from "styled-components";
 import {NavLink, useMatches, useNavigate} from "react-router-dom";
-import firebase from "firebase/compat";
 import {LogoutOutlined} from "@ant-design/icons";
 import {icons, IconType} from "../icons/icons";
 import {LogoBig, LogoSmall} from "../../assets/svg";
 import Svg from "../../assets/svg/Svg";
 import {useSlider} from "../../hooks/useSlider";
 import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
+import {signOut} from "firebase/auth";
+import {auth} from "../../firebase";
 
 const { Header } = Layout;
 
@@ -90,8 +91,7 @@ const MenuTop: React.FC = () => {
     const navigate = useNavigate();
 
     const logoutHandler = useCallback(() => {
-        firebase.auth().signOut();
-        navigate("/");
+        signOut(auth).then(() => navigate("/"));
     }, []);
 
     return (

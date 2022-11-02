@@ -70,7 +70,9 @@ const Home: React.FC = () => {
     useEffect(() => {
         console.log("Setting menu left..");
         dispatch(setMenuLeftItems(homeMenuLeftItems));
-    }, [])
+    }, []);
+
+
 
     return (
         <div>

@@ -1,9 +1,10 @@
-import {User} from "../types/User";
-import firebase from "firebase/compat/app/";
+import {HabitivityUser} from "../types/HabitivityUser";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {getUser} from "./localStore";
+import {User} from "firebase/auth";
 
-export const firebaseUserToLocalUser = async (firebaseUser: firebase.User | null): Promise<User | undefined> => {
+
+export const firebaseUserToLocalUser = async (firebaseUser: User | null): Promise<HabitivityUser | undefined> => {
     if (!firebaseUser) return undefined;
 
     const token = await firebaseUser.getIdToken();
@@ -17,7 +18,7 @@ export const firebaseUserToLocalUser = async (firebaseUser: firebase.User | null
 }
 
 export interface UserState {
-    user: User | undefined;
+    user: HabitivityUser | undefined;
 }
 
 const initialState: UserState = {
@@ -28,15 +29,15 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        signIn: (state, action: PayloadAction<User>) => {
+        logIn: (state, action: PayloadAction<HabitivityUser>) => {
             state.user = action.payload;
         },
-        signOut: (state) => {
+        logOut: (state) => {
             state.user = undefined;
         }
     }
 });
 
-export const { signIn, signOut } = userSlice.actions;
+export const { logIn, logOut } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

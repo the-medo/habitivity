@@ -1,4 +1,5 @@
 import firebase from 'firebase/compat';
+import {QueryDocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 
 
 //--------------------------
@@ -97,8 +98,8 @@ export const taskConverter = {
     },
 
     fromFirestore(
-        snapshot: firebase.firestore.QueryDocumentSnapshot,
-        options: firebase.firestore.SnapshotOptions
+        snapshot: QueryDocumentSnapshot,
+        options: SnapshotOptions
     ): Task {
         const data = snapshot.data(options)!;
         return data as Task;

@@ -1,12 +1,13 @@
 import React from "react";
-import firebase from "firebase/compat/app/";
+import {GoogleAuthProvider, EmailAuthProvider} from "firebase/auth";
 import FirebaseAuth from "react-firebaseui/FirebaseAuth";
-import 'firebase/compat/auth';
 import styled from "styled-components";
 import img from "../../assets/images/login-bg.jpg";
 import { Layout } from "antd";
 import {useSelector} from "react-redux";
 import {ReduxState} from "../../store";
+import {signOut} from "firebase/auth";
+import {auth} from "../../firebase";
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -16,8 +17,8 @@ const uiConfig = {
     signInSuccessUrl: '/home',
     // We will display Google and Facebook as auth providers.
     signInOptions: [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        GoogleAuthProvider.PROVIDER_ID,
+        EmailAuthProvider.PROVIDER_ID,
     ],
 };
 
@@ -80,14 +81,14 @@ function LoginPage() {
                         <h1>Habitivity</h1>
                     </LoginPageContent>
                     <LoginPageContentImage>
-                        <FirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+                        <FirebaseAuth uiConfig={uiConfig} firebaseAuth={auth}/>
                     </LoginPageContentImage>
                 </LoginPageLayout>
             </LoginPageBackground>
         );
     }
 
-    return <a onClick={() => firebase.auth().signOut()}>Sign-out</a>;
+    return <a onClick={() => signOut(auth)}>Sign-out</a>;
 }
 
 

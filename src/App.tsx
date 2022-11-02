@@ -2,21 +2,22 @@ import React, {useEffect} from 'react';
 import { RouterProvider} from "react-router-dom";
 import {router} from "./routes/router";
 import GlobalStyleAndTheme from "./styles/GlobalStyleAndTheme";
-import firebase from "firebase/compat";
+import {onAuthStateChanged} from "firebase/auth";
 import {setUser} from "./store/localStore";
-import {firebaseUserToLocalUser, signIn, signOut} from "./store/userSlice";
+import {firebaseUserToLocalUser, logIn, logOut} from "./store/userSlice";
 import {useDispatch} from "react-redux";
 import {ReduxDispatch} from "./store";
+import {auth} from "./firebase";
 
 function App() {
     const dispatch: ReduxDispatch = useDispatch();
 
     // Listen to the Firebase Auth state and set the local state.
     useEffect(() => {
-        const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async user => {
+        const unregisterAuthObserver = onAuthStateChanged(auth, async user => {
             const appUser = await firebaseUserToLocalUser(user);
             setUser(appUser);
-            dispatch(appUser ? signIn(appUser) : signOut() );
+            dispatch(appUser ? logIn(appUser) : logOut() );
         });
 
         return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
