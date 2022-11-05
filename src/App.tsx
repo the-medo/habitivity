@@ -8,6 +8,8 @@ import {firebaseUserToLocalUser, logIn, logOut} from "./store/userSlice";
 import {useDispatch} from "react-redux";
 import {ReduxDispatch} from "./store";
 import {auth} from "./firebase";
+import Helmet from "react-helmet";
+import LogoIcon from "./assets/svg/habitivity-logo-favicon.svg";
 
 function App() {
     const dispatch: ReduxDispatch = useDispatch();
@@ -25,6 +27,15 @@ function App() {
 
     return (
         <GlobalStyleAndTheme>
+            <Helmet
+                title="Habitivity"
+                link={[
+                    {
+                        "rel": "icon",
+                        "href": LogoIcon,
+                    }
+                ]}
+            />
             <RouterProvider router={router} />
         </GlobalStyleAndTheme>
     )

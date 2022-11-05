@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import './index.css'
 import {StoreProvider} from "./store";
 
 //TODO maybe change to <Menu.Item> to ItemType[] ?
