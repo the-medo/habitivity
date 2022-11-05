@@ -1,18 +1,51 @@
 import {
     DurationUnits,
-    DurationUnitsSyntax, Task,
+    DurationUnitsSyntax,
+    Task,
     TaskType,
-    TTCheckbox, TTDuration, TTOptions,
+    TTCheckbox,
+    TTDuration,
+    TTOptions,
     TTTime,
     TTUnitCheckpoints,
     TTUnits
 } from "../types/Tasks";
+import {TaskList, TaskListType} from "../types/TaskLists";
+import {TaskGroup} from "../types/TaskGroup";
+
+
+//===========================================================
+
+export const TaskListExample: TaskList = {
+    id: "task-list-example",
+    name: "Task List Example",
+    type: TaskListType.DAILY,
+}
+
+//===========================================================
+
+export const TaskGroupExample1: TaskGroup = {
+    id: "task-group-example-1",
+    name: "Task Group 1",
+    taskListId: "task-list-example"
+}
+
+export const TaskGroupExample2: TaskGroup = {
+    id: "task-group-example-2",
+    name: "Task Group 2",
+    taskListId: "task-list-example"
+}
+
+//===========================================================
 
 export const TaskWakeUp: TTTime = {
     taskType: TaskType.TIME,
     userId: "my-user-id",
     taskId: "task-wake-up-id",
     taskName: "Actually woke up",
+    taskListId: "task-list-example",
+    taskGroupId: "task-group-example-1",
+    isActive: true,
     taskPoints: 0,
     taskModifiers: {
         percentageModifier: false,
@@ -32,6 +65,9 @@ export const TaskSleep: TTUnitCheckpoints = {
     userId: "my-user-id",
     taskId: "task-sleep",
     taskName: "Sleep",
+    taskListId: "task-list-example",
+    taskGroupId: "task-group-example-1",
+    isActive: true,
     taskPoints: 0,
     taskModifiers: {
         percentageModifier: false,
@@ -49,6 +85,9 @@ export const TaskElevate: TTCheckbox = {
     userId: "my-user-id",
     taskId: "task-elevate",
     taskName: "Elevate",
+    taskListId: "task-list-example",
+    taskGroupId: "task-group-example-1",
+    isActive: true,
     taskPoints: 1,
     taskModifiers: {
         percentageModifier: false,
@@ -61,6 +100,9 @@ export const TaskBookReading: TTUnits = {
     userId: "my-user-id",
     taskId: "task-book-reading",
     taskName: "Book",
+    taskListId: "task-list-example",
+    taskGroupId: "task-group-example-2",
+    isActive: true,
     taskPoints: 10, //10 pages for 1 point
     taskModifiers: {
         percentageModifier: false,
@@ -79,6 +121,9 @@ export const TaskExercise: TTDuration = {
     userId: "my-user-id",
     taskId: "task-exercise",
     taskName: "Exercise",
+    taskListId: "task-list-example",
+    taskGroupId: "task-group-example-2",
+    isActive: true,
     taskPoints: 15, //15 minutes for 1 point
     taskModifiers: {
         percentageModifier: false,
@@ -93,6 +138,9 @@ export const TaskOverallFeeling: TTOptions = {
     userId: "my-user-id",
     taskId: "task-overall-feelings",
     taskName: "Overall feelings",
+    taskListId: "task-list-example",
+    taskGroupId: "task-group-example-2",
+    isActive: true,
     taskModifiers: {
         percentageModifier: false,
         dayModifier: [],
@@ -120,4 +168,6 @@ export const TaskOverallFeeling: TTOptions = {
     ],
 }
 
+export const ExampleTaskLists: TaskList[] = [TaskListExample];
+export const ExampleTaskGroups: TaskGroup[] = [TaskGroupExample1, TaskGroupExample2];
 export const ExampleTasks: Task[] = [TaskWakeUp, TaskSleep, TaskElevate, TaskBookReading, TaskExercise, TaskOverallFeeling];
