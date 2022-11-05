@@ -6,6 +6,7 @@ import Home from "./Home";
 import PageOneOne from "./PageOneOne";
 import Calendar from "./Calendar";
 import Settings from "./Settings";
+import Today from "./Today";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -19,6 +20,8 @@ export const router = createBrowserRouter(
                 <Route path=":subpage" element={<PageOneOne />} >
                     <Route path=":subSub" />
                 </Route>
+            </Route>
+            <Route path="today" element={<Today />} >
             </Route>
             <Route path="calendar" element={<Calendar />} >
                 <Route path=":subpage" element={<PageOneOne />} >

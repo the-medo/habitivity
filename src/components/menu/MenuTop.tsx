@@ -27,11 +27,17 @@ export const menuTopItemsLeft: MenuTopItem[] = [
     {
         key: "1",
         to: "/home",
-        label: "Today",
+        label: "Home",
         isDefault: true,
     },
     {
         key: "2",
+        to: "/today",
+        label: "Today",
+        isDefault: false,
+    },
+    {
+        key: "3",
         to: "/calendar",
         label: "Calendar",
     },

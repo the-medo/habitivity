@@ -23,21 +23,27 @@ export type TaskShared = {
 }
 
 //--------------------------
-type TimeCheckpoint = {
+export type TimeCheckpoint = {
     time: string;
     points: number;
 }
 
-type UnitCheckpoint = {
-    unitCount: string;
+export type UnitCheckpoint = {
+    unitCount: number;
     points: number;
 }
 
-type OptionCheckpoint = {
+export type OptionCheckpoint = {
     optionId: number;
     option: string;
     points: number;
     isDefault: boolean;
+}
+
+export type UnitSyntax = {
+    zero: string; //units   seconds
+    one: string;  //unit    second
+    twoAndMore: string;  //units   seconds
 }
 //--------------------------
 
@@ -55,36 +61,54 @@ export enum DurationUnits {
     MINUTE = 'minute',
     SECOND = 'second',
 }
+
+export const DurationUnitsSyntax: Record<DurationUnits, UnitSyntax> = {
+    [DurationUnits.HOUR]: {
+        zero: 'hours',
+        one: 'hour',
+        twoAndMore: 'hours',
+    },
+    [DurationUnits.MINUTE]: {
+        zero: 'minutes',
+        one: 'minute',
+        twoAndMore: 'minutes',
+    },
+    [DurationUnits.SECOND]: {
+        zero: 'seconds',
+        one: 'second',
+        twoAndMore: 'seconds',
+    },
+}
 //--------------------------
 
-type TTTime = TaskShared & {
+export type TTTime = TaskShared & {
     taskType: TaskType.TIME,
     taskUnits?: undefined,
     taskCheckpoints: TimeCheckpoint[],
 }
 
-type TTDuration = TaskShared & {
+export type TTDuration = TaskShared & {
     taskType: TaskType.DURATION,
-    taskUnits: DurationUnits,
+    taskUnits: UnitSyntax, //from DurationUnitsSyntax
 }
 
-type TTCheckbox = TaskShared & {
+export type TTCheckbox = TaskShared & {
     taskType: TaskType.CHECKBOX,
     taskUnits?: undefined,
 }
 
-type TTUnits = TaskShared & {
+export type TTUnits = TaskShared & {
     taskType: TaskType.UNITS,
-    taskUnits: string,
+    taskUnits: UnitSyntax,
 }
 
-type TTUnitCheckpoints = TaskShared & {
+export type TTUnitCheckpoints = TaskShared & {
     taskType: TaskType.UNIT_CHECKPOINTS,
-    taskUnits: string,
+    taskUnits: UnitSyntax,
     taskCheckpoints: UnitCheckpoint[],
 }
 
-type TTOptions = TaskShared & {
+export type TTOptions = TaskShared & {
     taskType: TaskType.OPTIONS,
     taskUnits?: undefined,
     taskCheckpoints: OptionCheckpoint[],
@@ -106,25 +130,4 @@ export const taskConverter = {
     }
 };
 
-
-
-export const TaskWakeUp: Task = {
-    userId: "my-user-id",
-    taskId: "task-wake-up-id",
-    taskName: "Actually woke up",
-    taskPoints: 0,
-    taskModifiers: {
-        percentageModifier: false,
-        dayModifier: [],
-    },
-
-    taskType: TaskType.TIME,
-    taskCheckpoints: [
-        {time: "5:30", points: 2},
-        {time: "6:00", points: 1},
-        {time: "7:00", points: 0},
-        {time: "8:00", points: -1},
-        {time: "9:00", points: -2},
-    ],
-};
 
