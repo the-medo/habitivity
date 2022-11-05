@@ -59,6 +59,7 @@ export const getActiveKeys = (search: string, menuItems: MenuTopItem[]) => menuI
 
 const LeftMenuWrapper = styled.div`
   display: flex;
+  flex: auto;
   align-items: center;
 `;
 
@@ -82,7 +83,11 @@ const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
     line-height: ${TOP_MENU_SMALL}rem;
     height: ${TOP_MENU_SMALL}rem;
   `}
-  
+`;
+
+const LeftMenu = styled(Menu)`
+  min-width: 0;
+  flex: auto;
 `
 
 const MenuTop: React.FC = () => {
@@ -99,9 +104,9 @@ const MenuTop: React.FC = () => {
             <FullMenuWrapper>
                 <LeftMenuWrapper>
                     <Svg svgImage={isLeftMenuCollapsed ? LogoSmall : LogoBig} height={isLeftMenuCollapsed ? '2.5rem' : '3rem'} width={isLeftMenuCollapsed ? `${SIDER_COLLAPSED_SIZE}rem` : `${LEFT_MENU_WIDTH}rem`} />
-                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, menuTopItemsLeft) : menuTopItemsLeft.filter(mti => mti.isDefault).map(mti => mti.key)}>
+                    <LeftMenu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, menuTopItemsLeft) : menuTopItemsLeft.filter(mti => mti.isDefault).map(mti => mti.key)}>
                         {menuTopItemsLeft.map(mti => displayMenuItem(mti))}
-                    </Menu>
+                    </LeftMenu>
                 </LeftMenuWrapper>
                 <RightMenuWrapper>
                     <Menu theme="dark" mode="horizontal">
