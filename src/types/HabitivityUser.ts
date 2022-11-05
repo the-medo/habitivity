@@ -3,4 +3,5 @@ export interface HabitivityUser {
     email: string;
     name: string;
     token: string;
+    photoUrl: string | null;
 }

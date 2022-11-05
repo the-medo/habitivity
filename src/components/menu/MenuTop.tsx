@@ -10,6 +10,7 @@ import {useSlider} from "../../hooks/useSlider";
 import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
 import {signOut} from "firebase/auth";
 import {auth} from "../../firebase";
+import UserAvatar, {StyledUserAvatar} from "../global/UserAvatar";
 
 const { Header } = Layout;
 
@@ -63,12 +64,16 @@ const LeftMenuWrapper = styled.div`
   align-items: center;
 `;
 
-const RightMenuWrapper = styled.div``;
+const RightMenuWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const FullMenuWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
 
 const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   position: fixed;
@@ -83,12 +88,20 @@ const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
     line-height: ${TOP_MENU_SMALL}rem;
     height: ${TOP_MENU_SMALL}rem;
   `}
+  
+  ${StyledUserAvatar} {
+    width: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
+    height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
+    line-height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
+    margin: ${({$isCollapsed}) => $isCollapsed ? 0.375 : 0.5}rem;
+  }
 `;
 
 const LeftMenu = styled(Menu)`
   min-width: 0;
   flex: auto;
 `
+
 
 const MenuTop: React.FC = () => {
     const {isLeftMenuCollapsed} = useSlider();
@@ -113,6 +126,7 @@ const MenuTop: React.FC = () => {
                         {menuTopItemsRight.map(mti => displayMenuItem(mti))}
                         <Menu.Item key={2} icon={<LogoutOutlined />} onClick={logoutHandler} ></Menu.Item>
                     </Menu>
+                    <UserAvatar />
                 </RightMenuWrapper>
             </FullMenuWrapper>
         </TopMenuHeader>

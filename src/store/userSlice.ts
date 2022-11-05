@@ -12,7 +12,8 @@ export const firebaseUserToLocalUser = async (firebaseUser: User | null): Promis
     return {
         email: firebaseUser.email ?? 'Unknown email',
         id: firebaseUser.uid,
-        name: firebaseUser.displayName ?? 'Unknown name',
+        name: firebaseUser.displayName ?? '?',
+        photoUrl: firebaseUser.photoURL,
         token,
     }
 }
