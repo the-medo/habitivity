@@ -4,10 +4,9 @@ import FirebaseAuth from "react-firebaseui/FirebaseAuth";
 import styled from "styled-components";
 import img from "../../assets/images/login-bg.jpg";
 import { Layout } from "antd";
-import {useSelector} from "react-redux";
-import {ReduxState} from "../../store";
 import {signOut} from "firebase/auth";
 import {auth} from "../../firebase";
+import {useUser} from "../../hooks/useUser";
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -71,7 +70,7 @@ const LoginPageContentImage = styled.div`
 `
 
 function LoginPage() {
-    const user = useSelector((state: ReduxState) => state.userReducer.user);
+    const user = useUser();
 
     if (!user) {
         return (

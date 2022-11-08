@@ -7,6 +7,8 @@ import PageOneOne from "./PageOneOne";
 import Calendar from "./Calendar";
 import Settings from "./Settings";
 import Today from "./Today";
+import TaskList from "../screens/TaskList/TaskList";
+import TaskListCreate from "../screens/TaskList/TaskListCreate/TaskListCreate";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -16,6 +18,11 @@ export const router = createBrowserRouter(
             errorElement={<ErrorPage />}
         >
             <Route index element={<Home />} />
+            <Route path="task-list" element={<TaskList />}>
+                <Route path="create" element={<TaskListCreate />}>
+
+                </Route>
+            </Route>
             <Route path="home" element={<Home />} >
                 <Route path=":subpage" element={<PageOneOne />} >
                     <Route path=":subSub" />

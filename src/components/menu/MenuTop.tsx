@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Layout, Menu} from 'antd';
 import styled, {css} from "styled-components";
 import {NavLink, useMatches, useNavigate} from "react-router-dom";
@@ -11,6 +11,9 @@ import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} fro
 import {signOut} from "firebase/auth";
 import {auth} from "../../firebase";
 import UserAvatar, {StyledUserAvatar} from "../global/UserAvatar";
+import {useSelector} from "react-redux";
+import {ReduxState} from "../../store";
+import {selectTaskLists} from "../../store/taskSlice";
 
 const { Header } = Layout;
 
@@ -23,7 +26,7 @@ export type MenuTopItem = {
     onClick?: () => void;
 }
 
-export const menuTopItemsLeft: MenuTopItem[] = [
+export const menuTopItemsLeftDefault: MenuTopItem[] = [
     {
         key: "1",
         to: "/home",
@@ -40,6 +43,15 @@ export const menuTopItemsLeft: MenuTopItem[] = [
         key: "3",
         to: "/calendar",
         label: "Calendar",
+    },
+];
+
+export const menuTopItemsLeftWhenNoTaskList: MenuTopItem[] = [
+    {
+        key: "1",
+        to: "/task-list/create",
+        label: "Create new task list",
+        isDefault: true,
     },
 ];
 
@@ -114,6 +126,19 @@ const MenuTop: React.FC = () => {
     const matched = useMatches();
     const navigate = useNavigate();
 
+    const taskLists = useSelector((state: ReduxState) => selectTaskLists(state));
+    const selectedTaskListId = useSelector((state: ReduxState) => state.taskReducer.selectedTaskListId);
+
+    const [leftTopMenuItems, setLeftTopMenuItems] = useState<MenuTopItem[]>(selectedTaskListId !== undefined ? menuTopItemsLeftDefault : menuTopItemsLeftWhenNoTaskList);
+
+    useEffect(() => {
+        if (selectedTaskListId) {
+            setLeftTopMenuItems(menuTopItemsLeftDefault);
+        } else {
+            setLeftTopMenuItems(menuTopItemsLeftWhenNoTaskList);
+        }
+    }, [selectedTaskListId])
+
     const logoutHandler = useCallback(() => {
         signOut(auth).then(() => navigate("/"));
     }, []);
@@ -123,8 +148,10 @@ const MenuTop: React.FC = () => {
             <FullMenuWrapper>
                 <LeftMenuWrapper>
                     <Svg svgImage={isLeftMenuCollapsed ? LogoSmall : LogoBig} height={isLeftMenuCollapsed ? '2.5rem' : '3rem'} width={isLeftMenuCollapsed ? `${SIDER_COLLAPSED_SIZE}rem` : `${LEFT_MENU_WIDTH}rem`} />
-                    <LeftMenu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, menuTopItemsLeft) : menuTopItemsLeft.filter(mti => mti.isDefault).map(mti => mti.key)}>
-                        {menuTopItemsLeft.map(mti => displayMenuItem(mti))}
+                    <LeftMenu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, leftTopMenuItems) : leftTopMenuItems.filter(mti => mti.isDefault).map(mti => mti.key)}>
+                        {
+                            leftTopMenuItems.map(mti => displayMenuItem(mti))
+                        }
                     </LeftMenu>
                 </LeftMenuWrapper>
                 <RightMenuWrapper>

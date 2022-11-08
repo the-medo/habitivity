@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import {Avatar, Image} from "antd";
-import {useSelector} from "react-redux";
-import {ReduxState} from "../../store";
 import {HabitivityUser} from "../../types/HabitivityUser";
+import {useUser} from "../../hooks/useUser";
 
 interface UserAvatarProps {
     userToDisplay?: HabitivityUser;
@@ -15,7 +14,7 @@ export const StyledUserAvatar = styled(Avatar)`
 
 
 const UserAvatar: React.FC<UserAvatarProps> = ({userToDisplay}) => {
-    const user = userToDisplay ?? useSelector((state: ReduxState) => state.userReducer.user);
+    const user = userToDisplay ?? useUser();
 
     if (!user) {
         return <StyledUserAvatar>-</StyledUserAvatar>

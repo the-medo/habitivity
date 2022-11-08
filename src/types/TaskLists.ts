@@ -1,6 +1,5 @@
 import firebase from "firebase/compat";
 import {QueryDocumentSnapshot, SnapshotOptions} from "firebase/firestore";
-import {Task} from "./Tasks";
 
 export enum TaskListType {
     DAILY = 'daily'
@@ -8,6 +7,7 @@ export enum TaskListType {
 
 export type TaskList = {
     id: string,
+    userId: string,
     name: string,
     type: TaskListType,
 }

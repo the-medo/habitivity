@@ -92,9 +92,12 @@ const MenuLeft: React.FC = () => {
     const matched = useMatches();
     const dispatch = useDispatch();
     const {items} = useSelector((state: ReduxState) => state.menuReducer);
-    const {isLeftMenuCollapsed, leftMenuAutomaticallyCollapsed, leftMenuManuallyCollapsed} = useSlider();
+    const {isLeftMenuCollapsed, isLeftMenuWithContent, leftMenuAutomaticallyCollapsed, leftMenuManuallyCollapsed} = useSlider();
     const selectedKeys = useMemo(() => getActiveKeys(matched[matched.length - 1].pathname, items), [matched, items]);
 
+    if (!isLeftMenuWithContent) {
+        return null;
+    }
 
     return (
         <StyledSider
