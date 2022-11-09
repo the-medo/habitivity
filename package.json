@@ -15,7 +15,7 @@
     "@types/localforage": "^0.0.34",
     "@types/react-helmet": "^6.1.5",
     "@types/styled-components": "^5.1.26",
-    "antd": "^4.23.3",
+    "antd": "^4.24.1",
     "firebase": "^9.10.0",
     "firebaseui": "^6.0.1",
     "localforage": "^1.10.0",

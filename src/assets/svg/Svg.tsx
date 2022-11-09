@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import React from "react";
 
-const SVG_COLOR_PRIMARY = 'white';
-const SVG_COLOR_PRIMARY_HOVER = 'rgb(77 92 106)';
-const SVG_COLOR_SECONDARY = 'rgb(77 92 106)';
-const SVG_COLOR_SECONDARY_HOVER = 'white';
+export const SVG_COLOR_PRIMARY = 'white';
+export const SVG_COLOR_PRIMARY_HOVER = 'rgb(77 92 106)';
+export const SVG_COLOR_SECONDARY = 'rgb(77 92 106)';
+export const SVG_COLOR_SECONDARY_HOVER = 'white';
 
 interface StyledSvgProps {
     height?: string;
@@ -15,7 +15,7 @@ interface StyledSvgProps {
     colorSecondaryHover?: string;
 }
 
-const StyledSvg = styled.div<StyledSvgProps>`
+export const StyledSvg = styled.div<StyledSvgProps>`
   height: ${({height}) => height ?? 'fit-content'};
   width: ${({width}) => width ?? 'fit-content'};
   line-height: 0;

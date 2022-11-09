@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {Avatar, Image} from "antd";
 import {HabitivityUser} from "../../types/HabitivityUser";
 import {useUser} from "../../hooks/useUser";
+import {initials} from "../../helpers/initials";
 
 interface UserAvatarProps {
     userToDisplay?: HabitivityUser;
@@ -21,7 +22,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({userToDisplay}) => {
     }
 
     if (!user.photoUrl) {
-        return <StyledUserAvatar>{user.name.match(/(\b\S)?/g)?.join("").match(/(^\S|\S$)?/g)?.join("").toUpperCase()}</StyledUserAvatar>
+        return <StyledUserAvatar>{initials(user.name)}</StyledUserAvatar>
     }
 
     return <StyledUserAvatar src={<Image src={user.photoUrl} referrerPolicy="no-referrer" />} />

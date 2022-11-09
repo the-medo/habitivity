@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Layout, Menu} from 'antd';
+import {Dropdown, Layout, Menu} from 'antd';
 import styled, {css} from "styled-components";
 import {NavLink, useMatches, useNavigate} from "react-router-dom";
 import {LogoutOutlined} from "@ant-design/icons";
@@ -14,6 +14,7 @@ import UserAvatar, {StyledUserAvatar} from "../global/UserAvatar";
 import {useSelector} from "react-redux";
 import {ReduxState} from "../../store";
 import {selectTaskLists} from "../../store/taskSlice";
+import LogoWithTaskList from "../global/LogoWithTaskList";
 
 const { Header } = Layout;
 
@@ -147,7 +148,16 @@ const MenuTop: React.FC = () => {
         <TopMenuHeader $isCollapsed={isLeftMenuCollapsed}>
             <FullMenuWrapper>
                 <LeftMenuWrapper>
-                    <Svg svgImage={isLeftMenuCollapsed ? LogoSmall : LogoBig} height={isLeftMenuCollapsed ? '2.5rem' : '3rem'} width={isLeftMenuCollapsed ? `${SIDER_COLLAPSED_SIZE}rem` : `${LEFT_MENU_WIDTH}rem`} />
+                    <Dropdown menu={{items: [
+                        {label: 'test of maybe some longer label', key: 'test'},
+                        {label: 'test of maybe some longer label', key: 'test2'},
+                        {label: 'test of maybe some longer label', key: 'test3'},
+                        {label: 'test of maybe some longer label', key: 'test4'},
+                    ]}}>
+                        <div>
+                        <LogoWithTaskList version={isLeftMenuCollapsed ? 'small' : 'big'} title={"Testing title a bit longer"} />
+                        </div>
+                    </Dropdown>
                     <LeftMenu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, leftTopMenuItems) : leftTopMenuItems.filter(mti => mti.isDefault).map(mti => mti.key)}>
                         {
                             leftTopMenuItems.map(mti => displayMenuItem(mti))
