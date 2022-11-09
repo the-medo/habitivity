@@ -21,7 +21,7 @@ interface FormTaskListCreate {
     taskListType: TaskListType;
 }
 
-const TaskListCreate: React.FC = () => {
+const TaskListEdit: React.FC = () => {
     const user = useUser();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -56,7 +56,7 @@ const TaskListCreate: React.FC = () => {
         <>
             <PageHeader
                 className="site-page-header"
-                title="Create new task list"
+                title="Edit this task list"
             />
             <Form
                 labelCol={{ span: 4 }}
@@ -78,17 +78,18 @@ const TaskListCreate: React.FC = () => {
                 <Form.Item
                     label="Task list type"
                     name="taskListType"
+                    tooltip="It is not possible to change task list type"
                 >
-                    <Select>
+                    <Select disabled={true}>
                         <Select.Option value={TaskListType.DAILY}>Daily</Select.Option>
                     </Select>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
-                    <Button type="primary" htmlType="submit">Create</Button>
+                    <Button type="primary" htmlType="submit">Edit</Button>
                 </Form.Item>
             </Form>
         </>
     );
 }
 
-export default TaskListCreate;
+export default TaskListEdit;

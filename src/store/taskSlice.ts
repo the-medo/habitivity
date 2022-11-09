@@ -65,15 +65,15 @@ export const taskSlice = createSlice({
             taskListsAdapter.setAll(state.taskLists, action.payload);
         },
         addTaskList: (state, action: PayloadAction<TaskList>) => {
+            console.log("Adding task list...", action.payload);
             taskListsAdapter.addOne(state.taskLists, action.payload);
         },
         removeTaskList: (state, action: PayloadAction<string>) => {
             taskListsAdapter.removeOne(state.taskLists, action.payload);
         },
 
-
-
         setSelectedTaskListId: (state, action: PayloadAction<string | undefined>) => {
+            console.log("Selecting task list - " + action.payload);
             state.selectedTaskListId = action.payload;
             setItem(LSKey.selectedTaskListId, action.payload);
         },

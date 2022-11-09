@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Dropdown, Layout, Menu} from 'antd';
+import {Button, Dropdown, Layout, Menu} from 'antd';
 import styled, {css} from "styled-components";
-import {NavLink, useMatches, useNavigate} from "react-router-dom";
+import {Link, NavLink, useMatches, useNavigate} from "react-router-dom";
 import {LogoutOutlined} from "@ant-design/icons";
 import {icons, IconType} from "../icons/icons";
 import {LogoBig, LogoSmall} from "../../assets/svg";
@@ -15,6 +15,8 @@ import {useSelector} from "react-redux";
 import {ReduxState} from "../../store";
 import {selectTaskLists} from "../../store/taskSlice";
 import LogoWithTaskList from "../global/LogoWithTaskList";
+import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
+import {ItemType} from "antd/es/menu/hooks/useItems";
 
 const { Header } = Layout;
 
@@ -129,6 +131,7 @@ const MenuTop: React.FC = () => {
 
     const taskLists = useSelector((state: ReduxState) => selectTaskLists(state));
     const selectedTaskListId = useSelector((state: ReduxState) => state.taskReducer.selectedTaskListId);
+    const selectedTaskList = useSelectedTaskList();
 
     const [leftTopMenuItems, setLeftTopMenuItems] = useState<MenuTopItem[]>(selectedTaskListId !== undefined ? menuTopItemsLeftDefault : menuTopItemsLeftWhenNoTaskList);
 
@@ -138,24 +141,40 @@ const MenuTop: React.FC = () => {
         } else {
             setLeftTopMenuItems(menuTopItemsLeftWhenNoTaskList);
         }
-    }, [selectedTaskListId])
+    }, [selectedTaskListId, taskLists])
+
+    useEffect(() => {
+
+        console.log("MenuTop => taskLists changed - ", taskLists)
+    }, [taskLists]);
+
 
     const logoutHandler = useCallback(() => {
         signOut(auth).then(() => navigate("/"));
     }, []);
 
+    const dropdownItems: ItemType[] =
+        taskLists
+            .filter(tl => tl.id !== selectedTaskListId)
+            .map(tl => ({
+                label: <Link to={`/task-list/${tl.id}`}>{tl.name}</Link>,
+                key: `tl-${tl.id}`
+            })).concat(selectedTaskList ? [{
+                label: <Button type="default" style={{width: '100%'}}><Link to={`/task-list/edit`}>Edit current task list</Link></Button>,
+                key: `tl-edit`
+            }]: []).concat([{
+            label: <Button type="primary" style={{width: '100%'}}><Link to={`/task-list/create`}>Create new task list</Link></Button>,
+                key: `tl-create`
+            }])
+    ;
+
     return (
         <TopMenuHeader $isCollapsed={isLeftMenuCollapsed}>
             <FullMenuWrapper>
                 <LeftMenuWrapper>
-                    <Dropdown menu={{items: [
-                        {label: 'test of maybe some longer label', key: 'test'},
-                        {label: 'test of maybe some longer label', key: 'test2'},
-                        {label: 'test of maybe some longer label', key: 'test3'},
-                        {label: 'test of maybe some longer label', key: 'test4'},
-                    ]}}>
+                    <Dropdown menu={{items: dropdownItems}}>
                         <div>
-                        <LogoWithTaskList version={isLeftMenuCollapsed ? 'small' : 'big'} title={"Testing title a bit longer"} />
+                        <LogoWithTaskList version={isLeftMenuCollapsed ? 'small' : 'big'} title={selectedTaskList?.name} />
                         </div>
                     </Dropdown>
                     <LeftMenu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, leftTopMenuItems) : leftTopMenuItems.filter(mti => mti.isDefault).map(mti => mti.key)}>

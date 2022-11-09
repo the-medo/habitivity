@@ -56,6 +56,8 @@ export default function PageLayout() {
                 const selectedExist = taskListData.find(tl => tl.id === selectedTaskListId);
                 if (!selectedExist && taskListData.length > 0) {
                     dispatch(setSelectedTaskListId(taskListData[0].id));
+                } else if (taskListData.length === 0) {
+                    dispatch(setSelectedTaskListId(undefined));
                 }
             });
 

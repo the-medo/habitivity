@@ -64,13 +64,10 @@ const StyledLogoWrapper = styled.div<{$width: string, $height: string}>`
 `
 
 const LogoWithTaskList: React.FC<LogoWithTaskListProps> = ({version, title}) => {
-    title = 'Daily productivity';
     const titleToDisplay = useMemo(() => title
         ? (version === 'small' ? (title[0] + title[1]) : title)
         : undefined,
         [title, version]);
-
-
 
     let fontSize = 145;
     if (titleToDisplay && titleToDisplay.length > 13) {
