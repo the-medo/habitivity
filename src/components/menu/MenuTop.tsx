@@ -4,19 +4,17 @@ import styled, {css} from "styled-components";
 import {Link, NavLink, useMatches, useNavigate} from "react-router-dom";
 import {LogoutOutlined} from "@ant-design/icons";
 import {icons, IconType} from "../icons/icons";
-import {LogoBig, LogoSmall} from "../../assets/svg";
-import Svg from "../../assets/svg/Svg";
 import {useSlider} from "../../hooks/useSlider";
-import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
+import { TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
 import {signOut} from "firebase/auth";
 import {auth} from "../../firebase";
 import UserAvatar, {StyledUserAvatar} from "../global/UserAvatar";
 import {useSelector} from "react-redux";
 import {ReduxState} from "../../store";
-import {selectTaskLists} from "../../store/taskSlice";
 import LogoWithTaskList from "../global/LogoWithTaskList";
 import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
 import {ItemType} from "antd/es/menu/hooks/useItems";
+import {useGetTaskListsQuery} from "../../store/api";
 
 const { Header } = Layout;
 
@@ -129,10 +127,17 @@ const MenuTop: React.FC = () => {
     const matched = useMatches();
     const navigate = useNavigate();
 
-    const taskLists = useSelector((state: ReduxState) => selectTaskLists(state));
+    const {
+        data: taskLists = [],
+        isLoading,
+        isSuccess,
+        isError,
+        error
+    } = useGetTaskListsQuery();
+
+    // const taskLists = useSelector((state: ReduxState) => selectTaskLists(state));
     const selectedTaskListId = useSelector((state: ReduxState) => state.taskReducer.selectedTaskListId);
     const selectedTaskList = useSelectedTaskList();
-
     const [leftTopMenuItems, setLeftTopMenuItems] = useState<MenuTopItem[]>(selectedTaskListId !== undefined ? menuTopItemsLeftDefault : menuTopItemsLeftWhenNoTaskList);
 
     useEffect(() => {

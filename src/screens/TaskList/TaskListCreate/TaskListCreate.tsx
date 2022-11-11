@@ -3,18 +3,17 @@ import {
     Button,
     Form,
     Input,
-    PageHeader,
+    PageHeader, Result,
     Select,
 } from "antd";
 import {useUser} from "../../../hooks/useUser";
 import {stringToPretty} from "../../../helpers/stringToPretty";
 import {generateID} from "../../../helpers/generateID";
-import {TaskList, taskListConverter, TaskListType} from "../../../types/TaskLists";
-import {doc, setDoc} from "firebase/firestore";
-import {db} from "../../../firebase";
+import {TaskList, TaskListType} from "../../../types/TaskLists";
 import {useNavigate} from "react-router-dom";
-import {addTaskList, setSelectedTaskListId} from "../../../store/taskSlice";
-import {batch, useDispatch} from "react-redux";
+import {setSelectedTaskListId} from "../../../store/taskSlice";
+import {useDispatch} from "react-redux";
+import {useCreateTaskListMutation} from "../../../store/api";
 
 interface FormTaskListCreate {
     taskListName: string;
@@ -25,8 +24,9 @@ const TaskListCreate: React.FC = () => {
     const user = useUser();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [createTaskList, { isLoading, isSuccess }] = useCreateTaskListMutation();
 
-    const onFinish = useCallback((values: FormTaskListCreate) => {
+    const onFinish = useCallback(async (values: FormTaskListCreate) => {
         if (user) {
             const newId = stringToPretty(values.taskListName) + '-' + generateID(4);
 
@@ -37,18 +37,12 @@ const TaskListCreate: React.FC = () => {
                 type: values.taskListType
             }
 
-
             console.log('Trying to create this task list: ', newTaskList);
 
-            const taskListRef = doc(db, '/Users/' + user.id + '/TaskLists/' + newId).withConverter(taskListConverter);
-            setDoc(taskListRef, newTaskList).then(() => {
-                batch(() => {
-                    dispatch(addTaskList(newTaskList));
-                    dispatch(setSelectedTaskListId(newId));
-                });
+            await createTaskList(newTaskList).then(() => {
+                dispatch(setSelectedTaskListId(newId));
                 navigate(`/task-list/${newId}`);
             });
-
         }
     }, [user]);
 
@@ -66,6 +60,7 @@ const TaskListCreate: React.FC = () => {
                 initialValues={{
                     taskListType: TaskListType.DAILY
                 }}
+                disabled={isLoading}
                 onFinish={onFinish}
             >
                 <Form.Item
@@ -86,6 +81,13 @@ const TaskListCreate: React.FC = () => {
                 <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
                     <Button type="primary" htmlType="submit">Create</Button>
                 </Form.Item>
+                {
+                    isSuccess && <Result
+                        status="success"
+                        title="Good job!"
+                        subTitle="Your new task list was created!"
+                      />
+                }
             </Form>
         </>
     );

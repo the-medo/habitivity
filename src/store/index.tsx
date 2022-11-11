@@ -4,13 +4,17 @@ import { Provider } from 'react-redux';
 import {userReducer} from "./userSlice";
 import {menuReducer} from "./menuSlice";
 import {taskReducer} from "./taskSlice";
+import {apiSlice} from "./api";
 
 export const store = configureStore({
     reducer: {
         userReducer,
         menuReducer: menuReducer,
         taskReducer: taskReducer,
+        [apiSlice.reducerPath]: apiSlice.reducer,
     },
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware().concat(apiSlice.middleware)
 });
 
 export type ReduxState = ReturnType<typeof store.getState>;

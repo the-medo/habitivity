@@ -13,8 +13,8 @@ import {TaskList, taskListConverter, TaskListType} from "../../../types/TaskList
 import {doc, setDoc} from "firebase/firestore";
 import {db} from "../../../firebase";
 import {useNavigate} from "react-router-dom";
-import {addTaskList, setSelectedTaskListId} from "../../../store/taskSlice";
-import {batch, useDispatch} from "react-redux";
+import {setSelectedTaskListId} from "../../../store/taskSlice";
+import {useDispatch} from "react-redux";
 
 interface FormTaskListCreate {
     taskListName: string;
@@ -42,10 +42,7 @@ const TaskListEdit: React.FC = () => {
 
             const taskListRef = doc(db, '/Users/' + user.id + '/TaskLists/' + newId).withConverter(taskListConverter);
             setDoc(taskListRef, newTaskList).then(() => {
-                batch(() => {
-                    dispatch(addTaskList(newTaskList));
-                    dispatch(setSelectedTaskListId(newId));
-                });
+                dispatch(setSelectedTaskListId(newId));
                 navigate(`/task-list/${newId}`);
             });
 

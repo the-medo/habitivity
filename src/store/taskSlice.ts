@@ -20,7 +20,6 @@ const taskGroupsAdapter = createEntityAdapter<TaskGroup>({
 
 export interface TaskState {
     tasks: ReturnType<typeof tasksAdapter.getInitialState>;
-    taskLists: ReturnType<typeof taskListsAdapter.getInitialState>;
     taskGroups: ReturnType<typeof taskGroupsAdapter.getInitialState>;
     selectedTaskListId?: string;
 }
@@ -28,7 +27,6 @@ export interface TaskState {
 
 const initialState: TaskState = {
     tasks: tasksAdapter.getInitialState(),
-    taskLists: taskListsAdapter.getInitialState(),
     taskGroups: taskGroupsAdapter.getInitialState(),
     selectedTaskListId: getItem(LSKey.selectedTaskListId),
 }
@@ -39,6 +37,7 @@ export const taskSlice = createSlice({
     reducers: {
         // ========== TASKS ==========
         setTasks: (state, action: PayloadAction<Task[]>) => {
+
             tasksAdapter.setAll(state.tasks, action.payload);
         },
         addTask: (state, action: PayloadAction<Task>) => {
@@ -60,18 +59,6 @@ export const taskSlice = createSlice({
         },
 
 
-        // ========== TASK LISTS ==========
-        setTaskLists: (state, action: PayloadAction<TaskList[]>) => {
-            taskListsAdapter.setAll(state.taskLists, action.payload);
-        },
-        addTaskList: (state, action: PayloadAction<TaskList>) => {
-            console.log("Adding task list...", action.payload);
-            taskListsAdapter.addOne(state.taskLists, action.payload);
-        },
-        removeTaskList: (state, action: PayloadAction<string>) => {
-            taskListsAdapter.removeOne(state.taskLists, action.payload);
-        },
-
         setSelectedTaskListId: (state, action: PayloadAction<string | undefined>) => {
             console.log("Selecting task list - " + action.payload);
             state.selectedTaskListId = action.payload;
@@ -80,10 +67,10 @@ export const taskSlice = createSlice({
     }
 });
 
+
 export const {
     setTasks, addTask, removeTask,
     setTaskGroups, addTaskGroup, removeTaskGroup,
-    setTaskLists, addTaskList, removeTaskList,
     setSelectedTaskListId
 } = taskSlice.actions;
 
@@ -93,5 +80,3 @@ export const { selectById: selectTaskById, selectAll: selectTasks } =
     tasksAdapter.getSelectors<ReduxState>(state => state.taskReducer.tasks);
 export const { selectById: selectTaskGroupById, selectAll: selectTaskGroups } =
     taskGroupsAdapter.getSelectors<ReduxState>(state => state.taskReducer.taskGroups);
-export const { selectById: selectTaskListById, selectAll: selectTaskLists } =
-    taskListsAdapter.getSelectors<ReduxState>(state => state.taskReducer.taskLists);
