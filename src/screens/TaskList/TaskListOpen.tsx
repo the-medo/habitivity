@@ -1,9 +1,8 @@
 import React, {useEffect} from "react";
 import {Outlet, useParams} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {ReduxState} from "../../../store";
-import {selectTaskLists, setSelectedTaskListId} from "../../../store/taskSlice";
-import {useGetTaskListsQuery} from "../../../store/api";
+import {useDispatch} from "react-redux";
+import { setSelectedTaskListId} from "../../store/taskSlice";
+import {useGetTaskListsQuery} from "../../store/api";
 
 interface TaskListOpenProps {
 

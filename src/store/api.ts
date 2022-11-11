@@ -13,7 +13,7 @@ export const apiSlice = createApi({
 
 
         getTaskLists: builder.query<TaskList[], void>({
-            providesTags: ['TaskList'],
+            providesTags: [{ type: 'TaskList', id: 'LIST' }],
             queryFn: async ( arg, api ) => {
                 console.log("======== API ============ inside getTaskLists ====================");
                 const {
@@ -51,7 +51,26 @@ export const apiSlice = createApi({
                     return { error: e }
                 }
             },
-        })
+        }),
+
+        /*updateTaskList: builder.mutation<TaskList, Partial<TaskList> & Pick<TaskList, 'id'>>({
+            invalidatesTags: ['TaskList'],
+            queryFn: async ( {id, ...patch}, api ) => {
+                console.log("======== API ============ inside createTaskList ====================");
+                const {
+                    userReducer: user,
+                } = api.getState() as ReduxState;
+
+                try {
+                    const userId = user.user?.id
+                    const taskListRef = doc(db, '/Users/' + userId + '/TaskLists/' + newTaskList.id).withConverter(taskListConverter);
+                    await setDoc(taskListRef, newTaskList);
+                    return { data: newTaskList };
+                } catch (e) {
+                    return { error: e }
+                }
+            },
+        })*/
 
 
     })

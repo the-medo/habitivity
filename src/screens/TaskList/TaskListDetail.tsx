@@ -1,5 +1,5 @@
 import React from "react";
-import {useSelectedTaskList} from "../../../hooks/useSelectedTaskList";
+import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
 
 interface TaskListDetailProps {
 

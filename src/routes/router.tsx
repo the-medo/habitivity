@@ -8,10 +8,10 @@ import Calendar from "./Calendar";
 import Settings from "./Settings";
 import Today from "./Today";
 import TaskList from "../screens/TaskList/TaskList";
-import TaskListCreate from "../screens/TaskList/TaskListCreate/TaskListCreate";
-import TaskListOpen from "../screens/TaskList/TaskListOpen/TaskListOpen";
-import TaskListDetail from "../screens/TaskList/TaskListDetail/TaskListDetail";
-import TaskListEdit from "../screens/TaskList/TaskListEdit/TaskListEdit";
+import TaskListCreate from "../screens/TaskList/TaskListCreate";
+import TaskListOpen from "../screens/TaskList/TaskListOpen";
+import TaskListDetail from "../screens/TaskList/TaskListDetail";
+import TaskListEdit from "../screens/TaskList/TaskListEdit";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -25,6 +25,8 @@ export const router = createBrowserRouter(
                 <Route index element={<TaskListDetail />} />
                 <Route path=":taskListId" element={<TaskListOpen />}>
                     <Route index element={<TaskListDetail />} />
+                    <Route path="create" element={<TaskListCreate />} />
+                    <Route path="edit" element={<TaskListEdit />} />
                 </Route>
                 <Route path="create" element={<TaskListCreate />} />
                 <Route path="edit" element={<TaskListEdit />} />
