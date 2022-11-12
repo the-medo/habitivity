@@ -9,11 +9,11 @@ interface TaskListFormProps {
     taskList?: TaskList;
     isLoading?: boolean;
     isEdit?: boolean;
-    onFinish: (values: FormTaskListCreate | FormTaskListEdit) => void;
+    onFinish: ((values: FormTaskListCreate) => void) | ((values: FormTaskListEdit) => void);
     onDelete?: () => void;
 }
 
-const StyledForm = styled(Form<FormTaskListCreate | FormTaskListEdit>)`
+const FormWrapper = styled.div`
   button:not(:first-of-type) {
     margin-left: .5rem;
   }
@@ -33,39 +33,41 @@ const TaskListForm: React.FC<TaskListFormProps> = ({taskList, isLoading, isEdit,
     }
 
     return (
-        <StyledForm
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 14 }}
-            layout="horizontal"
-            name="new-task-list"
-            initialValues={{
-                taskListName: taskList && isEdit ? taskList.name : undefined,
-                taskListType: TaskListType.DAILY
-            }}
-            disabled={isLoading}
-            onFinish={onFinish}
-        >
-            <Form.Item
-                label="Task list name"
-                name="taskListName"
-                rules={[{ required: true, message: 'Please input name of your task list!' }]}
+        <FormWrapper>
+            <Form
+                labelCol={{ span: 4 }}
+                wrapperCol={{ span: 14 }}
+                layout="horizontal"
+                name="new-task-list"
+                initialValues={{
+                    taskListName: taskList && isEdit ? taskList.name : undefined,
+                    taskListType: TaskListType.DAILY
+                }}
+                disabled={isLoading}
+                onFinish={onFinish}
             >
-                <Input placeholder="Task list name" />
-            </Form.Item>
-            <Form.Item
-                label="Task list type"
-                name="taskListType"
-                tooltip={isEdit && "It is not possible to change task list type"}
-            >
-                <Select disabled={isEdit}>
-                    <Select.Option value={TaskListType.DAILY}>Daily</Select.Option>
-                </Select>
-            </Form.Item>
-            <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
-                <Button type="primary" htmlType="submit">{isEdit ? 'Edit' : 'Create'}</Button>
-                {isEdit && <Button danger htmlType="reset" onClick={onDelete}>Delete</Button>}
-            </Form.Item>
-        </StyledForm>
+                <Form.Item
+                    label="Task list name"
+                    name="taskListName"
+                    rules={[{ required: true, message: 'Please input name of your task list!' }]}
+                >
+                    <Input placeholder="Task list name" />
+                </Form.Item>
+                <Form.Item
+                    label="Task list type"
+                    name="taskListType"
+                    tooltip={isEdit && "It is not possible to change task list type"}
+                >
+                    <Select disabled={isEdit}>
+                        <Select.Option value={TaskListType.DAILY}>Daily</Select.Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
+                    <Button type="primary" htmlType="submit">{isEdit ? 'Edit' : 'Create'}</Button>
+                    {isEdit && <Button danger htmlType="reset" onClick={onDelete}>Delete</Button>}
+                </Form.Item>
+            </Form>
+        </FormWrapper>
     );
 }
 

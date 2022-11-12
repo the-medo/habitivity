@@ -3,6 +3,7 @@ import {QueryDocumentSnapshot, SnapshotOptions} from "firebase/firestore";
 
 export type TaskGroup = {
     id: string,
+    position: number,
     name: string,
     taskListId: string,
 }

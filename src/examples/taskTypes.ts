@@ -18,6 +18,7 @@ import {TaskGroup} from "../types/TaskGroup";
 
 export const TaskListExample: TaskList = {
     id: "task-list-example",
+    userId: "random-user-id",
     name: "Task List Example",
     type: TaskListType.DAILY,
 }
@@ -26,12 +27,14 @@ export const TaskListExample: TaskList = {
 
 export const TaskGroupExample1: TaskGroup = {
     id: "task-group-example-1",
+    position: 1,
     name: "Task Group 1",
     taskListId: "task-list-example"
 }
 
 export const TaskGroupExample2: TaskGroup = {
     id: "task-group-example-2",
+    position: 2,
     name: "Task Group 2",
     taskListId: "task-list-example"
 }

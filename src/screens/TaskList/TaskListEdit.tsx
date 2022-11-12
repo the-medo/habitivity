@@ -3,11 +3,12 @@ import {
     PageHeader,
 } from "antd";
 import {useUser} from "../../hooks/useUser";
-import {TaskList, TaskListType} from "../../types/TaskLists";
+import {TaskList} from "../../types/TaskLists";
 import {useNavigate} from "react-router-dom";
 import TaskListForm from "./TaskListForm";
 import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
-import {useDeleteTaskListMutation, useUpdateTaskListMutation} from "../../store/api";
+import {useDeleteTaskListMutation, useUpdateTaskListMutation} from "../../store/apis/apiTaskList";
+import TaskGroupsEdit from "./TaskGroup/TaskGroupsEdit";
 
 export interface FormTaskListEdit {
     taskListName: string;
@@ -54,6 +55,7 @@ const TaskListEdit: React.FC = () => {
             <PageHeader
                 className="site-page-header"
                 title="Edit this task list"
+                subTitle={`ID: ${taskList?.id}`}
             />
             <TaskListForm
                 onFinish={onFinish}
@@ -62,6 +64,11 @@ const TaskListEdit: React.FC = () => {
                 taskList={taskList}
                 isEdit
             />
+            <PageHeader
+                className="site-page-header"
+                title="Edit groups"
+            />
+            <TaskGroupsEdit />
         </>
     );
 }

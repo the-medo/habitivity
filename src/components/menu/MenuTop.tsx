@@ -14,7 +14,7 @@ import {ReduxState} from "../../store";
 import LogoWithTaskList from "../global/LogoWithTaskList";
 import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
 import {ItemType} from "antd/es/menu/hooks/useItems";
-import {useGetTaskListsQuery} from "../../store/api";
+import {useGetTaskListsQuery} from "../../store/apis/apiTaskList";
 
 const { Header } = Layout;
 

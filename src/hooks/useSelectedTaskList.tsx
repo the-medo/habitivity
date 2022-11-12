@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {TaskList, TaskListType} from "../types/TaskLists";
 import {setSelectedTaskListId} from "../store/taskSlice";
 import {useEffect, useState} from "react";
-import {useGetTaskListsQuery} from "../store/api";
+import {useGetTaskListsQuery} from "../store/apis/apiTaskList";
 
 export function useSelectedTaskList(): TaskList | undefined {
     const {
