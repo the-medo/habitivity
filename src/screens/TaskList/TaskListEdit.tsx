@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 import TaskListForm from "./TaskListForm";
 import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
 import {useDeleteTaskListMutation, useUpdateTaskListMutation} from "../../store/apis/apiTaskList";
-import TaskGroupsEdit from "./TaskGroup/TaskGroupsEdit";
+import TaskGroupsForm from "./TaskGroup/TaskGroupsForm";
 
 export interface FormTaskListEdit {
     taskListName: string;
@@ -68,7 +68,7 @@ const TaskListEdit: React.FC = () => {
                 className="site-page-header"
                 title="Edit groups"
             />
-            <TaskGroupsEdit />
+            <TaskGroupsForm />
         </>
     );
 }

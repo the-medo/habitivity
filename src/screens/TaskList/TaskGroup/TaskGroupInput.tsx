@@ -7,6 +7,7 @@ import styled from "styled-components";
 
 interface TaskGroupInputProps {
     position: number;
+    isFirst: boolean;
     name: string | number;
     taskGroup?: TaskGroup;
     remove?: (index: (number | number[])) => void
@@ -22,25 +23,26 @@ const StyledRow = styled.div`
   }
 `
 
-const TaskGroupInput: React.FC<TaskGroupInputProps> = ({position, name, taskGroup, remove}) => {
-    const isExisting = taskGroup && !remove;
+const TaskGroupInput: React.FC<TaskGroupInputProps> = ({position, isFirst, name, taskGroup, remove}) => {
+    const alreadyExists = taskGroup && !remove;
+    const initialValue = alreadyExists ? taskGroup.name : undefined;
 
     const onDelete = useCallback(() => {
 
-    }, [])
+    }, []);
 
     return (
         <>
             <Form.Item
-                wrapperCol={position > 0 ? { offset: 4, span: 14 } : undefined}
+                wrapperCol={!isFirst ? { offset: 4, span: 14 } : undefined}
                 validateTrigger={['onChange', 'onBlur']}
-                label={position === 0 && "Task group name"}
+                label={isFirst && (alreadyExists ? "Existing groups" : "New groups")}
                 name={name}
-                rules={[{ required: true, message: `Please input name of task group ${taskGroup ? '' : 'or delete it'}` }]}
-                initialValue={taskGroup?.name}
+                rules={[{ required: alreadyExists, message: `Please input name of task group or delete it` }]}
+                initialValue={initialValue}
             >
                 <StyledRow>
-                    <Input placeholder="Task group name" />
+                    <Input placeholder="Task group name" defaultValue={initialValue} />
                     {
                         !remove
                             ? <DeleteOutlined onClick={onDelete} />
