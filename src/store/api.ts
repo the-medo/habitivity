@@ -1,7 +1,7 @@
 import {createApi, fakeBaseQuery} from "@reduxjs/toolkit/query/react";
 import {ReduxState} from "./index";
 import {TaskList, taskListConverter} from "../types/TaskLists";
-import {collection, doc, getDocs, setDoc} from "firebase/firestore";
+import {collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc} from "firebase/firestore";
 import {db} from "../firebase";
 
 
@@ -13,7 +13,6 @@ export const apiSlice = createApi({
 
 
         getTaskLists: builder.query<TaskList[], void>({
-            providesTags: [{ type: 'TaskList', id: 'LIST' }],
             queryFn: async ( arg, api ) => {
                 console.log("======== API ============ inside getTaskLists ====================");
                 const {
@@ -32,10 +31,17 @@ export const apiSlice = createApi({
                     return { error: e }
                 }
             },
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.map(({ id }) => ({ type: 'TaskList', id } as const)),
+                          { type: 'TaskList', id: 'LIST' },
+                      ]
+                    : [{ type: 'TaskList', id: 'LIST' }],
         }),
 
+
         createTaskList: builder.mutation<TaskList, TaskList>({
-            invalidatesTags: ['TaskList'],
             queryFn: async ( newTaskList, api ) => {
                 console.log("======== API ============ inside createTaskList ====================");
                 const {
@@ -51,26 +57,48 @@ export const apiSlice = createApi({
                     return { error: e }
                 }
             },
+            invalidatesTags: [{ type: 'TaskList', id: 'LIST' }],
         }),
 
-        /*updateTaskList: builder.mutation<TaskList, Partial<TaskList> & Pick<TaskList, 'id'>>({
-            invalidatesTags: ['TaskList'],
+
+        updateTaskList: builder.mutation<TaskList, Partial<TaskList> & Pick<TaskList, 'id'>>({
             queryFn: async ( {id, ...patch}, api ) => {
-                console.log("======== API ============ inside createTaskList ====================");
+                console.log("======== API ============ inside updateTaskList ====================");
                 const {
                     userReducer: user,
                 } = api.getState() as ReduxState;
 
                 try {
                     const userId = user.user?.id
-                    const taskListRef = doc(db, '/Users/' + userId + '/TaskLists/' + newTaskList.id).withConverter(taskListConverter);
-                    await setDoc(taskListRef, newTaskList);
-                    return { data: newTaskList };
+                    const taskListRef = doc(db, '/Users/' + userId + '/TaskLists/' + id).withConverter(taskListConverter);
+                    await updateDoc(taskListRef, patch);
+                    return { data: undefined };
                 } catch (e) {
                     return { error: e }
                 }
             },
-        })*/
+            invalidatesTags: (result, error, { id }) => [{ type: 'TaskList', id }],
+        }),
+
+
+        deleteTaskList: builder.mutation<TaskList, string>({
+            queryFn: async ( id, api ) => {
+                console.log("======== API ============ inside deleteTaskList ====================");
+                const {
+                    userReducer: user,
+                } = api.getState() as ReduxState;
+
+                try {
+                    const userId = user.user?.id
+                    const taskListRef = doc(db, '/Users/' + userId + '/TaskLists/' + id).withConverter(taskListConverter);
+                    await deleteDoc(taskListRef);
+                    return { data: undefined };
+                } catch (e) {
+                    return { error: e }
+                }
+            },
+            invalidatesTags: (result, error, id) => [{ type: 'TaskList', id }],
+        })
 
 
     })
@@ -79,4 +107,6 @@ export const apiSlice = createApi({
 export const {
     useGetTaskListsQuery,
     useCreateTaskListMutation,
+    useUpdateTaskListMutation,
+    useDeleteTaskListMutation,
 } = apiSlice;

@@ -2,15 +2,28 @@ import React, {useEffect} from "react";
 import {TaskList, TaskListType} from "../../types/TaskLists";
 import {Button, Form, Input, Select, Spin} from "antd";
 import {FormTaskListCreate} from "./TaskListCreate";
+import {FormTaskListEdit} from "./TaskListEdit";
+import styled from "styled-components";
 
 interface TaskListFormProps {
     taskList?: TaskList;
     isLoading?: boolean;
     isEdit?: boolean;
-    onFinish: (args: FormTaskListCreate) => void;
+    onFinish: (values: FormTaskListCreate | FormTaskListEdit) => void;
+    onDelete?: () => void;
 }
 
-const TaskListForm: React.FC<TaskListFormProps> = ({taskList, isLoading, onFinish, isEdit}) => {
+const StyledForm = styled(Form<FormTaskListCreate | FormTaskListEdit>)`
+  button:not(:first-of-type) {
+    margin-left: .5rem;
+  }
+  
+  button:not(:last-of-type) {
+    margin-right: .5rem;
+  }
+`;
+
+const TaskListForm: React.FC<TaskListFormProps> = ({taskList, isLoading, isEdit, onFinish, onDelete}) => {
     useEffect(() => {
         console.log("TASK LIST CHANGED!!! ", taskList);
     }, [taskList])
@@ -20,7 +33,7 @@ const TaskListForm: React.FC<TaskListFormProps> = ({taskList, isLoading, onFinis
     }
 
     return (
-        <Form
+        <StyledForm
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 14 }}
             layout="horizontal"
@@ -50,8 +63,9 @@ const TaskListForm: React.FC<TaskListFormProps> = ({taskList, isLoading, onFinis
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
                 <Button type="primary" htmlType="submit">{isEdit ? 'Edit' : 'Create'}</Button>
+                {isEdit && <Button danger htmlType="reset" onClick={onDelete}>Delete</Button>}
             </Form.Item>
-        </Form>
+        </StyledForm>
     );
 }
 
