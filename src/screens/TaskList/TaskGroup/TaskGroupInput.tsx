@@ -1,8 +1,9 @@
 import React, {useCallback} from "react";
-import {Form, Input} from "antd";
+import {Form, Input, Spin} from "antd";
 import {DeleteOutlined, MinusCircleOutlined} from "@ant-design/icons";
 import {TaskGroup} from "../../../types/TaskGroup";
 import styled from "styled-components";
+import {useDeleteTaskGroupMutation} from "../../../store/apis/apiTaskGroup";
 
 
 interface TaskGroupInputProps {
@@ -10,7 +11,7 @@ interface TaskGroupInputProps {
     isFirst: boolean;
     name: string | number;
     taskGroup?: TaskGroup;
-    remove?: (index: (number | number[])) => void
+    removeFromList?: (index: (number | number[])) => void
 }
 
 const StyledRow = styled.div`
@@ -23,16 +24,21 @@ const StyledRow = styled.div`
   }
 `
 
-const TaskGroupInput: React.FC<TaskGroupInputProps> = ({position, isFirst, name, taskGroup, remove}) => {
-    const alreadyExists = taskGroup && !remove;
+const TaskGroupInput: React.FC<TaskGroupInputProps> = ({position, isFirst, name, taskGroup, removeFromList}) => {
+    const alreadyExists = taskGroup && !removeFromList;
     const initialValue = alreadyExists ? taskGroup.name : undefined;
+    const [deleteTaskGroup, { isLoading: isDeleting }] = useDeleteTaskGroupMutation();
 
     const onDelete = useCallback(() => {
-
-    }, []);
+        if (alreadyExists) {
+            deleteTaskGroup(taskGroup.id);
+        } else if (removeFromList) {
+            removeFromList(+name);
+        }
+    }, [alreadyExists, removeFromList, taskGroup, name]);
 
     return (
-        <>
+        <Spin spinning={isDeleting}>
             <Form.Item
                 wrapperCol={!isFirst ? { offset: 4, span: 14 } : undefined}
                 validateTrigger={['onChange', 'onBlur']}
@@ -44,13 +50,13 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({position, isFirst, name,
                 <StyledRow>
                     <Input placeholder="Task group name" defaultValue={initialValue} />
                     {
-                        !remove
+                        alreadyExists
                             ? <DeleteOutlined onClick={onDelete} />
-                            : <MinusCircleOutlined onClick={() => remove(+name)} />
+                            : <MinusCircleOutlined onClick={onDelete} />
                     }
                 </StyledRow>
             </Form.Item>
-        </>
+        </Spin>
     );
 }
 

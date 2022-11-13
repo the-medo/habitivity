@@ -1,0 +1,1 @@
+export type PartialWithId<O extends {id: any}> = Partial<O> & Pick<O, 'id'>;
