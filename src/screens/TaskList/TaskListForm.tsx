@@ -3,7 +3,7 @@ import {TaskList, TaskListType} from "../../types/TaskLists";
 import {Button, Form, Input, Select, Spin} from "antd";
 import {FormTaskListCreate} from "./TaskListCreate";
 import {FormTaskListEdit} from "./TaskListEdit";
-import styled from "styled-components";
+import ButtonWrapper from "../../components/global/ButtonWrapper";
 
 interface TaskListFormProps {
     taskList?: TaskList;
@@ -12,16 +12,6 @@ interface TaskListFormProps {
     onFinish: ((values: FormTaskListCreate) => void) | ((values: FormTaskListEdit) => void);
     onDelete?: () => void;
 }
-
-const FormWrapper = styled.div`
-  button:not(:first-of-type) {
-    margin-left: .5rem;
-  }
-  
-  button:not(:last-of-type) {
-    margin-right: .5rem;
-  }
-`;
 
 const TaskListForm: React.FC<TaskListFormProps> = ({taskList, isLoading, isEdit, onFinish, onDelete}) => {
     useEffect(() => {
@@ -33,10 +23,9 @@ const TaskListForm: React.FC<TaskListFormProps> = ({taskList, isLoading, isEdit,
     }
 
     return (
-        <FormWrapper>
             <Form
-                labelCol={{ span: 4 }}
-                wrapperCol={{ span: 14 }}
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 18 }}
                 layout="horizontal"
                 name="new-task-list"
                 initialValues={{
@@ -62,12 +51,13 @@ const TaskListForm: React.FC<TaskListFormProps> = ({taskList, isLoading, isEdit,
                         <Select.Option value={TaskListType.DAILY}>Daily</Select.Option>
                     </Select>
                 </Form.Item>
-                <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
-                    <Button type="primary" htmlType="submit">{isEdit ? 'Edit' : 'Create'}</Button>
-                    {isEdit && <Button danger htmlType="reset" onClick={onDelete}>Delete</Button>}
+                <Form.Item wrapperCol={{ span: 18, sm: {offset: 6}, xs: {offset: 0} }}>
+                    <ButtonWrapper>
+                        <Button type="primary" htmlType="submit">{isEdit ? 'Edit' : 'Create'}</Button>
+                        {isEdit && <Button danger htmlType="reset" onClick={onDelete}>Delete</Button>}
+                    </ButtonWrapper>
                 </Form.Item>
             </Form>
-        </FormWrapper>
     );
 }
 

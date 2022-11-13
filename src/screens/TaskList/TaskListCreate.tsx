@@ -1,5 +1,5 @@
 import React, {useCallback} from "react";
-import {PageHeader} from "antd";
+import {Col, PageHeader} from "antd";
 import {useUser} from "../../hooks/useUser";
 import {stringToPretty} from "../../helpers/stringToPretty";
 import {generateID} from "../../helpers/generateID";
@@ -41,10 +41,11 @@ const TaskListCreate: React.FC = () => {
 
     return (
         <>
-            <PageHeader
-                className="site-page-header"
-                title="Create new task list"
-            />
+            <Col offset={6}>
+                <PageHeader
+                    title="Create new task list"
+                />
+            </Col>
             <TaskListForm isLoading={isLoading} onFinish={onFinish}/>
         </>
     );

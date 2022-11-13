@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {Button, Dropdown, Layout, Menu} from 'antd';
 import styled, {css} from "styled-components";
-import {Link, NavLink, useMatches, useNavigate} from "react-router-dom";
+import {NavLink, useMatches, useNavigate} from "react-router-dom";
 import {icons, IconType} from "../icons/icons";
 import {useSlider} from "../../hooks/useSlider";
 import { TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
@@ -115,6 +115,8 @@ const LeftMenu = styled(Menu).attrs(() => ({
   flex: auto;
 `
 
+const DivPointerCursor = styled.div`cursor: pointer`;
+
 
 const MenuTop: React.FC = () => {
     const {isLeftMenuCollapsed} = useSlider();
@@ -185,12 +187,13 @@ const MenuTop: React.FC = () => {
         <TopMenuHeader $isCollapsed={isLeftMenuCollapsed}>
             <FullMenuWrapper>
                 <LeftMenuWrapper>
-                    <Dropdown menu={{items: taskListDropdownItems}} align={{targetOffset: [0, isLeftMenuCollapsed ? 0 : -5]}}>
-                        <div>
-                            <Link to={`/`}>
-                                <LogoWithTaskList version={isLeftMenuCollapsed ? 'small' : 'big'} title={selectedTaskList?.name} />
-                            </Link>
-                        </div>
+                    <Dropdown trigger={["click", "hover"]} menu={{items: taskListDropdownItems}} align={{targetOffset: [0, isLeftMenuCollapsed ? 0 : -5]}}>
+                        <DivPointerCursor>
+                                {/*TODO - in case of touch screen, dont link to homepage*/}
+                                {/*<Link to={`/`}>*/}
+                                    <LogoWithTaskList version={isLeftMenuCollapsed ? 'small' : 'big'} title={selectedTaskList?.name} />
+                                {/*</Link>*/}
+                        </DivPointerCursor>
                     </Dropdown>
                     <LeftMenu mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, leftTopMenuItems) : leftTopMenuItems.filter(mti => mti.isDefault).map(mti => mti.key)}>
                         {
@@ -199,10 +202,10 @@ const MenuTop: React.FC = () => {
                     </LeftMenu>
                 </LeftMenuWrapper>
                 <RightMenuWrapper>
-                    <Dropdown menu={{items: userOptionDropdownItems}} overlayStyle={{width: '200px'}} align={{offset: [0, -1]}}>
-                        <div>
+                    <Dropdown trigger={["click", "hover"]} menu={{items: userOptionDropdownItems}} overlayStyle={{width: '200px'}} align={{offset: [0, -1]}}>
+                        <DivPointerCursor style={{cursor: "pointer"}}>
                             <UserAvatar />
-                        </div>
+                        </DivPointerCursor>
                     </Dropdown>
                 </RightMenuWrapper>
             </FullMenuWrapper>

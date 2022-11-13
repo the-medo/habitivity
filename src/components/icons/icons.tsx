@@ -9,6 +9,8 @@ import {
     EditOutlined,
     PlusOutlined,
     RightOutlined,
+    DragOutlined,
+    RestOutlined,
 } from "@ant-design/icons";
 
 export enum IconType {
@@ -22,6 +24,8 @@ export enum IconType {
     EditOutlined,
     PlusOutlined,
     RightOutlined,
+    DragOutlined,
+    RestOutlined,
 }
 
 export const icons: Record<IconType, React.ReactNode> = {
@@ -35,4 +39,6 @@ export const icons: Record<IconType, React.ReactNode> = {
     [IconType.EditOutlined]: React.createElement(EditOutlined),
     [IconType.PlusOutlined]: React.createElement(PlusOutlined),
     [IconType.RightOutlined]: React.createElement(RightOutlined),
+    [IconType.DragOutlined]: React.createElement(DragOutlined),
+    [IconType.RestOutlined]: React.createElement(RestOutlined),
 }

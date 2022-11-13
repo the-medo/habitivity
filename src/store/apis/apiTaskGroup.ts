@@ -100,22 +100,26 @@ export const apiTaskList = apiSlice.enhanceEndpoints({ addTagTypes: ['TaskGroup'
         }),
 
 
-        deleteTaskGroup: builder.mutation<{taskListId: string}, string>({
-            queryFn: async ( id, api ) => {
+        deleteTaskGroups: builder.mutation<{taskListId: string, ids: string[]}, string[]>({
+            queryFn: async ( ids, api ) => {
                 console.log("======== API ============ inside deleteTaskGroup ====================");
                 const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
                 const selectedTaskListId = (api.getState() as ReduxState).taskReducer.selectedTaskListId ?? 'undefined';
 
                 try {
-                    const taskGroupRef = doc(db, '/Users/' + userId + '/TaskGroups/' + id).withConverter(taskGroupConverter);
-                    await deleteDoc(taskGroupRef);
-                    return { data: {taskListId: selectedTaskListId} };
+                    const batch = writeBatch(db);
+                    ids.forEach((id) => {
+                        const taskGroupRef = doc(db, '/Users/' + userId + '/TaskGroups/' + id).withConverter(taskGroupConverter);
+                        batch.delete(taskGroupRef);
+                    });
+                    await batch.commit();
+                    return { data: {taskListId: selectedTaskListId, ids} };
                 } catch (e) {
                     return { error: e }
                 }
             },
-            invalidatesTags: (result, error, id) => [
-                { type: 'TaskGroup', id: `single-${id}` },
+            invalidatesTags: (result) => [
+                ...(result?.ids ?? []).map(( id ) => ({ type: 'TaskGroup', id: `single-${id}` } as const)),
                 { type: 'TaskGroup', id: `LIST-${result?.taskListId ?? 'undefined'}` }
             ],
         })
@@ -128,5 +132,5 @@ export const {
     useGetTaskGroupsByTaskListQuery,
     useCreateTaskGroupsMutation,
     useUpdateTaskGroupsMutation,
-    useDeleteTaskGroupMutation,
+    useDeleteTaskGroupsMutation,
 } = apiTaskList;
