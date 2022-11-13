@@ -1,5 +1,5 @@
 import React, {ReactNode} from "react";
-import {createGlobalStyle, css, ThemeProvider} from 'styled-components';
+import {createGlobalStyle, css, DefaultTheme, ThemeProvider} from 'styled-components';
 
 
 export let REM_SIZE = 24; //in pixels
@@ -17,10 +17,6 @@ const GlobalStyle = createGlobalStyle`
     font-size: 100%;
   }
   
-  html {
-    --ant-primary-color: red;
-  }
-
   li.ant-menu-item .ant-menu-item-icon + span:empty {
     margin-left: 0;
   }
@@ -53,9 +49,17 @@ export const withScrollbar = css`
   }
 `;
 
+const theme: DefaultTheme = {
+    fontFamily: 'Helvetica Neue',
+    colors: {
+        primary: '#1DA57A',
+        secondary: '#1DA57A',
+    },
+}
+
 const GlobalStyleAndTheme: React.FC<GlobalStyleAndThemeProps> = ({children}) => {
     return (
-        <ThemeProvider theme={{ fontFamily: 'Helvetica Neue' }}>
+        <ThemeProvider theme={theme}>
             <GlobalStyle />
             {children}
         </ThemeProvider>

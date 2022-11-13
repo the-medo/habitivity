@@ -5,7 +5,10 @@ import {
     HomeOutlined,
     HomeTwoTone, LogoutOutlined,
     RightCircleOutlined,
-    SettingOutlined
+    SettingOutlined,
+    EditOutlined,
+    PlusOutlined,
+    RightOutlined,
 } from "@ant-design/icons";
 
 export enum IconType {
@@ -16,6 +19,9 @@ export enum IconType {
     RightCircleOutlined,
     SettingOutlined,
     LogoutOutlined,
+    EditOutlined,
+    PlusOutlined,
+    RightOutlined,
 }
 
 export const icons: Record<IconType, React.ReactNode> = {
@@ -26,4 +32,7 @@ export const icons: Record<IconType, React.ReactNode> = {
     [IconType.RightCircleOutlined]: React.createElement(RightCircleOutlined),
     [IconType.SettingOutlined]: React.createElement(SettingOutlined),
     [IconType.LogoutOutlined]: React.createElement(LogoutOutlined),
+    [IconType.EditOutlined]: React.createElement(EditOutlined),
+    [IconType.PlusOutlined]: React.createElement(PlusOutlined),
+    [IconType.RightOutlined]: React.createElement(RightOutlined),
 }

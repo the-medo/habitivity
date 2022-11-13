@@ -25,7 +25,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({userToDisplay}) => {
         return <StyledUserAvatar>{initials(user.name)}</StyledUserAvatar>
     }
 
-    return <StyledUserAvatar src={<Image src={user.photoUrl} referrerPolicy="no-referrer" />} />
+    return <StyledUserAvatar src={<img src={user.photoUrl} referrerPolicy="no-referrer"  alt="User avatar" />} />
 }
 
 export default UserAvatar;

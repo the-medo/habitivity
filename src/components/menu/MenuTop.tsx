@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useState} from "react";
 import {Button, Dropdown, Layout, Menu} from 'antd';
 import styled, {css} from "styled-components";
 import {Link, NavLink, useMatches, useNavigate} from "react-router-dom";
-import {LogoutOutlined} from "@ant-design/icons";
 import {icons, IconType} from "../icons/icons";
 import {useSlider} from "../../hooks/useSlider";
 import { TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
@@ -57,14 +56,6 @@ export const menuTopItemsLeftWhenNoTaskList: MenuTopItem[] = [
 ];
 
 
-export const menuTopItemsRight: MenuTopItem[] = [
-    {
-        key: "1",
-        to: "/settings",
-        icon: IconType.SettingOutlined,
-    },
-];
-
 const displayMenuItem = (mti: MenuTopItem) => {
     return (
         <Menu.Item key={mti.key} onClick={mti.onClick} icon={mti.icon ? icons[mti.icon] : undefined}>
@@ -102,6 +93,7 @@ const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   transition: .5s all;
   line-height: ${TOP_MENU_BIG}rem;
   height: ${TOP_MENU_BIG}rem;
+  overflow: hidden;
   
   ${({$isCollapsed}) => $isCollapsed && css`
     line-height: ${TOP_MENU_SMALL}rem;
@@ -112,11 +104,13 @@ const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
     width: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
     height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
     line-height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
-    margin: ${({$isCollapsed}) => $isCollapsed ? 0.375 : 0.5}rem;
+    margin: ${({$isCollapsed}) => $isCollapsed ? 0.35 : 0.45}rem;
   }
 `;
 
-const LeftMenu = styled(Menu)`
+const LeftMenu = styled(Menu).attrs(() => ({
+    theme: "dark",
+}))`
   min-width: 0;
   flex: auto;
 `
@@ -129,10 +123,6 @@ const MenuTop: React.FC = () => {
 
     const {
         data: taskLists = [],
-        isLoading,
-        isSuccess,
-        isError,
-        error
     } = useGetTaskListsQuery();
 
     // const taskLists = useSelector((state: ReduxState) => selectTaskLists(state));
@@ -148,52 +138,72 @@ const MenuTop: React.FC = () => {
         }
     }, [selectedTaskListId, taskLists])
 
-    useEffect(() => {
-
-        console.log("MenuTop => taskLists changed - ", taskLists)
-    }, [taskLists]);
-
-
     const logoutHandler = useCallback(() => {
         signOut(auth).then(() => navigate("/"));
     }, []);
 
-    const dropdownItems: ItemType[] =
+    const taskListDropdownItems: ItemType[] =
         taskLists
             .filter(tl => tl.id !== selectedTaskListId)
-            .map(tl => ({
-                label: <Link to={`/task-list/${tl.id}`}>{tl.name}</Link>,
-                key: `tl-${tl.id}`
-            })).concat(selectedTaskList ? [{
-                label: <Button type="default" style={{width: '100%'}}><Link to={`/task-list/edit`}>Edit current task list</Link></Button>,
-                key: `tl-edit`
-            }]: []).concat([{
-            label: <Button type="primary" style={{width: '100%'}}><Link to={`/task-list/create`}>Create new task list</Link></Button>,
-                key: `tl-create`
-            }])
-    ;
+            .map((tl): ItemType => ({
+                label: tl.name,
+                key: `tl-${tl.id}`,
+                onClick: () => navigate(`/task-list/${tl.id}`),
+                icon: icons[IconType.RightOutlined],
+                style: {marginLeft: '.5rem'}
+            })).concat([{
+                type: "divider"
+            }], (selectedTaskList ? [{
+                label: <Button style={{width: '100%'}} icon={icons[IconType.EditOutlined]} >Edit current task list</Button>,
+                key: `tl-edit`,
+                onClick: () => navigate(`/task-list/edit`),
+            }]: []), [{
+                label: <Button type="primary" style={{width: '100%'}} icon={icons[IconType.PlusOutlined]} >Create new task list</Button>,
+                key: `tl-create`,
+                onClick: () => navigate(`/task-list/create`),
+            }]);
+
+    const userOptionDropdownItems: ItemType[] = [
+        {
+            label: "Settings",
+            key: "1",
+            icon: icons[IconType.SettingOutlined],
+            onClick: () => navigate("/settings"),
+        },
+        {
+            type: "divider"
+        },
+        {
+            label: "Logout",
+            key: "3",
+            icon: icons[IconType.LogoutOutlined],
+            onClick: logoutHandler,
+        }
+    ]
 
     return (
         <TopMenuHeader $isCollapsed={isLeftMenuCollapsed}>
             <FullMenuWrapper>
                 <LeftMenuWrapper>
-                    <Dropdown menu={{items: dropdownItems}}>
+                    <Dropdown menu={{items: taskListDropdownItems}} align={{targetOffset: [0, isLeftMenuCollapsed ? 0 : -5]}}>
                         <div>
-                        <LogoWithTaskList version={isLeftMenuCollapsed ? 'small' : 'big'} title={selectedTaskList?.name} />
+                            <Link to={`/`}>
+                                <LogoWithTaskList version={isLeftMenuCollapsed ? 'small' : 'big'} title={selectedTaskList?.name} />
+                            </Link>
                         </div>
                     </Dropdown>
-                    <LeftMenu theme="dark" mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, leftTopMenuItems) : leftTopMenuItems.filter(mti => mti.isDefault).map(mti => mti.key)}>
+                    <LeftMenu mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, leftTopMenuItems) : leftTopMenuItems.filter(mti => mti.isDefault).map(mti => mti.key)}>
                         {
                             leftTopMenuItems.map(mti => displayMenuItem(mti))
                         }
                     </LeftMenu>
                 </LeftMenuWrapper>
                 <RightMenuWrapper>
-                    <Menu theme="dark" mode="horizontal">
-                        {menuTopItemsRight.map(mti => displayMenuItem(mti))}
-                        <Menu.Item key={2} icon={<LogoutOutlined />} onClick={logoutHandler} ></Menu.Item>
-                    </Menu>
-                    <UserAvatar />
+                    <Dropdown menu={{items: userOptionDropdownItems}} overlayStyle={{width: '200px'}} align={{offset: [0, -1]}}>
+                        <div>
+                            <UserAvatar />
+                        </div>
+                    </Dropdown>
                 </RightMenuWrapper>
             </FullMenuWrapper>
         </TopMenuHeader>

@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import {StoreProvider} from "./store";
 
-//TODO maybe change to <Menu.Item> to ItemType[] ?
-
 const _warn = console.warn;
 const warnsToSkip: string[] = [];
 console.warn = (msg, ...args) => {
