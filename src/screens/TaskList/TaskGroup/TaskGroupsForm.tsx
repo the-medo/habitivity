@@ -34,20 +34,18 @@ const StyledReorderGroup = styled(Reorder.Group)`
 
 const TaskGroupsForm: React.FC = () => {
     const selectedTaskListId = useSelectedTaskList()?.id ?? 'undefined';
-    const {data: existingGroups = [], isLoading } = useGetTaskGroupsByTaskListQuery(selectedTaskListId);
 
+    const {data: existingGroups = [], isLoading } = useGetTaskGroupsByTaskListQuery(selectedTaskListId);
     const [createTaskGroups, { isLoading: isCreating }] = useCreateTaskGroupsMutation();
     const [updateTaskGroups, { isLoading: isUpdating }] = useUpdateTaskGroupsMutation();
     const [deleteTaskGroups, { isLoading: isDeleting }] = useDeleteTaskGroupsMutation();
-
-    const isDoingSomething = isCreating || isUpdating || isDeleting;
+    const isDoingSomething = isLoading || isCreating || isUpdating || isDeleting;
 
     const [items, setItems] = useState<ReorderTaskGroupType[]>([]);
     const [deletedItems, setDeletedItems] = useState<ReorderTaskGroupType[]>([]);
 
-    const onReorder = (x: ReorderTaskGroupType[]) => {
-        setItems(x.map((g, i) => ({...g, position: i })));
-    }
+
+    const onReorder = (x: ReorderTaskGroupType[]) => setItems(x.map((g, i) => ({...g, position: i })));
 
     const setDefaults = useCallback(() => {
         setItems(existingGroups.map((g, i) => ({
