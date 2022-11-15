@@ -15,6 +15,8 @@ export default defineConfig({
         modifyVars: { //variable list: https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
           'primary-color': '#1DA57A',
           'heading-color': '#0e4227',
+          'menu-dark-item-active-bg': 'transparent',
+          'menu-item-color': 'pink',
           // 'font-size-base': '1rem',
           // 'font-size-lg': '1.25rem',
           // 'font-size-sm': '.75rem',

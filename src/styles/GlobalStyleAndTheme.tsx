@@ -15,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
   :root {
     //font-size: ${REM_SIZE}px;
     font-size: 100%;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple Color Emoji",Helvetica,Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";;
   }
   
   li.ant-menu-item .ant-menu-item-icon + span:empty {
