@@ -4,7 +4,7 @@ import styled, {css} from "styled-components";
 import {NavLink, useMatches, useNavigate} from "react-router-dom";
 import {icons, IconType} from "../icons/icons";
 import {useSlider} from "../../hooks/useSlider";
-import { TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
+import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
 import {signOut} from "firebase/auth";
 import {auth} from "../../firebase";
 import UserAvatar, {StyledUserAvatar} from "../global/UserAvatar";
@@ -44,6 +44,21 @@ export const menuTopItemsLeftDefault: MenuTopItem[] = [
         to: "/calendar",
         label: "Calendar",
     },
+    {
+        key: "3",
+        to: "/calendar",
+        label: "Calendar",
+    },
+    {
+        key: "3",
+        to: "/calendar",
+        label: "Calendar",
+    },
+    {
+        key: "3",
+        to: "/calendar",
+        label: "Calendar",
+    },
 ];
 
 export const menuTopItemsLeftWhenNoTaskList: MenuTopItem[] = [
@@ -55,18 +70,65 @@ export const menuTopItemsLeftWhenNoTaskList: MenuTopItem[] = [
     },
 ];
 
+const TestMenuItem = styled(Menu.Item)`
+  //background-color: #001529;
+  //border-radius: .5rem;
+  //margin: .5rem;
+  //padding: .75rem;
+  //height: 2.5rem;
+  //font-size: 1rem;
+  //line-height: 1rem;
+  //transition: .3s all;
+  //
+  //span, a {
+  //  color: #eeeeee;
+  //}
+  //
+  //&:hover {
+  //  background-color: #6e84c5;
+  //}
+`
 
 const displayMenuItem = (mti: MenuTopItem) => {
     return (
-        <Menu.Item key={mti.key} onClick={mti.onClick} icon={mti.icon ? icons[mti.icon] : undefined}>
+        <TestMenuItem key={mti.key} onClick={mti.onClick} >
             {mti.label && mti.to && <NavLink to={mti.to}>{mti.label}</NavLink>}
             {mti.label && !mti.to && <span>{mti.label}</span>}
-        </Menu.Item>
+        </TestMenuItem>
     )
+    // return (
+    //     <Menu.Item key={mti.key} onClick={mti.onClick} icon={mti.icon ? icons[mti.icon] : undefined}>
+    //         {mti.label && mti.to && <NavLink to={mti.to}>{mti.label}</NavLink>}
+    //         {mti.label && !mti.to && <span>{mti.label}</span>}
+    //     </Menu.Item>
+    // )
 }
 
 export const isActive = (search: string, menuItems: MenuTopItem[]) => menuItems.find(mi => mi.to === search) !== undefined;
 export const getActiveKeys = (search: string, menuItems: MenuTopItem[]) => menuItems.filter(mi => mi.to === search).map(mi => mi.key);
+
+
+
+const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  padding: 0;
+  transition: .5s all;
+  overflow: hidden;
+
+  ${({$isCollapsed}) => css`
+    line-height: ${$isCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG}rem;
+    height: ${$isCollapsed ? TOP_MENU_SMALL: TOP_MENU_BIG}rem;
+  `}
+  
+  ${StyledUserAvatar} {
+    width: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
+    height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
+    line-height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
+    margin: ${({$isCollapsed}) => $isCollapsed ? 0.35 : 0.45}rem;
+  }
+`;
 
 const LeftMenuWrapper = styled.div`
   display: flex;
@@ -85,35 +147,15 @@ const FullMenuWrapper = styled.div`
 `;
 
 
-const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
-  position: fixed;
-  z-index: 1;
-  width: 100%;
-  padding: 0;
-  transition: .5s all;
-  line-height: ${TOP_MENU_BIG}rem;
-  height: ${TOP_MENU_BIG}rem;
-  overflow: hidden;
-  
-  ${({$isCollapsed}) => $isCollapsed && css`
-    line-height: ${TOP_MENU_SMALL}rem;
-    height: ${TOP_MENU_SMALL}rem;
-  `}
-  
-  ${StyledUserAvatar} {
-    width: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
-    height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
-    line-height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
-    margin: ${({$isCollapsed}) => $isCollapsed ? 0.35 : 0.45}rem;
-  }
-`;
-
 const LeftMenu = styled(Menu).attrs(() => ({
     theme: "dark",
-}))`
+}))<{$isCollapsed?: boolean}>`
   min-width: 0;
   flex: auto;
+  ${({$isCollapsed}) => css`width: calc(100vw - 5rem - ${$isCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH}rem)`}
 `
+
+
 
 const DivPointerCursor = styled.div`cursor: pointer`;
 

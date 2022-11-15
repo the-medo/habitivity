@@ -57,8 +57,9 @@ export const menuSlice = createSlice({
                     newStatus = "openedByForce";
                 }
             } else if (newStatus === "collapsed") {
-
+                //no change of status
             }
+            setItem(LSKey.rightDrawerCollapsed, newStatus);
 
             state.rightDrawerStatus = newStatus;
         },
