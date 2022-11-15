@@ -45,21 +45,22 @@ export const menuTopItemsLeftDefault: MenuTopItem[] = [
         label: "Calendar",
     },
     {
-        key: "3",
+        key: "4",
         to: "/calendar",
-        label: "Calendar",
+        label: "Calendar2",
     },
     {
-        key: "3",
+        key: "5",
         to: "/calendar",
-        label: "Calendar",
+        label: "Calendar3",
     },
     {
-        key: "3",
+        key: "6",
         to: "/calendar",
-        label: "Calendar",
+        label: "Calendar4",
     },
 ];
+
 
 export const menuTopItemsLeftWhenNoTaskList: MenuTopItem[] = [
     {
@@ -70,31 +71,53 @@ export const menuTopItemsLeftWhenNoTaskList: MenuTopItem[] = [
     },
 ];
 
-const TestMenuItem = styled(Menu.Item)`
-  //background-color: #001529;
-  //border-radius: .5rem;
-  //margin: .5rem;
-  //padding: .75rem;
-  //height: 2.5rem;
-  //font-size: 1rem;
-  //line-height: 1rem;
-  //transition: .3s all;
-  //
-  //span, a {
-  //  color: #eeeeee;
-  //}
-  //
-  //&:hover {
-  //  background-color: #6e84c5;
-  //}
-`
+const TopMenuItem = styled.span`
+  border-radius: .5rem;
+  margin: .5rem;
+  padding: .75rem;
+  height: 2.5rem;
+  font-size: 1rem;
+  line-height: 1rem;
+  transition: .3s all;
+  
+  &:hover {
+    background-color: #6e84c5;
+  }
+`;
+
+export const menuTopItems2: ItemType[] = [
+    {
+        key: "home",
+        label: <TopMenuItem><NavLink to="/home">Home</NavLink></TopMenuItem>
+    },
+    {
+        key: "today",
+        label: <TopMenuItem><NavLink to="/today">Today</NavLink></TopMenuItem>
+    },
+    {
+        key: "calendar1",
+        label: <TopMenuItem><NavLink to="/calendar">Calendar 1</NavLink></TopMenuItem>
+    },
+    {
+        key: "calendar2",
+        label: <TopMenuItem><NavLink to="/calendar">Calendar 2</NavLink></TopMenuItem>
+    },
+    {
+        key: "calendar3",
+        label: <TopMenuItem><NavLink to="/calendar">Calendar 3</NavLink></TopMenuItem>
+    },
+    {
+        key: "calendar4",
+        label: <TopMenuItem><NavLink to="/calendar">Calendar 4</NavLink></TopMenuItem>
+    },
+]
 
 const displayMenuItem = (mti: MenuTopItem) => {
     return (
-        <TestMenuItem key={mti.key} onClick={mti.onClick} >
+        <TopMenuItem key={mti.key} onClick={mti.onClick} >
             {mti.label && mti.to && <NavLink to={mti.to}>{mti.label}</NavLink>}
             {mti.label && !mti.to && <span>{mti.label}</span>}
-        </TestMenuItem>
+        </TopMenuItem>
     )
     // return (
     //     <Menu.Item key={mti.key} onClick={mti.onClick} icon={mti.icon ? icons[mti.icon] : undefined}>
@@ -116,6 +139,11 @@ const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   padding: 0;
   transition: .5s all;
   overflow: hidden;
+  
+  /* must be here because of antd css rules overruling it in "TestMenuItem" styled component... better than !important... I guess? */
+  ${TopMenuItem} > a { 
+      color: #eeeeee;
+  }
 
   ${({$isCollapsed}) => css`
     line-height: ${$isCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG}rem;
@@ -158,7 +186,6 @@ const LeftMenu = styled(Menu).attrs(() => ({
 
 
 const DivPointerCursor = styled.div`cursor: pointer`;
-
 
 const MenuTop: React.FC = () => {
     const {isLeftMenuCollapsed} = useSlider();
@@ -237,11 +264,7 @@ const MenuTop: React.FC = () => {
                                 {/*</Link>*/}
                         </DivPointerCursor>
                     </Dropdown>
-                    <LeftMenu mode="horizontal" defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, leftTopMenuItems) : leftTopMenuItems.filter(mti => mti.isDefault).map(mti => mti.key)}>
-                        {
-                            leftTopMenuItems.map(mti => displayMenuItem(mti))
-                        }
-                    </LeftMenu>
+                    <LeftMenu mode="horizontal" items={menuTopItems2} defaultSelectedKeys={matched[1].pathname !== "/" ? getActiveKeys(matched[1].pathname, leftTopMenuItems) : leftTopMenuItems.filter(mti => mti.isDefault).map(mti => mti.key)} />
                 </LeftMenuWrapper>
                 <RightMenuWrapper>
                     <Dropdown trigger={["click", "hover"]} menu={{items: userOptionDropdownItems}} overlayStyle={{width: '200px'}} align={{offset: [0, -1]}}>
