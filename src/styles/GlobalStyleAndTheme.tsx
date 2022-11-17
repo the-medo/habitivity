@@ -1,5 +1,7 @@
 import React, {ReactNode} from "react";
 import {createGlobalStyle, css, DefaultTheme, ThemeProvider} from 'styled-components';
+import {SVG_COLOR_SECONDARY} from "../assets/svg/Svg";
+import {TopMenuItem} from "../components/menu/MenuTopComponents";
 
 
 export let REM_SIZE = 24; //in pixels
@@ -13,14 +15,40 @@ export const TOP_MENU_BIG = 4;
 
 const GlobalStyle = createGlobalStyle`
   :root {
-    //font-size: ${REM_SIZE}px;
+      //font-size: ${REM_SIZE}px;
     font-size: 100%;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple Color Emoji",Helvetica,Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";;
   }
-  
+
   li.ant-menu-item .ant-menu-item-icon + span:empty {
     margin-left: 0;
   }
+
+  div.ant-menu-submenu.ant-menu-submenu-popup ul {
+    transform: translateX(0rem) translateY(-.7rem);
+    border-radius: 0 0 .5rem .5rem ;
+    
+    li {
+      &:hover {
+        background-color: ${SVG_COLOR_SECONDARY}; //#001529
+      }
+
+      ${TopMenuItem} {
+        border-radius: 0;
+        margin: 0;
+
+        &:hover {
+          background-color: transparent;
+        }
+
+        a {
+          color: #cdd9ee;
+        }
+      }
+
+    }
+  }
+
 `
 
 

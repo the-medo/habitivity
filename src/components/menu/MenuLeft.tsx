@@ -9,7 +9,6 @@ import {
     SIDER_COLLAPSED_SIZE,
     LEFT_MENU_WIDTH,
     withScrollbar,
-    REM_SIZE,
     TOP_MENU_SMALL, TOP_MENU_BIG
 } from "../../styles/GlobalStyleAndTheme";
 import {setLeftMenuAutomaticallyCollapsed, toggleLeftMenuManuallyCollapsed} from "../../store/menuSlice";
