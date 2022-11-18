@@ -3,9 +3,10 @@ import {SVG_COLOR_SECONDARY} from "../../assets/svg/Svg";
 import {Layout, Menu} from "antd";
 import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
 import {StyledUserAvatar} from "../global/UserAvatar";
+import {NavLink} from "react-router-dom";
 const { Header } = Layout;
 
-export const TopMenuItem = styled.span`
+export const TopMenuNavLink = styled(NavLink)`
   border-radius: .5rem;
   margin: .25rem;
   padding: .4rem .5rem;
@@ -14,10 +15,26 @@ export const TopMenuItem = styled.span`
   line-height: 1rem;
   transition: .3s all;
   
-  &:hover {
+  &:hover, &[aria-current="page"].active {
     background-color: ${SVG_COLOR_SECONDARY}; //#001529
   }
 `;
+
+
+export const LeftMenuWrapper = styled.div`
+  display: flex;
+  flex: auto;
+  align-items: center;
+`;
+
+
+export const LeftMenu = styled(Menu).attrs(() => ({
+  theme: "dark",
+}))<{$isCollapsed?: boolean}>`
+  min-width: 0;
+  flex: auto;
+  ${({$isCollapsed}) => css`width: calc(100vw - 5rem - ${$isCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH}rem)`}
+`
 
 export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   position: fixed;
@@ -28,7 +45,7 @@ export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   overflow: hidden;
   
   /* must be here because of antd css rules overruling it in "TestMenuItem" styled component... better than !important... I guess? */
-  ${TopMenuItem} > a, ${TopMenuItem}:hover > a { 
+  ${LeftMenuWrapper} ${LeftMenu} ${TopMenuNavLink} { 
     color: #cdd9ee;
   }
 
@@ -47,19 +64,6 @@ export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
 
 
 
-export const LeftMenu = styled(Menu).attrs(() => ({
-    theme: "dark",
-}))<{$isCollapsed?: boolean}>`
-  min-width: 0;
-  flex: auto;
-  ${({$isCollapsed}) => css`width: calc(100vw - 5rem - ${$isCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH}rem)`}
-`
-
-export const LeftMenuWrapper = styled.div`
-  display: flex;
-  flex: auto;
-  align-items: center;
-`;
 
 export const RightMenuWrapper = styled.div`
   display: flex;

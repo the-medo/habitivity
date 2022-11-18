@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {Button, Dropdown} from 'antd';
 import styled from "styled-components";
-import {NavLink, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {icons, IconType} from "../icons/icons";
 import {useSlider} from "../../hooks/useSlider";
 import {signOut} from "firebase/auth";
@@ -13,40 +13,27 @@ import LogoWithTaskList from "../global/LogoWithTaskList";
 import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
 import {ItemType} from "antd/es/menu/hooks/useItems";
 import {useGetTaskListsQuery} from "../../store/apis/apiTaskList";
-import {FullMenuWrapper, LeftMenu, LeftMenuWrapper, RightMenuWrapper, TopMenuHeader, TopMenuItem } from "./MenuTopComponents";
-
+import {FullMenuWrapper, LeftMenu, LeftMenuWrapper, RightMenuWrapper, TopMenuHeader, TopMenuNavLink } from "./MenuTopComponents";
 
 export const menuTopItemsLeftDefault: ItemType[] = [
     {
         key: "home",
-        label: <TopMenuItem><NavLink to="/home">Home</NavLink></TopMenuItem>
+        label: <TopMenuNavLink to="/home">Home</TopMenuNavLink>
     },
     {
         key: "today",
-        label: <TopMenuItem><NavLink to="/today">Today</NavLink></TopMenuItem>
+        label: <TopMenuNavLink to="/today">Today</TopMenuNavLink>
     },
     {
         key: "calendar",
-        label: <TopMenuItem><NavLink to="/calendar">Calendar</NavLink></TopMenuItem>
-    },
-    {
-        key: "calendar2",
-        label: <TopMenuItem><NavLink to="/calendar">Calendar</NavLink></TopMenuItem>
-    },
-    {
-        key: "calendar3",
-        label: <TopMenuItem><NavLink to="/calendar">Calendar</NavLink></TopMenuItem>
-    },
-    {
-        key: "calendar4",
-        label: <TopMenuItem><NavLink to="/calendar">Calendar</NavLink></TopMenuItem>
+        label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
     },
 ];
 
 export const menuTopItemsLeftWhenNoTaskList: ItemType[] = [
     {
         key: "create-task-list",
-        label: <TopMenuItem><NavLink to="/task-list/create">Create new task list</NavLink></TopMenuItem>
+        label: <TopMenuNavLink to="/task-list/create">Create new task list</TopMenuNavLink>
     },
 ];
 
