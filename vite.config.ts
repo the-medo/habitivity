@@ -12,11 +12,12 @@ export default defineConfig({
     devSourcemap: true,
     preprocessorOptions:{
       less: {
-        modifyVars: { //variable list: https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
+        modifyVars: { //variable list: https://github.com/ant-design/ant-design/blob/4.24.3/components/style/themes/default.less
           'primary-color': '#1DA57A',
           'heading-color': '#0e4227',
           'menu-dark-item-active-bg': 'transparent',
-          'menu-item-padding-horizontal': '.5rem',
+          'menu-item-padding-horizontal': '.1rem',
+          'menu-item-padding': '.25rem',
           // 'menu-item-color': 'pink',
           // 'font-size-base': '1rem',
           // 'font-size-lg': '1.25rem',
