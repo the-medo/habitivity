@@ -7,6 +7,7 @@ import {NavLink} from "react-router-dom";
 const { Header } = Layout;
 
 export const TopMenuNavLink = styled(NavLink)`
+  
   border-radius: .5rem;
   margin: .25rem;
   padding: .4rem .5rem;
@@ -14,6 +15,12 @@ export const TopMenuNavLink = styled(NavLink)`
   font-size: 1.1rem;
   line-height: 1rem;
   transition: .3s all;
+  
+  span svg{
+    font-size: 1.2rem;
+    margin-right: .5rem;
+    color: #cdd9ee;
+  }
   
   &:hover, &[aria-current="page"].active {
     background-color: ${SVG_COLOR_SECONDARY}; //#001529

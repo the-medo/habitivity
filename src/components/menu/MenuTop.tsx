@@ -18,7 +18,7 @@ import {FullMenuWrapper, LeftMenu, LeftMenuWrapper, RightMenuWrapper, TopMenuHea
 export const menuTopItemsLeftDefault: ItemType[] = [
     {
         key: "home",
-        label: <TopMenuNavLink to="/home">Home</TopMenuNavLink>
+        label: <TopMenuNavLink to="/home">{icons[IconType.HomeOutlined]}Home</TopMenuNavLink>
     },
     {
         key: "today",

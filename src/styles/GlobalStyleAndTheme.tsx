@@ -20,6 +20,11 @@ const GlobalStyle = createGlobalStyle`
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";;
   }
 
+  ul.ant-menu > li.ant-menu-item[role="menuitem"] {
+    padding: 0 .5rem !important;
+    margin: 0;
+  }
+  
   li.ant-menu-item .ant-menu-item-icon + span:empty {
     margin-left: 0;
   }
