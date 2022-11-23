@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import {NavLink} from "react-router-dom";
-import {MenuLeftItem} from "./MenuLeft";
 import {
     LEFT_MENU_WIDTH,
     SIDER_COLLAPSED_SIZE,
@@ -9,17 +7,14 @@ import {
     withScrollbar
 } from "../../../styles/GlobalStyleAndTheme";
 import { Layout, Menu } from 'antd';
-import {icons, IconType} from "../../icons/icons";
 import React from "react";
-import {useSlider} from "../../../hooks/useSlider";
+import {COLORS} from "../../../styles/CustomStyles";
 const { Sider, } = Layout;
 
 export const LeftMenu = styled(Menu)`
   padding-top: .25rem;
+  background-color: ${COLORS.GREY_LIGHT};
 `;
-
-
-
 
 export interface MenuLeftProps {
     $isCollapsed: boolean;
@@ -28,7 +23,6 @@ export interface MenuLeftProps {
 }
 
 export const LeftSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyCollapsed' | '$isCollapsed'>>`
-  background: #fff;
   overflow-y: auto;
   height: calc(
             100vh
@@ -60,25 +54,3 @@ export const MenuCollapsor = styled.div<Pick<MenuLeftProps, '$isCollapsed'>>`
     transition: .3s all;
   }
 `
-
-
-
-
-// ======================= OLD
-const combinePaths = (pathParts: string[]): string => pathParts.map(p => p[0] === "/" ? p : '/' + p).join('');
-
-export const getActiveKeys = (fullPath: string, menuItems: MenuLeftItem[]) => {
-    const keys: string[] = [];
-    const defaultKeys: string[] = []
-    menuItems.forEach(mi => {
-        if (mi.to === fullPath) keys.push(mi.key);
-        if (mi.isDefault) defaultKeys.push(mi.key);
-
-        mi.childItems.forEach(ci => {
-            if (combinePaths([mi.to, ci.to]) === fullPath) keys.push(ci.key)
-            if (ci.isDefault) defaultKeys.push(ci.key)
-        });
-    });
-
-    return keys.length > 0 ? keys : defaultKeys;
-}

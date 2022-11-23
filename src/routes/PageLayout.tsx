@@ -15,6 +15,7 @@ import {
     TOP_MENU_SMALL
 } from "../styles/GlobalStyleAndTheme";
 import {useUser} from "../hooks/useUser";
+import {COLORS} from "../styles/CustomStyles";
 
 const StyledContent = styled(Layout.Content)<{
     $isLeftMenuCollapsed: boolean;

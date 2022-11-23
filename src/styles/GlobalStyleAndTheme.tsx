@@ -21,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ul.ant-menu > li.ant-menu-item[role="menuitem"] {
-    padding: 0 .5rem !important;
+    padding: 0 calc(.5rem - 1px) 0 .5rem !important;
     margin: 0;
   }
   
