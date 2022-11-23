@@ -1,8 +1,8 @@
 import styled, {css} from "styled-components";
-import {SVG_COLOR_SECONDARY} from "../../assets/svg/Svg";
+import {SVG_COLOR_SECONDARY} from "../../../assets/svg/Svg";
 import {Layout, Menu} from "antd";
-import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} from "../../styles/GlobalStyleAndTheme";
-import {StyledUserAvatar} from "../global/UserAvatar";
+import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} from "../../../styles/GlobalStyleAndTheme";
+import {StyledUserAvatar} from "../../global/UserAvatar";
 import {NavLink} from "react-router-dom";
 const { Header } = Layout;
 

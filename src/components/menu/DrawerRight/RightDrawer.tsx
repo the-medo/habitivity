@@ -1,13 +1,13 @@
 import React, {useCallback} from "react";
-import {useSlider} from "../../hooks/useSlider";
+import {useSlider} from "../../../hooks/useSlider";
 import {
     SIDER_COLLAPSED_SIZE,
     LEFT_MENU_WIDTH,
     withScrollbar,
     TOP_MENU_BIG,
     TOP_MENU_SMALL, RIGHT_DRAWER_WIDTH
-} from "../../styles/GlobalStyleAndTheme";
-import {setRightDrawerStatus,} from "../../store/menuSlice";
+} from "../../../styles/GlobalStyleAndTheme";
+import {setRightDrawerStatus,} from "../../../store/menuSlice";
 import {Button, Layout,} from 'antd';
 import {DoubleLeftOutlined} from "@ant-design/icons";
 import styled from "styled-components";

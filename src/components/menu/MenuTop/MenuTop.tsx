@@ -2,17 +2,17 @@ import React, {useCallback, useEffect, useState} from "react";
 import {Button, Dropdown} from 'antd';
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
-import {icons, IconType} from "../icons/icons";
-import {useSlider} from "../../hooks/useSlider";
+import {icons, IconType} from "../../icons/icons";
+import {useSlider} from "../../../hooks/useSlider";
 import {signOut} from "firebase/auth";
-import {auth} from "../../firebase";
-import UserAvatar from "../global/UserAvatar";
+import {auth} from "../../../firebase";
+import UserAvatar from "../../global/UserAvatar";
 import {useSelector} from "react-redux";
-import {ReduxState} from "../../store";
-import LogoWithTaskList from "../global/LogoWithTaskList";
-import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
+import {ReduxState} from "../../../store";
+import LogoWithTaskList from "../../global/LogoWithTaskList";
+import {useSelectedTaskList} from "../../../hooks/useSelectedTaskList";
 import {ItemType} from "antd/es/menu/hooks/useItems";
-import {useGetTaskListsQuery} from "../../store/apis/apiTaskList";
+import {useGetTaskListsQuery} from "../../../store/apis/apiTaskList";
 import {FullMenuWrapper, LeftMenu, LeftMenuWrapper, RightMenuWrapper, TopMenuHeader, TopMenuNavLink } from "./MenuTopComponents";
 
 export const menuTopItemsLeftDefault: ItemType[] = [

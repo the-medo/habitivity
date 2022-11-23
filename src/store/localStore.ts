@@ -1,5 +1,5 @@
 import {HabitivityUser} from "../types/HabitivityUser";
-import {RightDrawerStatus} from "../components/menu/RightDrawer";
+import {RightDrawerStatus} from "../components/menu/DrawerRight/RightDrawer";
 
 export enum LSKey {
     user = '1',

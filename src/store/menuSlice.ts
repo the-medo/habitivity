@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {MenuLeftItem} from "../components/menu/MenuLeft";
+import {MenuLeftItem} from "../components/menu/MenuLeft/MenuLeft";
 import {getItem, LSKey, setItem} from "./localStore";
-import {RightDrawerStatus} from "../components/menu/RightDrawer";
+import {RightDrawerStatus} from "../components/menu/DrawerRight/RightDrawer";
 
 export interface MenuLeftState {
     leftMenuAutomaticallyCollapsed: boolean,

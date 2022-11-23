@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {Outlet} from "react-router-dom";
-import {MenuLeftItem} from "../components/menu/MenuLeft";
+import {MenuLeftItem} from "../components/menu/MenuLeft/MenuLeft";
 import {setMenuLeftItems} from "../store/menuSlice";
 import {useDispatch} from "react-redux";
 import {IconType} from "../components/icons/icons";
