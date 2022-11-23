@@ -9,18 +9,19 @@ export const COLORS = {
     PRIMARY_DARK: primaryColors[8],
     PRIMARY_STEPS: primaryColors,
     GREY: 'grey',
-    GREY_LIGHT: 'lightgrey',
+    GREY_LIGHT: '#fafafa',
     GREY_DARK: 'darkgrey',
 }
 
 export const STYLE = {
     PRIMARY_COLOR: COLORS.PRIMARY,
     HEADING_COLOR: COLORS.PRIMARY_DARK,
+    MENU_ITEM_ACTIVE_BG: 'transparent',
     MENU_DARK_ITEM_ACTIVE_BG: 'transparent',
     MENU_ITEM_PADDING_HORIZONTAL: '.1rem',
     MENU_ITEM_PADDING: '.25rem',
     MENU_ITEM_HEIGHT: '1.5rem',
-    MENU_ITEM_ACTIVE_BG: 'transparent',
-    MENU_HIGHLIGHT_COLOR: COLORS.PRIMARY,
+    MENU_ITEM_COLOR: COLORS.PRIMARY_DARK,
+    MENU_HIGHLIGHT_COLOR: COLORS.PRIMARY_DARK,
     BODY_BACKGROUND: '#fff',
 };
