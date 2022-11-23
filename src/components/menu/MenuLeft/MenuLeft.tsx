@@ -1,16 +1,17 @@
 import React, {useMemo} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {ReduxState} from "../../store";
-import {icons, IconType} from "../icons/icons";
+import {ReduxState} from "../../../store";
+import {IconType} from "../../icons/icons";
 import {
     SIDER_COLLAPSED_SIZE,
     LEFT_MENU_WIDTH,
-} from "../../styles/GlobalStyleAndTheme";
-import {setLeftMenuAutomaticallyCollapsed, toggleLeftMenuManuallyCollapsed} from "../../store/menuSlice";
+} from "../../../styles/GlobalStyleAndTheme";
+import {setLeftMenuAutomaticallyCollapsed, toggleLeftMenuManuallyCollapsed} from "../../../store/menuSlice";
 import {DoubleLeftOutlined} from "@ant-design/icons";
-import {useSlider} from "../../hooks/useSlider";
-import {LeftMenu, LeftMenuNavLink, LeftSider, MenuCollapsor} from "./MenuLeftComponents";
+import {useSlider} from "../../../hooks/useSlider";
+import {LeftMenu, LeftSider, MenuCollapsor} from "./MenuLeftComponents";
 import {ItemType} from "antd/es/menu/hooks/useItems";
+import LeftMenuItem from "./LeftMenuItem";
 
 
 
@@ -23,14 +24,11 @@ export type MenuLeftItem = {
     childItems: MenuLeftSubItem[],
 }
 
-const parseMenuLeftItem = (item: MenuLeftItem, isLeftMenuCollapsed: boolean): ItemType => {
+const parseMenuLeftItem = (item: MenuLeftItem): ItemType => {
     return ({
         key: item.key,
         title: item.label,
-        label: <LeftMenuNavLink to={item.to}>
-            {item.icon ? icons[item.icon] : (isLeftMenuCollapsed ? icons[IconType.RightCircleOutlined] : null)}
-            {isLeftMenuCollapsed ? undefined : item.label}
-        </LeftMenuNavLink>
+        label: <LeftMenuItem item={item} />
     });
 }
 
@@ -40,7 +38,7 @@ const MenuLeft: React.FC = () => {
     const dispatch = useDispatch();
     const {items} = useSelector((state: ReduxState) => state.menuReducer);
     const {isLeftMenuCollapsed, isLeftMenuWithContent, leftMenuAutomaticallyCollapsed, leftMenuManuallyCollapsed} = useSlider();
-    const leftMenuItems = useMemo(() => items.map(i => parseMenuLeftItem(i, isLeftMenuCollapsed)), [items, isLeftMenuCollapsed])
+    const leftMenuItems = useMemo(() => items.map(i => parseMenuLeftItem(i)), [items, isLeftMenuCollapsed])
 
     if (!isLeftMenuWithContent) {
         return null;

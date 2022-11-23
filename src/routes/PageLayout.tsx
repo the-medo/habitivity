@@ -3,11 +3,11 @@ import { Outlet } from "react-router-dom";
 import { Layout } from 'antd';
 import 'antd/dist/antd.less'
 import LoginPage from "../components/auth/LoginPage";
-import MenuTop from "../components/menu/MenuTop";
-import MenuLeft from "../components/menu/MenuLeft";
+import MenuTop from "../components/menu/MenuTop/MenuTop";
+import MenuLeft from "../components/menu/MenuLeft/MenuLeft";
 import styled from "styled-components";
 import {useSlider} from "../hooks/useSlider";
-import RightDrawer from "../components/menu/RightDrawer";
+import RightDrawer from "../components/menu/DrawerRight/RightDrawer";
 import {
     LEFT_MENU_WIDTH,
     RIGHT_DRAWER_WIDTH,

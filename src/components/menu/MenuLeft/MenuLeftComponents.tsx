@@ -7,37 +7,16 @@ import {
     TOP_MENU_BIG,
     TOP_MENU_SMALL,
     withScrollbar
-} from "../../styles/GlobalStyleAndTheme";
+} from "../../../styles/GlobalStyleAndTheme";
 import { Layout, Menu } from 'antd';
+import {icons, IconType} from "../../icons/icons";
+import React from "react";
+import {useSlider} from "../../../hooks/useSlider";
 const { Sider, } = Layout;
 
 export const LeftMenu = styled(Menu)`
   padding-top: .25rem;
 `;
-
-export const LeftMenuNavLink = styled(NavLink)`
-  //border: 1px solid red;
-  border-radius: .5rem;
-  padding: .4rem .4rem;
-
-  display: block;
-  height: 2rem;
-  
-  font-size: 1rem;
-  line-height: 1rem;
-  transition: .3s all;
-
-  span svg {
-    font-size: 1rem;
-    margin-right: .5rem;
-    color: rgb(77 92 106);
-  }
-
-  &:hover, &[aria-current="page"].active {
-    background-color: rgb(213, 213, 213);
-  }
-`;
-
 
 
 

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr'
+import {STYLE} from "./src/styles/CustomStyles";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,16 +14,18 @@ export default defineConfig({
     preprocessorOptions:{
       less: {
         modifyVars: { //variable list: https://github.com/ant-design/ant-design/blob/4.24.3/components/style/themes/default.less
-          'primary-color': '#1DA57A',
-          'heading-color': '#0e4227',
-          'menu-dark-item-active-bg': 'transparent',
-          'menu-item-padding-horizontal': '.1rem',
-          'menu-item-padding': '.25rem',
-          // 'menu-item-color': 'pink',
+          'primary-color': STYLE.PRIMARY_COLOR,
+          'heading-color': STYLE.HEADING_COLOR,
+          'menu-dark-item-active-bg': STYLE.MENU_DARK_ITEM_ACTIVE_BG,
+          'menu-item-padding-horizontal': STYLE.MENU_ITEM_PADDING_HORIZONTAL,
+          'menu-item-padding': STYLE.MENU_ITEM_PADDING,
+          'menu-item-height': STYLE.MENU_ITEM_HEIGHT,
+          'menu-item-active-bg': STYLE.MENU_ITEM_ACTIVE_BG,
+          'menu-highlight-color': STYLE.MENU_HIGHLIGHT_COLOR,
           // 'font-size-base': '1rem',
           // 'font-size-lg': '1.25rem',
           // 'font-size-sm': '.75rem',
-          'body-background': '#fff',
+          'body-background': STYLE.BODY_BACKGROUND,
           // 'padding-lg': '1.5rem',
           // 'padding-md': '1rem',
           // 'padding-sm': '.75rem',

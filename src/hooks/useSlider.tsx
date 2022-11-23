@@ -1,6 +1,6 @@
 import {ReduxState} from '../store';
 import {useSelector} from "react-redux";
-import {RightDrawerStatus} from "../components/menu/RightDrawer";
+import {RightDrawerStatus} from "../components/menu/DrawerRight/RightDrawer";
 
 interface SliderState {
     leftMenuAutomaticallyCollapsed: boolean;

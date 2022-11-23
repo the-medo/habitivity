@@ -1,7 +1,7 @@
 import React, {ReactNode} from "react";
 import {createGlobalStyle, css, DefaultTheme, ThemeProvider} from 'styled-components';
 import {SVG_COLOR_SECONDARY} from "../assets/svg/Svg";
-import {TopMenuNavLink} from "../components/menu/MenuTopComponents";
+import {TopMenuNavLink} from "../components/menu/MenuTop/MenuTopComponents";
 
 
 export let REM_SIZE = 24; //in pixels
