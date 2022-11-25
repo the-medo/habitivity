@@ -38,17 +38,20 @@ export const LeftSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyColl
 `
 
 export const MenuCollapsor = styled.div<Pick<MenuLeftProps, '$isCollapsed'>>`
-  width: ${SIDER_COLLAPSED_SIZE}rem;
+  width: ${({$isCollapsed}) => $isCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH}rem;
   height: ${SIDER_COLLAPSED_SIZE}rem;
   transition: .3s all;
   position: fixed;
-  left: ${({$isCollapsed}) => $isCollapsed ? 0 : `calc(${LEFT_MENU_WIDTH}rem - ${SIDER_COLLAPSED_SIZE}rem)`};
+  left: 0;
+  bottom: 0;
+  padding-right: .5rem;
   cursor: pointer;
   font-size: 1.5rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  bottom: 0;
+  background-color: ${COLORS.GREY_LIGHT};
+  border-right: 1px solid ${COLORS.GREY_BORDER};
   
   & > span > svg {
     transition: .3s all;

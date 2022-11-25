@@ -23,6 +23,7 @@ export default defineConfig({
           'menu-item-height': STYLE.MENU_ITEM_HEIGHT,
           'menu-item-color': STYLE.MENU_ITEM_COLOR,
           'menu-highlight-color': STYLE.MENU_HIGHLIGHT_COLOR,
+          'border-color-split': STYLE.BORDER_COLOR_SPLIT,
           // 'font-size-base': '1rem',
           // 'font-size-lg': '1.25rem',
           // 'font-size-sm': '.75rem',

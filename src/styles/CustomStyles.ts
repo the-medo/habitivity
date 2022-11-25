@@ -10,6 +10,7 @@ export const COLORS = {
     PRIMARY_STEPS: primaryColors,
     GREY: 'grey',
     GREY_LIGHT: '#fafafa',
+    GREY_BORDER: '#f4f4f4',
     GREY_DARK: 'darkgrey',
 }
 
@@ -24,4 +25,5 @@ export const STYLE = {
     MENU_ITEM_COLOR: COLORS.PRIMARY_DARK,
     MENU_HIGHLIGHT_COLOR: COLORS.PRIMARY_DARK,
     BODY_BACKGROUND: '#fff',
+    BORDER_COLOR_SPLIT: COLORS.GREY_BORDER,
 };
