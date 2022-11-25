@@ -13,7 +13,7 @@ const { Sider, } = Layout;
 
 export const LeftMenu = styled(Menu)`
   padding-top: .25rem;
-  background-color: ${COLORS.GREY_LIGHT};
+  background-color: transparent;
 `;
 
 export interface MenuLeftProps {
@@ -33,6 +33,7 @@ export const LeftSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyColl
   left: 0;
   top: ${({$isCollapsed}) => $isCollapsed ?  TOP_MENU_SMALL : TOP_MENU_BIG}rem;
   bottom: ${SIDER_COLLAPSED_SIZE}rem;
+  background-color: ${COLORS.GREY_LIGHT};
   
   ${withScrollbar}
 `

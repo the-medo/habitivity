@@ -24,10 +24,12 @@ export default defineConfig({
           'menu-item-color': STYLE.MENU_ITEM_COLOR,
           'menu-highlight-color': STYLE.MENU_HIGHLIGHT_COLOR,
           'border-color-split': STYLE.BORDER_COLOR_SPLIT,
+          'body-background': STYLE.BODY_BACKGROUND,
+          'layout-body-background': STYLE.LAYOUT_BODY_BACKGROUND,
+
           // 'font-size-base': '1rem',
           // 'font-size-lg': '1.25rem',
           // 'font-size-sm': '.75rem',
-          'body-background': STYLE.BODY_BACKGROUND,
           // 'padding-lg': '1.5rem',
           // 'padding-md': '1rem',
           // 'padding-sm': '.75rem',
