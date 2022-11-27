@@ -1,10 +1,7 @@
 import styled from "styled-components";
 import React from "react";
+import {COLORS} from "../../styles/CustomStyles";
 
-export const SVG_COLOR_PRIMARY = 'white';
-export const SVG_COLOR_PRIMARY_HOVER = 'rgb(77 92 106)';
-export const SVG_COLOR_SECONDARY = 'rgb(77 92 106)';
-export const SVG_COLOR_SECONDARY_HOVER = 'white';
 
 interface StyledSvgProps {
     height?: string;
@@ -31,24 +28,24 @@ export const StyledSvg = styled.div<StyledSvgProps>`
   }
 
   svg > .svg-color-primary {
-    fill: ${({colorPrimary}) => colorPrimary ?? SVG_COLOR_PRIMARY};
-    stroke: ${({colorPrimary}) => colorPrimary ?? SVG_COLOR_PRIMARY};
+    fill: ${({colorPrimary}) => colorPrimary ?? COLORS.WHITE};
+    stroke: ${({colorPrimary}) => colorPrimary ?? COLORS.WHITE};
   }
 
   svg > .svg-color-secondary {
-    fill: ${({colorSecondary}) => colorSecondary ?? SVG_COLOR_SECONDARY};
-    stroke: ${({colorSecondary}) => colorSecondary ?? SVG_COLOR_SECONDARY};
+    fill: ${({colorSecondary}) => colorSecondary ?? COLORS.BLUE_DARK};
+    stroke: ${({colorSecondary}) => colorSecondary ?? COLORS.BLUE_DARK};
   }
   
   &:hover {
     svg > .svg-color-primary {
-      fill: ${({colorPrimaryHover}) => colorPrimaryHover ?? SVG_COLOR_PRIMARY_HOVER};
-      stroke: ${({colorPrimaryHover}) => colorPrimaryHover ?? SVG_COLOR_PRIMARY_HOVER};
+      fill: ${({colorPrimaryHover}) => colorPrimaryHover ?? COLORS.BLUE_DARK};
+      stroke: ${({colorPrimaryHover}) => colorPrimaryHover ?? COLORS.BLUE_DARK};
     }
 
     svg > .svg-color-secondary {
-      fill: ${({colorSecondaryHover}) => colorSecondaryHover ?? SVG_COLOR_SECONDARY_HOVER};
-      stroke: ${({colorSecondaryHover}) => colorSecondaryHover ?? SVG_COLOR_SECONDARY_HOVER};
+      fill: ${({colorSecondaryHover}) => colorSecondaryHover ?? COLORS.WHITE};
+      stroke: ${({colorSecondaryHover}) => colorSecondaryHover ?? COLORS.WHITE};
     }
   }
 `;

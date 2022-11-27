@@ -12,6 +12,7 @@ import {Button, Layout,} from 'antd';
 import {DoubleLeftOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import {useDispatch} from "react-redux";
+import {COLORS} from "../../../styles/CustomStyles";
 const { Sider } = Layout;
 
 export type RightDrawerStatus = "hidden" | "opened" | "collapsed" | "automaticallyCollapsed" | "openedByForce" | "automaticallyOpened";
@@ -22,7 +23,9 @@ interface RightDrawerProps {
 }
 
 const StyledSider = styled(Sider)<RightDrawerProps>`
-  background: #fff;
+  display: none; //hidden for now
+  
+  background: ${COLORS.WHITE};
   overflow-y: auto;
   height: calc(
             100vh - ${SIDER_COLLAPSED_SIZE}rem
@@ -32,7 +35,6 @@ const StyledSider = styled(Sider)<RightDrawerProps>`
   right: 0;
   top: ${({$isLeftMenuCollapsed}) => $isLeftMenuCollapsed ?  TOP_MENU_SMALL : TOP_MENU_BIG}rem;
   bottom: ${SIDER_COLLAPSED_SIZE}rem;
-  border: 1px solid red;
   
   ${withScrollbar}
 `

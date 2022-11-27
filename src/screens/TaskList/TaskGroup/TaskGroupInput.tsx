@@ -4,6 +4,7 @@ import {DeleteOutlined, DragOutlined, MinusCircleOutlined, RestOutlined} from "@
 import {TaskGroup} from "../../../types/TaskGroup";
 import styled from "styled-components";
 import {getLabelColWidth, getLabelOffsetSM, getLabelOffsetXS} from "../../../helpers/formHelpers";
+import {COLORS} from "../../../styles/CustomStyles";
 
 interface TaskGroupInputProps {
     isFirst?: boolean;
@@ -51,12 +52,11 @@ const StyledRow = styled.div`
     
     ${HandleIcon} {
       font-size: .9rem;
-      color: #d9d9d9;
-      //margin-left: -.5rem;
+      color: ${COLORS.GREY_MEDIUM}
     }
     
     &:hover ${HandleIcon} {
-      color: black;
+      color: ${COLORS.BLUE_DARK};
     }
   }
   

@@ -1,7 +1,7 @@
 import React, {ReactNode} from "react";
 import {createGlobalStyle, css, DefaultTheme, ThemeProvider} from 'styled-components';
-import {SVG_COLOR_SECONDARY} from "../assets/svg/Svg";
 import {TopMenuNavLink} from "../components/menu/MenuTop/MenuTopComponents";
+import {COLORS} from "./CustomStyles";
 
 
 export let REM_SIZE = 24; //in pixels
@@ -35,7 +35,7 @@ const GlobalStyle = createGlobalStyle`
     
     li {
       &:hover {
-        background-color: ${SVG_COLOR_SECONDARY}; //#001529
+        background-color: ${COLORS.BLUE_DARK}; //#001529
       }
 
       ${TopMenuNavLink} {
@@ -47,15 +47,13 @@ const GlobalStyle = createGlobalStyle`
         }
 
         a {
-          color: #cdd9ee;
+          color: ${COLORS.BLUE_LIGHT};
         }
       }
 
     }
   }
-
 `
-
 
 interface GlobalStyleAndThemeProps {
     children?: ReactNode
@@ -86,8 +84,8 @@ export const withScrollbar = css`
 const theme: DefaultTheme = {
     fontFamily: 'Helvetica Neue',
     colors: {
-        primary: '#1DA57A',
-        secondary: '#1DA57A',
+        primary: COLORS.PRIMARY,
+        secondary: COLORS.PRIMARY,
     },
 }
 

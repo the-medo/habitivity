@@ -8,11 +8,15 @@ export const COLORS = {
     PRIMARY_LIGHT: primaryColors[0],
     PRIMARY_DARK: primaryColors[8],
     PRIMARY_STEPS: primaryColors,
+    WHITE: 'white',
     GREY: 'grey',
-    GREY_LIGHT: '#fafafa',
     GREY_BORDER: '#f4f4f4',
+    GREY_LIGHT: '#fafafa',
+    GREY_MEDIUM: '#d9d9d9',
     GREY_DARK: 'darkgrey',
     BACKGROUND: '#fff',
+    BLUE_LIGHT: '#cdd9ee',
+    BLUE_DARK: 'rgb(77 92 106)',
 }
 
 export const STYLE = {

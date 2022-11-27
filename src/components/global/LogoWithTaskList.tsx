@@ -3,12 +3,9 @@ import {LogoBig, LogoSmall} from "../../assets/svg";
 import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE} from "../../styles/GlobalStyleAndTheme";
 import Svg, {
     StyledSvg,
-    SVG_COLOR_PRIMARY,
-    SVG_COLOR_PRIMARY_HOVER,
-    SVG_COLOR_SECONDARY_HOVER
 } from "../../assets/svg/Svg";
 import styled from "styled-components";
-import {initials} from "../../helpers/initials";
+import {COLORS} from "../../styles/CustomStyles";
 
 interface LogoWithTaskListProps {
     version: 'small' | 'big';
@@ -37,12 +34,12 @@ const StyledLogoWrapper = styled.div<{$width: string, $height: string}>`
 
   &:hover {
     ${StyledHeader} {
-      color: ${SVG_COLOR_PRIMARY_HOVER};
+      color: ${COLORS.BLUE_DARK};
     }
 
     .svg-color-secondary {
-      fill: ${SVG_COLOR_SECONDARY_HOVER};
-      stroke: ${SVG_COLOR_SECONDARY_HOVER};
+      fill: ${COLORS.WHITE};
+      stroke: ${COLORS.WHITE};
     }
   }
   
@@ -50,7 +47,7 @@ const StyledLogoWrapper = styled.div<{$width: string, $height: string}>`
     ${({$height}) => ` line-height: ${$height};`}
     transition: .3s all;
     font-weight: 6000;
-    color: ${SVG_COLOR_PRIMARY};
+    color: ${COLORS.WHITE};
     position: absolute;
     top: -8%;
     width: 100%;

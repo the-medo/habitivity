@@ -1,9 +1,9 @@
 import styled, {css} from "styled-components";
-import {SVG_COLOR_SECONDARY} from "../../../assets/svg/Svg";
 import {Layout, Menu} from "antd";
 import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} from "../../../styles/GlobalStyleAndTheme";
 import {StyledUserAvatar} from "../../global/UserAvatar";
 import {NavLink} from "react-router-dom";
+import {COLORS} from "../../../styles/CustomStyles";
 const { Header } = Layout;
 
 export const TopMenuNavLink = styled(NavLink)`
@@ -19,11 +19,11 @@ export const TopMenuNavLink = styled(NavLink)`
   span svg{
     font-size: 1.2rem;
     margin-right: .5rem;
-    color: #cdd9ee;
+    color: ${COLORS.BLUE_LIGHT};
   }
   
   &:hover, &[aria-current="page"].active {
-    background-color: ${SVG_COLOR_SECONDARY}; //#001529
+    background-color: ${COLORS.BLUE_DARK}; //#001529
   }
 `;
 
@@ -53,7 +53,7 @@ export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   
   /* must be here because of antd css rules overruling it in "TestMenuItem" styled component... better than !important... I guess? */
   ${LeftMenuWrapper} ${LeftMenu} ${TopMenuNavLink} { 
-    color: #cdd9ee;
+    color: ${COLORS.BLUE_LIGHT};
   }
 
   ${({$isCollapsed}) => css`

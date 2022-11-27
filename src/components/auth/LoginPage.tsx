@@ -7,6 +7,7 @@ import { Layout } from "antd";
 import {signOut} from "firebase/auth";
 import {auth} from "../../firebase";
 import {useUser} from "../../hooks/useUser";
+import {COLORS} from "../../styles/CustomStyles";
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -29,7 +30,7 @@ const LoginPageBackground = styled(Layout)`
 
 const LoginPageLayout = styled(Layout.Content)`
   border-radius: 1rem;
-  background-color: #ffffffee;
+  background-color: ${COLORS.WHITE};
   flex: 0 1 50%;
   width: 50%;
   min-width: 400px;
