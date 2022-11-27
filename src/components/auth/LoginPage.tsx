@@ -8,6 +8,9 @@ import {signOut} from "firebase/auth";
 import {auth} from "../../firebase";
 import {useUser} from "../../hooks/useUser";
 import {COLORS} from "../../styles/CustomStyles";
+import {LogoBig} from "../../assets/svg";
+import Svg from "../../assets/svg/Svg";
+
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -22,46 +25,55 @@ const uiConfig = {
     ],
 };
 
-
 const LoginPageBackground = styled(Layout)`
-  justify-content: center;
-  background: linear-gradient(17deg, rgba(97,159,134,1) 5%, rgba(208,248,255,1) 91%);
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(17deg, ${COLORS.BLUE_DARK} 11%, ${COLORS.PRIMARY_LIGHT} 95%);
+    opacity: 20%;
+  }
 `;
 
 const LoginPageLayout = styled(Layout.Content)`
-  border-radius: 1rem;
-  background-color: ${COLORS.WHITE};
-  flex: 0 1 50%;
-  width: 50%;
-  min-width: 400px;
   display: flex;
-  align-self: center;
-  flex-wrap: wrap;
-  overflow: hidden;
+  flex-direction: column;
+  margin: 3rem;
+  align-items: center;
+  justify-content: center;
 `;
 
-const LoginPageContent = styled.div`
-  padding: 2rem;
-  flex: 2;
-  min-width: 400px;
-`;
 
 const LoginPageContentImage = styled.div`
+  border-radius: 1rem;
   display: flex;
-  flex: 1;
+  flex-direction: column;
   padding: 2rem;
   min-width: 310px;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   position: relative;
-  background-image: linear-gradient(17deg, rgba(208,248,255,.5) 5%, rgba(97,159,134,.5) 91%);
+  background-image: linear-gradient(17deg, ${COLORS.PRIMARY_LIGHT} 5%, ${COLORS.BLUE_DARK} 91%);
+  box-shadow: 0 0 10px 2px rgba(0,0,0,0.3);
   
   &::before {
+    border-radius: 1rem;
     content: "";
     position: absolute;
     top: 0; 
     left: 0;
-    width: 100%; height: 100%;
+    width: 100%; 
+    height: 100%;
     background-image: url(${img});
     background-size: cover;
     background-position-x: center;
@@ -77,10 +89,13 @@ function LoginPage() {
         return (
             <LoginPageBackground>
                 <LoginPageLayout>
-                    <LoginPageContent>
-                        <h1>Habitivity</h1>
-                    </LoginPageContent>
                     <LoginPageContentImage>
+                        <Svg
+                            svgImage={LogoBig}
+                            height={'12rem'}
+                            colorPrimary={COLORS.PRIMARY_LIGHT}
+                            colorSecondary={COLORS.BLUE_DARK}
+                        />
                         <FirebaseAuth uiConfig={uiConfig} firebaseAuth={auth}/>
                     </LoginPageContentImage>
                 </LoginPageLayout>
