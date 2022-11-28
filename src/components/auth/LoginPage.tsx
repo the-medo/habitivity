@@ -27,7 +27,6 @@ const uiConfig = {
 
 const LoginPageBackground = styled(Layout)`
   position: fixed;
-  z-index: -1;
   top: 0;
   left: 0;
   right: 0;
@@ -87,6 +86,7 @@ function LoginPage() {
 
     if (!user) {
         return (
+
             <LoginPageBackground>
                 <LoginPageLayout>
                     <LoginPageContentImage>
