@@ -15,9 +15,16 @@ export const TOP_MENU_BIG = 4;
 
 const GlobalStyle = createGlobalStyle`
   :root {
-      //font-size: ${REM_SIZE}px;
     font-size: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";;
+  }  
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat',  -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
   }
 
   ul.ant-menu > li.ant-menu-item[role="menuitem"] {
