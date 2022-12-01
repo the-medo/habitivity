@@ -16,23 +16,29 @@ const LeftLinkLabel = styled.span``;
 export const LeftMenuNavLinkStyled = styled(NavLink)<LeftMenuNavLinkStyledProps>`
   //border: 1px solid red;
   border-radius: .5rem;
-  padding: .5rem .5rem;
+  padding: .5rem .25rem;
 
-  display: block;
+  display: flex;
   height: 2rem;
   
   font-size: 1rem;
   line-height: 1rem;
   transition: .3s all;
+  
 
   & > ${LeftLinkIcon} > span[role="img"].anticon {
+    height: 1rem;
     line-height: 1rem;
+    padding-left: .25rem;
     color: ${COLORS.PRIMARY_DARK};
   }
   
   ${LeftLinkLabel} {
     padding-left: .5rem;
     display: ${ p => p.$isCollapsed ? 'none' : 'inline-block' };
+    width: calc(100% - .5rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &:hover, &[aria-current="page"].active {

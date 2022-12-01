@@ -20,7 +20,7 @@ export default defineConfig({
           'menu-dark-item-active-bg': STYLE.MENU_DARK_ITEM_ACTIVE_BG,
           'menu-item-padding-horizontal': STYLE.MENU_ITEM_PADDING_HORIZONTAL,
           'menu-item-padding': STYLE.MENU_ITEM_PADDING,
-          'menu-item-height': STYLE.MENU_ITEM_HEIGHT,
+          'menu-item-height': STYLE.MENU_ITEM_HEIGHT, //don't see any difference ???
           'menu-item-color': STYLE.MENU_ITEM_COLOR,
           'menu-highlight-color': STYLE.MENU_HIGHLIGHT_COLOR,
           'border-color-split': STYLE.BORDER_COLOR_SPLIT,
