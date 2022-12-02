@@ -13,10 +13,8 @@ export const TopMenuNavLink = styled(NavLink)`
   justify-content: center;
   
   border-radius: .5rem;
-  
   margin: 0 .25rem;
   padding: 0 .75rem;
-  height: 2.5rem;
   
   font-size: 1.25rem;
   transition: .3s all;
@@ -60,6 +58,11 @@ export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   /* must be here because of antd css rules overruling it in "TestMenuItem" styled component... better than !important... I guess? */
   ${TopMenuLeftPartWrapper} ${TopMenuLeftPart} ${TopMenuNavLink} { 
     color: ${COLORS.BLUE_LIGHT};
+    ${({$isCollapsed}) => css`
+      line-height: ${$isCollapsed ? 2 : 2.5}rem;
+      height: ${$isCollapsed ? 2: 2.5}rem;
+      font-size: ${$isCollapsed ? 1: 1.25}rem;
+    `}
   }
 
   ${({$isCollapsed}) => css`
@@ -68,9 +71,9 @@ export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   `}
   
   ${StyledUserAvatar} {
-    width: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
-    height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
-    line-height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
+    width: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - 1 : TOP_MENU_BIG - 1}rem;
+    height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - 1 : TOP_MENU_BIG - 1}rem;
+    line-height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - 1 : TOP_MENU_BIG - 1}rem;
   }
 `;
 
