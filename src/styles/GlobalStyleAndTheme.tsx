@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 600;
   }
 
-  ul.ant-menu > li.ant-menu-item[role="menuitem"] {
+  aside ul.ant-menu > li.ant-menu-item[role="menuitem"] {
     padding: 0 calc(.5rem - 1px) 0 .5rem !important;
     margin: 0;
   }

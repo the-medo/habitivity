@@ -1,12 +1,7 @@
-import React, {useEffect} from "react";
-import {Outlet} from "react-router-dom";
 import {MenuLeftItem} from "../components/menu/MenuLeft/MenuLeft";
-import {setMenuLeftItems} from "../store/menuSlice";
-import {useDispatch} from "react-redux";
 import {IconType} from "../components/icons/icons";
 
-
-const homeMenuLeftItems: MenuLeftItem[] = [
+export const exampleMenuLeftItems: MenuLeftItem[] = [
     {
         key: "home1",
         to: "/home/page-1",
@@ -62,24 +57,3 @@ const homeMenuLeftItems: MenuLeftItem[] = [
         ]
     },
 ];
-
-const Home: React.FC = () => {
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        console.log("Setting menu left..");
-        dispatch(setMenuLeftItems(homeMenuLeftItems));
-    }, []);
-
-
-
-    return (
-        <div>
-            <h1>This is page called HOME</h1>
-            <Outlet />
-        </div>
-    )
-}
-
-export default Home;

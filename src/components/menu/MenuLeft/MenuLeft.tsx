@@ -16,7 +16,7 @@ import LeftMenuItem from "./LeftMenuItem";
 
 
 export type MenuLeftItem = {
-    key: string;
+    key: string,
     to: string,
     label: string,
     icon?: IconType,

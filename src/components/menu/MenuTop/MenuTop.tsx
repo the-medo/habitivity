@@ -17,39 +17,23 @@ import {FullMenuWrapper, TopMenuLeftPart, TopMenuLeftPartWrapper, RightMenuWrapp
 
 export const menuTopItemsLeftDefault: ItemType[] = [
     {
-        key: "home",
-        label: <TopMenuNavLink to="/home">{icons[IconType.HomeOutlined]}Home</TopMenuNavLink>
-    },
-    {
         key: "today",
-        label: <TopMenuNavLink to="/today">Today</TopMenuNavLink>
+        label: <TopMenuNavLink to="/today">{icons[IconType.CarryOutOutlined]}Today</TopMenuNavLink>
+    },
+    {
+        key: "dashboard",
+        label: <TopMenuNavLink to="/dashboard">{icons[IconType.LineChartOutlined]}Dashboard</TopMenuNavLink>
     },
     {
         key: "calendar",
-        label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
-    },
-    {
-        key: "calendar",
-        label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
-    },
-    {
-        key: "calendar",
-        label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
-    },
-    {
-        key: "calendar",
-        label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
-    },
-    {
-        key: "calendar",
-        label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
+        label: <TopMenuNavLink to="/calendar">{icons[IconType.CalendarOutlined]}Calendar</TopMenuNavLink>
     },
 ];
 
 export const menuTopItemsLeftWhenNoTaskList: ItemType[] = [
     {
         key: "create-task-list",
-        label: <TopMenuNavLink to="/task-list/create">Create new task list</TopMenuNavLink>
+        label: <TopMenuNavLink to="/task-list/create">{icons[IconType.PlusOutlined]}Create new task list</TopMenuNavLink>
     },
 ];
 

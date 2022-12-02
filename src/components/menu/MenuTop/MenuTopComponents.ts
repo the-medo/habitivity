@@ -16,7 +16,6 @@ export const TopMenuNavLink = styled(NavLink)`
   margin: 0 .25rem;
   padding: 0 .75rem;
   
-  font-size: 1.25rem;
   transition: .3s all;
   
   span svg {
@@ -63,10 +62,11 @@ export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   /* must be here because of antd css rules overruling it in "TestMenuItem" styled component... better than !important... I guess? */
   ${TopMenuLeftPartWrapper} ${TopMenuLeftPart} ${TopMenuNavLink} { 
     color: ${COLORS.BLUE_LIGHT};
+    
     ${({$isCollapsed}) => css`
       line-height: ${$isCollapsed ? 2 : 2.5}rem;
       height: ${$isCollapsed ? 2: 2.5}rem;
-      font-size: ${$isCollapsed ? 1: 1.25}rem;
+      font-size: 1rem;
     `}
   }
 
