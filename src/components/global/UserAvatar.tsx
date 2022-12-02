@@ -10,7 +10,10 @@ interface UserAvatarProps {
 }
 
 export const StyledUserAvatar = styled(Avatar)`
+  padding: 0;
+  margin: .25rem .5rem .25rem .25rem;
   transition: .5s all;
+  display: flex;
 `
 
 

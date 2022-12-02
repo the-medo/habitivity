@@ -7,18 +7,23 @@ import {COLORS} from "../../../styles/CustomStyles";
 const { Header } = Layout;
 
 export const TopMenuNavLink = styled(NavLink)`
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   border-radius: .5rem;
-  margin: .25rem;
-  padding: .4rem .5rem;
-  height: 1.5rem;
-  font-size: 1.1rem;
-  line-height: 1rem;
+  
+  margin: 0 .25rem;
+  padding: 0 .75rem;
+  height: 2.5rem;
+  
+  font-size: 1.25rem;
   transition: .3s all;
   
-  span svg{
-    font-size: 1.2rem;
+  span svg {
     margin-right: .5rem;
+    font-size: 1.25rem;
     color: ${COLORS.BLUE_LIGHT};
   }
   
@@ -28,14 +33,14 @@ export const TopMenuNavLink = styled(NavLink)`
 `;
 
 
-export const LeftMenuWrapper = styled.div`
+export const TopMenuLeftPartWrapper = styled.div`
   display: flex;
   flex: auto;
   align-items: center;
 `;
 
 
-export const LeftMenu = styled(Menu).attrs(() => ({
+export const TopMenuLeftPart = styled(Menu).attrs(() => ({
   theme: "dark",
 }))<{$isCollapsed?: boolean}>`
   min-width: 0;
@@ -45,6 +50,7 @@ export const LeftMenu = styled(Menu).attrs(() => ({
 
 export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   position: fixed;
+  
   z-index: 1;
   width: 100%;
   padding: 0;
@@ -52,7 +58,7 @@ export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   overflow: hidden;
   
   /* must be here because of antd css rules overruling it in "TestMenuItem" styled component... better than !important... I guess? */
-  ${LeftMenuWrapper} ${LeftMenu} ${TopMenuNavLink} { 
+  ${TopMenuLeftPartWrapper} ${TopMenuLeftPart} ${TopMenuNavLink} { 
     color: ${COLORS.BLUE_LIGHT};
   }
 
@@ -65,19 +71,19 @@ export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
     width: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
     height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
     line-height: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - .75 : TOP_MENU_BIG - 1}rem;
-    margin: ${({$isCollapsed}) => $isCollapsed ? 0.35 : 0.45}rem;
   }
 `;
-
 
 
 
 export const RightMenuWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-items: center;
 `;
 
 export const FullMenuWrapper = styled.div`
+  margin: 0.25rem 0;
   display: flex;
   justify-content: space-between;
 `;

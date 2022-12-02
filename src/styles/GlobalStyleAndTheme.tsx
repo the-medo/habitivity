@@ -28,8 +28,16 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ul.ant-menu > li.ant-menu-item[role="menuitem"] {
-    padding: 0.25rem calc(.5rem - 1px) 0.25rem .5rem !important;
+    padding: 0 calc(.5rem - 1px) 0 .5rem !important;
     margin: 0;
+  }
+  
+  .ant-menu-title-content {
+    display: block;
+  }
+
+  .ant-menu-horizontal > .ant-menu-item a::before {
+    bottom: 0;
   }
   
   li.ant-menu-item .ant-menu-item-icon + span:empty {

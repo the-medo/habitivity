@@ -13,7 +13,7 @@ import LogoWithTaskList from "../../global/LogoWithTaskList";
 import {useSelectedTaskList} from "../../../hooks/useSelectedTaskList";
 import {ItemType} from "antd/es/menu/hooks/useItems";
 import {useGetTaskListsQuery} from "../../../store/apis/apiTaskList";
-import {FullMenuWrapper, LeftMenu, LeftMenuWrapper, RightMenuWrapper, TopMenuHeader, TopMenuNavLink } from "./MenuTopComponents";
+import {FullMenuWrapper, TopMenuLeftPart, TopMenuLeftPartWrapper, RightMenuWrapper, TopMenuHeader, TopMenuNavLink } from "./MenuTopComponents";
 
 export const menuTopItemsLeftDefault: ItemType[] = [
     {
@@ -106,14 +106,14 @@ const MenuTop: React.FC = () => {
     return (
         <TopMenuHeader $isCollapsed={isLeftMenuCollapsed}>
             <FullMenuWrapper>
-                <LeftMenuWrapper>
+                <TopMenuLeftPartWrapper>
                     <Dropdown trigger={["click", "hover"]} menu={{items: taskListDropdownItems}} align={{targetOffset: [0, isLeftMenuCollapsed ? 0 : -5]}}>
                         <DivPointerCursor>
                             <LogoWithTaskList version={isLeftMenuCollapsed ? 'small' : 'big'} title={selectedTaskList?.name} />
                         </DivPointerCursor>
                     </Dropdown>
-                    <LeftMenu mode="horizontal" items={leftTopMenuItems} />
-                </LeftMenuWrapper>
+                    <TopMenuLeftPart mode="horizontal" items={leftTopMenuItems} />
+                </TopMenuLeftPartWrapper>
                 <RightMenuWrapper>
                     <Dropdown trigger={["click", "hover"]} menu={{items: userOptionDropdownItems}} overlayStyle={{width: '200px'}} align={{offset: [0, -1]}}>
                         <DivPointerCursor>
