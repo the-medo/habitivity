@@ -35,6 +35,11 @@ export const TopMenuLeftPartWrapper = styled.div`
   display: flex;
   flex: auto;
   align-items: center;
+
+  .ant-menu-overflow-item {
+    display: flex;
+    align-self: center;
+  }
 `;
 
 
@@ -66,7 +71,7 @@ export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   }
 
   ${({$isCollapsed}) => css`
-    line-height: ${$isCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG}rem;
+    line-height: ${$isCollapsed ? TOP_MENU_SMALL - 1 : TOP_MENU_BIG - 1}rem;
     height: ${$isCollapsed ? TOP_MENU_SMALL: TOP_MENU_BIG}rem;
   `}
   

@@ -28,6 +28,22 @@ export const menuTopItemsLeftDefault: ItemType[] = [
         key: "calendar",
         label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
     },
+    {
+        key: "calendar",
+        label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
+    },
+    {
+        key: "calendar",
+        label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
+    },
+    {
+        key: "calendar",
+        label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
+    },
+    {
+        key: "calendar",
+        label: <TopMenuNavLink to="/calendar">Calendar</TopMenuNavLink>
+    },
 ];
 
 export const menuTopItemsLeftWhenNoTaskList: ItemType[] = [

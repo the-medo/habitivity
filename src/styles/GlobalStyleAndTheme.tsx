@@ -45,7 +45,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   div.ant-menu-submenu.ant-menu-submenu-popup ul {
-    transform: translateX(0rem) translateY(-.7rem);
     border-radius: 0 0 .5rem .5rem ;
     
     li {
