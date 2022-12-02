@@ -14,15 +14,14 @@ const LeftLinkIcon = styled.span``;
 const LeftLinkLabel = styled.span``;
 
 export const LeftMenuNavLinkStyled = styled(NavLink)<LeftMenuNavLinkStyledProps>`
-  //border: 1px solid red;
   border-radius: .5rem;
   padding: .5rem .25rem;
 
   display: flex;
-  height: 2rem;
+  height: 2.25rem;
   
   font-size: 1rem;
-  line-height: 1rem;
+  line-height: 1.25rem;
   transition: .3s all;
   
 
