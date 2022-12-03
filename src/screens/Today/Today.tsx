@@ -4,7 +4,7 @@ import {MenuLeftItem} from "../../components/menu/MenuLeft/MenuLeft";
 import {setMenuLeftItems} from "../../store/menuSlice";
 import {useDispatch} from "react-redux";
 import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
-import {useGetTaskGroupsByTaskListQuery} from "../../store/apis/apiTaskGroup";
+import {useGetTaskGroupsByTaskListQuery} from "../../apis/apiTaskGroup";
 
 const Today: React.FC = () => {
     const dispatch = useDispatch();
@@ -25,14 +25,7 @@ const Today: React.FC = () => {
         }
     }, [isLoading, existingGroups]);
 
-
-
-    return (
-        <div>
-            <h1>This is page called TODAY</h1>
-            <Outlet />
-        </div>
-    )
+    return <Outlet />
 }
 
 export default Today;

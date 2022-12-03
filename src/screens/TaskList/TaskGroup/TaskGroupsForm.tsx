@@ -7,7 +7,7 @@ import {
     useCreateTaskGroupsMutation, useDeleteTaskGroupsMutation,
     useGetTaskGroupsByTaskListQuery,
     useUpdateTaskGroupsMutation
-} from "../../../store/apis/apiTaskGroup";
+} from "../../../apis/apiTaskGroup";
 import {useSelectedTaskList} from "../../../hooks/useSelectedTaskList";
 import {generateID} from "../../../helpers/generateID";
 import {PartialWithId} from "../../../types/PartialWithId";

@@ -12,7 +12,7 @@ import {ReduxState} from "../../../store";
 import LogoWithTaskList from "../../global/LogoWithTaskList";
 import {useSelectedTaskList} from "../../../hooks/useSelectedTaskList";
 import {ItemType} from "antd/es/menu/hooks/useItems";
-import {useGetTaskListsQuery} from "../../../store/apis/apiTaskList";
+import {useGetTaskListsQuery} from "../../../apis/apiTaskList";
 import {FullMenuWrapper, TopMenuLeftPart, TopMenuLeftPartWrapper, RightMenuWrapper, TopMenuHeader, TopMenuNavLink } from "./MenuTopComponents";
 
 export const menuTopItemsLeftDefault: ItemType[] = [

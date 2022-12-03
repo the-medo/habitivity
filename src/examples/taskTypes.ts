@@ -44,7 +44,8 @@ export const TaskGroupExample2: TaskGroup = {
 export const TaskWakeUp: TTTime = {
     taskType: TaskType.TIME,
     userId: "my-user-id",
-    taskId: "task-wake-up-id",
+    id: "task-wake-up-id",
+    position: 1,
     taskName: "Actually woke up",
     taskListId: "task-list-example",
     taskGroupId: "task-group-example-1",
@@ -66,7 +67,8 @@ export const TaskWakeUp: TTTime = {
 export const TaskSleep: TTUnitCheckpoints = {
     taskType: TaskType.UNIT_CHECKPOINTS,
     userId: "my-user-id",
-    taskId: "task-sleep",
+    id: "task-sleep",
+    position: 2,
     taskName: "Sleep",
     taskListId: "task-list-example",
     taskGroupId: "task-group-example-1",
@@ -86,7 +88,8 @@ export const TaskSleep: TTUnitCheckpoints = {
 export const TaskElevate: TTCheckbox = {
     taskType: TaskType.CHECKBOX,
     userId: "my-user-id",
-    taskId: "task-elevate",
+    id: "task-elevate",
+    position: 3,
     taskName: "Elevate",
     taskListId: "task-list-example",
     taskGroupId: "task-group-example-1",
@@ -101,7 +104,8 @@ export const TaskElevate: TTCheckbox = {
 export const TaskBookReading: TTUnits = {
     taskType: TaskType.UNITS,
     userId: "my-user-id",
-    taskId: "task-book-reading",
+    id: "task-book-reading",
+    position: 4,
     taskName: "Book",
     taskListId: "task-list-example",
     taskGroupId: "task-group-example-2",
@@ -122,7 +126,8 @@ export const TaskBookReading: TTUnits = {
 export const TaskExercise: TTDuration = {
     taskType: TaskType.DURATION,
     userId: "my-user-id",
-    taskId: "task-exercise",
+    id: "task-exercise",
+    position: 5,
     taskName: "Exercise",
     taskListId: "task-list-example",
     taskGroupId: "task-group-example-2",
@@ -136,11 +141,12 @@ export const TaskExercise: TTDuration = {
 }
 
 
-export const TaskOverallFeeling: TTOptions = {
+export const TaskOverallRandom: TTOptions = {
     taskType: TaskType.OPTIONS,
     userId: "my-user-id",
-    taskId: "task-overall-feelings",
-    taskName: "Overall feelings",
+    id: "task-overall-random",
+    position: 6,
+    taskName: "Random feelings",
     taskListId: "task-list-example",
     taskGroupId: "task-group-example-2",
     isActive: true,
@@ -173,4 +179,4 @@ export const TaskOverallFeeling: TTOptions = {
 
 export const ExampleTaskLists: TaskList[] = [TaskListExample];
 export const ExampleTaskGroups: TaskGroup[] = [TaskGroupExample1, TaskGroupExample2];
-export const ExampleTasks: Task[] = [TaskWakeUp, TaskSleep, TaskElevate, TaskBookReading, TaskExercise, TaskOverallFeeling];
+export const ExampleTasks: Task[] = [TaskWakeUp, TaskSleep, TaskElevate, TaskBookReading, TaskExercise, TaskOverallRandom];

@@ -11,6 +11,8 @@ import TaskListOpen from "../screens/TaskList/TaskListOpen";
 import TaskListDetail from "../screens/TaskList/TaskListDetail";
 import TaskListEdit from "../screens/TaskList/TaskListEdit";
 import Dashboard from "../screens/Dashboard/Dashboard";
+import TodayDefault from "../screens/Today/TodayDefault";
+import TaskCreate from "../components/task/TaskCreate";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -33,7 +35,10 @@ export const router = createBrowserRouter(
             <Route path="dashboard" element={<Dashboard />} >
             </Route>
             <Route path="today" element={<Today />} >
-                <Route path=":groupId" element={<Fragment />} >
+                <Route index element={<TodayDefault />} />
+                <Route path="new-task">
+                    <Route index element={<TaskCreate />} />
+                    <Route path=":taskGroupId" element={<TaskCreate />} />
                 </Route>
             </Route>
             <Route path="calendar" element={<Calendar />} >

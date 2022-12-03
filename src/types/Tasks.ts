@@ -15,8 +15,9 @@ export type TaskModifier = {
 }
 
 export type TaskShared = {
+    id: string,
+    position: number,
     userId: string,
-    taskId: string,
     taskGroupId: string,
     taskListId: string,
     isActive: boolean;

@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Outlet, useParams} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import { setSelectedTaskListId} from "../../store/taskSlice";
-import {useGetTaskListsQuery} from "../../store/apis/apiTaskList";
+import {useGetTaskListsQuery} from "../../apis/apiTaskList";
 
 interface TaskListOpenProps {
 

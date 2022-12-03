@@ -1,9 +1,9 @@
-import {ReduxState} from "../index";
+import {ReduxState} from "../store";
 import {collection, deleteDoc, doc, getDocs, orderBy, query, where, writeBatch} from "firebase/firestore";
-import {db} from "../../firebase";
-import {apiSlice} from "../api";
-import {TaskGroup, taskGroupConverter} from "../../types/TaskGroup";
-import {PartialWithId} from "../../types/PartialWithId";
+import {db} from "../firebase";
+import {apiSlice} from "./api";
+import {TaskGroup, taskGroupConverter} from "../types/TaskGroup";
+import {PartialWithId} from "../types/PartialWithId";
 
 
 export const apiTaskList = apiSlice.enhanceEndpoints({ addTagTypes: ['TaskGroup'] }).injectEndpoints({

@@ -7,7 +7,7 @@ import {TaskList, TaskListType} from "../../types/TaskLists";
 import {useNavigate} from "react-router-dom";
 import {setSelectedTaskListId} from "../../store/taskSlice";
 import {useDispatch} from "react-redux";
-import {useCreateTaskListMutation} from "../../store/apis/apiTaskList";
+import {useCreateTaskListMutation} from "../../apis/apiTaskList";
 import TaskListForm from "./TaskListForm";
 
 export interface FormTaskListCreate {

@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import {userReducer} from "./userSlice";
 import {menuReducer} from "./menuSlice";
 import {taskReducer} from "./taskSlice";
-import {apiSlice} from "./api";
+import {apiSlice} from "../apis/api";
 
 export const store = configureStore({
     reducer: {

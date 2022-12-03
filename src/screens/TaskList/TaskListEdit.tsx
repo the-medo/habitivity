@@ -8,7 +8,7 @@ import {TaskList} from "../../types/TaskLists";
 import {useNavigate} from "react-router-dom";
 import TaskListForm from "./TaskListForm";
 import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
-import {useDeleteTaskListMutation, useUpdateTaskListMutation} from "../../store/apis/apiTaskList";
+import {useDeleteTaskListMutation, useUpdateTaskListMutation} from "../../apis/apiTaskList";
 import TaskGroupsForm from "./TaskGroup/TaskGroupsForm";
 
 export interface FormTaskListEdit {

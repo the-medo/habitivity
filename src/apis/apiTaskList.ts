@@ -1,8 +1,8 @@
-import {TaskList, taskListConverter} from "../../types/TaskLists";
-import {ReduxState} from "../index";
+import {TaskList, taskListConverter} from "../types/TaskLists";
+import {ReduxState} from "../store";
 import {collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc} from "firebase/firestore";
-import {db} from "../../firebase";
-import {apiSlice} from "../api";
+import {db} from "../firebase";
+import {apiSlice} from "./api";
 
 
 export const apiTaskList = apiSlice.enhanceEndpoints({ addTagTypes: ['TaskList'] }).injectEndpoints({
