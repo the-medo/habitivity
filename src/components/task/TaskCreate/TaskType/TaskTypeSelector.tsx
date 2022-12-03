@@ -39,7 +39,7 @@ const TaskTypeSelector: React.FC<TaskTypeSelectorProps> = () => {
         <TaskTypeWrapper>
             {
                 taskTypesWithDescription.map((tt, i) =>
-                    <Fragment key={tt.title}>
+                    <Fragment key={tt.id}>
                         <TaskTypeItem taskType={tt} isSelected={selectedTaskType?.id === tt.id} setSelectedTaskType={setSelectedTaskType} />
                         {i < taskTypesWithDescription.length - 1 && <TaskTypeItemDivider />}
                     </Fragment>

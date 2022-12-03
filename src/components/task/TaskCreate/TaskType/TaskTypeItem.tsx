@@ -42,10 +42,9 @@ const TaskTypeItemWrapper = styled.div<TaskTypeItemWrapperProps>`
   
 `
 
-const TaskTypeItemTitle = styled.h4``
-const TaskTypeItemDescription = styled.p`
-  font-size: 100%;
-`
+const TaskTypeItemTitle = styled.h4`margin-top: 1rem;`;
+const TaskTypeItemDescription = styled.p``
+
 const TaskTypeItemExamples = styled.div`
   font-size: 80%;
   font-style: italic;
@@ -62,7 +61,7 @@ const TaskTypeItem: React.FC<TaskTypeItemProps> = ({taskType, isSelected, setSel
         <TaskTypeItemWrapper $isSelected={isSelected} onClick={() => setSelectedTaskType(taskType)}>
             <Svg
                 svgImage={taskType.svg}
-                height={'8rem'}
+                height={'6rem'}
                 colorPrimary={COLORS.PRIMARY_DARK}
             />
             <TaskTypeItemTitle>{taskType.title}</TaskTypeItemTitle>
