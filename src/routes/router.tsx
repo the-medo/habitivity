@@ -12,7 +12,7 @@ import TaskListDetail from "../screens/TaskList/TaskListDetail";
 import TaskListEdit from "../screens/TaskList/TaskListEdit";
 import Dashboard from "../screens/Dashboard/Dashboard";
 import TodayDefault from "../screens/Today/TodayDefault";
-import TaskCreate from "../components/task/TaskCreate";
+import TaskCreate from "../components/task/TaskCreate/TaskCreate";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(

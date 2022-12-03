@@ -20,6 +20,7 @@ export const COLORS = {
 }
 
 export const STYLE = {
+    //restyling ant design components
     PRIMARY_COLOR: COLORS.PRIMARY,
     HEADING_COLOR: COLORS.PRIMARY_DARK,
     MENU_ITEM_ACTIVE_BG: 'transparent',
@@ -34,4 +35,8 @@ export const STYLE = {
     LAYOUT_BODY_BACKGROUND: COLORS.BACKGROUND,
     FONT_SIZE_BASE: '1rem', //fcks up dropdown menu (??)
     LINE_HEIGHT_BASE: 1.5,
+
+    //other
+    BASE_SHADOW: `0 0 10px 2px rgba(0,0,0,0.3)`,
+
 };

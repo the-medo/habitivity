@@ -24,7 +24,8 @@ const StyledContent = styled(Layout.Content)<{
 }>`
   padding: 1.5rem;
   margin-left: ${({$isLeftMenuCollapsed, $isLeftMenuWithContent}) => $isLeftMenuWithContent ? ($isLeftMenuCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH) : 0}rem;
-  margin-right: ${({$isRightDrawerCollapsed}) => $isRightDrawerCollapsed ? SIDER_COLLAPSED_SIZE : RIGHT_DRAWER_WIDTH}rem;
+  //TODO: after returning drawer, uncomment
+  //margin-right: ${({$isRightDrawerCollapsed}) => $isRightDrawerCollapsed ? SIDER_COLLAPSED_SIZE : RIGHT_DRAWER_WIDTH}rem;
   margin-top: ${({$isLeftMenuCollapsed}) => $isLeftMenuCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG}rem;
   min-height: 10rem;
   transition: .5s all;
