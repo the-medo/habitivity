@@ -81,8 +81,8 @@ const LogoWithTaskList: React.FC<LogoWithTaskListProps> = ({version, title}) => 
                 svgImage={version === 'small' ? LogoSmall : LogoBig}
                 height={version === 'small' ? '2.5rem' : '3rem'}
                 width={version === 'small' ? `${SIDER_COLLAPSED_SIZE}rem` : `${LEFT_MENU_WIDTH}rem`}
-                colorPrimary={title ? "transparent" : undefined}
-                colorPrimaryHover={title ? "transparent" : undefined}
+                $colorPrimary={title ? "transparent" : undefined}
+                $colorPrimaryHover={title ? "transparent" : undefined}
             />
             {title && <StyledHeader $fontSize={`${fontSize}%`}>{titleToDisplay}</StyledHeader>}
         </StyledLogoWrapper>

@@ -1,7 +1,8 @@
 import React, {ReactNode} from "react";
 import {createGlobalStyle, css, DefaultTheme, ThemeProvider} from 'styled-components';
 import {TopMenuNavLink} from "../components/menu/MenuTop/MenuTopComponents";
-import {COLORS} from "./CustomStyles";
+import {COLORS, STYLE} from "./CustomStyles";
+import {ConfigProvider} from "antd";
 
 
 export let REM_SIZE = 24; //in pixels
@@ -99,20 +100,22 @@ export const withScrollbar = css`
   }
 `;
 
-const theme: DefaultTheme = {
-    fontFamily: 'Helvetica Neue',
-    colors: {
-        primary: COLORS.PRIMARY,
-        secondary: COLORS.PRIMARY,
-    },
-}
-
 const GlobalStyleAndTheme: React.FC<GlobalStyleAndThemeProps> = ({children}) => {
     return (
-        <ThemeProvider theme={theme}>
-            <GlobalStyle />
+        <ConfigProvider
+            theme={{
+                token: {
+                    colorPrimary: STYLE.PRIMARY_COLOR,
+                    colorTextHeading: STYLE.HEADING_COLOR,
+                },
+                components: {
+                    Menu: { },
+                }
+            }}
+        >
+            <GlobalStyle to={"/"} />
             {children}
-        </ThemeProvider>
+        </ConfigProvider>
     )
 }
 

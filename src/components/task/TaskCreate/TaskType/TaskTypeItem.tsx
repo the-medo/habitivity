@@ -77,7 +77,7 @@ const TaskTypeItem: React.FC<TaskTypeItemProps> = ({taskType}) => {
             <Svg
                 svgImage={taskType.svg}
                 height={'6rem'}
-                colorPrimary={COLORS.PRIMARY_DARK}
+                $colorPrimary={COLORS.PRIMARY_DARK}
             />
             <TaskTypeItemTitle>{taskType.title}</TaskTypeItemTitle>
             <TaskTypeItemDescription>{taskType.description}</TaskTypeItemDescription>

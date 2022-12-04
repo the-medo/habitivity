@@ -93,8 +93,8 @@ function LoginPage() {
                         <Svg
                             svgImage={LogoBig}
                             height={'12rem'}
-                            colorPrimary={COLORS.PRIMARY_LIGHT}
-                            colorSecondary={COLORS.BLUE_DARK}
+                            $colorPrimary={COLORS.PRIMARY_LIGHT}
+                            $colorSecondary={COLORS.BLUE_DARK}
                         />
                         <FirebaseAuth uiConfig={uiConfig} firebaseAuth={auth}/>
                     </LoginPageContentImage>
