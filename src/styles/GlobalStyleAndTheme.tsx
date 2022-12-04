@@ -22,6 +22,10 @@ const GlobalStyle = createGlobalStyle`
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol" !important;
   }
   
+  h1 {
+    font-size: 2rem;
+  }
+  
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat',  -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 600;

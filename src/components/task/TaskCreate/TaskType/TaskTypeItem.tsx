@@ -3,6 +3,11 @@ import Svg from "../../../../assets/svg/Svg";
 import {COLORS} from "../../../../styles/CustomStyles";
 import styled, {css} from "styled-components";
 import {TaskType} from "../../../../types/Tasks";
+import {useDispatch, useSelector} from "react-redux";
+import {ReduxState} from "../../../../store";
+import {setSelectedTaskType} from "../../../../store/taskSlice";
+import {Button} from "antd";
+import {icons, IconType} from "../../../icons/icons";
 
 export interface TaskTypeForTTSelector {
     id: TaskType;
@@ -14,35 +19,36 @@ export interface TaskTypeForTTSelector {
 
 interface TaskTypeItemProps {
     taskType: TaskTypeForTTSelector;
-    isSelected: boolean;
-    setSelectedTaskType: React.Dispatch<React.SetStateAction<TaskTypeForTTSelector | undefined>>;
 }
 
 interface TaskTypeItemWrapperProps {
-    $isSelected: boolean;
+    $isCurrentSelected: boolean;
 }
 
 const TaskTypeItemWrapper = styled.div<TaskTypeItemWrapperProps>`
   display: flex;
-  flex-grow: 1;
+  //flex-grow: 1;
   flex-direction: column;
-  flex-basis: 50%;
+
+  flex-basis: 20%;
+  min-width: 10rem;
+
   border-radius: 1rem;
-  
+
   padding: 1rem;
   gap: .5rem;
   align-items: center;
   transition: .3s all;
-  
+
   &:hover {
     background-color: ${COLORS.PRIMARY_LIGHT};
   }
-  
-  ${ ({$isSelected}) => $isSelected && css` background-color: ${COLORS.PRIMARY_LIGHT}; ` }
-  
+
+  ${({$isCurrentSelected}) => $isCurrentSelected && css` background-color: ${COLORS.PRIMARY_LIGHT}; `}
+
 `
 
-const TaskTypeItemTitle = styled.h4`margin-top: 1rem;`;
+const TaskTypeItemTitle = styled.h3`margin-top: 1rem;`;
 const TaskTypeItemDescription = styled.p``
 
 const TaskTypeItemExamples = styled.div`
@@ -55,10 +61,19 @@ const TaskTypeItemExamples = styled.div`
   justify-content: flex-end;
 `
 
-const TaskTypeItem: React.FC<TaskTypeItemProps> = ({taskType, isSelected, setSelectedTaskType}) => {
+const TaskTypeItem: React.FC<TaskTypeItemProps> = ({taskType}) => {
+
+    const dispatch = useDispatch();
+    const { selectedTaskType } = useSelector((state: ReduxState) => state.taskReducer);
+
+    const isCurrentSelected = selectedTaskType === taskType.id;
+
+    const onTaskTypeClick = useCallback(() => {
+        if (!isCurrentSelected) dispatch(setSelectedTaskType(taskType.id));
+    }, [isCurrentSelected]);
 
     return (
-        <TaskTypeItemWrapper $isSelected={isSelected} onClick={() => setSelectedTaskType(taskType)}>
+        <TaskTypeItemWrapper $isCurrentSelected={isCurrentSelected} onClick={onTaskTypeClick}>
             <Svg
                 svgImage={taskType.svg}
                 height={'6rem'}
@@ -72,6 +87,7 @@ const TaskTypeItem: React.FC<TaskTypeItemProps> = ({taskType, isSelected, setSel
                     {taskType.examples.map(e => <li>{e}</li>)}
                 </ul>
             </TaskTypeItemExamples>
+            {isCurrentSelected && <Button onClick={() => dispatch(setSelectedTaskType(undefined))} icon={icons[IconType.EditOutlined]}>Change type</Button>}
         </TaskTypeItemWrapper>
     );
 }

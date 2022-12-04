@@ -1,17 +1,27 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment} from "react";
 import styled from "styled-components";
-import {COLORS, STYLE} from "../../../../styles/CustomStyles";
-import TaskTypeItem, {TaskTypeForTTSelector} from "./TaskTypeItem";
+import {COLORS} from "../../../../styles/CustomStyles";
+import TaskTypeItem from "./TaskTypeItem";
 import {taskTypesWithDescription} from "./taskTypesWithDescription";
+import {useSelector} from "react-redux";
+import {ReduxState} from "../../../../store";
 
 interface TaskTypeSelectorProps {
 }
 
-export const TaskTypeWrapper = styled.div`
+interface TaskTypeWrapperProps {
+    $isTaskTypeSelected: boolean;
+}
+
+export const TaskTypeWrapper = styled.div<TaskTypeWrapperProps>`
   border-radius: 1rem;
-  //box-shadow: ${STYLE.BASE_SHADOW};
   padding: 1rem;
 
+  //flex-wrap: wrap;
+
+  flex-basis: ${ ({$isTaskTypeSelected}) => $isTaskTypeSelected ? '20%' : '100%'  } ;
+  min-width: 250px;
+  
   display: flex;
   flex-direction: row;
   gap: 1rem;
@@ -32,20 +42,23 @@ export const TaskTypeItemDivider = styled.div`
 
 
 const TaskTypeSelector: React.FC<TaskTypeSelectorProps> = () => {
-
-    const [selectedTaskType, setSelectedTaskType] = useState<TaskTypeForTTSelector>();
+    const { selectedTaskType } = useSelector((state: ReduxState) => state.taskReducer);
 
     return (
-        <TaskTypeWrapper>
-            {
-                taskTypesWithDescription.map((tt, i) =>
-                    <Fragment key={tt.id}>
-                        <TaskTypeItem taskType={tt} isSelected={selectedTaskType?.id === tt.id} setSelectedTaskType={setSelectedTaskType} />
-                        {i < taskTypesWithDescription.length - 1 && <TaskTypeItemDivider />}
-                    </Fragment>
-                )
-            }
-        </TaskTypeWrapper>
+        <Fragment>
+            <h2>Choose task type:</h2>
+            <TaskTypeWrapper $isTaskTypeSelected={!!selectedTaskType}>
+                <TaskTypeItemDivider />
+                {
+                    taskTypesWithDescription.map((tt, i) =>
+                        <Fragment key={tt.id}>
+                            <TaskTypeItem taskType={tt} />
+                            <TaskTypeItemDivider />
+                        </Fragment>
+                    )
+                }
+            </TaskTypeWrapper>
+        </Fragment>
     );
 }
 
