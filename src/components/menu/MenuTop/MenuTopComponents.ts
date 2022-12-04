@@ -1,16 +1,21 @@
 import styled, {css} from "styled-components";
 import {Layout, Menu} from "antd";
-import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE, TOP_MENU_BIG, TOP_MENU_SMALL} from "../../../styles/GlobalStyleAndTheme";
 import {StyledUserAvatar} from "../../global/UserAvatar";
 import {NavLink} from "react-router-dom";
-import {COLORS} from "../../../styles/CustomStyles";
+import {
+    COLORS,
+    LEFT_MENU_WIDTH,
+    SIDER_COLLAPSED_SIZE,
+    TOP_MENU_BIG,
+    TOP_MENU_SMALL
+} from "../../../styles/CustomStyles";
 const { Header } = Layout;
 
 export const TopMenuNavLink = styled(NavLink)`
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   
   border-radius: .5rem;
   margin: 0 .25rem;
@@ -25,7 +30,7 @@ export const TopMenuNavLink = styled(NavLink)`
   }
   
   &:hover, &[aria-current="page"].active {
-    background-color: ${COLORS.BLUE_DARK}; //#001529
+    background-color: ${COLORS.BLUE_GREY_DARK}; //#001529
   }
 `;
 
@@ -36,18 +41,21 @@ export const TopMenuLeftPartWrapper = styled.div`
   align-items: center;
 
   .ant-menu-overflow-item {
-    display: flex;
-    align-self: center;
+    display: flex !important;
+    align-self: center !important;
   }
 `;
 
 
-export const TopMenuLeftPart = styled(Menu).attrs(() => ({
-  theme: "dark",
-}))<{$isCollapsed?: boolean}>`
-  min-width: 0;
+export const TopMenuLeftPart = styled(Menu)<{$isCollapsed?: boolean}>`
+  min-width: 0 !important;
   flex: auto;
-  ${({$isCollapsed}) => css`width: calc(100vw - 5rem - ${$isCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH}rem)`}
+  background-color: ${COLORS.BLUE_DARK};
+  ${({$isCollapsed}) => css`width: calc(100vw - 5rem - ${$isCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH}rem) !important;`}
+
+  & > .ant-menu-item a::before {
+    bottom: 0;
+  }
 `
 
 export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
@@ -55,25 +63,43 @@ export const TopMenuHeader = styled(Header)<{$isCollapsed?: boolean}>`
   
   z-index: 1;
   width: 100%;
-  padding: 0;
+  padding: 0 !important;
   transition: .5s all;
   overflow: hidden;
-  
-  /* must be here because of antd css rules overruling it in "TestMenuItem" styled component... better than !important... I guess? */
-  ${TopMenuLeftPartWrapper} ${TopMenuLeftPart} ${TopMenuNavLink} { 
-    color: ${COLORS.BLUE_LIGHT};
-    
+
+  &.ant-layout-header {
     ${({$isCollapsed}) => css`
-      line-height: ${$isCollapsed ? 2 : 2.5}rem;
-      height: ${$isCollapsed ? 2: 2.5}rem;
-      font-size: 1rem;
+      line-height: ${$isCollapsed ? TOP_MENU_SMALL - 1 : TOP_MENU_BIG - 1}rem;
+      height: ${$isCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG}rem;
     `}
   }
+  
+  ${TopMenuLeftPartWrapper} {
+    ${TopMenuLeftPart} {
+      
+      .ant-menu-item, .ant-menu-overflow-item {
+        padding-inline: .25rem;
+        
+        &::after {
+          border: 0;
+        }
+      }
 
-  ${({$isCollapsed}) => css`
-    line-height: ${$isCollapsed ? TOP_MENU_SMALL - 1 : TOP_MENU_BIG - 1}rem;
-    height: ${$isCollapsed ? TOP_MENU_SMALL: TOP_MENU_BIG}rem;
-  `}
+      .ant-menu-overflow-item > div {
+        color: ${COLORS.BLUE_LIGHT} !important;
+      }
+      
+      ${TopMenuNavLink} {
+        color: ${COLORS.BLUE_LIGHT};
+
+        ${({$isCollapsed}) => css`
+          line-height: ${$isCollapsed ? 2 : 2.5}rem;
+          height: ${$isCollapsed ? 2: 2.5}rem;
+          font-size: 1rem;
+        `}
+      }
+    }
+  }  
   
   ${StyledUserAvatar} {
     width: ${({$isCollapsed}) => $isCollapsed ? TOP_MENU_SMALL - 1 : TOP_MENU_BIG - 1}rem;

@@ -1,13 +1,9 @@
 import React from "react";
 import {TaskGroup} from "../../../types/TaskGroup";
 import styled from "styled-components";
-import {ExampleTasks} from "../../../examples/taskTypes";
 import TodayTask from "./TodayTask";
 import {useTasksByGroup} from "../../../hooks/useTasksByGroup";
-import {Button} from "antd";
-import ButtonWrapper from "../../../components/global/ButtonWrapper";
 import {COLORS} from "../../../styles/CustomStyles";
-import {icons, IconType} from "../../../components/icons/icons";
 import EmptyGroupMessage from "./EmptyGroupMessage";
 
 interface TodayTaskGroupProps {

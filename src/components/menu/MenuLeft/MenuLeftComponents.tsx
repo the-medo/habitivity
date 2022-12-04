@@ -1,19 +1,31 @@
 import styled from "styled-components";
 import {
-    LEFT_MENU_WIDTH,
-    SIDER_COLLAPSED_SIZE,
-    TOP_MENU_BIG,
-    TOP_MENU_SMALL,
     withScrollbar
 } from "../../../styles/GlobalStyleAndTheme";
 import { Layout, Menu } from 'antd';
 import React from "react";
-import {COLORS} from "../../../styles/CustomStyles";
+import {
+    COLORS,
+    LEFT_MENU_WIDTH,
+    SIDER_COLLAPSED_SIZE,
+    TOP_MENU_BIG,
+    TOP_MENU_SMALL
+} from "../../../styles/CustomStyles";
 const { Sider, } = Layout;
 
 export const LeftMenu = styled(Menu)`
   padding-top: .25rem;
   background-color: transparent;
+  
+  & > li.ant-menu-item[role="menuitem"] { /* left menu, otherwise could be:  "aside ul.ant-menu" */
+    padding: 0 calc(.5rem - 1px) 0 .5rem !important;
+    margin: 0 0 .5rem;
+    width: 100%;
+
+    &:hover {
+      background-color: transparent !important;
+    }
+  }
 `;
 
 export interface MenuLeftProps {
@@ -29,14 +41,14 @@ export const LeftSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyColl
             - ${({$isCollapsed}) => $isCollapsed ?  TOP_MENU_SMALL : TOP_MENU_BIG}rem
             ${({$isAutomaticallyCollapsed}) => !$isAutomaticallyCollapsed  && ` - ${SIDER_COLLAPSED_SIZE}rem`}
   );
-  position: fixed;
+  position: fixed !important;
   left: 0;
   top: ${({$isCollapsed}) => $isCollapsed ?  TOP_MENU_SMALL : TOP_MENU_BIG}rem;
   bottom: ${SIDER_COLLAPSED_SIZE}rem;
-  background-color: ${COLORS.GREY_LIGHT};
+  background-color: ${COLORS.GREY_LIGHT} !important;
   
   ${withScrollbar}
-`
+`;
 
 export const MenuCollapsor = styled.div<Pick<MenuLeftProps, '$isCollapsed'>>`
   width: ${({$isCollapsed}) => $isCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH}rem;

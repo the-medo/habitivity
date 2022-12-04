@@ -17,7 +17,7 @@ const uiConfig = {
     // Popup signin flow rather than redirect flow.
     signInFlow: 'popup',
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    signInSuccessUrl: '/home',
+    signInSuccessUrl: '/today',
     // We will display Google and Facebook as auth providers.
     signInOptions: [
         GoogleAuthProvider.PROVIDER_ID,
@@ -39,7 +39,7 @@ const LoginPageBackground = styled(Layout)`
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(17deg, ${COLORS.BLUE_DARK} 11%, ${COLORS.PRIMARY_LIGHT} 95%);
+    background: linear-gradient(17deg, ${COLORS.BLUE_GREY_DARK} 11%, ${COLORS.PRIMARY_LIGHT} 95%);
     opacity: 20%;
   }
 `;
@@ -62,7 +62,7 @@ const LoginPageContentImage = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  background-image: linear-gradient(17deg, ${COLORS.PRIMARY_LIGHT} 5%, ${COLORS.BLUE_DARK} 91%);
+  background-image: linear-gradient(17deg, ${COLORS.PRIMARY_LIGHT} 5%, ${COLORS.BLUE_GREY_DARK} 91%);
   box-shadow: 0 0 10px 2px rgba(0,0,0,0.3);
   
   &::before {
@@ -94,7 +94,7 @@ function LoginPage() {
                             svgImage={LogoBig}
                             height={'12rem'}
                             $colorPrimary={COLORS.PRIMARY_LIGHT}
-                            $colorSecondary={COLORS.BLUE_DARK}
+                            $colorSecondary={COLORS.BLUE_GREY_DARK}
                         />
                         <FirebaseAuth uiConfig={uiConfig} firebaseAuth={auth}/>
                     </LoginPageContentImage>

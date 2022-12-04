@@ -21,23 +21,30 @@ export const LeftMenuNavLinkStyled = styled(NavLink)<LeftMenuNavLinkStyledProps>
   height: 2.25rem;
   
   font-size: 1rem;
-  line-height: 1.25rem;
+  line-height: 1rem;
   transition: .3s all;
   
+  align-items: center;
+  justify-content: center;
 
   & > ${LeftLinkIcon} > span[role="img"].anticon {
     height: 1rem;
     line-height: 1rem;
-    padding-left: .25rem;
+    
+    padding-left: .1rem;
+    padding-right: .1rem;
+    
     color: ${COLORS.PRIMARY_DARK};
   }
   
   ${LeftLinkLabel} {
     padding-left: .5rem;
-    display: ${ p => p.$isCollapsed ? 'none' : 'inline-block' };
+    display: ${ p => p.$isCollapsed ? 'none' : 'flex' };
     width: calc(100% - .5rem);
     overflow: hidden;
+    height: 100%;
     text-overflow: ellipsis;
+    align-items: center;
   }
 
   &:hover, &[aria-current="page"].active {

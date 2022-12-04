@@ -56,7 +56,7 @@ const StyledRow = styled.div`
     }
     
     &:hover ${HandleIcon} {
-      color: ${COLORS.BLUE_DARK};
+      color: ${COLORS.BLUE_GREY_DARK};
     }
   }
   

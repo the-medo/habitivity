@@ -8,13 +8,14 @@ import MenuLeft from "../components/menu/MenuLeft/MenuLeft";
 import styled from "styled-components";
 import {useSlider} from "../hooks/useSlider";
 import RightDrawer from "../components/menu/DrawerRight/RightDrawer";
+import {useUser} from "../hooks/useUser";
 import {
     LEFT_MENU_WIDTH,
     RIGHT_DRAWER_WIDTH,
-    SIDER_COLLAPSED_SIZE, TOP_MENU_BIG,
+    SIDER_COLLAPSED_SIZE,
+    TOP_MENU_BIG,
     TOP_MENU_SMALL
-} from "../styles/GlobalStyleAndTheme";
-import {useUser} from "../hooks/useUser";
+} from "../styles/CustomStyles";
 
 const StyledContent = styled(Layout.Content)<{
     $isLeftMenuCollapsed: boolean;
@@ -23,8 +24,7 @@ const StyledContent = styled(Layout.Content)<{
 }>`
   padding: 1.5rem;
   margin-left: ${({$isLeftMenuCollapsed, $isLeftMenuWithContent}) => $isLeftMenuWithContent ? ($isLeftMenuCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH) : 0}rem;
-  //TODO: after returning drawer, uncomment
-  //margin-right: ${({$isRightDrawerCollapsed}) => $isRightDrawerCollapsed ? SIDER_COLLAPSED_SIZE : RIGHT_DRAWER_WIDTH}rem;
+  //TODO: after returning drawer, uncomment: //margin-right: ${({$isRightDrawerCollapsed}) => $isRightDrawerCollapsed ? SIDER_COLLAPSED_SIZE : RIGHT_DRAWER_WIDTH}rem;
   margin-top: ${({$isLeftMenuCollapsed}) => $isLeftMenuCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG}rem;
   min-height: 10rem;
   transition: .5s all;

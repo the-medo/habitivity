@@ -1,6 +1,7 @@
 import React, {Fragment} from "react";
 import {useParams} from "react-router-dom";
 import TaskCreateForm from "./TaskCreateForm";
+import {Header1} from "../../global/Headers";
 
 interface TaskCreateProps {
 
@@ -11,7 +12,7 @@ const TaskCreate: React.FC<TaskCreateProps> = () => {
 
     return (
         <Fragment>
-            <h1>Create new task</h1>
+            <Header1>Create new task</Header1>
             <TaskCreateForm />
         </Fragment>
     );

@@ -1,4 +1,5 @@
 import { useRouteError } from "react-router-dom";
+import {Header1} from "./components/global/Headers";
 
 export default function ErrorPage() {
     const error = useRouteError() as any;
@@ -6,7 +7,7 @@ export default function ErrorPage() {
 
     return (
         <div id="error-page">
-            <h1>Oops!</h1>
+            <Header1>Oops!</Header1>
             <p>Sorry, an unexpected error has occurred.</p>
             <p>
                 <i>{error.statusText || error.message}</i>

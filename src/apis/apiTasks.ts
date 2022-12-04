@@ -1,5 +1,5 @@
 import {ReduxState} from "../store";
-import {collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where} from "firebase/firestore";
+import {collection, getDocs, query, where} from "firebase/firestore";
 import {db} from "../firebase";
 import {apiSlice} from "./api";
 import {Task, taskConverter} from "../types/Tasks";
