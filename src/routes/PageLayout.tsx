@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { Layout } from 'antd';
-import 'antd/dist/antd.less'
+import 'antd/dist/reset.css'
 import LoginPage from "../components/auth/LoginPage";
 import MenuTop from "../components/menu/MenuTop/MenuTop";
 import MenuLeft from "../components/menu/MenuLeft/MenuLeft";
@@ -15,7 +15,6 @@ import {
     TOP_MENU_SMALL
 } from "../styles/GlobalStyleAndTheme";
 import {useUser} from "../hooks/useUser";
-import {COLORS} from "../styles/CustomStyles";
 
 const StyledContent = styled(Layout.Content)<{
     $isLeftMenuCollapsed: boolean;

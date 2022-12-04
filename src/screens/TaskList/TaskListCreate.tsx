@@ -1,5 +1,5 @@
 import React, {useCallback} from "react";
-import {Col, PageHeader} from "antd";
+import {Col, Layout} from "antd";
 import {useUser} from "../../hooks/useUser";
 import {stringToPretty} from "../../helpers/stringToPretty";
 import {generateID} from "../../helpers/generateID";
@@ -42,7 +42,7 @@ const TaskListCreate: React.FC = () => {
     return (
         <>
             <Col offset={6}>
-                <PageHeader
+                <Layout.Header
                     title="Create new task list"
                 />
             </Col>

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from "react";
 import {
-    Col,
+    Col, Layout,
     PageHeader,
 } from "antd";
 import {useUser} from "../../hooks/useUser";
@@ -54,10 +54,10 @@ const TaskListEdit: React.FC = () => {
     return (
         <>
             <Col offset={6}>
-                <PageHeader
+                <Layout.Header
                     style={{marginLeft: "-1.5rem"}}
                     title="Edit this task list"
-                    subTitle={`ID: ${taskList?.id}`}
+                    // subTitle={`ID: ${taskList?.id}`}
                 />
             </Col>
             <TaskListForm
@@ -68,7 +68,7 @@ const TaskListEdit: React.FC = () => {
                 isEdit
             />
             <Col offset={6}>
-                <PageHeader style={{marginLeft: "-1.5rem"}} title="Edit groups" />
+                <Layout.Header style={{marginLeft: "-1.5rem"}} title="Edit groups" />
             </Col>
             <TaskGroupsForm />
         </>
