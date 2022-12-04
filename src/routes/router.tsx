@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React from "react";
 import {createBrowserRouter, createRoutesFromElements, Route} from "react-router-dom";
 import PageLayout from "./PageLayout";
 import ErrorPage from "../ErrorPage";
@@ -41,8 +41,7 @@ export const router = createBrowserRouter(
                     <Route path=":taskGroupId" element={<TaskCreate />} />
                 </Route>
             </Route>
-            <Route path="calendar" element={<Calendar />} >
-            </Route>
+            <Route path="calendar" element={<Calendar />} />
             <Route path="settings" element={<Settings />} >
             </Route>
         </Route>

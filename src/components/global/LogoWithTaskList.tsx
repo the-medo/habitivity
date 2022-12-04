@@ -1,11 +1,10 @@
 import React, {useMemo} from "react";
 import {LogoBig, LogoSmall} from "../../assets/svg";
-import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE} from "../../styles/GlobalStyleAndTheme";
 import Svg, {
     StyledSvg,
 } from "../../assets/svg/Svg";
 import styled from "styled-components";
-import {COLORS} from "../../styles/CustomStyles";
+import {COLORS, LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE} from "../../styles/CustomStyles";
 
 interface LogoWithTaskListProps {
     version: 'small' | 'big';
@@ -34,7 +33,7 @@ const StyledLogoWrapper = styled.div<{$width: string, $height: string}>`
 
   &:hover {
     ${StyledHeader} {
-      color: ${COLORS.BLUE_DARK};
+      color: ${COLORS.BLUE_GREY_DARK};
     }
 
     .svg-color-secondary {

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {Avatar, Image} from "antd";
+import {Avatar} from "antd";
 import {HabitivityUser} from "../../types/HabitivityUser";
 import {useUser} from "../../hooks/useUser";
 import {initials} from "../../helpers/initials";

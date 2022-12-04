@@ -1,8 +1,5 @@
 import React, {useCallback, useEffect} from "react";
-import {
-    Col, Layout,
-    PageHeader,
-} from "antd";
+import { Col } from "antd";
 import {useUser} from "../../hooks/useUser";
 import {TaskList} from "../../types/TaskLists";
 import {useNavigate} from "react-router-dom";
@@ -10,6 +7,7 @@ import TaskListForm from "./TaskListForm";
 import {useSelectedTaskList} from "../../hooks/useSelectedTaskList";
 import {useDeleteTaskListMutation, useUpdateTaskListMutation} from "../../apis/apiTaskList";
 import TaskGroupsForm from "./TaskGroup/TaskGroupsForm";
+import {Header2} from "../../components/global/Headers";
 
 export interface FormTaskListEdit {
     taskListName: string;
@@ -53,13 +51,7 @@ const TaskListEdit: React.FC = () => {
 
     return (
         <>
-            <Col offset={6}>
-                <Layout.Header
-                    style={{marginLeft: "-1.5rem"}}
-                    title="Edit this task list"
-                    // subTitle={`ID: ${taskList?.id}`}
-                />
-            </Col>
+            <Col offset={6}> <Header2>Edit this task list</Header2> </Col>
             <TaskListForm
                 onFinish={onFinish}
                 onDelete={onDelete}
@@ -67,9 +59,7 @@ const TaskListEdit: React.FC = () => {
                 taskList={taskList}
                 isEdit
             />
-            <Col offset={6}>
-                <Layout.Header style={{marginLeft: "-1.5rem"}} title="Edit groups" />
-            </Col>
+            <Col offset={6}> <Header2 $marginTop={5}>Edit groups</Header2> </Col>
             <TaskGroupsForm />
         </>
     );

@@ -1,5 +1,5 @@
 import React, {useCallback} from "react";
-import {Col, Layout} from "antd";
+import {Col} from "antd";
 import {useUser} from "../../hooks/useUser";
 import {stringToPretty} from "../../helpers/stringToPretty";
 import {generateID} from "../../helpers/generateID";
@@ -9,6 +9,7 @@ import {setSelectedTaskListId} from "../../store/taskSlice";
 import {useDispatch} from "react-redux";
 import {useCreateTaskListMutation} from "../../apis/apiTaskList";
 import TaskListForm from "./TaskListForm";
+import {Header2} from "../../components/global/Headers";
 
 export interface FormTaskListCreate {
     taskListName: string;
@@ -42,9 +43,7 @@ const TaskListCreate: React.FC = () => {
     return (
         <>
             <Col offset={6}>
-                <Layout.Header
-                    title="Create new task list"
-                />
+                <Header2>Create new task list</Header2>
             </Col>
             <TaskListForm isLoading={isLoading} onFinish={onFinish}/>
         </>

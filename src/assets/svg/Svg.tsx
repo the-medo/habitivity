@@ -33,14 +33,14 @@ export const StyledSvg = styled.div<StyledSvgProps>`
   }
 
   svg > .svg-color-secondary {
-    fill: ${({$colorSecondary}) => $colorSecondary ?? COLORS.BLUE_DARK};
-    stroke: ${({$colorSecondary}) => $colorSecondary ?? COLORS.BLUE_DARK};
+    fill: ${({$colorSecondary}) => $colorSecondary ?? COLORS.BLUE_GREY_DARK};
+    stroke: ${({$colorSecondary}) => $colorSecondary ?? COLORS.BLUE_GREY_DARK};
   }
   
   &:hover {
     svg > .svg-color-primary {
-      fill: ${({$colorPrimaryHover}) => $colorPrimaryHover ?? COLORS.BLUE_DARK};
-      stroke: ${({$colorPrimaryHover}) => $colorPrimaryHover ?? COLORS.BLUE_DARK};
+      fill: ${({$colorPrimaryHover}) => $colorPrimaryHover ?? COLORS.BLUE_GREY_DARK};
+      stroke: ${({$colorPrimaryHover}) => $colorPrimaryHover ?? COLORS.BLUE_GREY_DARK};
     }
 
     svg > .svg-color-secondary {

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr'
-import {STYLE} from "./src/styles/CustomStyles";
+// import {STYLE} from "./src/styles/CustomStyles";
 
 // https://vitejs.dev/config/
 export default defineConfig({

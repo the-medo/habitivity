@@ -16,7 +16,8 @@ export const COLORS = {
     GREY_DARK: 'darkgrey',
     BACKGROUND: '#fff',
     BLUE_LIGHT: '#cdd9ee',
-    BLUE_DARK: 'rgb(77 92 106)',
+    BLUE_GREY_DARK: 'rgb(77 92 106)',
+    BLUE_DARK: '#001529',
 }
 
 export const STYLE = {
@@ -39,4 +40,11 @@ export const STYLE = {
     //other
     BASE_SHADOW: `0 0 10px 2px rgba(0,0,0,0.3)`,
 
-};
+}; /* rest of the sizes are in REM */
+
+
+export const SIDER_COLLAPSED_SIZE = 3;
+export const LEFT_MENU_WIDTH = 13;
+export const RIGHT_DRAWER_WIDTH = 13;
+export const TOP_MENU_SMALL = 3;
+export const TOP_MENU_BIG = 4;

@@ -2,16 +2,13 @@ import React, {useMemo} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ReduxState} from "../../../store";
 import {IconType} from "../../icons/icons";
-import {
-    SIDER_COLLAPSED_SIZE,
-    LEFT_MENU_WIDTH,
-} from "../../../styles/GlobalStyleAndTheme";
 import {setLeftMenuAutomaticallyCollapsed, toggleLeftMenuManuallyCollapsed} from "../../../store/menuSlice";
 import {DoubleLeftOutlined} from "@ant-design/icons";
 import {useSlider} from "../../../hooks/useSlider";
 import {LeftMenu, LeftSider, MenuCollapsor} from "./MenuLeftComponents";
 import {ItemType} from "antd/es/menu/hooks/useItems";
 import LeftMenuItem from "./LeftMenuItem";
+import {LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE} from "../../../styles/CustomStyles";
 
 
 
