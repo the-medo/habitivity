@@ -84,7 +84,7 @@ const TaskTypeItem: React.FC<TaskTypeItemProps> = ({taskType}) => {
             <TaskTypeItemExamples>
                 Example:
                 <ul>
-                    {taskType.examples.map(e => <li>{e}</li>)}
+                    {taskType.examples.map((e, i) => <li key={i}>{e}</li>)}
                 </ul>
             </TaskTypeItemExamples>
             {isCurrentSelected && <Button onClick={() => dispatch(setSelectedTaskType(undefined))} icon={icons[IconType.EditOutlined]}>Change type</Button>}
