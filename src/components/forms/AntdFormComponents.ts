@@ -7,22 +7,38 @@ export interface FormItemProps {
     $width?: string;
 }
 
-export const FormWrapper = styled.div`
-  //display: flex;
-  flex-grow: 1;
+export const FormWrapper = styled.div`  
+  flex: 18 0 250px;  
+  padding: 1rem;
 `
 
 export const FormItem = styled(Form.Item)<FormItemProps>`
-  ${({$isItalic}) => $isItalic && css`font-style: italic` }
   ${({$minWidth}) => $minWidth && css`min-width: ${$minWidth};` };
   ${({$width}) => $width && css`width: ${$width};` };
+
+  label {
+    font-weight: bold;
+  }
 `;
 
+export const FormInlineText = styled.div<FormItemProps>`
+  display: inline-block;
+  ${({$isItalic}) => $isItalic && css`font-style: italic` };
+  ${({$minWidth}) => $minWidth && css`min-width: ${$minWidth};` };
+  ${({$width}) => $width && css`width: ${$width};` };
+  margin-right: .25rem;
+  line-height: 2rem;
+`;
+
+
 export const FormItemInline = styled(FormItem)`
-  margin-bottom: 0;
-  
   ${FormItem} {
     display: inline-block;
+    margin-bottom: .5rem;
     margin-right: .25rem;
+
+    label {
+      font-weight: normal;
+    }    
   }
 `;

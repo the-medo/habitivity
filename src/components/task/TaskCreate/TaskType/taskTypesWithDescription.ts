@@ -58,7 +58,7 @@ export const taskTypesWithDescription: TaskTypeForTTSelector[] = [
     {
         id: TaskType.OPTIONS,
         svg: TaskType6,
-        title: 'Options',
+        title: 'Option select',
         description: 'Get fixed amount of points based on what option you choose',
         examples: [
             'asd',

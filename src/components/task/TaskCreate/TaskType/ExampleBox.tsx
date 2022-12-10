@@ -7,15 +7,14 @@ interface ExampleBoxProps {
 }
 
 const Box = styled.div`
+  flex: 1 1 250px;
+  
+  border-radius: 1rem;
+  padding: 1rem;
   background-color: ${COLORS.GREY_LIGHT};
   color: ${COLORS.PRIMARY_DARK};
-  padding: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
   font-style: italic;
 `
-
-
 
 const BoxTitle = styled.h3``
 
@@ -24,7 +23,6 @@ const Example = styled.li`
 `
 
 const ExampleBox: React.FC<ExampleBoxProps> = ({examples}) => {
-
     if (examples.length === 0) return null;
 
     return (

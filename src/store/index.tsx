@@ -5,12 +5,14 @@ import {userReducer} from "./userSlice";
 import {menuReducer} from "./menuSlice";
 import {taskReducer} from "./taskSlice";
 import {apiSlice} from "../apis/api";
+import {taskCreationReducer} from "../components/task/TaskCreate/TaskType/taskCreationSlice";
 
 export const store = configureStore({
     reducer: {
         userReducer,
         menuReducer: menuReducer,
         taskReducer: taskReducer,
+        taskCreationReducer: taskCreationReducer,
         [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: getDefaultMiddleware =>

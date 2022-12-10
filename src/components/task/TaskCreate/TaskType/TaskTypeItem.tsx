@@ -25,20 +25,18 @@ interface TaskTypeItemWrapperProps {
     $isCurrentSelected: boolean;
 }
 
-const TaskTypeItemWrapper = styled.div<TaskTypeItemWrapperProps>`
-  display: flex;
-  //flex-grow: 1;
-  flex-direction: column;
-
-  flex-basis: 20%;
-  min-width: 10rem;
-
+export const TaskTypeItemWrapper = styled.div<TaskTypeItemWrapperProps>`
   border-radius: 1rem;
-
+  min-width: 10rem;
   padding: 1rem;
+  margin-bottom: 1rem;
+  transition: .3s all;
+  
+  display: flex;
+  flex: 1 1 250px;
+  flex-direction: column;
   gap: .5rem;
   align-items: center;
-  transition: .3s all;
 
   &:hover {
     background-color: ${COLORS.PRIMARY_LIGHT};
