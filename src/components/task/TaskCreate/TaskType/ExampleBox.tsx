@@ -20,7 +20,8 @@ const BoxTitle = styled.h3``
 
 const Example = styled.li`
   list-style: none;
-`
+  margin-bottom: .5rem;
+`;
 
 const ExampleBox: React.FC<ExampleBoxProps> = ({examples}) => {
     if (examples.length === 0) return null;

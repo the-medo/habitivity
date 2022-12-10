@@ -8,6 +8,7 @@ import TaskTypeItem from "./TaskType/TaskTypeItem";
 import {TaskType} from "../../../types/Tasks";
 import TaskCreate_Duration from "./TaskType/TaskCreate_Duration";
 import ExampleBox from "./TaskType/ExampleBox";
+import TaskCreate_Checkbox from "./TaskType/TaskCreate_Checkbox";
 
 interface TaskCreateFormProps {
 
@@ -31,6 +32,7 @@ const TaskCreateForm: React.FC<TaskCreateFormProps> = () => {
         <TaskCreateFormWrapper>
             <TaskTypeItem taskType={taskTypesWithDescription.find(tt => tt.id === selectedTaskType)!} />
             {selectedTaskType === TaskType.DURATION && <TaskCreate_Duration />}
+            {selectedTaskType === TaskType.CHECKBOX && <TaskCreate_Checkbox />}
             <ExampleBox examples={examples} />
         </TaskCreateFormWrapper>
     );

@@ -2,7 +2,6 @@ import React, {useEffect} from "react";
 import {Button, Form, Input, Select} from "antd";
 import {DurationUnits} from "../../../../types/Tasks";
 import {FormItem, FormItemInline, FormInlineText, FormWrapper} from "../../../forms/AntdFormComponents";
-import ButtonWrapper from "../../../global/ButtonWrapper";
 import {useDispatch} from "react-redux";
 import {setExamples} from "./taskCreationSlice";
 
@@ -42,9 +41,7 @@ const TaskCreate_Duration: React.FC<TaskCreate_DurationProps> = () => {
 
     useEffect(() => {
         dispatch(setExamples(currentSetupExamplesTaskTypeDuration(taskName, parseFloat(unitCountForPoint), parseFloat(pointCount), units)));
-    }, [taskName, unitCountForPoint, pointCount, units])
-
-
+    }, [taskName, unitCountForPoint, pointCount, units]);
 
     return (
         <FormWrapper>
