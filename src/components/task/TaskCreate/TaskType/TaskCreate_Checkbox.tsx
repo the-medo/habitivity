@@ -5,18 +5,14 @@ import {FormItem, FormItemInline, FormInlineText, FormWrapper} from "../../../fo
 import {useDispatch} from "react-redux";
 import {setExamples} from "./taskCreationSlice";
 
-interface TaskCreate_DurationProps {
-
-}
-
-const currentSetupExamplesTaskTypeCheckbox = (taskName: string = "Task name", pointCount: string): string[] => {
+const currentSetupExamples = (taskName: string = "Task name", pointCount: string): string[] => {
     const examples: string[] = [];
     examples.push(`Complete "${taskName}" to get ${pointCount !== '' ? pointCount : 'X'} points`);
     examples.push(`You don't lose any points for not completing this task`);
     return examples;
 }
 
-const TaskCreate_Checkbox: React.FC<TaskCreate_DurationProps> = () => {
+const TaskCreate_Checkbox: React.FC = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
 
@@ -24,7 +20,7 @@ const TaskCreate_Checkbox: React.FC<TaskCreate_DurationProps> = () => {
     const pointCount = Form.useWatch<string>('pointCount', form);
 
     useEffect(() => {
-        dispatch(setExamples(currentSetupExamplesTaskTypeCheckbox(taskName, pointCount)));
+        dispatch(setExamples(currentSetupExamples(taskName, pointCount)));
     }, [taskName, pointCount]);
 
     return (
@@ -35,9 +31,6 @@ const TaskCreate_Checkbox: React.FC<TaskCreate_DurationProps> = () => {
                 name="new-task"
                 requiredMark={false}
                 colon={false}
-                initialValues={{
-                    units: DurationUnits.MINUTE,
-                }}
             >
                 <FormItem
                     label="Task name:"

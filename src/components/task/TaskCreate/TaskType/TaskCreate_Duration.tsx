@@ -5,11 +5,7 @@ import {FormItem, FormItemInline, FormInlineText, FormWrapper} from "../../../fo
 import {useDispatch} from "react-redux";
 import {setExamples} from "./taskCreationSlice";
 
-interface TaskCreate_DurationProps {
-
-}
-
-const currentSetupExamplesTaskTypeDuration = (taskName: string = "Task name", unitCountForPoint: number | undefined, pointCount: number | undefined, units: DurationUnits): string[] => {
+const currentSetupExamples = (taskName: string = "Task name", unitCountForPoint: number | undefined, pointCount: number | undefined, units: DurationUnits): string[] => {
     const examples: string[] = [];
     if (unitCountForPoint && pointCount) {
         if (units === DurationUnits.MINUTE) {
@@ -30,7 +26,7 @@ const currentSetupExamplesTaskTypeDuration = (taskName: string = "Task name", un
     return examples;
 }
 
-const TaskCreate_Duration: React.FC<TaskCreate_DurationProps> = () => {
+const TaskCreate_Duration: React.FC = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
 
@@ -40,7 +36,7 @@ const TaskCreate_Duration: React.FC<TaskCreate_DurationProps> = () => {
     const units = Form.useWatch<DurationUnits>('units', form);
 
     useEffect(() => {
-        dispatch(setExamples(currentSetupExamplesTaskTypeDuration(taskName, parseFloat(unitCountForPoint), parseFloat(pointCount), units)));
+        dispatch(setExamples(currentSetupExamples(taskName, parseFloat(unitCountForPoint), parseFloat(pointCount), units)));
     }, [taskName, unitCountForPoint, pointCount, units]);
 
     return (
