@@ -1,7 +1,6 @@
 import React, {useEffect} from "react";
 import {Button, Form, Input} from "antd";
-import {DurationUnits} from "../../../../types/Tasks";
-import {FormItem, FormItemInline, FormInlineText, FormWrapper} from "../../../forms/AntdFormComponents";
+import {FormItem, FormItemInline, FormInlineText, FormWrapper, SForm} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
 import {setExamples} from "./taskCreationSlice";
 
@@ -25,7 +24,7 @@ const TaskCreate_Checkbox: React.FC = () => {
 
     return (
         <FormWrapper>
-            <Form
+            <SForm
                 form={form}
                 layout="vertical"
                 name="new-task"
@@ -47,7 +46,7 @@ const TaskCreate_Checkbox: React.FC = () => {
                     <FormInlineText $isItalic $minWidth="1rem">points for completing this task</FormInlineText>
                 </FormItemInline>
                 <Button type="primary" htmlType="submit">Create</Button>
-            </Form>
+            </SForm>
         </FormWrapper>
     );
 }

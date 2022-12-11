@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {Button, Form, Input} from "antd";
 import {DurationUnits} from "../../../../types/Tasks";
-import {FormItem, FormWrapper} from "../../../forms/AntdFormComponents";
+import {FormItem, SForm, FormWrapper} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
 import {setExamples} from "./taskCreationSlice";
 
@@ -23,7 +23,7 @@ const TaskCreate_UnitCheckpoints: React.FC = () => {
 
     return (
         <FormWrapper>
-            <Form
+            <SForm
                 form={form}
                 layout="vertical"
                 name="new-task"
@@ -41,7 +41,7 @@ const TaskCreate_UnitCheckpoints: React.FC = () => {
                     <Input placeholder="Task name" />
                 </FormItem>
                 <Button type="primary" htmlType="submit">Create</Button>
-            </Form>
+            </SForm>
         </FormWrapper>
     );
 }
