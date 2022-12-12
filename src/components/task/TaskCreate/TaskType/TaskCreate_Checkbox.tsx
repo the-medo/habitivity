@@ -40,7 +40,7 @@ const TaskCreate_Checkbox: React.FC = () => {
                 </FormItem>
                 <FormItemInline label="Units and points:">
                     <FormInlineText $isItalic $minWidth="1rem">Get</FormInlineText>
-                    <FormItem $width="4rem" name="pointCount" rules={[{ required: true, message: '' }]} >
+                    <FormItem $width="4rem" name="pointCount" rules={[{ required: true }]} >
                         <Input placeholder="2" type="number" />
                     </FormItem>
                     <FormInlineText $isItalic $minWidth="1rem">points for completing this task</FormInlineText>

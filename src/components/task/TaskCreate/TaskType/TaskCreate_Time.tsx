@@ -52,7 +52,7 @@ const TaskCreate_Time: React.FC = () => {
                                             {...restField}
                                             $width="4rem"
                                             name={[name, 'pointCount']}
-                                            rules={[{ required: true, message: '' }]}
+                                            rules={[{ required: true }]}
                                         >
                                             <Input placeholder="2" type="number" />
                                         </FormItem>
@@ -61,7 +61,7 @@ const TaskCreate_Time: React.FC = () => {
                                             {...restField}
                                             $width="6rem"
                                             name={[name, 'time']}
-                                            rules={[{ required: true, message: '' }]}
+                                            rules={[{ required: true }]}
                                         >
                                             <TimePicker
                                                 format={timepickerFormat}

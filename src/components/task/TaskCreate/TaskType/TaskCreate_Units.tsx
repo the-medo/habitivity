@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
-import {Button, Form, Input, Select} from "antd";
-import {DurationUnits} from "../../../../types/Tasks";
+import {Button, Form, Input} from "antd";
 import {FormItem, SForm, FormWrapper, FormItemInline, FormInlineText} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
 import {setExamples} from "../taskCreationSlice";
@@ -35,28 +34,25 @@ const TaskCreate_Units: React.FC = () => {
                 name="new-task"
                 requiredMark={false}
                 colon={false}
-                initialValues={{
-                    units: DurationUnits.MINUTE,
-                }}
             >
                 <FormItem
                     label="Task name:"
                     name="taskName"
-                    rules={[{ required: true, message: '' }]}
+                    rules={[{ required: true }]}
                 >
                     <Input placeholder="Task name" />
                 </FormItem>
                 <CustomUnitDefinition />
                 <FormItemInline label="Units and points:">
                     <FormInlineText $isItalic $minWidth="1rem">Get</FormInlineText>
-                    <FormItem $width="4rem" name="pointCount" rules={[{ required: true, message: '' }]} >
+                    <FormItem $width="4rem" name="pointCount" rules={[{ required: true }]} >
                         <Input placeholder="2" type="number" />
                     </FormItem>
                     <FormInlineText $isItalic $minWidth="1rem">{countableString(pointCount, pointCountable)} for each</FormInlineText>
-                    <FormItem $width="4rem" name="unitCountForPoint" rules={[{ required: true, message: '' }]} >
+                    <FormItem $width="4rem" name="unitCountForPoint" rules={[{ required: true }]} >
                         <Input placeholder="10" type="number" />
                     </FormItem>
-                    <FormInlineText $isItalic $minWidth="1rem"> <b>{countableString(unitCountForPoint, units)}</b> of "{taskName.length > 0 ? taskName : `this action`}"</FormInlineText>
+                    <FormInlineText $isItalic $minWidth="1rem"> <b>{countableString(unitCountForPoint, units)}</b> of "{taskName?.length > 0 ? taskName : `this action`}"</FormInlineText>
                 </FormItemInline>
                 <Button type="primary" htmlType="submit">Create</Button>
             </SForm>
