@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Button, Form, Input, TimePicker} from "antd";
 import {FormInlineText, FormItem, FormItemInline, SForm, FormWrapper} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
-import {setExamples} from "./taskCreationSlice";
+import {setExamples} from "../taskCreationSlice";
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 
 const currentSetupExamples = (taskName: string = "Task name",): string[] => {

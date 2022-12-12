@@ -5,7 +5,7 @@ import {userReducer} from "./userSlice";
 import {menuReducer} from "./menuSlice";
 import {taskReducer} from "./taskSlice";
 import {apiSlice} from "../apis/api";
-import {taskCreationReducer} from "../components/task/TaskCreate/TaskType/taskCreationSlice";
+import {taskCreationReducer} from "../components/task/TaskCreate/taskCreationSlice";
 
 export const store = configureStore({
     reducer: {

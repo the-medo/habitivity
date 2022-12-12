@@ -1,5 +1,6 @@
 import firebase from 'firebase/compat';
 import {QueryDocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
+import {UnitSyntax} from "../helpers/unitSyntaxHelpers";
 
 
 //--------------------------
@@ -44,11 +45,6 @@ export type OptionCheckpoint = {
     isDefault: boolean;
 }
 
-export type UnitSyntax = {
-    zero: string; //units   seconds
-    one: string;  //unit    second
-    twoAndMore: string;  //units   seconds
-}
 //--------------------------
 
 export enum TaskType {

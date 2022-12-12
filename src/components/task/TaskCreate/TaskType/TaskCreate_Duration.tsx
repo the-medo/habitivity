@@ -3,7 +3,7 @@ import {Button, Form, Input, Select} from "antd";
 import {DurationUnits} from "../../../../types/Tasks";
 import {FormItem, FormItemInline, FormInlineText, FormWrapper, SForm} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
-import {setExamples} from "./taskCreationSlice";
+import {setExamples} from "../taskCreationSlice";
 
 const currentSetupExamples = (taskName: string = "Task name", unitCountForPoint: number | undefined, pointCount: number | undefined, units: DurationUnits): string[] => {
     const examples: string[] = [];

@@ -1,10 +1,10 @@
 import React, {Fragment} from "react";
 import styled from "styled-components";
-import {COLORS} from "../../../../styles/CustomStyles";
-import TaskTypeItem, {TaskTypeItemWrapper} from "./TaskTypeItem";
+import {COLORS} from "../../../styles/CustomStyles";
+import TaskTypeItem, {TaskTypeItemWrapper} from "./TaskType/TaskTypeItem";
 import {taskTypesWithDescription} from "./taskTypesWithDescription";
 import {useSelector} from "react-redux";
-import {ReduxState} from "../../../../store";
+import {ReduxState} from "../../../store";
 
 interface TaskTypeSelectorProps {
 }

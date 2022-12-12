@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Button, Form, Input} from "antd";
 import {FormItem, FormItemInline, FormInlineText, FormWrapper, SForm} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
-import {setExamples} from "./taskCreationSlice";
+import {setExamples} from "../taskCreationSlice";
 
 const currentSetupExamples = (taskName: string = "Task name", pointCount: string): string[] => {
     const examples: string[] = [];
