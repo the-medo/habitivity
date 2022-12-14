@@ -1,6 +1,14 @@
-import React, {useEffect} from "react";
+import React, {useCallback, useEffect, useMemo} from "react";
+import type { ValidatorRule } from 'rc-field-form/lib/interface';
 import {Button, Form, Input} from "antd";
-import {FormItem, SForm, FormWrapper, FormItemInline, FormInlineText} from "../../../forms/AntdFormComponents";
+import {
+    FormItem,
+    SForm,
+    FormWrapper,
+    FormItemInline,
+    FormInlineText,
+    RuleRequiredNoMessage, changeableFieldValidator
+} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
 import {setExamples} from "../taskCreationSlice";
 import CustomUnitDefinition from "./CustomUnitDefinition";
@@ -33,6 +41,8 @@ const TaskCreate_UnitCheckpoints: React.FC = () => {
         console.log(checkpoints);
     }, [checkpoints]);
 
+    const checkpointValidator: ValidatorRule[] = useMemo(() => changeableFieldValidator('checkpoints', 2), []);
+
     return (
         <FormWrapper>
             <SForm
@@ -42,7 +52,7 @@ const TaskCreate_UnitCheckpoints: React.FC = () => {
                 requiredMark={false}
                 colon={false}
                 initialValues={{
-                    checkpoints: [undefined],
+                    checkpoints: [undefined, undefined],
                 }}
             >
                 <FormItem
@@ -54,8 +64,11 @@ const TaskCreate_UnitCheckpoints: React.FC = () => {
                 </FormItem>
                 <CustomUnitDefinition />
                 <FormItem label="Units and points:">
-                    <Form.List name="checkpoints">
-                        {(fields, { add, remove,  },) => (
+                    <Form.List
+                        name="checkpoints"
+                        rules={checkpointValidator}
+                    >
+                        {(fields, { add, remove,  }, {errors}) => (
                             <>
                                 {fields.map(({ key, name, ...restField }) => (
                                     <FormItemInline key={key}>
@@ -64,26 +77,27 @@ const TaskCreate_UnitCheckpoints: React.FC = () => {
                                             {...restField}
                                             $width="4rem"
                                             name={[name, 'unitCountForPoint']}
-                                            rules={[{ required: true }]}
+                                            rules={RuleRequiredNoMessage}
                                         >
                                             <Input placeholder="2" type="number" />
                                         </FormItem>
-                                        <FormInlineText $isItalic $minWidth="1rem"> <b>{ countableString(checkpoints[key]?.unitCountForPoint ?? 0, units) }</b> you will get  </FormInlineText>
+                                        <FormInlineText $isItalic $minWidth="1rem"> <b>{ countableString((checkpoints && checkpoints[key]?.unitCountForPoint) ?? 0, units) }</b> you will get  </FormInlineText>
                                         <FormItem
                                             {...restField}
                                             $width="4rem"
                                             name={[name, 'pointCount']}
-                                            rules={[{ required: true }]}
+                                            rules={RuleRequiredNoMessage}
                                         >
                                             <Input placeholder="10" type="number" />
                                         </FormItem>
-                                        <FormInlineText $isItalic $minWidth="1rem"> <b>{ countableString(checkpoints[key]?.pointCount ?? 0, pointCountable) }</b> </FormInlineText>
+                                        <FormInlineText $isItalic $minWidth="1rem"> <b>{ countableString((checkpoints && checkpoints[key]?.pointCount) ?? 0, pointCountable) }</b> </FormInlineText>
                                         <MinusCircleOutlined onClick={() => remove(name)} />
                                     </FormItemInline>
                                 ))}
                                 <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                                     Add unit checkpoint
                                 </Button>
+                                <Form.ErrorList errors={errors} />
                             </>
                         )}
                     </Form.List>

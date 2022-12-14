@@ -1,5 +1,6 @@
 import styled, {css} from "styled-components";
-import {Form} from "antd";
+import {Form, FormRule} from "antd";
+import {ValidatorRule} from "rc-field-form/lib/interface";
 
 export interface FormItemProps {
     $isItalic?: boolean;
@@ -17,6 +18,16 @@ export const FormWrapper = styled.div`
     max-width: 500px;
   }
 `;
+
+export const RuleRequiredNoMessage: FormRule[] = [{ required: true, message: '' }];
+
+export const changeableFieldValidator = (changeableFieldName: string, changeableFieldMinCount: number): ValidatorRule[] => [
+    {
+        validator: async (_, changeableField) => {
+            if (!changeableField || changeableField.length < changeableFieldMinCount) return Promise.reject(new Error(`At least 2 ${changeableFieldName} are required`));
+        },
+    },
+];
 
 export const FormItem = styled(Form.Item)<FormItemProps>`
   ${({$minWidth}) => $minWidth && css`min-width: ${$minWidth};` };

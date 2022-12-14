@@ -1,6 +1,13 @@
 import React, {useEffect} from "react";
 import {Button, Form, Input} from "antd";
-import {FormItem, FormItemInline, FormInlineText, FormWrapper, SForm} from "../../../forms/AntdFormComponents";
+import {
+    FormItem,
+    FormItemInline,
+    FormInlineText,
+    FormWrapper,
+    SForm,
+    RuleRequiredNoMessage
+} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
 import {setExamples} from "../taskCreationSlice";
 
@@ -40,7 +47,7 @@ const TaskCreate_Checkbox: React.FC = () => {
                 </FormItem>
                 <FormItemInline label="Units and points:">
                     <FormInlineText $isItalic $minWidth="1rem">Get</FormInlineText>
-                    <FormItem $width="4rem" name="pointCount" rules={[{ required: true }]} >
+                    <FormItem $width="4rem" name="pointCount" rules={RuleRequiredNoMessage} >
                         <Input placeholder="2" type="number" />
                     </FormItem>
                     <FormInlineText $isItalic $minWidth="1rem">points for completing this task</FormInlineText>

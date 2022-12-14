@@ -1,9 +1,17 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useMemo} from "react";
 import {Button, Form, Input, TimePicker} from "antd";
-import {FormInlineText, FormItem, FormItemInline, SForm, FormWrapper} from "../../../forms/AntdFormComponents";
+import {
+    FormInlineText,
+    FormItem,
+    FormItemInline,
+    SForm,
+    FormWrapper,
+    RuleRequiredNoMessage, changeableFieldValidator
+} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
 import {setExamples} from "../taskCreationSlice";
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
+import {ValidatorRule} from "rc-field-form/lib/interface";
 
 const currentSetupExamples = (taskName: string = "Task name",): string[] => {
     const examples: string[] = [];
@@ -22,6 +30,8 @@ const TaskCreate_Time: React.FC = () => {
         dispatch(setExamples(currentSetupExamples(taskName)));
     }, [taskName]);
 
+    const checkpointValidator: ValidatorRule[] = useMemo(() => changeableFieldValidator('time points', 2), []);
+
     return (
         <FormWrapper>
             <SForm
@@ -31,7 +41,7 @@ const TaskCreate_Time: React.FC = () => {
                 requiredMark={false}
                 colon={false}
                 initialValues={{
-                    checkpoints: [undefined],
+                    checkpoints: [undefined, undefined],
                 }}
             >
                 <FormItem
@@ -42,8 +52,11 @@ const TaskCreate_Time: React.FC = () => {
                     <Input placeholder="Task name" />
                 </FormItem>
                 <FormItem label="Units and points:">
-                    <Form.List name="checkpoints">
-                        {(fields, { add, remove }) => (
+                    <Form.List
+                        name="checkpoints"
+                        rules={checkpointValidator}
+                    >
+                        {(fields, { add, remove }, {errors}) => (
                             <>
                                 {fields.map(({ key, name, ...restField }) => (
                                     <FormItemInline key={key}>
@@ -52,7 +65,7 @@ const TaskCreate_Time: React.FC = () => {
                                             {...restField}
                                             $width="4rem"
                                             name={[name, 'pointCount']}
-                                            rules={[{ required: true }]}
+                                            rules={RuleRequiredNoMessage}
                                         >
                                             <Input placeholder="2" type="number" />
                                         </FormItem>
@@ -61,7 +74,7 @@ const TaskCreate_Time: React.FC = () => {
                                             {...restField}
                                             $width="6rem"
                                             name={[name, 'time']}
-                                            rules={[{ required: true }]}
+                                            rules={RuleRequiredNoMessage}
                                         >
                                             <TimePicker
                                                 format={timepickerFormat}
@@ -75,6 +88,7 @@ const TaskCreate_Time: React.FC = () => {
                                 <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                                     Add time point
                                 </Button>
+                                <Form.ErrorList errors={errors} />
                             </>
                         )}
                     </Form.List>

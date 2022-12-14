@@ -1,6 +1,13 @@
 import React, {useEffect} from "react";
 import {Button, Form, Input} from "antd";
-import {FormItem, SForm, FormWrapper, FormItemInline, FormInlineText} from "../../../forms/AntdFormComponents";
+import {
+    FormItem,
+    SForm,
+    FormWrapper,
+    FormItemInline,
+    FormInlineText,
+    RuleRequiredNoMessage
+} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
 import {setExamples} from "../taskCreationSlice";
 import CustomUnitDefinition from "./CustomUnitDefinition";
@@ -38,18 +45,18 @@ const TaskCreate_Units: React.FC = () => {
                 <FormItem
                     label="Task name:"
                     name="taskName"
-                    rules={[{ required: true }]}
+                    rules={RuleRequiredNoMessage}
                 >
                     <Input placeholder="Task name" />
                 </FormItem>
                 <CustomUnitDefinition />
                 <FormItemInline label="Units and points:">
                     <FormInlineText $isItalic $minWidth="1rem">Get</FormInlineText>
-                    <FormItem $width="4rem" name="pointCount" rules={[{ required: true }]} >
+                    <FormItem $width="4rem" name="pointCount" rules={RuleRequiredNoMessage} >
                         <Input placeholder="2" type="number" />
                     </FormItem>
                     <FormInlineText $isItalic $minWidth="1rem">{countableString(pointCount, pointCountable)} for each</FormInlineText>
-                    <FormItem $width="4rem" name="unitCountForPoint" rules={[{ required: true }]} >
+                    <FormItem $width="4rem" name="unitCountForPoint" rules={RuleRequiredNoMessage} >
                         <Input placeholder="10" type="number" />
                     </FormItem>
                     <FormInlineText $isItalic $minWidth="1rem"> <b>{countableString(unitCountForPoint, units)}</b> of "{taskName?.length > 0 ? taskName : `this action`}"</FormInlineText>

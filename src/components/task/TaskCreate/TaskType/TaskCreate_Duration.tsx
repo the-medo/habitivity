@@ -1,7 +1,14 @@
 import React, {useEffect} from "react";
 import {Button, Form, Input, Select} from "antd";
 import {DurationUnits} from "../../../../types/Tasks";
-import {FormItem, FormItemInline, FormInlineText, FormWrapper, SForm} from "../../../forms/AntdFormComponents";
+import {
+    FormItem,
+    FormItemInline,
+    FormInlineText,
+    FormWrapper,
+    SForm,
+    RuleRequiredNoMessage
+} from "../../../forms/AntdFormComponents";
 import {useDispatch} from "react-redux";
 import {setExamples} from "../taskCreationSlice";
 
@@ -60,11 +67,11 @@ const TaskCreate_Duration: React.FC = () => {
                 </FormItem>
                 <FormItemInline label="Units and points:">
                     <FormInlineText $isItalic $minWidth="1rem">Get</FormInlineText>
-                    <FormItem $width="4rem" name="pointCount" rules={[{ required: true }]} >
+                    <FormItem $width="4rem" name="pointCount" rules={RuleRequiredNoMessage} >
                         <Input placeholder="2" type="number" />
                     </FormItem>
                     <FormInlineText $isItalic $minWidth="1rem">points for each</FormInlineText>
-                    <FormItem $width="4rem" name="unitCountForPoint" rules={[{ required: true }]} >
+                    <FormItem $width="4rem" name="unitCountForPoint" rules={RuleRequiredNoMessage} >
                         <Input placeholder="15" type="number" />
                     </FormItem>
                     <FormItem name="units" $width="8rem">
