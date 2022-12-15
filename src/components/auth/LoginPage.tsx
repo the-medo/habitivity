@@ -1,28 +1,24 @@
-import React from "react";
-import {GoogleAuthProvider, EmailAuthProvider} from "firebase/auth";
-import FirebaseAuth from "react-firebaseui/FirebaseAuth";
-import styled from "styled-components";
-import img from "../../assets/images/login-bg.jpg";
-import { Layout } from "antd";
-import {signOut} from "firebase/auth";
-import {auth} from "../../firebase";
-import {useUser} from "../../hooks/useUser";
-import {COLORS} from "../../styles/CustomStyles";
-import {LogoBig} from "../../assets/svg";
-import Svg from "../../assets/svg/Svg";
-
+import React from 'react';
+import { GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth';
+import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
+import styled from 'styled-components';
+import img from '../../assets/images/login-bg.jpg';
+import { Layout } from 'antd';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { useUser } from '../../hooks/useUser';
+import { COLORS } from '../../styles/CustomStyles';
+import { LogoBig } from '../../assets/svg';
+import Svg from '../../assets/svg/Svg';
 
 // Configure FirebaseUI.
 const uiConfig = {
-    // Popup signin flow rather than redirect flow.
-    signInFlow: 'popup',
-    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    signInSuccessUrl: '/today',
-    // We will display Google and Facebook as auth providers.
-    signInOptions: [
-        GoogleAuthProvider.PROVIDER_ID,
-        EmailAuthProvider.PROVIDER_ID,
-    ],
+  // Popup sign in flow rather than redirect flow.
+  signInFlow: 'popup',
+  // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+  signInSuccessUrl: '/today',
+  // We will display Google and Facebook as auth providers.
+  signInOptions: [GoogleAuthProvider.PROVIDER_ID, EmailAuthProvider.PROVIDER_ID],
 };
 
 const LoginPageBackground = styled(Layout)`
@@ -31,9 +27,9 @@ const LoginPageBackground = styled(Layout)`
   left: 0;
   right: 0;
   bottom: 0;
-  
+
   &::before {
-    content: "";
+    content: '';
     position: fixed;
     top: 0;
     left: 0;
@@ -52,7 +48,6 @@ const LoginPageLayout = styled(Layout.Content)`
   justify-content: center;
 `;
 
-
 const LoginPageContentImage = styled.div`
   border-radius: 1rem;
   display: flex;
@@ -62,16 +57,20 @@ const LoginPageContentImage = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  background-image: linear-gradient(17deg, ${COLORS.PRIMARY_LIGHT} 5%, ${COLORS.BLUE_GREY_DARK} 91%);
-  box-shadow: 0 0 10px 2px rgba(0,0,0,0.3);
-  
+  background-image: linear-gradient(
+    17deg,
+    ${COLORS.PRIMARY_LIGHT} 5%,
+    ${COLORS.BLUE_GREY_DARK} 91%
+  );
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
+
   &::before {
     border-radius: 1rem;
-    content: "";
+    content: '';
     position: absolute;
-    top: 0; 
+    top: 0;
     left: 0;
-    width: 100%; 
+    width: 100%;
     height: 100%;
     background-image: url(${img});
     background-size: cover;
@@ -79,32 +78,30 @@ const LoginPageContentImage = styled.div`
     filter: grayscale(100%);
     opacity: 30%;
   }
-`
+`;
 
 function LoginPage() {
-    const user = useUser();
+  const user = useUser();
 
-    if (!user) {
-        return (
+  if (!user) {
+    return (
+      <LoginPageBackground>
+        <LoginPageLayout>
+          <LoginPageContentImage>
+            <Svg
+              svgImage={LogoBig}
+              height={'12rem'}
+              $colorPrimary={COLORS.PRIMARY_LIGHT}
+              $colorSecondary={COLORS.BLUE_GREY_DARK}
+            />
+            <FirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+          </LoginPageContentImage>
+        </LoginPageLayout>
+      </LoginPageBackground>
+    );
+  }
 
-            <LoginPageBackground>
-                <LoginPageLayout>
-                    <LoginPageContentImage>
-                        <Svg
-                            svgImage={LogoBig}
-                            height={'12rem'}
-                            $colorPrimary={COLORS.PRIMARY_LIGHT}
-                            $colorSecondary={COLORS.BLUE_GREY_DARK}
-                        />
-                        <FirebaseAuth uiConfig={uiConfig} firebaseAuth={auth}/>
-                    </LoginPageContentImage>
-                </LoginPageLayout>
-            </LoginPageBackground>
-        );
-    }
-
-    return <a onClick={() => signOut(auth)}>Sign-out</a>;
+  return <a onClick={() => signOut(auth)}>Sign-out</a>;
 }
-
 
 export default LoginPage;

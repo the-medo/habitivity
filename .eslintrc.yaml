@@ -1,0 +1,114 @@
+parser: "@typescript-eslint/parser"
+parserOptions:
+  project: "./tsconfig.json"
+plugins:
+  - import
+  - "@typescript-eslint"
+  - deprecation
+  - react-perf
+settings:
+  react:
+    version: detect
+  "import/parsers":
+    "@typescript-eslint/parser": [ ".ts", ".tsx" ]
+  "import/ignore":
+    - react
+    - react-dom
+extends:
+  - "eslint:recommended"
+  - "plugin:@typescript-eslint/recommended"
+  - "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  - "plugin:@typescript-eslint/strict"
+  - "plugin:react/recommended"
+  - "plugin:react/jsx-runtime"
+  - "plugin:react-hooks/recommended"
+  - "plugin:import/recommended"
+  - "plugin:import/typescript"
+  - prettier
+rules:
+  no-console: off
+  max-params: [ warn, 5 ]
+  no-nested-ternary: warn
+  no-var: error
+  prefer-object-spread: warn
+  one-var: [ warn, never ]
+  "@typescript-eslint/no-unused-vars": # https://typescript-eslint.io/rules/no-unused-vars/
+    - warn
+    - varsIgnorePattern: "^_$"
+      argsIgnorePattern: "^_$"
+      destructuredArrayIgnorePattern: "^_$"
+  eqeqeq: [ error, always ]
+  "deprecation/deprecation": warn
+
+  ##--------------------------------------
+  ## React rules
+  "react/function-component-definition": # https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/function-component-definition.md
+    - error
+    - namedComponents: arrow-function
+      unnamedComponents: arrow-function
+  "react/jsx-no-useless-fragment": warn                           # https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-no-useless-fragment.md
+  "react/jsx-fragments": [ warn, syntax ]                           # https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-fragments.md
+  "react/jsx-curly-brace-presence": [ warn, never ]                 # https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-curly-brace-presence.md
+  "react/no-array-index-key": warn                                # https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-array-index-key.md
+  "react/jsx-no-bind": warn                                       # https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md
+  "react/jsx-no-constructed-context-values": warn                 # https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-no-constructed-context-values.md
+
+  "react-perf/jsx-no-new-object-as-prop": warn                    # https://github.com/cvazac/eslint-plugin-react-perf/blob/master/docs/rules/jsx-no-new-object-as-prop.md
+  "react-perf/jsx-no-new-array-as-prop": warn                     # https://github.com/cvazac/eslint-plugin-react-perf/blob/master/docs/rules/jsx-no-new-array-as-prop.md
+  "react-perf/jsx-no-new-function-as-prop": warn                  # https://github.com/cvazac/eslint-plugin-react-perf/blob/master/docs/rules/jsx-no-new-function-as-prop.md
+  "react-perf/jsx-no-jsx-as-prop": warn                           # https://github.com/cvazac/eslint-plugin-react-perf/blob/master/docs/rules/jsx-no-jsx-as-prop.md
+
+  ##--------------------------------------
+  ## Typescript rules
+  "@typescript-eslint/no-floating-promises": off                  # https://typescript-eslint.io/rules/no-floating-promises/
+  "@typescript-eslint/switch-exhaustiveness-check": error         # https://typescript-eslint.io/rules/switch-exhaustiveness-check/
+  "@typescript-eslint/consistent-type-assertions": # https://typescript-eslint.io/rules/consistent-type-assertions/
+    - warn
+    - assertionStyle: never
+  "@typescript-eslint/naming-convention": # https://typescript-eslint.io/rules/naming-convention/
+    - warn
+    - selector: default
+      format: [ camelCase ]
+      leadingUnderscore: forbid
+      trailingUnderscore: forbid
+      filter:
+        regex: "^_$"
+        match: false
+    - selector: function
+      format: [ camelCase ]
+      ## this supports the const Component = () => {} react style
+    - selector: variable
+      format: [ camelCase, PascalCase ]
+      modifiers: [ const ]
+      types: [ function ]
+      leadingUnderscore: forbid
+      trailingUnderscore: forbid
+      filter: "."
+    - selector: variable
+      format: [ camelCase, UPPER_CASE ]
+      leadingUnderscore: forbid
+      trailingUnderscore: forbid
+      filter:
+        regex: "^_$"
+        match: false
+    - selector: typeLike
+      format: [ PascalCase ]
+    - selector: enumMember
+      format: [ UPPER_CASE ]
+    - selector: classProperty
+      modifiers: [ private, static, readonly ]
+      format: [ UPPER_CASE ]
+  no-return-await: 'off'                                          # https://eslint.org/docs/rules/no-return-await
+  "@typescript-eslint/return-await": error                        # https://typescript-eslint.io/rules/return-await/
+  "@typescript-eslint/explicit-module-boundary-types": warn       # https://typescript-eslint.io/rules/explicit-module-boundary-types/
+
+  "@typescript-eslint/require-await": warn                        # https://typescript-eslint.io/rules/require-await/
+  "@typescript-eslint/no-unsafe-member-access": warn              # https://typescript-eslint.io/rules/no-unsafe-member-access/
+  "@typescript-eslint/no-unsafe-argument": warn                   # https://typescript-eslint.io/rules/no-unsafe-argument/
+  "@typescript-eslint/restrict-plus-operands": warn               # https://typescript-eslint.io/rules/restrict-plus-operands/
+  "@typescript-eslint/no-unsafe-assignment": warn                 # https://typescript-eslint.io/rules/no-unsafe-assignment/
+  "@typescript-eslint/restrict-template-expressions": warn        # https://typescript-eslint.io/rules/restrict-template-expressions/
+  "@typescript-eslint/no-unnecessary-type-assertion": warn        # https://typescript-eslint.io/rules/no-unnecessary-type-assertion/
+  "@typescript-eslint/no-unsafe-call": warn                       # https://typescript-eslint.io/rules/no-unsafe-call/
+  "@typescript-eslint/no-misused-promises": warn                  # https://typescript-eslint.io/rules/no-misused-promises/
+  "@typescript-eslint/no-unsafe-return": warn                     # https://typescript-eslint.io/rules/no-unsafe-return/
