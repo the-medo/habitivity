@@ -4,7 +4,6 @@ import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
 import styled from 'styled-components';
 import img from '../../assets/images/login-bg.jpg';
 import { Layout } from 'antd';
-import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useUser } from '../../hooks/useUser';
 import { COLORS } from '../../styles/CustomStyles';
@@ -80,28 +79,26 @@ const LoginPageContentImage = styled.div`
   }
 `;
 
-function LoginPage() {
+const LoginPage: React.FC = () => {
   const user = useUser();
 
-  if (!user) {
-    return (
-      <LoginPageBackground>
-        <LoginPageLayout>
-          <LoginPageContentImage>
-            <Svg
-              svgImage={LogoBig}
-              height={'12rem'}
-              $colorPrimary={COLORS.PRIMARY_LIGHT}
-              $colorSecondary={COLORS.BLUE_GREY_DARK}
-            />
-            <FirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
-          </LoginPageContentImage>
-        </LoginPageLayout>
-      </LoginPageBackground>
-    );
-  }
+  if (user) return null;
 
-  return <a onClick={() => signOut(auth)}>Sign-out</a>;
-}
+  return (
+    <LoginPageBackground>
+      <LoginPageLayout>
+        <LoginPageContentImage>
+          <Svg
+            svgImage={LogoBig}
+            height="12rem"
+            $colorPrimary={COLORS.PRIMARY_LIGHT}
+            $colorSecondary={COLORS.BLUE_GREY_DARK}
+          />
+          <FirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+        </LoginPageContentImage>
+      </LoginPageLayout>
+    </LoginPageBackground>
+  );
+};
 
 export default LoginPage;

@@ -1,37 +1,38 @@
-import React from "react";
-import styled from "styled-components";
-import {COLORS} from "../../../../styles/CustomStyles";
+import React from 'react';
+import styled from 'styled-components';
+import { COLORS } from '../../../../styles/CustomStyles';
 
 interface ExampleBoxProps {
-    examples: string[];
+  examples: string[];
 }
 
 const Box = styled.div`
   flex: 1 1 250px;
-  
   border-radius: 1rem;
   padding: 1rem;
   background-color: ${COLORS.GREY_LIGHT};
   color: ${COLORS.PRIMARY_DARK};
   font-style: italic;
-`
+`;
 
-const BoxTitle = styled.h3``
+const BoxTitle = styled.h3``;
 
 const Example = styled.li`
   list-style: none;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 `;
 
-const ExampleBox: React.FC<ExampleBoxProps> = ({examples}) => {
-    if (examples.length === 0) return null;
+const ExampleBox: React.FC<ExampleBoxProps> = ({ examples }) => {
+  if (examples.length === 0) return null;
 
-    return (
-        <Box>
-            <BoxTitle>Current setup examples:</BoxTitle>
-            {examples.map(e => <Example key={null}>{e}</Example>)}
-        </Box>
-    );
-}
+  return (
+    <Box>
+      <BoxTitle>Current setup examples:</BoxTitle>
+      {examples.map(e => (
+        <Example key={null}>{e}</Example>
+      ))}
+    </Box>
+  );
+};
 
 export default ExampleBox;

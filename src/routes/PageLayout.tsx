@@ -1,60 +1,69 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 import { Layout } from 'antd';
-import 'antd/dist/reset.css'
-import LoginPage from "../components/auth/LoginPage";
-import MenuTop from "../components/menu/MenuTop/MenuTop";
-import MenuLeft from "../components/menu/MenuLeft/MenuLeft";
-import styled from "styled-components";
-import {useSlider} from "../hooks/useSlider";
-import RightDrawer from "../components/menu/DrawerRight/RightDrawer";
-import {useUser} from "../hooks/useUser";
+import 'antd/dist/reset.css';
+import LoginPage from '../components/auth/LoginPage';
+import MenuTop from '../components/menu/MenuTop/MenuTop';
+import MenuLeft from '../components/menu/MenuLeft/MenuLeft';
+import styled from 'styled-components';
+import { useSlider } from '../hooks/useSlider';
+import RightDrawer from '../components/menu/DrawerRight/RightDrawer';
+import { useUser } from '../hooks/useUser';
 import {
-    LEFT_MENU_WIDTH,
-    RIGHT_DRAWER_WIDTH,
-    SIDER_COLLAPSED_SIZE,
-    TOP_MENU_BIG,
-    TOP_MENU_SMALL
-} from "../styles/CustomStyles";
+  LEFT_MENU_WIDTH,
+  RIGHT_DRAWER_WIDTH,
+  SIDER_COLLAPSED_SIZE,
+  TOP_MENU_BIG,
+  TOP_MENU_SMALL,
+} from '../styles/CustomStyles';
 
 const StyledContent = styled(Layout.Content)<{
-    $isLeftMenuCollapsed: boolean;
-    $isRightDrawerCollapsed: boolean;
-    $isLeftMenuWithContent: boolean;
+  $isLeftMenuCollapsed: boolean;
+  $isRightDrawerCollapsed: boolean;
+  $isLeftMenuWithContent: boolean;
 }>`
   padding: 1.5rem;
-  margin-left: ${({$isLeftMenuCollapsed, $isLeftMenuWithContent}) => $isLeftMenuWithContent ? ($isLeftMenuCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH) : 0}rem;
-  //TODO: after returning drawer, uncomment: //margin-right: ${({$isRightDrawerCollapsed}) => $isRightDrawerCollapsed ? SIDER_COLLAPSED_SIZE : RIGHT_DRAWER_WIDTH}rem;
-  margin-top: ${({$isLeftMenuCollapsed}) => $isLeftMenuCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG}rem;
+  margin-left: ${({ $isLeftMenuCollapsed, $isLeftMenuWithContent }) => {
+    if ($isLeftMenuCollapsed && $isLeftMenuWithContent) return SIDER_COLLAPSED_SIZE;
+    if ($isLeftMenuWithContent) return LEFT_MENU_WIDTH;
+    return 0;
+  }}rem;
+
+  margin-top: ${({ $isLeftMenuCollapsed }) =>
+    $isLeftMenuCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG}rem;
   min-height: 10rem;
-  transition: .5s all;
+  transition: 0.5s all;
   background-color: white;
-`
 
-export default function PageLayout() {
-    const user = useUser();
-    const {isLeftMenuCollapsed, isRightDrawerCollapsed, isLeftMenuWithContent} = useSlider();
+  //TODO: after returning drawer, uncomment:
+  // margin-right: ${({ $isRightDrawerCollapsed }) =>
+    $isRightDrawerCollapsed ? SIDER_COLLAPSED_SIZE : RIGHT_DRAWER_WIDTH}rem;
+`;
 
-    if (!user) {
-        return (
-            <LoginPage/>
-        )
-    }
+const PageLayout: React.FC = () => {
+  const user = useUser();
+  const { isLeftMenuCollapsed, isRightDrawerCollapsed, isLeftMenuWithContent } = useSlider();
 
-    return (
-        <Layout>
-            <MenuTop />
-            <Layout>
-                <MenuLeft />
-                <StyledContent
-                    $isLeftMenuCollapsed={isLeftMenuCollapsed}
-                    $isRightDrawerCollapsed={isRightDrawerCollapsed}
-                    $isLeftMenuWithContent={isLeftMenuWithContent}
-                >
-                    <Outlet />
-                </StyledContent>
-                <RightDrawer />
-            </Layout>
-        </Layout>
-    );
-}
+  if (!user) {
+    return <LoginPage />;
+  }
+
+  return (
+    <Layout>
+      <MenuTop />
+      <Layout>
+        <MenuLeft />
+        <StyledContent
+          $isLeftMenuCollapsed={isLeftMenuCollapsed}
+          $isRightDrawerCollapsed={isRightDrawerCollapsed}
+          $isLeftMenuWithContent={isLeftMenuWithContent}
+        >
+          <Outlet />
+        </StyledContent>
+        <RightDrawer />
+      </Layout>
+    </Layout>
+  );
+};
+
+export default PageLayout;
