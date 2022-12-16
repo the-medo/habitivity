@@ -34,9 +34,9 @@ rules:
   one-var: [ warn, never ]
   "@typescript-eslint/no-unused-vars": # https://typescript-eslint.io/rules/no-unused-vars/
     - warn
-    - varsIgnorePattern: "^_$"
-      argsIgnorePattern: "^_$"
-      destructuredArrayIgnorePattern: "^_$"
+    - varsIgnorePattern: "^_"
+      argsIgnorePattern: "^_"
+      destructuredArrayIgnorePattern: "^_"
   eqeqeq: [ error, always ]
   "deprecation/deprecation": warn
 
@@ -69,7 +69,7 @@ rules:
     - warn
     - selector: default
       format: [ camelCase ]
-      leadingUnderscore: forbid
+      leadingUnderscore: allow
       trailingUnderscore: forbid
       filter:
         regex: "^_$"
@@ -81,12 +81,12 @@ rules:
       format: [ camelCase, PascalCase ]
       modifiers: [ const ]
       types: [ function ]
-      leadingUnderscore: forbid
+      leadingUnderscore: allow
       trailingUnderscore: forbid
       filter: "."
     - selector: variable
       format: [ camelCase, UPPER_CASE ]
-      leadingUnderscore: forbid
+      leadingUnderscore: allow
       trailingUnderscore: forbid
       filter:
         regex: "^_$"
