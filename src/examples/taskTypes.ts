@@ -1,6 +1,6 @@
 import {
   DurationUnits,
-  DurationUnitsSyntax,
+  durationUnitsSyntax,
   Task,
   TaskType,
   TTCheckbox,
@@ -77,7 +77,7 @@ export const taskSleep: TTUnitCheckpoints = {
     percentageModifier: false,
     dayModifier: [],
   },
-  taskUnits: DurationUnitsSyntax[DurationUnits.HOUR],
+  taskUnits: durationUnitsSyntax[DurationUnits.HOUR],
   taskCheckpoints: [
     { unitCount: 4, points: -2 },
     { unitCount: 8, points: 1 },
@@ -135,7 +135,7 @@ export const taskExercise: TTDuration = {
     percentageModifier: false,
     dayModifier: [],
   },
-  taskUnits: DurationUnitsSyntax[DurationUnits.MINUTE],
+  taskUnits: durationUnitsSyntax[DurationUnits.MINUTE],
 };
 
 export const taskOverallRandom: TTOptions = {

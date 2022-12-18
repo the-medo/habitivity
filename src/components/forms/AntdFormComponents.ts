@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
-import { Form, FormRule } from 'antd';
+import { ColProps, Form, FormRule } from 'antd';
 import { ValidatorRule } from 'rc-field-form/lib/interface';
+import { InternalFieldProps } from 'rc-field-form/lib/Field';
 
 export interface FormItemProps {
   $isItalic?: boolean;
@@ -19,7 +20,15 @@ export const FormWrapper = styled.div`
   }
 `;
 
+export const validateTriggerDefault: InternalFieldProps['validateTrigger'] = ['onChange', 'onBlur'];
 export const ruleRequiredNoMessage: FormRule[] = [{ required: true, message: '' }];
+export const colSpan6: ColProps | undefined = { span: 6 };
+export const colSpan18: ColProps | undefined = { span: 18 };
+export const wrapperColSpanMovedButton: ColProps | undefined = {
+  span: 18,
+  sm: { offset: 6 },
+  xs: { offset: 0 },
+};
 
 export const changeableFieldValidator = (
   changeableFieldName: string,
@@ -27,6 +36,7 @@ export const changeableFieldValidator = (
 ): ValidatorRule[] => [
   {
     validator: async (_, changeableField) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (!changeableField || changeableField.length < changeableFieldMinCount)
         return Promise.reject(new Error(`At least 2 ${changeableFieldName} are required`));
     },

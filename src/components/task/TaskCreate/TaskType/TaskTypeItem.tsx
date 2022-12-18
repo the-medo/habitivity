@@ -72,26 +72,28 @@ const TaskTypeItem: React.FC<TaskTypeItemProps> = ({ taskType }) => {
 
   const onTaskTypeClick = useCallback(() => {
     if (!isCurrentSelected) dispatch(setSelectedTaskType(taskType.id));
-  }, [isCurrentSelected]);
+  }, [dispatch, isCurrentSelected, taskType.id]);
+
+  const setSelectedTaskTypeHandler = useCallback(
+    () => dispatch(setSelectedTaskType(undefined)),
+    [dispatch],
+  );
 
   return (
     <TaskTypeItemWrapper $isCurrentSelected={isCurrentSelected} onClick={onTaskTypeClick}>
-      <Svg svgImage={taskType.svg} height={'6rem'} $colorPrimary={COLORS.PRIMARY_DARK} />
+      <Svg svgImage={taskType.svg} height="6rem" $colorPrimary={COLORS.PRIMARY_DARK} />
       <TaskTypeItemTitle>{taskType.title}</TaskTypeItemTitle>
       <TaskTypeItemDescription>{taskType.description}</TaskTypeItemDescription>
       <TaskTypeItemExamples>
         Example:
         <ul>
-          {taskType.examples.map((e, i) => (
-            <li key={i}>{e}</li>
+          {taskType.examples.map(e => (
+            <li key={e}>{e}</li>
           ))}
         </ul>
       </TaskTypeItemExamples>
       {isCurrentSelected && (
-        <Button
-          onClick={() => dispatch(setSelectedTaskType(undefined))}
-          icon={icons[IconType.EDIT_OUTLINED]}
-        >
+        <Button onClick={setSelectedTaskTypeHandler} icon={icons[IconType.EDIT_OUTLINED]}>
           Change type
         </Button>
       )}
