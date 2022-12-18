@@ -1,1 +1,1 @@
-export type PartialWithId<O extends {id: any}> = Partial<O> & Pick<O, 'id'>;
+export type PartialWithId<O extends { id: string }> = Partial<O> & Pick<O, 'id'>;

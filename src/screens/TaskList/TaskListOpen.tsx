@@ -17,7 +17,7 @@ const TaskListOpen: React.FC = () => {
         dispatch(setSelectedTaskListId(taskListId));
       }
     }
-  }, [taskLists, taskListId, isLoading]);
+  }, [taskLists, taskListId, isLoading, dispatch]);
 
   return <Outlet />;
 };

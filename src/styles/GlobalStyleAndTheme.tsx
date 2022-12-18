@@ -1,14 +1,14 @@
-import React, {ReactNode} from "react";
-import {createGlobalStyle, css} from 'styled-components';
-import {TopMenuNavLink} from "../components/menu/MenuTop/MenuTopComponents";
-import {COLORS, STYLE} from "./CustomStyles";
-import {ConfigProvider} from "antd";
+import React, { ReactNode, useMemo } from 'react';
+import { createGlobalStyle, css } from 'styled-components';
+import { TopMenuNavLink } from '../components/menu/MenuTop/MenuTopComponents';
+import { COLORS, STYLE } from './CustomStyles';
+import { ConfigProvider } from 'antd';
 
 const GlobalStyle = createGlobalStyle`
   :root {
     font-size: 100%;
-  }  
-  
+  }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol" !important;
   }
@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
   ul.ant-menu.ant-menu-sub.ant-menu-vertical {
     margin-bottom: 0;
   }
-  
+
   div.ant-menu-submenu.ant-menu-submenu-popup ul.ant-menu {
     background-color: ${COLORS.BLUE_DARK};
     
@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
       
       &:hover {
          background-color: ${COLORS.BLUE_GREY_DARK}; //#001529
-      } 
+      }
 
       ${TopMenuNavLink} {
         border-radius: 0;
@@ -36,54 +36,57 @@ const GlobalStyle = createGlobalStyle`
       }
     }
   }
-  
+
   // ============= ============= ============= ============= ============= ============= ============= 
-  
-`
+
+`;
 
 interface GlobalStyleAndThemeProps {
-    children?: ReactNode
+  children?: ReactNode;
 }
 
 export const withScrollbar = css`
   &::-webkit-scrollbar {
-    width: .5rem;
+    width: 0.5rem;
   }
 
   /* Track */
+
   &::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
 
   /* Handle */
+
   &::-webkit-scrollbar-thumb {
     background: #888;
-    border-radius: .5rem;
+    border-radius: 0.5rem;
   }
 
   /* Handle on hover */
+
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
 `.toString();
 
-const GlobalStyleAndTheme: React.FC<GlobalStyleAndThemeProps> = ({children}) => {
-    return (
-        <ConfigProvider
-            theme={{
-                token: {
-                    colorPrimary: STYLE.PRIMARY_COLOR,
-                    colorTextHeading: STYLE.HEADING_COLOR,
-                },
-                components: {
-                    Menu: { },
-                }
-            }}
-        >
-            <GlobalStyle to={"/"} />
-            {children}
-        </ConfigProvider>
-    )
-}
+const GlobalStyleAndTheme: React.FC<GlobalStyleAndThemeProps> = ({ children }) => {
+  const theme = useMemo(
+    () => ({
+      token: {
+        colorPrimary: STYLE.PRIMARY_COLOR,
+        colorTextHeading: STYLE.HEADING_COLOR,
+      },
+    }),
+    [],
+  );
+
+  return (
+    <ConfigProvider theme={theme}>
+      <GlobalStyle to="/" />
+      {children}
+    </ConfigProvider>
+  );
+};
 
 export default GlobalStyleAndTheme;
