@@ -5,45 +5,39 @@ import {
   FormItemInline,
   ruleRequiredNoMessage,
 } from '../../../forms/AntdFormComponents';
-import { FormListOperation, Input, TimePicker } from 'antd';
+import { FormListOperation, Input } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 
-interface CheckpointsTimeProps {
+interface FieldsOptionsProps {
   name: number;
   restField: { fieldKey?: number | undefined };
   remove: FormListOperation['remove'];
   labelPoints: string;
 }
 
-const CheckpointsTime: React.FC<CheckpointsTimeProps> = ({
-  name,
-  restField,
-  remove,
-  labelPoints,
-}) => {
+const FieldsOptions: React.FC<FieldsOptionsProps> = ({ name, restField, remove, labelPoints }) => {
   const removeHandler = useCallback(() => remove(name), [name, remove]);
+  const optionName = useMemo(() => [name, 'option'], [name]);
   const pointCountName = useMemo(() => [name, 'pointCount'], [name]);
-  const timeName = useMemo(() => [name, 'time'], [name]);
-
-  const timepickerFormat = 'HH:mm';
 
   return (
     <FormItemInline>
+      <FormItem {...restField} $width="12rem" name={optionName} rules={ruleRequiredNoMessage}>
+        <Input placeholder="Text of your option" type="text" />
+      </FormItem>
       <FormInlineText $isItalic $minWidth="1rem">
-        Get
+        {' '}
+        this option gives you{' '}
       </FormInlineText>
       <FormItem {...restField} $width="4rem" name={pointCountName} rules={ruleRequiredNoMessage}>
-        <Input placeholder="2" type="number" />
+        <Input placeholder="20" type="number" />
       </FormItem>
       <FormInlineText $isItalic $minWidth="1rem">
-        <b>{labelPoints}</b> when action is done at{' '}
+        <b>{labelPoints}</b>
       </FormInlineText>
-      <FormItem {...restField} $width="6rem" name={timeName} rules={ruleRequiredNoMessage}>
-        <TimePicker format={timepickerFormat} minuteStep={5} placeholder="06:00" />
-      </FormItem>
       <MinusCircleOutlined onClick={removeHandler} />
     </FormItemInline>
   );
 };
 
-export default CheckpointsTime;
+export default FieldsOptions;

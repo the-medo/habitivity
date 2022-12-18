@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import { ValidatorRule } from 'rc-field-form/lib/interface';
 import NewCheckpointButton from '../../../forms/NewCheckpointButton';
-import CheckpointsTime from './CheckpointsTime';
+import FieldsCheckpointsTime from './FieldsCheckpointsTime';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 
 const currentSetupExamples = (_taskName = 'Task name'): string[] => {
@@ -64,7 +64,7 @@ const TaskCreateTime: React.FC = () => {
             {(fields, { add, remove }, { errors }) => (
               <>
                 {fields.map(({ key, name, ...restField }) => (
-                  <CheckpointsTime
+                  <FieldsCheckpointsTime
                     key={key}
                     name={name}
                     restField={restField}

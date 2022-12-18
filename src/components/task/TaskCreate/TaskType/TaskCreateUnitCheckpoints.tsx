@@ -13,7 +13,7 @@ import { setExamples } from '../taskCreationSlice';
 import CustomUnitDefinition from './CustomUnitDefinition';
 import { useCustomUnitForm } from '../../../../hooks/useCustomUnitForm';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
-import CheckpointsUnitAndPoints from './CheckpointsUnitAndPoints';
+import FieldsCheckpointsUnitAndPoints from './FieldsCheckpointsUnitAndPoints';
 import NewCheckpointButton from '../../../forms/NewCheckpointButton';
 
 const currentSetupExamples = (_taskName = 'Task name'): string[] => {
@@ -72,7 +72,7 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
             {(fields, { add, remove }, { errors }) => (
               <>
                 {fields.map(({ key, name, ...restField }) => (
-                  <CheckpointsUnitAndPoints
+                  <FieldsCheckpointsUnitAndPoints
                     key={key}
                     name={name}
                     restField={restField}

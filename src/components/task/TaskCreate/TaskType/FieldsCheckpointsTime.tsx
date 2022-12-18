@@ -5,55 +5,45 @@ import {
   FormItemInline,
   ruleRequiredNoMessage,
 } from '../../../forms/AntdFormComponents';
-import { FormListOperation, Input } from 'antd';
+import { FormListOperation, Input, TimePicker } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 
-interface CheckpointsUnitAndPointsProps {
+interface FieldsCheckpointsTimeProps {
   name: number;
   restField: { fieldKey?: number | undefined };
   remove: FormListOperation['remove'];
-  labelUnit: string;
   labelPoints: string;
 }
 
-const CheckpointsUnitAndPoints: React.FC<CheckpointsUnitAndPointsProps> = ({
+const FieldsCheckpointsTime: React.FC<FieldsCheckpointsTimeProps> = ({
   name,
   restField,
   remove,
-  labelUnit,
   labelPoints,
 }) => {
   const removeHandler = useCallback(() => remove(name), [name, remove]);
-  const unitCountForPointName = useMemo(() => [name, 'unitCountForPoint'], [name]);
   const pointCountName = useMemo(() => [name, 'pointCount'], [name]);
+  const timeName = useMemo(() => [name, 'time'], [name]);
+
+  const timepickerFormat = 'HH:mm';
 
   return (
     <FormItemInline>
       <FormInlineText $isItalic $minWidth="1rem">
-        For
+        Get
       </FormInlineText>
-      <FormItem
-        {...restField}
-        $width="4rem"
-        name={unitCountForPointName}
-        rules={ruleRequiredNoMessage}
-      >
+      <FormItem {...restField} $width="4rem" name={pointCountName} rules={ruleRequiredNoMessage}>
         <Input placeholder="2" type="number" />
       </FormItem>
       <FormInlineText $isItalic $minWidth="1rem">
-        {' '}
-        <b>{labelUnit}</b> you will get{' '}
+        <b>{labelPoints}</b> when action is done at{' '}
       </FormInlineText>
-      <FormItem {...restField} $width="4rem" name={pointCountName} rules={ruleRequiredNoMessage}>
-        <Input placeholder="10" type="number" />
+      <FormItem {...restField} $width="6rem" name={timeName} rules={ruleRequiredNoMessage}>
+        <TimePicker format={timepickerFormat} minuteStep={5} placeholder="06:00" />
       </FormItem>
-      <FormInlineText $isItalic $minWidth="1rem">
-        {' '}
-        <b>{labelPoints}</b>{' '}
-      </FormInlineText>
       <MinusCircleOutlined onClick={removeHandler} />
     </FormItemInline>
   );
 };
 
-export default CheckpointsUnitAndPoints;
+export default FieldsCheckpointsTime;
