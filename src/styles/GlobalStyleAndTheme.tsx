@@ -3,6 +3,7 @@ import { createGlobalStyle, css } from 'styled-components';
 import { TopMenuNavLink } from '../components/menu/MenuTop/MenuTopComponents';
 import { COLORS, STYLE } from './CustomStyles';
 import { ConfigProvider } from 'antd';
+import { ConfigProviderProps } from 'antd/es/config-provider';
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -71,7 +72,7 @@ export const withScrollbar = css`
 `.toString();
 
 const GlobalStyleAndTheme: React.FC<GlobalStyleAndThemeProps> = ({ children }) => {
-  const theme = useMemo(
+  const theme: ConfigProviderProps['theme'] = useMemo(
     () => ({
       token: {
         colorPrimary: STYLE.PRIMARY_COLOR,
