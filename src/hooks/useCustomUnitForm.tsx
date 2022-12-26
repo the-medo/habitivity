@@ -14,9 +14,9 @@ export function useCustomUnitForm(
 
   return useMemo(
     () => ({
-      zero: unit0 ?? '<units>',
-      one: unit1 ?? '<unit>',
-      twoAndMore: unit2 ?? '<units>',
+      zero: unit0 === '' || !unit0 ? '<units>' : unit0,
+      one: unit1 === '' || !unit1 ? '<unit>' : unit1,
+      twoAndMore: unit2 === '' || !unit2 ? '<units>' : unit2,
     }),
     [unit0, unit1, unit2],
   );

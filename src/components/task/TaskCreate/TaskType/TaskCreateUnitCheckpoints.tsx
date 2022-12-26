@@ -12,15 +12,16 @@ import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import CustomUnitDefinition from './CustomUnitDefinition';
 import { useCustomUnitForm } from '../../../../hooks/useCustomUnitForm';
-import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
+import {countableString, pointCountable} from '../../../../helpers/unitSyntaxHelpers';
 import FieldsCheckpointsUnitAndPoints from './FieldsCheckpointsUnitAndPoints';
 import NewCheckpointButton from '../../../forms/NewCheckpointButton';
+import {examplesUnitCheckpoint} from "./currentSetupExamples/examplesUnitCheckpoints";
 
-const currentSetupExamples = (_taskName = 'Task name'): string[] => {
-  const examples: string[] = [];
-  examples.push(`Examples of your setup will be shown here after filling the form.`);
-  return examples;
-};
+export type UnitCheckpoint = {
+  pointCount?: string;
+  unitCountForPoint?: string;
+} | undefined;
+
 
 const TaskCreateUnitCheckpoints: React.FC = () => {
   const [form] = Form.useForm();
@@ -29,20 +30,11 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
   const initialValues = useMemo(() => ({ checkpoints: [undefined, undefined] }), []);
   const units = useCustomUnitForm(form);
   const taskName = Form.useWatch<string>('taskName', form);
-  const checkpoints = Form.useWatch<
-    | (
-        | {
-            unitCountForPoint: string;
-            pointCount: string;
-          }
-        | undefined
-      )[]
-    | undefined
-  >('checkpoints', form);
+  const checkpoints = Form.useWatch<UnitCheckpoint[]>('checkpoints', form);
 
   useEffect(() => {
-    dispatch(setExamples(currentSetupExamples(taskName)));
-  }, [dispatch, taskName]);
+    dispatch(setExamples(examplesUnitCheckpoint(checkpoints, units)));
+  }, [dispatch, checkpoints, units]);
 
   useEffect(() => {
     console.log(checkpoints);
