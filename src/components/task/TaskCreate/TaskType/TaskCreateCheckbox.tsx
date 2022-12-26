@@ -10,11 +10,21 @@ import {
 } from '../../../forms/AntdFormComponents';
 import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
+import {ExampleType} from "./ExampleBox";
 
-const currentSetupExamples = (taskName = 'Task name', pointCount: string): string[] => {
-  const examples: string[] = [];
-  examples.push(`Complete "${taskName}" to get ${pointCount !== '' ? pointCount : 'X'} points`);
-  examples.push(`You don't lose any points for not completing this task`);
+const currentSetupExamples = (taskName = 'Task name', pointCount: string | undefined): ExampleType[] => {
+  const baseExampleKey = `ucfp-${taskName}-pc-${pointCount}`
+  const examples: ExampleType[] = [];
+  if (pointCount) {
+    examples.push({
+      key: `1-${baseExampleKey}`,
+      example: `Complete "${taskName}" to get ${pointCount !== '' ? pointCount : 'X'} points`
+    });
+    examples.push({
+      key: `2-not-losing-points`,
+      example: `You don't lose any points for not completing this task`
+    });
+  }
   return examples;
 };
 

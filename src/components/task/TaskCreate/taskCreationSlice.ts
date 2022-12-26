@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {ExampleType} from "./TaskType/ExampleBox";
 
 export interface TaskState {
-  examples: string[];
+  examples: ExampleType[];
 }
 
 const initialState: TaskState = {
@@ -12,7 +13,7 @@ export const taskCreationSlice = createSlice({
   name: 'taskCreation',
   initialState,
   reducers: {
-    setExamples: (state, action: PayloadAction<string[]>) => {
+    setExamples: (state, action: PayloadAction<ExampleType[]>) => {
       state.examples = action.payload;
     },
   },

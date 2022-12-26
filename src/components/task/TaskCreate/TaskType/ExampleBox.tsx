@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { COLORS } from '../../../../styles/CustomStyles';
+import {useSelector} from "react-redux";
+import {ReduxState} from "../../../../store";
 
-interface ExampleBoxProps {
-  examples: string[];
+export type ExampleType = {
+  key: string,
+  example: string;
 }
 
 const Box = styled.div`
@@ -22,14 +25,15 @@ const Example = styled.li`
   margin-bottom: 0.5rem;
 `;
 
-const ExampleBox: React.FC<ExampleBoxProps> = ({ examples }) => {
+const ExampleBox: React.FC = () => {
+  const { examples } = useSelector((state: ReduxState) => state.taskCreationReducer);
   if (examples.length === 0) return null;
 
   return (
     <Box>
       <BoxTitle>Current setup examples:</BoxTitle>
       {examples.map(e => (
-        <Example key={null}>{e}</Example>
+        <Example key={e.key}>{e.example}</Example>
       ))}
     </Box>
   );
