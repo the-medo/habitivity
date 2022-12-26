@@ -14,6 +14,16 @@ const GlobalStyle = createGlobalStyle`
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol" !important;
   }
 
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  input[type='number'] {
+    appearance: textfield;
+  }
+
   // ============= submenu of collapsed top menu in case of small viewport width ============= 
   ul.ant-menu.ant-menu-sub.ant-menu-vertical {
     margin-bottom: 0;
