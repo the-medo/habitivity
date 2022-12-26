@@ -56,7 +56,7 @@ const TaskCreateUnits: React.FC = () => {
           <FormInlineText $isItalic $minWidth="1rem">
             {' '}
             <b>{countableString(unitCountForPoint, units)}</b> of &quot;
-            {taskName.length > 0 ? taskName : `this action`}&quot;
+            {taskName?.length > 0 ? taskName : `this action`}&quot;
           </FormInlineText>
         </FormItemInline>
         <Button type="primary" htmlType="submit">
