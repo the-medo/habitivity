@@ -1,32 +1,17 @@
 import React, { useEffect } from 'react';
 import { Button, Form, Input } from 'antd';
 import {
+  FormInlineText,
   FormItem,
   FormItemInline,
-  FormInlineText,
   FormWrapper,
-  SForm,
   ruleRequiredNoMessage,
+  SForm,
 } from '../../../forms/AntdFormComponents';
 import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
-import {ExampleType} from "./ExampleBox";
-
-const currentSetupExamples = (taskName = 'Task name', pointCount: string | undefined): ExampleType[] => {
-  const baseExampleKey = `ucfp-${taskName}-pc-${pointCount}`
-  const examples: ExampleType[] = [];
-  if (pointCount) {
-    examples.push({
-      key: `1-${baseExampleKey}`,
-      example: `Complete "${taskName}" to get ${pointCount !== '' ? pointCount : 'X'} points`
-    });
-    examples.push({
-      key: `2-not-losing-points`,
-      example: `You don't lose any points for not completing this task`
-    });
-  }
-  return examples;
-};
+import { examplesCheckbox } from './currentSetupExamples/examplesCheckbox';
+import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 
 const TaskCreateCheckbox: React.FC = () => {
   const [form] = Form.useForm();
@@ -36,7 +21,7 @@ const TaskCreateCheckbox: React.FC = () => {
   const pointCount = Form.useWatch<string>('pointCount', form);
 
   useEffect(() => {
-    dispatch(setExamples(currentSetupExamples(taskName, pointCount)));
+    dispatch(setExamples(examplesCheckbox(taskName, pointCount)));
   }, [taskName, pointCount, dispatch]);
 
   return (
@@ -53,7 +38,7 @@ const TaskCreateCheckbox: React.FC = () => {
             <Input placeholder="2" type="number" />
           </FormItem>
           <FormInlineText $isItalic $minWidth="1rem">
-            points for completing this task
+            {countableString(pointCount, pointCountable)} for completing this task
           </FormInlineText>
         </FormItemInline>
         <Button type="primary" htmlType="submit">

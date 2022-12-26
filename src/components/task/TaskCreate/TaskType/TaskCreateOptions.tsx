@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo } from 'react';
 import { Button, Form, Input } from 'antd';
 import {
+  changeableFieldValidator,
   FormItem,
-  SForm,
   FormWrapper,
   ruleRequiredNoMessage,
-  changeableFieldValidator,
+  SForm,
 } from '../../../forms/AntdFormComponents';
 import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
@@ -13,12 +13,14 @@ import { countableString, pointCountable } from '../../../../helpers/unitSyntaxH
 import NewCheckpointButton from '../../../forms/NewCheckpointButton';
 import { ValidatorRule } from 'rc-field-form/lib/interface';
 import FieldsOptions from './FieldsOptions';
+import { examplesOptions } from './currentSetupExamples/examplesOptions';
 
-const currentSetupExamples = (_taskName = 'Task name'): string[] => {
-  const examples: string[] = [];
-  examples.push(`Examples of your setup will be shown here after filling the form.`);
-  return examples;
-};
+export type OptionCheckpoint =
+  | {
+      option?: string;
+      pointCount?: string;
+    }
+  | undefined;
 
 const TaskCreateOptions: React.FC = () => {
   const [form] = Form.useForm();
@@ -26,20 +28,11 @@ const TaskCreateOptions: React.FC = () => {
 
   const taskName = Form.useWatch<string>('taskName', form);
   const initialValues = useMemo(() => ({ options: [undefined, undefined] }), []);
-  const options = Form.useWatch<
-    | (
-        | {
-            option: string;
-            pointCount: string;
-          }
-        | undefined
-      )[]
-    | undefined
-  >('options', form);
+  const options = Form.useWatch<OptionCheckpoint[]>('options', form);
 
   useEffect(() => {
-    dispatch(setExamples(currentSetupExamples(taskName)));
-  }, [dispatch, taskName]);
+    dispatch(setExamples(examplesOptions(options)));
+  }, [dispatch, options]);
 
   useEffect(() => {
     console.log(options);
