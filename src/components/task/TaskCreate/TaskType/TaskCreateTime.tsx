@@ -15,15 +15,15 @@ import FieldsCheckpointsTime from './FieldsCheckpointsTime';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 import { Dayjs } from 'dayjs';
 import {dayjsToMinutes} from "../../../../helpers/dayjs/dayjsToMinutes";
+import {ExampleType} from "./ExampleBox";
 
 type TimeCheckpoint = {
   pointCount?: string;
   time?: Dayjs;
 };
 
-const currentSetupExamples = (_taskName = 'Task name', checkpoints: TimeCheckpoint[] | undefined): string[] => {
-  const examples: string[] = [];
-  console.log("EXAMPLES: ", checkpoints);
+const currentSetupExamples = (_taskName = 'Task name', checkpoints: TimeCheckpoint[] | undefined): ExampleType[] => {
+  const examples: ExampleType[] = [];
   let fullData: {
     pointCount: number,
     time: number,
@@ -45,7 +45,10 @@ const currentSetupExamples = (_taskName = 'Task name', checkpoints: TimeCheckpoi
     fullData.sort((a, b) => a.time < b.time ? -1 : 1);
 
     if (fullData.length > 0) {
-      examples.push(`${fullData[0].timeFormatted} and earlier: ${fullData[0].pointCount} points`)
+      examples.push({
+        key: `1-time-${fullData[0].timeFormatted}-and-earlier`,
+        example: `${fullData[0].timeFormatted} and earlier: ${fullData[0].pointCount} points`
+      });
 
       if (fullData.length > 1) {
         for (let i = 1; i < fullData.length; i++) {
@@ -54,17 +57,28 @@ const currentSetupExamples = (_taskName = 'Task name', checkpoints: TimeCheckpoi
           const interval = timeDiff > 60 ? 60 : (timeDiff > 15 ? 15 : 5);
           const intervalCount = timeDiff / interval;
           if (intervalCount > 1) {
-            examples.push(`For each ${interval} minutes between ${fullData[i - 1].timeFormatted} and ${fullData[i].timeFormatted} you get ${(pointDiff / timeDiff * interval).toFixed(2)} points`);
-            examples.push(`${fullData[i].timeFormatted}: ${fullData[i].pointCount} points`);
+            examples.push({
+              key: `2-i-${interval}-${fullData[i].timeFormatted}-${pointDiff}-${timeDiff}`,
+              example: `${fullData[i - 1].timeFormatted} - ${fullData[i].timeFormatted}:  each ${interval} minutes give you ${(pointDiff / timeDiff * interval).toFixed(2)} points`
+            });
+            if (i < fullData.length - 1) {
+              examples.push({
+                key: `3-time-${fullData[i].timeFormatted}-pd-${fullData[i].pointCount}`,
+                example: `${fullData[i].timeFormatted}: ${fullData[i].pointCount} points`
+              });
+            }
           }
         }
       }
 
-      examples.push(`${fullData[fullData.length - 1].timeFormatted} and later: ${fullData[fullData.length - 1].pointCount} points`)
+      examples.push({
+        key: `Key`,
+        example: `${fullData[fullData.length - 1].timeFormatted} and later: ${fullData[fullData.length - 1].pointCount} points`
+      });
     }
 
   } else {
-    examples.push(`Examples of your setup will be shown here after filling the form.`);
+    examples.push({key: `no-examples`, example: `Examples of your setup will be shown here after filling the form.`});
   }
   return examples;
 };

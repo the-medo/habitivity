@@ -22,7 +22,6 @@ const TaskCreateFormWrapper = styled.div`
 
 const TaskCreateForm: React.FC = () => {
   const { selectedTaskType } = useSelector((state: ReduxState) => state.taskReducer);
-  const { examples } = useSelector((state: ReduxState) => state.taskCreationReducer);
 
   const taskTypeWithDescription = useMemo(
     () => taskTypesWithDescription.find(tt => tt.id === selectedTaskType),
@@ -40,7 +39,7 @@ const TaskCreateForm: React.FC = () => {
       {selectedTaskType === TaskType.UNITS && <TaskCreateUnits />}
       {selectedTaskType === TaskType.UNIT_CHECKPOINTS && <TaskCreateUnitCheckpoints />}
       {selectedTaskType === TaskType.OPTIONS && <TaskCreateOptions />}
-      <ExampleBox examples={examples} />
+      <ExampleBox />
     </TaskCreateFormWrapper>
   );
 };
