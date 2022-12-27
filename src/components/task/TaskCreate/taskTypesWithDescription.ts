@@ -17,7 +17,7 @@ export const taskTypesWithDescription: TaskTypeForTTSelector[] = [
     description: 'Get points based on duration spent doing the task',
     examples: [
       'get 1 point for every 15 minutes of exercising',
-      'lose 2 points for every 30 browsing social media',
+      'lose 2 points for every 30 minutes browsing social media',
     ],
   },
   {
@@ -67,6 +67,10 @@ export const taskTypesWithDescription: TaskTypeForTTSelector[] = [
     svg: TaskType6,
     title: 'Option select',
     description: 'Get fixed amount of points based on what option you choose',
-    examples: ['asd', 'des'],
+    examples: [
+      '"Had junkfood" option - you lose 1 point',
+      '"Had normal food" option - 0 points',
+      '"Had healthy food" option - you get 1 point',
+    ],
   },
 ];
