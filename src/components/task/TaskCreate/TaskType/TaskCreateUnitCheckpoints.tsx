@@ -12,16 +12,21 @@ import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import CustomUnitDefinition from './CustomUnitDefinition';
 import { useCustomUnitForm } from '../../../../hooks/useCustomUnitForm';
-import {countableString, pointCountable} from '../../../../helpers/unitSyntaxHelpers';
+import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 import FieldsCheckpointsUnitAndPoints from './FieldsCheckpointsUnitAndPoints';
 import NewCheckpointButton from '../../../forms/NewCheckpointButton';
-import {examplesUnitCheckpoint} from "./currentSetupExamples/examplesUnitCheckpoints";
+import { examplesUnitCheckpoint } from './currentSetupExamples/examplesUnitCheckpoints';
+import {
+  checkForDuplicatesInDynamicFields,
+  DuplicateCheck,
+} from '../../../forms/checkForDuplicatesInDynamicFields';
 
-export type UnitCheckpoint = {
-  pointCount?: string;
-  unitCountForPoint?: string;
-} | undefined;
-
+export type UnitCheckpoint =
+  | {
+      pointCount?: string;
+      unitCountForPoint?: string;
+    }
+  | undefined;
 
 const TaskCreateUnitCheckpoints: React.FC = () => {
   const [form] = Form.useForm();
@@ -31,6 +36,16 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
   const units = useCustomUnitForm(form);
   const taskName = Form.useWatch<string>('taskName', form);
   const checkpoints = Form.useWatch<UnitCheckpoint[]>('checkpoints', form);
+  const duplicateCheck = useMemo(
+    () =>
+      checkForDuplicatesInDynamicFields({
+        type: DuplicateCheck.UNIT_CHECKPOINT,
+        value: checkpoints,
+      })
+        ? [`Having the same amount of units more than once is not allowed.`]
+        : undefined,
+    [checkpoints],
+  );
 
   useEffect(() => {
     dispatch(setExamples(examplesUnitCheckpoint(checkpoints, units)));
@@ -77,7 +92,7 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
                   />
                 ))}
                 <NewCheckpointButton add={add} text="Add unit checkpoint" />
-                <Form.ErrorList errors={errors} />
+                <Form.ErrorList errors={duplicateCheck ?? errors} />
               </>
             )}
           </Form.List>
