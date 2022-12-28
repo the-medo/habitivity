@@ -2,12 +2,12 @@ import { ExampleType } from '../ExampleBox';
 import { OptionCheckpoint } from '../TaskCreateOptions';
 import { countableString, pointCountable } from '../../../../../helpers/unitSyntaxHelpers';
 
-export const examplesOptions = (options: OptionCheckpoint[]): ExampleType[] => {
-  let examples: ExampleType[] = [];
+export const examplesOptions = (options: OptionCheckpoint[] | undefined): ExampleType[] => {
+  const examples: ExampleType[] = [];
 
   if (options) {
     options.forEach(o => {
-      if (o && o.pointCount && o.option) {
+      if (o?.pointCount && o.option) {
         examples.push({
           key: `o-${o.pointCount}-${o.option}`,
           example: `${o.pointCount} ${countableString(o.pointCount, pointCountable)} for "${
