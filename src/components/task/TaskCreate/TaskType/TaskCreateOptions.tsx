@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import { Button, Form, Input } from 'antd';
 import {
   changeableFieldValidator,
-  checkNonDuplicates,
   FormItem,
   FormWrapper,
   ruleRequiredNoMessage,
@@ -15,6 +14,10 @@ import NewCheckpointButton from '../../../forms/NewCheckpointButton';
 import { ValidatorRule } from 'rc-field-form/lib/interface';
 import FieldsOptions from './FieldsOptions';
 import { examplesOptions } from './currentSetupExamples/examplesOptions';
+import {
+  checkForDuplicatesInDynamicFields,
+  DuplicateCheck,
+} from '../../../forms/checkForDuplicatesInDynamicFields';
 
 export type OptionCheckpoint =
   | {
@@ -30,9 +33,11 @@ const TaskCreateOptions: React.FC = () => {
   const taskName = Form.useWatch<string>('taskName', form);
   const initialValues = useMemo(() => ({ options: [undefined, undefined] }), []);
   const options = Form.useWatch<OptionCheckpoint[]>('options', form);
-  const duplicatesInOptions = useMemo(
+  const duplicateCheck = useMemo(
     () =>
-      checkNonDuplicates(options, ['option']) ? [`There are duplicates in options!`] : undefined,
+      checkForDuplicatesInDynamicFields({ type: DuplicateCheck.OPTION, value: options })
+        ? [`Having the same option more than once is not allowed.`]
+        : undefined,
     [options],
   );
 
@@ -72,7 +77,7 @@ const TaskCreateOptions: React.FC = () => {
                   />
                 ))}
                 <NewCheckpointButton add={add} text="Add option" />
-                <Form.ErrorList errors={duplicatesInOptions ?? errors} />
+                <Form.ErrorList errors={duplicateCheck ?? errors} />
               </>
             )}
           </Form.List>
