@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { COLORS } from '../../../../styles/CustomStyles';
-import {useSelector} from "react-redux";
-import {ReduxState} from "../../../../store";
+import { useSelector } from 'react-redux';
+import { ReduxState } from '../../../../store';
 
 export type ExampleType = {
-  key: string,
+  key: string;
   example: string;
-}
+};
 
 const Box = styled.div`
   flex: 1 1 250px;
@@ -24,6 +24,15 @@ const Example = styled.li`
   list-style: none;
   margin-bottom: 0.5rem;
 `;
+
+export const deduplicateExamples = (e: ExampleType[]): ExampleType[] => {
+  const uniqueExamples = new Set();
+  return e.filter(example => {
+    const isUnique = !uniqueExamples.has(example.key);
+    uniqueExamples.add(example.key);
+    return isUnique;
+  });
+};
 
 const ExampleBox: React.FC = () => {
   const { examples } = useSelector((state: ReduxState) => state.taskCreationReducer);

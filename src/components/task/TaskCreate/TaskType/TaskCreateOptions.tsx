@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { Button, Form, Input } from 'antd';
 import {
   changeableFieldValidator,
+  checkNonDuplicates,
   FormItem,
   FormWrapper,
   ruleRequiredNoMessage,
@@ -29,14 +30,15 @@ const TaskCreateOptions: React.FC = () => {
   const taskName = Form.useWatch<string>('taskName', form);
   const initialValues = useMemo(() => ({ options: [undefined, undefined] }), []);
   const options = Form.useWatch<OptionCheckpoint[]>('options', form);
+  const duplicatesInOptions = useMemo(
+    () =>
+      checkNonDuplicates(options, ['option']) ? [`There are duplicates in options!`] : undefined,
+    [options],
+  );
 
   useEffect(() => {
     dispatch(setExamples(examplesOptions(options)));
   }, [dispatch, options]);
-
-  useEffect(() => {
-    console.log(options);
-  }, [options]);
 
   const optionValidator: ValidatorRule[] = useMemo(
     () => changeableFieldValidator('options', 2),
@@ -70,7 +72,7 @@ const TaskCreateOptions: React.FC = () => {
                   />
                 ))}
                 <NewCheckpointButton add={add} text="Add option" />
-                <Form.ErrorList errors={errors} />
+                <Form.ErrorList errors={duplicatesInOptions ?? errors} />
               </>
             )}
           </Form.List>

@@ -6,6 +6,7 @@ import {
   FormWrapper,
   ruleRequiredNoMessage,
   changeableFieldValidator,
+  checkNonDuplicates,
 } from '../../../forms/AntdFormComponents';
 import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
@@ -14,13 +15,14 @@ import NewCheckpointButton from '../../../forms/NewCheckpointButton';
 import FieldsCheckpointsTime from './FieldsCheckpointsTime';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 import { Dayjs } from 'dayjs';
-import {examplesTime} from "./currentSetupExamples/examplesTime";
+import { examplesTime } from './currentSetupExamples/examplesTime';
 
-export type TimeCheckpoint = {
-  pointCount?: string;
-  time?: Dayjs;
-} | undefined;
-
+export type TimeCheckpoint =
+  | {
+      pointCount?: string;
+      time?: Dayjs;
+    }
+  | undefined;
 
 const TaskCreateTime: React.FC = () => {
   const [form] = Form.useForm();
@@ -29,6 +31,11 @@ const TaskCreateTime: React.FC = () => {
   const initialValues = useMemo(() => ({ checkpoints: [undefined, undefined] }), []);
   const taskName = Form.useWatch<string>('taskName', form);
   const checkpoints = Form.useWatch<TimeCheckpoint[]>('checkpoints', form);
+  const duplicatesInCheckpoints = useMemo(
+    () =>
+      checkNonDuplicates(checkpoints, ['time']) ? [`There are duplicates in time!`] : undefined,
+    [checkpoints],
+  );
 
   useEffect(() => {
     dispatch(setExamples(examplesTime(checkpoints)));
@@ -69,7 +76,7 @@ const TaskCreateTime: React.FC = () => {
                   />
                 ))}
                 <NewCheckpointButton add={add} text="Add time point" />
-                <Form.ErrorList errors={errors} />
+                <Form.ErrorList errors={duplicatesInCheckpoints ?? errors} />
               </>
             )}
           </Form.List>

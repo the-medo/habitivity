@@ -1,7 +1,9 @@
-import styled, { css } from 'styled-components';
-import { ColProps, Form, FormRule } from 'antd';
-import { ValidatorRule } from 'rc-field-form/lib/interface';
-import { InternalFieldProps } from 'rc-field-form/lib/Field';
+import styled, {css} from 'styled-components';
+import {ColProps, Form, FormRule} from 'antd';
+import {ValidatorRule} from 'rc-field-form/lib/interface';
+import {InternalFieldProps} from 'rc-field-form/lib/Field';
+import {TimeCheckpoint} from "../task/TaskCreate/TaskType/TaskCreateTime";
+import {OptionCheckpoint} from "../task/TaskCreate/TaskType/TaskCreateOptions";
 
 export interface FormItemProps {
   $isItalic?: boolean;
@@ -43,54 +45,77 @@ export const changeableFieldValidator = (
   },
 ];
 
-export const FormItem = styled(Form.Item)<FormItemProps>`
-  ${({ $minWidth }) =>
-    $minWidth &&
-    css`
-      min-width: ${$minWidth};
-    `};
-  ${({ $width }) =>
-    $width &&
-    css`
-      width: ${$width};
-    `};
-
-  label {
-    font-weight: bold;
+export function checkNonDuplicates(
+  changeableField: (TimeCheckpoint | OptionCheckpoint)[] | undefined,
+  nonDuplicateFields: string[],
+): boolean {
+  let hasDuplicates = false;
+  if (changeableField) {
+    if (nonDuplicateFields.length > 0) {
+      const filteredChangeableField = changeableField.filter(f => f !== undefined);
+      nonDuplicateFields.forEach(ndf => {
+        const prop = filteredChangeableField.map(f => {
+          if (f && f.hasOwnProperty(ndf) && f[ndf] !== undefined) {
+            return f[ndf];
+          }
+        )
+          ;
+          const uniqueProp = new Set(prop);
+          if (uniqueProp.size !== prop.length) hasDuplicates = true;
+        });
+      }
+    }
+    return hasDuplicates;
   }
-`;
 
-export const FormInlineText = styled.div<FormItemProps>`
-  display: inline-block;
-  ${({ $isItalic }) =>
-    $isItalic &&
-    css`
-      font-style: italic;
-    `};
-  ${({ $minWidth }) =>
-    $minWidth &&
-    css`
-      min-width: ${$minWidth};
-    `};
-  ${({ $width }) =>
-    $width &&
-    css`
-      width: ${$width};
-    `};
-  margin-right: 0.25rem;
-  line-height: 2rem;
-`;
-
-export const FormItemInline = styled(FormItem)`
-  margin-bottom: 0;
-
-  ${FormItem} {
-    display: inline-block;
-    margin-bottom: 0.5rem;
-    margin-right: 0.25rem;
+  export const FormItem = styled(Form.Item)<FormItemProps>`
+    ${({$minWidth}) =>
+            $minWidth &&
+            css`
+              min-width: ${$minWidth};
+            `};
+    ${({$width}) =>
+            $width &&
+            css`
+              width: ${$width};
+            `};
 
     label {
-      font-weight: normal;
+      font-weight: bold;
     }
-  }
+`;
+
+  export const FormInlineText = styled.div<FormItemProps>`
+    display: inline-block;
+    ${({ $isItalic }) =>
+            $isItalic &&
+            css`
+              font-style: italic;
+            `};
+    ${({ $minWidth }) =>
+            $minWidth &&
+            css`
+              min-width: ${$minWidth};
+            `};
+    ${({ $width }) =>
+            $width &&
+            css`
+              width: ${$width};
+            `};
+    margin-right: 0.25rem;
+    line-height: 2rem;
+`;
+
+  export const FormItemInline = styled(FormItem)`
+    margin-bottom: 0;
+
+    ${FormItem} {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      margin-right: 0.25rem;
+
+      label {
+        font-weight: normal;
+      }
+    }
 `;
