@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Button, Input, Select } from 'antd';
 import { DurationUnits, durationUnitsSyntax } from '../../../../types/Tasks';
 import {
+  BaseTaskCreationFormFields,
   FormInlineText,
   FormItem,
   FormItemInline,
@@ -14,8 +15,9 @@ import { setExamples } from '../taskCreationSlice';
 import { examplesDuration } from './currentSetupExamples/examplesDuration';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
+import TaskModifiers from './TaskModifiers';
 
-interface FormTaskDuration {
+interface FormTaskDuration extends BaseTaskCreationFormFields {
   taskName: string;
   unitCountForPoint: string;
   pointCount: string;
@@ -27,6 +29,7 @@ const initValues: FormTaskDuration = {
   unitCountForPoint: '',
   pointCount: '',
   units: DurationUnits.MINUTE,
+  modifierPercentage: false,
 };
 
 const TaskCreateDuration: React.FC = () => {
@@ -92,6 +95,7 @@ const TaskCreateDuration: React.FC = () => {
             of this action
           </FormInlineText>
         </FormItemInline>
+        <TaskModifiers />
         <Button type="primary" htmlType="submit">
           Create
         </Button>

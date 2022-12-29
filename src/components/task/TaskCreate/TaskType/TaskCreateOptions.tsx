@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Button, Form, Input } from 'antd';
 import {
+  BaseTaskCreationFormFields,
   changeableFieldValidator,
   FormItem,
   FormWrapper,
@@ -19,13 +20,14 @@ import {
   DuplicateCheck,
 } from '../../../forms/checkForDuplicatesInDynamicFields';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
+import TaskModifiers from './TaskModifiers';
 
 export interface OptionCheckpoint {
   option?: string;
   pointCount?: string;
 }
 
-interface FormTaskOptions {
+interface FormTaskOptions extends BaseTaskCreationFormFields {
   taskName: string;
   options: OptionCheckpoint[];
 }
@@ -36,6 +38,7 @@ const initValues: FormTaskOptions = {
     { option: '', pointCount: '' },
     { option: '', pointCount: '' },
   ],
+  modifierPercentage: false,
 };
 
 const TaskCreateOptions: React.FC = () => {
@@ -95,7 +98,7 @@ const TaskCreateOptions: React.FC = () => {
             )}
           </Form.List>
         </FormItem>
-
+        <TaskModifiers />
         <Button type="primary" htmlType="submit">
           Create
         </Button>
