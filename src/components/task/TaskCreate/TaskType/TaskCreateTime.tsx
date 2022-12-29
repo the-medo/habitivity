@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Button, Form, Input } from 'antd';
 import {
+  BaseTaskCreationFormFields,
   changeableFieldValidator,
   FormItem,
   FormWrapper,
@@ -20,13 +21,14 @@ import {
   DuplicateCheck,
 } from '../../../forms/checkForDuplicatesInDynamicFields';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
+import TaskModifiers from './TaskModifiers';
 
 export interface TimeCheckpoint {
   pointCount?: string;
   time?: Dayjs;
 }
 
-interface FormTaskTime {
+interface FormTaskTime extends BaseTaskCreationFormFields {
   taskName: string;
   checkpoints: TimeCheckpoint[];
 }
@@ -37,6 +39,7 @@ const initValues: FormTaskTime = {
     { pointCount: '', time: undefined },
     { pointCount: '', time: undefined },
   ],
+  modifierPercentage: false,
 };
 
 const TaskCreateTime: React.FC = () => {
@@ -96,6 +99,7 @@ const TaskCreateTime: React.FC = () => {
             )}
           </Form.List>
         </FormItem>
+        <TaskModifiers />
         <Button type="primary" htmlType="submit">
           Create
         </Button>

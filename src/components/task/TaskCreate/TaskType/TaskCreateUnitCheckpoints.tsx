@@ -8,6 +8,7 @@ import {
   ruleRequiredNoMessage,
   changeableFieldValidator,
   UnitsFormFields,
+  BaseTaskCreationFormFields,
 } from '../../../forms/AntdFormComponents';
 import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
@@ -22,13 +23,14 @@ import {
   DuplicateCheck,
 } from '../../../forms/checkForDuplicatesInDynamicFields';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
+import TaskModifiers from './TaskModifiers';
 
 export interface UnitCheckpoint {
   pointCount?: string;
   unitCountForPoint?: string;
 }
 
-interface FormTaskUnitCheckpoints extends UnitsFormFields {
+interface FormTaskUnitCheckpoints extends UnitsFormFields, BaseTaskCreationFormFields {
   taskName: string;
   checkpoints: UnitCheckpoint[];
 }
@@ -39,6 +41,7 @@ const initValues: FormTaskUnitCheckpoints = {
     { pointCount: '', unitCountForPoint: '' },
     { pointCount: '', unitCountForPoint: '' },
   ],
+  modifierPercentage: false,
 };
 
 const TaskCreateUnitCheckpoints: React.FC = () => {
@@ -105,6 +108,7 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
             )}
           </Form.List>
         </FormItem>
+        <TaskModifiers />
         <Button type="primary" htmlType="submit">
           Create
         </Button>

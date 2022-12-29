@@ -15,6 +15,13 @@ export interface UnitsFormFields {
   unit2?: string;
 }
 
+export interface ModifierFields {
+  modifierPercentage: boolean;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface BaseTaskCreationFormFields extends ModifierFields {}
+
 export const SForm = styled(Form)``;
 
 export const FormWrapper = styled.div`

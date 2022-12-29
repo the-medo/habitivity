@@ -8,6 +8,7 @@ import {
   FormInlineText,
   ruleRequiredNoMessage,
   UnitsFormFields,
+  BaseTaskCreationFormFields,
 } from '../../../forms/AntdFormComponents';
 import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
@@ -16,8 +17,9 @@ import { useCustomUnitForm } from '../../../../hooks/useCustomUnitForm';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 import { examplesUnits } from './currentSetupExamples/examplesUnits';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
+import TaskModifiers from './TaskModifiers';
 
-interface FormTaskUnits extends UnitsFormFields {
+interface FormTaskUnits extends UnitsFormFields, BaseTaskCreationFormFields {
   taskName: string;
   pointCount: string;
   unitCountForPoint: string;
@@ -27,6 +29,7 @@ const initValues: FormTaskUnits = {
   taskName: '',
   pointCount: '',
   unitCountForPoint: '',
+  modifierPercentage: false,
 };
 
 const TaskCreateUnits: React.FC = () => {
@@ -78,6 +81,7 @@ const TaskCreateUnits: React.FC = () => {
             {taskName.length > 0 ? taskName : `this action`}&quot;
           </FormInlineText>
         </FormItemInline>
+        <TaskModifiers />
         <Button type="primary" htmlType="submit">
           Create
         </Button>

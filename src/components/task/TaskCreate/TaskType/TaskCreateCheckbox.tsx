@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button, Input } from 'antd';
 import {
+  BaseTaskCreationFormFields,
   FormInlineText,
   FormItem,
   FormItemInline,
@@ -13,8 +14,9 @@ import { setExamples } from '../taskCreationSlice';
 import { examplesCheckbox } from './currentSetupExamples/examplesCheckbox';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
+import TaskModifiers from './TaskModifiers';
 
-interface FormTaskCheckbox {
+interface FormTaskCheckbox extends BaseTaskCreationFormFields {
   taskName: string;
   pointCount: string;
 }
@@ -22,6 +24,7 @@ interface FormTaskCheckbox {
 const initValues: FormTaskCheckbox = {
   taskName: '',
   pointCount: '0',
+  modifierPercentage: false,
 };
 
 const TaskCreateCheckbox: React.FC = () => {
@@ -53,6 +56,7 @@ const TaskCreateCheckbox: React.FC = () => {
             {countableString(pointCount, pointCountable)} for completing this task
           </FormInlineText>
         </FormItemInline>
+        <TaskModifiers />
         <Button type="primary" htmlType="submit">
           Create
         </Button>
