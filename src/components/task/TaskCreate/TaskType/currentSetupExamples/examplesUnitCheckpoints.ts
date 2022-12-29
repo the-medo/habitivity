@@ -11,14 +11,15 @@ export const examplesUnitCheckpoint = (
   units: UnitSyntax,
 ): ExampleType[] => {
   const examples: ExampleType[] = [];
-  let fullData: {
+
+  const fullData: {
     pointCount: number;
     unitCountForPoint: number;
   }[] = [];
 
-  if (checkpoints) {
+  if (checkpoints.length > 0) {
     checkpoints.forEach(c => {
-      if (c && c.pointCount && c.unitCountForPoint) {
+      if (c.pointCount && c.unitCountForPoint) {
         fullData.push({
           pointCount: parseFloat(c.pointCount),
           unitCountForPoint: parseFloat(c.unitCountForPoint),

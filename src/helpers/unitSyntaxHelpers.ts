@@ -1,3 +1,5 @@
+import { defaultUnitSyntax } from '../hooks/useCustomUnitForm';
+
 export interface UnitSyntax {
   zero: string; //units   seconds
   one: string; //unit    second
@@ -14,7 +16,13 @@ export const generateBasicCountables = (unit: string): UnitSyntax => {
 
 export const pointCountable: UnitSyntax = generateBasicCountables('point');
 
-export const countableString = (count: number | string, unitSyntax: UnitSyntax): string => {
+export const countableString = (
+  count: number | string | undefined,
+  unitSyntax: UnitSyntax | undefined,
+): string => {
+  if (!unitSyntax) unitSyntax = defaultUnitSyntax;
+  if (count === undefined) count = 0;
+
   if (typeof count === 'string') {
     count = parseInt(count);
   }

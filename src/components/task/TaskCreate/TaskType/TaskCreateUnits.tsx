@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Input } from 'antd';
 import {
   FormItem,
   SForm,
@@ -7,6 +7,7 @@ import {
   FormItemInline,
   FormInlineText,
   ruleRequiredNoMessage,
+  UnitsFormFields,
 } from '../../../forms/AntdFormComponents';
 import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
@@ -14,15 +15,29 @@ import CustomUnitDefinition from './CustomUnitDefinition';
 import { useCustomUnitForm } from '../../../../hooks/useCustomUnitForm';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 import { examplesUnits } from './currentSetupExamples/examplesUnits';
+import { useAntdForm } from '../../../../hooks/useAntdForm';
+
+interface FormTaskUnits extends UnitsFormFields {
+  taskName: string;
+  pointCount: string;
+  unitCountForPoint: string;
+}
+
+const initValues: FormTaskUnits = {
+  taskName: '',
+  pointCount: '',
+  unitCountForPoint: '',
+};
 
 const TaskCreateUnits: React.FC = () => {
-  const [form] = Form.useForm();
   const dispatch = useDispatch();
 
-  const units = useCustomUnitForm(form);
-  const taskName = Form.useWatch<string>('taskName', form);
-  const unitCountForPoint = Form.useWatch<string>('unitCountForPoint', form);
-  const pointCount = Form.useWatch<string>('pointCount', form);
+  const {
+    form,
+    data: { taskName, pointCount, unitCountForPoint },
+  } = useAntdForm<FormTaskUnits>(initValues);
+
+  const units = useCustomUnitForm<FormTaskUnits>(form);
 
   useEffect(() => {
     dispatch(
@@ -32,7 +47,14 @@ const TaskCreateUnits: React.FC = () => {
 
   return (
     <FormWrapper>
-      <SForm form={form} layout="vertical" name="new-task" requiredMark={false} colon={false}>
+      <SForm
+        form={form}
+        layout="vertical"
+        name="new-task"
+        requiredMark={false}
+        colon={false}
+        initialValues={initValues}
+      >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />
         </FormItem>
@@ -53,7 +75,7 @@ const TaskCreateUnits: React.FC = () => {
           <FormInlineText $isItalic $minWidth="1rem">
             {' '}
             <b>{countableString(unitCountForPoint, units)}</b> of &quot;
-            {taskName?.length > 0 ? taskName : `this action`}&quot;
+            {taskName.length > 0 ? taskName : `this action`}&quot;
           </FormInlineText>
         </FormItemInline>
         <Button type="primary" htmlType="submit">

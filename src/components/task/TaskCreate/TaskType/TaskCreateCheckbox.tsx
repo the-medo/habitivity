@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Input } from 'antd';
 import {
   FormInlineText,
   FormItem,
@@ -12,13 +12,25 @@ import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import { examplesCheckbox } from './currentSetupExamples/examplesCheckbox';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
+import { useAntdForm } from '../../../../hooks/useAntdForm';
+
+interface FormTaskCheckbox {
+  taskName: string;
+  pointCount: string;
+}
+
+const initValues: FormTaskCheckbox = {
+  taskName: '',
+  pointCount: '0',
+};
 
 const TaskCreateCheckbox: React.FC = () => {
-  const [form] = Form.useForm();
   const dispatch = useDispatch();
 
-  const taskName = Form.useWatch<string>('taskName', form);
-  const pointCount = Form.useWatch<string>('pointCount', form);
+  const {
+    form,
+    data: { taskName, pointCount },
+  } = useAntdForm<FormTaskCheckbox>(initValues);
 
   useEffect(() => {
     dispatch(setExamples(examplesCheckbox(taskName, pointCount)));

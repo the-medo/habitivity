@@ -3,9 +3,16 @@ import { dayjsToMinutes } from '../../../../../helpers/dayjs/dayjsToMinutes';
 import { TimeCheckpoint } from '../TaskCreateTime';
 import { countableString, pointCountable } from '../../../../../helpers/unitSyntaxHelpers';
 
+const getInterval = (timeDiff: number): number => {
+  if (timeDiff > 60) return 60;
+  if (timeDiff > 15) return 15;
+  if (timeDiff > 5) return 5;
+  return 1;
+};
+
 export const examplesTime = (checkpoints: TimeCheckpoint[] | undefined): ExampleType[] => {
   const examples: ExampleType[] = [];
-  let fullData: {
+  const fullData: {
     pointCount: number;
     time: number;
     timeFormatted: string;
@@ -13,7 +20,7 @@ export const examplesTime = (checkpoints: TimeCheckpoint[] | undefined): Example
 
   if (checkpoints) {
     checkpoints.forEach(c => {
-      if (c && c.time && c.pointCount) {
+      if (c.time && c.pointCount) {
         fullData.push({
           pointCount: parseFloat(c.pointCount),
           time: dayjsToMinutes(c.time),
@@ -36,7 +43,7 @@ export const examplesTime = (checkpoints: TimeCheckpoint[] | undefined): Example
         for (let i = 1; i < fullData.length; i++) {
           const timeDiff = fullData[i].time - fullData[i - 1].time;
           const pointDiff = fullData[i].pointCount - fullData[i - 1].pointCount;
-          const interval = timeDiff > 60 ? 60 : timeDiff > 15 ? 15 : 5;
+          const interval = getInterval(timeDiff);
           const intervalCount = timeDiff / interval;
           if (intervalCount > 1) {
             examples.push({

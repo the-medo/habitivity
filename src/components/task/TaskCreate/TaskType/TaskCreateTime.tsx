@@ -19,21 +19,34 @@ import {
   checkForDuplicatesInDynamicFields,
   DuplicateCheck,
 } from '../../../forms/checkForDuplicatesInDynamicFields';
+import { useAntdForm } from '../../../../hooks/useAntdForm';
 
-export type TimeCheckpoint =
-  | {
-      pointCount?: string;
-      time?: Dayjs;
-    }
-  | undefined;
+export interface TimeCheckpoint {
+  pointCount?: string;
+  time?: Dayjs;
+}
+
+interface FormTaskTime {
+  taskName: string;
+  checkpoints: TimeCheckpoint[];
+}
+
+const initValues: FormTaskTime = {
+  taskName: '',
+  checkpoints: [
+    { pointCount: '', time: undefined },
+    { pointCount: '', time: undefined },
+  ],
+};
 
 const TaskCreateTime: React.FC = () => {
-  const [form] = Form.useForm();
   const dispatch = useDispatch();
 
-  const initialValues = useMemo(() => ({ checkpoints: [undefined, undefined] }), []);
-  const taskName = Form.useWatch<string>('taskName', form);
-  const checkpoints = Form.useWatch<TimeCheckpoint[]>('checkpoints', form);
+  const {
+    form,
+    data: { taskName, checkpoints },
+  } = useAntdForm<FormTaskTime>(initValues);
+
   const duplicateCheck = useMemo(
     () =>
       checkForDuplicatesInDynamicFields({ type: DuplicateCheck.TIME, value: checkpoints })
@@ -59,7 +72,7 @@ const TaskCreateTime: React.FC = () => {
         name="new-task"
         requiredMark={false}
         colon={false}
-        initialValues={initialValues}
+        initialValues={initValues}
       >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />
@@ -74,10 +87,7 @@ const TaskCreateTime: React.FC = () => {
                     name={name}
                     restField={restField}
                     remove={remove}
-                    labelPoints={countableString(
-                      checkpoints?.[key]?.pointCount ?? 0,
-                      pointCountable,
-                    )}
+                    labelPoints={countableString(checkpoints[key]?.pointCount ?? 0, pointCountable)}
                   />
                 ))}
                 <NewCheckpointButton add={add} text="Add time point" />

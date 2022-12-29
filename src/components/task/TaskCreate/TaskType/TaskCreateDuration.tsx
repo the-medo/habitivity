@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { Button, Form, Input, Select } from 'antd';
+import React, { useEffect } from 'react';
+import { Button, Input, Select } from 'antd';
 import { DurationUnits, durationUnitsSyntax } from '../../../../types/Tasks';
 import {
   FormInlineText,
@@ -13,25 +13,41 @@ import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import { examplesDuration } from './currentSetupExamples/examplesDuration';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
+import { useAntdForm } from '../../../../hooks/useAntdForm';
+
+interface FormTaskDuration {
+  taskName: string;
+  unitCountForPoint: string;
+  pointCount: string;
+  units: DurationUnits;
+}
+
+const initValues: FormTaskDuration = {
+  taskName: '',
+  unitCountForPoint: '',
+  pointCount: '',
+  units: DurationUnits.MINUTE,
+};
 
 const TaskCreateDuration: React.FC = () => {
-  const [form] = Form.useForm();
   const dispatch = useDispatch();
-
-  const taskName = Form.useWatch<string>('taskName', form);
-  const unitCountForPoint = Form.useWatch<string>('unitCountForPoint', form);
-  const pointCount = Form.useWatch<string>('pointCount', form);
-  const units = Form.useWatch<DurationUnits>('units', form);
+  const {
+    form,
+    data: { taskName, unitCountForPoint, pointCount, units },
+  } = useAntdForm<FormTaskDuration>(initValues);
 
   useEffect(() => {
     dispatch(
       setExamples(
-        examplesDuration(taskName, parseFloat(unitCountForPoint), parseFloat(pointCount), units),
+        examplesDuration(
+          taskName,
+          unitCountForPoint ? parseFloat(unitCountForPoint) : undefined,
+          pointCount ? parseFloat(pointCount) : undefined,
+          units,
+        ),
       ),
     );
   }, [taskName, unitCountForPoint, pointCount, units, dispatch]);
-
-  const initialValues = useMemo(() => ({ units: DurationUnits.MINUTE }), []);
 
   return (
     <FormWrapper>
@@ -41,7 +57,7 @@ const TaskCreateDuration: React.FC = () => {
         name="new-task"
         requiredMark={false}
         colon={false}
-        initialValues={initialValues}
+        initialValues={initValues}
       >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />

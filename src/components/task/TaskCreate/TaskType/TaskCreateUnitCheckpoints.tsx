@@ -7,6 +7,7 @@ import {
   FormWrapper,
   ruleRequiredNoMessage,
   changeableFieldValidator,
+  UnitsFormFields,
 } from '../../../forms/AntdFormComponents';
 import { useDispatch } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
@@ -20,40 +21,50 @@ import {
   checkForDuplicatesInDynamicFields,
   DuplicateCheck,
 } from '../../../forms/checkForDuplicatesInDynamicFields';
+import { useAntdForm } from '../../../../hooks/useAntdForm';
 
-export type UnitCheckpoint =
-  | {
-      pointCount?: string;
-      unitCountForPoint?: string;
-    }
-  | undefined;
+export interface UnitCheckpoint {
+  pointCount?: string;
+  unitCountForPoint?: string;
+}
+
+interface FormTaskUnitCheckpoints extends UnitsFormFields {
+  taskName: string;
+  checkpoints: UnitCheckpoint[];
+}
+
+const initValues: FormTaskUnitCheckpoints = {
+  taskName: '',
+  checkpoints: [
+    { pointCount: '', unitCountForPoint: '' },
+    { pointCount: '', unitCountForPoint: '' },
+  ],
+};
 
 const TaskCreateUnitCheckpoints: React.FC = () => {
-  const [form] = Form.useForm();
   const dispatch = useDispatch();
 
-  const initialValues = useMemo(() => ({ checkpoints: [undefined, undefined] }), []);
-  const units = useCustomUnitForm(form);
-  const taskName = Form.useWatch<string>('taskName', form);
-  const checkpoints = Form.useWatch<UnitCheckpoint[]>('checkpoints', form);
+  const {
+    form,
+    data: { taskName, checkpoints },
+  } = useAntdForm<FormTaskUnitCheckpoints>(initValues);
+
+  const units = useCustomUnitForm<FormTaskUnitCheckpoints>(form);
+
   const duplicateCheck = useMemo(
     () =>
       checkForDuplicatesInDynamicFields({
         type: DuplicateCheck.UNIT_CHECKPOINT,
         value: checkpoints,
       })
-        ? [`Having the same amount of units more than once is not allowed.`]
+        ? [`Having the same amount of "${units.twoAndMore}" more than once is not allowed.`]
         : undefined,
-    [checkpoints],
+    [checkpoints, units],
   );
 
   useEffect(() => {
     dispatch(setExamples(examplesUnitCheckpoint(checkpoints, units)));
   }, [dispatch, checkpoints, units]);
-
-  useEffect(() => {
-    console.log(checkpoints);
-  }, [checkpoints]);
 
   const checkpointValidator: ValidatorRule[] = useMemo(
     () => changeableFieldValidator('checkpoints', 2),
@@ -68,7 +79,7 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
         name="new-task"
         requiredMark={false}
         colon={false}
-        initialValues={initialValues}
+        initialValues={initValues}
       >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />
@@ -84,11 +95,8 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
                     name={name}
                     restField={restField}
                     remove={remove}
-                    labelUnit={countableString(checkpoints?.[key]?.unitCountForPoint ?? 0, units)}
-                    labelPoints={countableString(
-                      checkpoints?.[key]?.pointCount ?? 0,
-                      pointCountable,
-                    )}
+                    labelUnit={countableString(checkpoints[key]?.unitCountForPoint ?? 0, units)}
+                    labelPoints={countableString(checkpoints[key]?.pointCount ?? 0, pointCountable)}
                   />
                 ))}
                 <NewCheckpointButton add={add} text="Add unit checkpoint" />

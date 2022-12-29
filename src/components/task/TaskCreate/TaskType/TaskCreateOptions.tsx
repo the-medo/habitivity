@@ -18,21 +18,34 @@ import {
   checkForDuplicatesInDynamicFields,
   DuplicateCheck,
 } from '../../../forms/checkForDuplicatesInDynamicFields';
+import { useAntdForm } from '../../../../hooks/useAntdForm';
 
-export type OptionCheckpoint =
-  | {
-      option?: string;
-      pointCount?: string;
-    }
-  | undefined;
+export interface OptionCheckpoint {
+  option?: string;
+  pointCount?: string;
+}
+
+interface FormTaskOptions {
+  taskName: string;
+  options: OptionCheckpoint[];
+}
+
+const initValues: FormTaskOptions = {
+  taskName: '',
+  options: [
+    { option: '', pointCount: '' },
+    { option: '', pointCount: '' },
+  ],
+};
 
 const TaskCreateOptions: React.FC = () => {
-  const [form] = Form.useForm();
   const dispatch = useDispatch();
 
-  const taskName = Form.useWatch<string>('taskName', form);
-  const initialValues = useMemo(() => ({ options: [undefined, undefined] }), []);
-  const options = Form.useWatch<OptionCheckpoint[]>('options', form);
+  const {
+    form,
+    data: { taskName, options },
+  } = useAntdForm<FormTaskOptions>(initValues);
+
   const duplicateCheck = useMemo(
     () =>
       checkForDuplicatesInDynamicFields({ type: DuplicateCheck.OPTION, value: options })
@@ -58,7 +71,7 @@ const TaskCreateOptions: React.FC = () => {
         name="new-task"
         requiredMark={false}
         colon={false}
-        initialValues={initialValues}
+        initialValues={initValues}
       >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />
@@ -73,7 +86,7 @@ const TaskCreateOptions: React.FC = () => {
                     name={name}
                     restField={restField}
                     remove={remove}
-                    labelPoints={countableString(options?.[key]?.pointCount ?? 0, pointCountable)}
+                    labelPoints={countableString(options[key]?.pointCount ?? 0, pointCountable)}
                   />
                 ))}
                 <NewCheckpointButton add={add} text="Add option" />

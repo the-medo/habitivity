@@ -9,6 +9,12 @@ export interface FormItemProps {
   $width?: string;
 }
 
+export interface UnitsFormFields {
+  unit0?: string;
+  unit1?: string;
+  unit2?: string;
+}
+
 export const SForm = styled(Form)``;
 
 export const FormWrapper = styled.div`

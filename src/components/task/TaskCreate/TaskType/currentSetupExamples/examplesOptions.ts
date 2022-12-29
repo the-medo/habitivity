@@ -7,7 +7,7 @@ export const examplesOptions = (options: OptionCheckpoint[] | undefined): Exampl
 
   if (options) {
     options.forEach(o => {
-      if (o?.pointCount && o.option) {
+      if (o.pointCount && o.option) {
         examples.push({
           key: `o-${o.pointCount}-${o.option}`,
           example: `${o.pointCount} ${countableString(o.pointCount, pointCountable)} for "${

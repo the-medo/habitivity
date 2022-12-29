@@ -1,10 +1,7 @@
 import { ExampleType } from '../ExampleBox';
 import { countableString, pointCountable } from '../../../../../helpers/unitSyntaxHelpers';
 
-export const examplesCheckbox = (
-  taskName = 'Task name',
-  pointCount: string | undefined,
-): ExampleType[] => {
+export const examplesCheckbox = (taskName = 'Task name', pointCount: string): ExampleType[] => {
   const baseExampleKey = `ucfp-${taskName}-pc-${pointCount}`;
   const examples: ExampleType[] = [];
   if (pointCount) {
