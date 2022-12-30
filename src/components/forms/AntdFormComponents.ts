@@ -22,13 +22,11 @@ export interface ModifierFields {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BaseTaskCreationFormFields extends ModifierFields {}
 
-export const SForm = styled(Form)``;
-
 export const FormWrapper = styled.div`
   flex: 18 0 250px;
   padding: 1rem;
 
-  ${SForm} {
+  form {
     max-width: 500px;
   }
 `;

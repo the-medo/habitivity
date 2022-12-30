@@ -1,16 +1,15 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import type { ValidatorRule } from 'rc-field-form/lib/interface';
 import { Button, Form, Input } from 'antd';
 import {
   FormItem,
-  SForm,
   FormWrapper,
   ruleRequiredNoMessage,
   changeableFieldValidator,
   UnitsFormFields,
   BaseTaskCreationFormFields,
 } from '../../../forms/AntdFormComponents';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import CustomUnitDefinition from './CustomUnitDefinition';
 import { useCustomUnitForm } from '../../../../hooks/useCustomUnitForm';
@@ -24,13 +23,16 @@ import {
 } from '../../../forms/checkForDuplicatesInDynamicFields';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
+import { ReduxState } from '../../../../store';
+import { parseFormFieldsToTask, TTUnitCheckpointsWithFormFields } from './parseFormFieldsToTask';
+import { TaskType } from '../../../../types/Tasks';
 
 export interface UnitCheckpoint {
   pointCount?: string;
   unitCountForPoint?: string;
 }
 
-interface FormTaskUnitCheckpoints extends UnitsFormFields, BaseTaskCreationFormFields {
+export interface FormTaskUnitCheckpoints extends UnitsFormFields, BaseTaskCreationFormFields {
   taskName: string;
   checkpoints: UnitCheckpoint[];
 }
@@ -46,10 +48,15 @@ const initValues: FormTaskUnitCheckpoints = {
 
 const TaskCreateUnitCheckpoints: React.FC = () => {
   const dispatch = useDispatch();
+  const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
+  const defaultNewOption: UnitCheckpoint = useMemo(
+    () => ({ pointCount: '', unitCountForPoint: '' }),
+    [],
+  );
 
   const {
     form,
-    data: { taskName, checkpoints },
+    data: { checkpoints },
   } = useAntdForm<FormTaskUnitCheckpoints>(initValues);
 
   const units = useCustomUnitForm<FormTaskUnitCheckpoints>(form);
@@ -74,15 +81,31 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
     [],
   );
 
+  const onSubmitHandler = useCallback(
+    (values: FormTaskUnitCheckpoints) => {
+      if (newTaskSharedProps) {
+        console.log(
+          parseFormFieldsToTask<TTUnitCheckpointsWithFormFields>(newTaskSharedProps, {
+            taskType: TaskType.UNIT_CHECKPOINTS,
+            fields: values,
+            units,
+          }),
+        );
+      }
+    },
+    [newTaskSharedProps, units],
+  );
+
   return (
     <FormWrapper>
-      <SForm
+      <Form<FormTaskUnitCheckpoints>
         form={form}
         layout="vertical"
         name="new-task"
         requiredMark={false}
         colon={false}
         initialValues={initValues}
+        onFinish={onSubmitHandler}
       >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />
@@ -102,7 +125,11 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
                     labelPoints={countableString(checkpoints[key]?.pointCount ?? 0, pointCountable)}
                   />
                 ))}
-                <NewCheckpointButton add={add} text="Add unit checkpoint" />
+                <NewCheckpointButton
+                  add={add}
+                  text="Add unit checkpoint"
+                  defaultValues={defaultNewOption}
+                />
                 <Form.ErrorList errors={duplicateCheck ?? errors} />
               </>
             )}
@@ -112,7 +139,7 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
         <Button type="primary" htmlType="submit">
           Create
         </Button>
-      </SForm>
+      </Form>
     </FormWrapper>
   );
 };

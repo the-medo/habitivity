@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Button, Form, Input } from 'antd';
 import {
   BaseTaskCreationFormFields,
@@ -6,9 +6,8 @@ import {
   FormItem,
   FormWrapper,
   ruleRequiredNoMessage,
-  SForm,
 } from '../../../forms/AntdFormComponents';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 import NewCheckpointButton from '../../../forms/NewCheckpointButton';
@@ -21,13 +20,16 @@ import {
 } from '../../../forms/checkForDuplicatesInDynamicFields';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
+import { ReduxState } from '../../../../store';
+import { parseFormFieldsToTask, TTOptionsWithFormFields } from './parseFormFieldsToTask';
+import { TaskType } from '../../../../types/Tasks';
 
 export interface OptionCheckpoint {
   option?: string;
   pointCount?: string;
 }
 
-interface FormTaskOptions extends BaseTaskCreationFormFields {
+export interface FormTaskOptions extends BaseTaskCreationFormFields {
   taskName: string;
   options: OptionCheckpoint[];
 }
@@ -43,10 +45,12 @@ const initValues: FormTaskOptions = {
 
 const TaskCreateOptions: React.FC = () => {
   const dispatch = useDispatch();
+  const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
+  const defaultNewOption: OptionCheckpoint = useMemo(() => ({ option: '', pointCount: '' }), []);
 
   const {
     form,
-    data: { taskName, options },
+    data: { options },
   } = useAntdForm<FormTaskOptions>(initValues);
 
   const duplicateCheck = useMemo(
@@ -66,15 +70,30 @@ const TaskCreateOptions: React.FC = () => {
     [],
   );
 
+  const onSubmitHandler = useCallback(
+    (values: FormTaskOptions) => {
+      if (newTaskSharedProps) {
+        console.log(
+          parseFormFieldsToTask<TTOptionsWithFormFields>(newTaskSharedProps, {
+            taskType: TaskType.OPTIONS,
+            fields: values,
+          }),
+        );
+      }
+    },
+    [newTaskSharedProps],
+  );
+
   return (
     <FormWrapper>
-      <SForm
+      <Form<FormTaskOptions>
         form={form}
         layout="vertical"
         name="new-task"
         requiredMark={false}
         colon={false}
         initialValues={initValues}
+        onFinish={onSubmitHandler}
       >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />
@@ -92,7 +111,7 @@ const TaskCreateOptions: React.FC = () => {
                     labelPoints={countableString(options[key]?.pointCount ?? 0, pointCountable)}
                   />
                 ))}
-                <NewCheckpointButton add={add} text="Add option" />
+                <NewCheckpointButton add={add} text="Add option" defaultValues={defaultNewOption} />
                 <Form.ErrorList errors={duplicateCheck ?? errors} />
               </>
             )}
@@ -102,7 +121,7 @@ const TaskCreateOptions: React.FC = () => {
         <Button type="primary" htmlType="submit">
           Create
         </Button>
-      </SForm>
+      </Form>
     </FormWrapper>
   );
 };

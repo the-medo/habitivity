@@ -157,19 +157,16 @@ export const taskOverallRandom: TTOptions = {
       optionId: 1,
       option: 'Average',
       points: 0,
-      isDefault: true,
     },
     {
       optionId: 2,
       option: 'Not productive feeling',
       points: -1,
-      isDefault: false,
     },
     {
       optionId: 3,
       option: 'Productive feeling',
       points: 1,
-      isDefault: false,
     },
   ],
 };

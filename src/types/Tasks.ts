@@ -21,9 +21,6 @@ export interface TaskShared {
   taskGroupId: string;
   taskListId: string;
   isActive: boolean;
-  taskName: string;
-  taskPoints: number;
-  taskModifiers: TaskModifier;
 }
 
 //--------------------------
@@ -41,7 +38,6 @@ export interface OptionCheckpoint {
   optionId: number;
   option: string;
   points: number;
-  isDefault: boolean;
 }
 
 //--------------------------
@@ -81,33 +77,49 @@ export const durationUnitsSyntax: Record<DurationUnits, UnitSyntax> = {
 //--------------------------
 
 export type TTTime = TaskShared & {
+  taskName: string;
+  taskModifiers: TaskModifier;
   taskType: TaskType.TIME;
   taskUnits?: undefined;
   taskCheckpoints: TimeCheckpoint[];
 };
 
 export type TTDuration = TaskShared & {
+  taskName: string;
+  taskModifiers: TaskModifier;
   taskType: TaskType.DURATION;
   taskUnits: UnitSyntax; //from DurationUnitsSyntax
+  taskUnitCount: number;
+  taskPoints: number;
 };
 
 export type TTCheckbox = TaskShared & {
+  taskName: string;
+  taskModifiers: TaskModifier;
   taskType: TaskType.CHECKBOX;
-  taskUnits?: undefined;
+  taskPoints: number;
 };
 
 export type TTUnits = TaskShared & {
+  taskName: string;
+  taskModifiers: TaskModifier;
   taskType: TaskType.UNITS;
   taskUnits: UnitSyntax;
+  taskUnitCount: number;
+  taskPoints: number;
 };
 
 export type TTUnitCheckpoints = TaskShared & {
+  taskName: string;
+  taskModifiers: TaskModifier;
   taskType: TaskType.UNIT_CHECKPOINTS;
   taskUnits: UnitSyntax;
   taskCheckpoints: UnitCheckpoint[];
 };
 
 export type TTOptions = TaskShared & {
+  taskName: string;
+  taskModifiers: TaskModifier;
   taskType: TaskType.OPTIONS;
   taskUnits?: undefined;
   taskCheckpoints: OptionCheckpoint[];

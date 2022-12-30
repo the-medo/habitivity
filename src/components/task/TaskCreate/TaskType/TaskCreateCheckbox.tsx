@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Button, Input } from 'antd';
+import React, { useCallback, useEffect } from 'react';
+import { Button, Form, Input } from 'antd';
 import {
   BaseTaskCreationFormFields,
   FormInlineText,
@@ -7,16 +7,18 @@ import {
   FormItemInline,
   FormWrapper,
   ruleRequiredNoMessage,
-  SForm,
 } from '../../../forms/AntdFormComponents';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import { examplesCheckbox } from './currentSetupExamples/examplesCheckbox';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
+import { ReduxState } from '../../../../store';
+import { parseFormFieldsToTask, TTCheckboxWithFormFields } from './parseFormFieldsToTask';
+import { TaskType } from '../../../../types/Tasks';
 
-interface FormTaskCheckbox extends BaseTaskCreationFormFields {
+export interface FormTaskCheckbox extends BaseTaskCreationFormFields {
   taskName: string;
   pointCount: string;
 }
@@ -29,6 +31,7 @@ const initValues: FormTaskCheckbox = {
 
 const TaskCreateCheckbox: React.FC = () => {
   const dispatch = useDispatch();
+  const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
 
   const {
     form,
@@ -39,9 +42,30 @@ const TaskCreateCheckbox: React.FC = () => {
     dispatch(setExamples(examplesCheckbox(taskName, pointCount)));
   }, [taskName, pointCount, dispatch]);
 
+  const onSubmitHandler = useCallback(
+    (values: FormTaskCheckbox) => {
+      if (newTaskSharedProps) {
+        console.log(
+          parseFormFieldsToTask<TTCheckboxWithFormFields>(newTaskSharedProps, {
+            fields: values,
+            taskType: TaskType.CHECKBOX,
+          }),
+        );
+      }
+    },
+    [newTaskSharedProps],
+  );
+
   return (
     <FormWrapper>
-      <SForm form={form} layout="vertical" name="new-task" requiredMark={false} colon={false}>
+      <Form<FormTaskCheckbox>
+        form={form}
+        layout="vertical"
+        name="new-task"
+        requiredMark={false}
+        colon={false}
+        onFinish={onSubmitHandler}
+      >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />
         </FormItem>
@@ -60,7 +84,7 @@ const TaskCreateCheckbox: React.FC = () => {
         <Button type="primary" htmlType="submit">
           Create
         </Button>
-      </SForm>
+      </Form>
     </FormWrapper>
   );
 };

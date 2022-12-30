@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { Button, Input, Select } from 'antd';
-import { DurationUnits, durationUnitsSyntax } from '../../../../types/Tasks';
+import React, { useCallback, useEffect } from 'react';
+import { Button, Form, Input, Select } from 'antd';
+import { DurationUnits, durationUnitsSyntax, TaskType } from '../../../../types/Tasks';
 import {
   BaseTaskCreationFormFields,
   FormInlineText,
@@ -8,16 +8,17 @@ import {
   FormItemInline,
   FormWrapper,
   ruleRequiredNoMessage,
-  SForm,
 } from '../../../forms/AntdFormComponents';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import { examplesDuration } from './currentSetupExamples/examplesDuration';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
+import { parseFormFieldsToTask, TTDurationWithFormFields } from './parseFormFieldsToTask';
+import { ReduxState } from '../../../../store';
 
-interface FormTaskDuration extends BaseTaskCreationFormFields {
+export interface FormTaskDuration extends BaseTaskCreationFormFields {
   taskName: string;
   unitCountForPoint: string;
   pointCount: string;
@@ -34,6 +35,8 @@ const initValues: FormTaskDuration = {
 
 const TaskCreateDuration: React.FC = () => {
   const dispatch = useDispatch();
+  const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
+
   const {
     form,
     data: { taskName, unitCountForPoint, pointCount, units },
@@ -52,15 +55,30 @@ const TaskCreateDuration: React.FC = () => {
     );
   }, [taskName, unitCountForPoint, pointCount, units, dispatch]);
 
+  const onSubmitHandler = useCallback(
+    (values: FormTaskDuration) => {
+      if (newTaskSharedProps) {
+        console.log(
+          parseFormFieldsToTask<TTDurationWithFormFields>(newTaskSharedProps, {
+            taskType: TaskType.DURATION,
+            fields: values,
+          }),
+        );
+      }
+    },
+    [newTaskSharedProps],
+  );
+
   return (
     <FormWrapper>
-      <SForm
+      <Form<FormTaskDuration>
         form={form}
         layout="vertical"
         name="new-task"
         requiredMark={false}
         colon={false}
         initialValues={initValues}
+        onFinish={onSubmitHandler}
       >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />
@@ -99,7 +117,7 @@ const TaskCreateDuration: React.FC = () => {
         <Button type="primary" htmlType="submit">
           Create
         </Button>
-      </SForm>
+      </Form>
     </FormWrapper>
   );
 };

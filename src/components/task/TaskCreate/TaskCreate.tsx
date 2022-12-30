@@ -1,8 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TaskCreateForm from './TaskCreateForm';
 import { Header1 } from '../../global/Headers';
+import { useParams } from 'react-router-dom';
+import { useUser } from '../../../hooks/useUser';
+import { useSelectedTaskList } from '../../../hooks/useSelectedTaskList';
+import { generateID } from '../../../helpers/generateID';
+import { useDispatch } from 'react-redux';
+import { setNewTaskSharedProps } from './taskCreationSlice';
 
 const TaskCreate: React.FC = () => {
+  const { taskGroupId } = useParams();
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const dispatch = useDispatch();
+  const user = useUser();
+  const selectedTaskList = useSelectedTaskList();
+
+  useEffect(() => {
+    if (user?.id && selectedTaskList?.id) {
+      dispatch(
+        setNewTaskSharedProps({
+          id: `task-${generateID(10)}`,
+          isActive: true,
+          position: 0,
+          taskGroupId: taskGroupId ?? 'undefined-task-group',
+          taskListId: selectedTaskList.id,
+          userId: user.id,
+        }),
+      );
+    }
+  }, [taskGroupId, user?.id, selectedTaskList?.id, dispatch]);
+
   return (
     <>
       <Header1>Create new task</Header1>

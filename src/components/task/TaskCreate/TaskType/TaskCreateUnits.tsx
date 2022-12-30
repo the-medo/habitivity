@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
-import { Button, Input } from 'antd';
+import React, { useCallback, useEffect } from 'react';
+import { Button, Form, Input } from 'antd';
 import {
   FormItem,
-  SForm,
   FormWrapper,
   FormItemInline,
   FormInlineText,
@@ -10,7 +9,7 @@ import {
   UnitsFormFields,
   BaseTaskCreationFormFields,
 } from '../../../forms/AntdFormComponents';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import CustomUnitDefinition from './CustomUnitDefinition';
 import { useCustomUnitForm } from '../../../../hooks/useCustomUnitForm';
@@ -18,8 +17,11 @@ import { countableString, pointCountable } from '../../../../helpers/unitSyntaxH
 import { examplesUnits } from './currentSetupExamples/examplesUnits';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
+import { ReduxState } from '../../../../store';
+import { parseFormFieldsToTask, TTUnitsWithFormFields } from './parseFormFieldsToTask';
+import { TaskType } from '../../../../types/Tasks';
 
-interface FormTaskUnits extends UnitsFormFields, BaseTaskCreationFormFields {
+export interface FormTaskUnits extends UnitsFormFields, BaseTaskCreationFormFields {
   taskName: string;
   pointCount: string;
   unitCountForPoint: string;
@@ -34,6 +36,7 @@ const initValues: FormTaskUnits = {
 
 const TaskCreateUnits: React.FC = () => {
   const dispatch = useDispatch();
+  const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
 
   const {
     form,
@@ -48,15 +51,31 @@ const TaskCreateUnits: React.FC = () => {
     );
   }, [dispatch, unitCountForPoint, pointCount, units]);
 
+  const onSubmitHandler = useCallback(
+    (values: FormTaskUnits) => {
+      if (newTaskSharedProps) {
+        console.log(
+          parseFormFieldsToTask<TTUnitsWithFormFields>(newTaskSharedProps, {
+            taskType: TaskType.UNITS,
+            fields: values,
+            units,
+          }),
+        );
+      }
+    },
+    [newTaskSharedProps, units],
+  );
+
   return (
     <FormWrapper>
-      <SForm
+      <Form<FormTaskUnits>
         form={form}
         layout="vertical"
         name="new-task"
         requiredMark={false}
         colon={false}
         initialValues={initValues}
+        onFinish={onSubmitHandler}
       >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />
@@ -85,7 +104,7 @@ const TaskCreateUnits: React.FC = () => {
         <Button type="primary" htmlType="submit">
           Create
         </Button>
-      </SForm>
+      </Form>
     </FormWrapper>
   );
 };

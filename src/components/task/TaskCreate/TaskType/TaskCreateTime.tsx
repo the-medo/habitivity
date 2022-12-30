@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Button, Form, Input } from 'antd';
 import {
   BaseTaskCreationFormFields,
@@ -6,9 +6,8 @@ import {
   FormItem,
   FormWrapper,
   ruleRequiredNoMessage,
-  SForm,
 } from '../../../forms/AntdFormComponents';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import { ValidatorRule } from 'rc-field-form/lib/interface';
 import NewCheckpointButton from '../../../forms/NewCheckpointButton';
@@ -22,13 +21,16 @@ import {
 } from '../../../forms/checkForDuplicatesInDynamicFields';
 import { useAntdForm } from '../../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
+import { parseFormFieldsToTask, TTTimeWithFormFields } from './parseFormFieldsToTask';
+import { TaskType } from '../../../../types/Tasks';
+import { ReduxState } from '../../../../store';
 
 export interface TimeCheckpoint {
   pointCount?: string;
   time?: Dayjs;
 }
 
-interface FormTaskTime extends BaseTaskCreationFormFields {
+export interface FormTaskTime extends BaseTaskCreationFormFields {
   taskName: string;
   checkpoints: TimeCheckpoint[];
 }
@@ -44,10 +46,12 @@ const initValues: FormTaskTime = {
 
 const TaskCreateTime: React.FC = () => {
   const dispatch = useDispatch();
+  const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
+  const defaultNewOption: TimeCheckpoint = useMemo(() => ({ pointCount: '', time: undefined }), []);
 
   const {
     form,
-    data: { taskName, checkpoints },
+    data: { checkpoints },
   } = useAntdForm<FormTaskTime>(initValues);
 
   const duplicateCheck = useMemo(
@@ -67,15 +71,30 @@ const TaskCreateTime: React.FC = () => {
     [],
   );
 
+  const onSubmitHandler = useCallback(
+    (values: FormTaskTime) => {
+      if (newTaskSharedProps) {
+        console.log(
+          parseFormFieldsToTask<TTTimeWithFormFields>(newTaskSharedProps, {
+            taskType: TaskType.TIME,
+            fields: values,
+          }),
+        );
+      }
+    },
+    [newTaskSharedProps],
+  );
+
   return (
     <FormWrapper>
-      <SForm
+      <Form<FormTaskTime>
         form={form}
         layout="vertical"
         name="new-task"
         requiredMark={false}
         colon={false}
         initialValues={initValues}
+        onFinish={onSubmitHandler}
       >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />
@@ -93,7 +112,11 @@ const TaskCreateTime: React.FC = () => {
                     labelPoints={countableString(checkpoints[key]?.pointCount ?? 0, pointCountable)}
                   />
                 ))}
-                <NewCheckpointButton add={add} text="Add time point" />
+                <NewCheckpointButton
+                  add={add}
+                  text="Add time point"
+                  defaultValues={defaultNewOption}
+                />
                 <Form.ErrorList errors={duplicateCheck ?? errors} />
               </>
             )}
@@ -103,7 +126,7 @@ const TaskCreateTime: React.FC = () => {
         <Button type="primary" htmlType="submit">
           Create
         </Button>
-      </SForm>
+      </Form>
     </FormWrapper>
   );
 };

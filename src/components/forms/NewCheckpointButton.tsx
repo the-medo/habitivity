@@ -1,15 +1,20 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Button, FormListOperation } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-interface NewCheckpointButtonProps {
+interface NewCheckpointButtonProps<T> {
   add: FormListOperation['add'];
   text: string;
+  defaultValues: T;
 }
 
-const NewCheckpointButton: React.FC<NewCheckpointButtonProps> = ({ add, text }) => {
+const NewCheckpointButton = <T,>({
+  add,
+  text,
+  defaultValues,
+}: NewCheckpointButtonProps<T>): JSX.Element => {
   const plusIcon = useMemo(() => <PlusOutlined />, []);
-  const addCallback = useCallback(() => add(), [add]);
+  const addCallback = useCallback(() => add(defaultValues), [add, defaultValues]);
 
   return (
     <Button type="dashed" onClick={addCallback} block icon={plusIcon}>
