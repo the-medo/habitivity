@@ -17,6 +17,7 @@ import { useAntdForm } from '../../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
 import { parseFormFieldsToTask, TTDurationWithFormFields } from './parseFormFieldsToTask';
 import { ReduxState } from '../../../../store';
+import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface FormTaskDuration extends BaseTaskCreationFormFields {
   taskName: string;
@@ -33,7 +34,7 @@ const initValues: FormTaskDuration = {
   modifierPercentage: false,
 };
 
-const TaskCreateDuration: React.FC = () => {
+const TaskCreateDuration: React.FC<TaskCreateProps> = ({ createTaskHandler }) => {
   const dispatch = useDispatch();
   const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
 
@@ -58,7 +59,7 @@ const TaskCreateDuration: React.FC = () => {
   const onSubmitHandler = useCallback(
     (values: FormTaskDuration) => {
       if (newTaskSharedProps) {
-        console.log(
+        createTaskHandler(
           parseFormFieldsToTask<TTDurationWithFormFields>(newTaskSharedProps, {
             taskType: TaskType.DURATION,
             fields: values,
@@ -66,7 +67,7 @@ const TaskCreateDuration: React.FC = () => {
         );
       }
     },
-    [newTaskSharedProps],
+    [createTaskHandler, newTaskSharedProps],
   );
 
   return (

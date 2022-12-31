@@ -17,6 +17,7 @@ import TaskModifiers from './TaskModifiers';
 import { ReduxState } from '../../../../store';
 import { parseFormFieldsToTask, TTCheckboxWithFormFields } from './parseFormFieldsToTask';
 import { TaskType } from '../../../../types/Tasks';
+import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface FormTaskCheckbox extends BaseTaskCreationFormFields {
   taskName: string;
@@ -29,7 +30,7 @@ const initValues: FormTaskCheckbox = {
   modifierPercentage: false,
 };
 
-const TaskCreateCheckbox: React.FC = () => {
+const TaskCreateCheckbox: React.FC<TaskCreateProps> = ({ createTaskHandler }) => {
   const dispatch = useDispatch();
   const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
 
@@ -45,7 +46,7 @@ const TaskCreateCheckbox: React.FC = () => {
   const onSubmitHandler = useCallback(
     (values: FormTaskCheckbox) => {
       if (newTaskSharedProps) {
-        console.log(
+        createTaskHandler(
           parseFormFieldsToTask<TTCheckboxWithFormFields>(newTaskSharedProps, {
             fields: values,
             taskType: TaskType.CHECKBOX,
@@ -53,7 +54,7 @@ const TaskCreateCheckbox: React.FC = () => {
         );
       }
     },
-    [newTaskSharedProps],
+    [createTaskHandler, newTaskSharedProps],
   );
 
   return (
@@ -65,6 +66,7 @@ const TaskCreateCheckbox: React.FC = () => {
         requiredMark={false}
         colon={false}
         onFinish={onSubmitHandler}
+        initialValues={initValues}
       >
         <FormItem label="Task name:" name="taskName" rules={ruleRequiredNoMessage}>
           <Input placeholder="Task name" />

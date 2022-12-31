@@ -24,6 +24,7 @@ import TaskModifiers from './TaskModifiers';
 import { parseFormFieldsToTask, TTTimeWithFormFields } from './parseFormFieldsToTask';
 import { TaskType } from '../../../../types/Tasks';
 import { ReduxState } from '../../../../store';
+import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface TimeCheckpoint {
   pointCount?: string;
@@ -44,7 +45,7 @@ const initValues: FormTaskTime = {
   modifierPercentage: false,
 };
 
-const TaskCreateTime: React.FC = () => {
+const TaskCreateTime: React.FC<TaskCreateProps> = ({ createTaskHandler }) => {
   const dispatch = useDispatch();
   const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
   const defaultNewOption: TimeCheckpoint = useMemo(() => ({ pointCount: '', time: undefined }), []);
@@ -74,7 +75,7 @@ const TaskCreateTime: React.FC = () => {
   const onSubmitHandler = useCallback(
     (values: FormTaskTime) => {
       if (newTaskSharedProps) {
-        console.log(
+        createTaskHandler(
           parseFormFieldsToTask<TTTimeWithFormFields>(newTaskSharedProps, {
             taskType: TaskType.TIME,
             fields: values,
@@ -82,7 +83,7 @@ const TaskCreateTime: React.FC = () => {
         );
       }
     },
-    [newTaskSharedProps],
+    [createTaskHandler, newTaskSharedProps],
   );
 
   return (

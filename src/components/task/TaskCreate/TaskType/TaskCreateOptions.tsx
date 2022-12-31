@@ -23,6 +23,7 @@ import TaskModifiers from './TaskModifiers';
 import { ReduxState } from '../../../../store';
 import { parseFormFieldsToTask, TTOptionsWithFormFields } from './parseFormFieldsToTask';
 import { TaskType } from '../../../../types/Tasks';
+import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface OptionCheckpoint {
   option?: string;
@@ -43,7 +44,7 @@ const initValues: FormTaskOptions = {
   modifierPercentage: false,
 };
 
-const TaskCreateOptions: React.FC = () => {
+const TaskCreateOptions: React.FC<TaskCreateProps> = ({ createTaskHandler }) => {
   const dispatch = useDispatch();
   const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
   const defaultNewOption: OptionCheckpoint = useMemo(() => ({ option: '', pointCount: '' }), []);
@@ -73,7 +74,7 @@ const TaskCreateOptions: React.FC = () => {
   const onSubmitHandler = useCallback(
     (values: FormTaskOptions) => {
       if (newTaskSharedProps) {
-        console.log(
+        createTaskHandler(
           parseFormFieldsToTask<TTOptionsWithFormFields>(newTaskSharedProps, {
             taskType: TaskType.OPTIONS,
             fields: values,
@@ -81,7 +82,7 @@ const TaskCreateOptions: React.FC = () => {
         );
       }
     },
-    [newTaskSharedProps],
+    [createTaskHandler, newTaskSharedProps],
   );
 
   return (

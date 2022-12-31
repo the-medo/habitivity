@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 import { TaskType } from '../../../../types/Tasks';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../../../store';
-import { setSelectedTaskType } from '../../../../store/taskSlice';
+import { setSelectedTaskType } from '../taskCreationSlice';
 import { Button } from 'antd';
 import { icons, IconType } from '../../../icons/icons';
 
@@ -66,7 +66,7 @@ const TaskTypeItemExamples = styled.div`
 
 const TaskTypeItem: React.FC<TaskTypeItemProps> = ({ taskType }) => {
   const dispatch = useDispatch();
-  const { selectedTaskType } = useSelector((state: ReduxState) => state.taskReducer);
+  const { selectedTaskType } = useSelector((state: ReduxState) => state.taskCreationReducer);
 
   const isCurrentSelected = selectedTaskType === taskType.id;
 

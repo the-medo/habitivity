@@ -20,6 +20,7 @@ import TaskModifiers from './TaskModifiers';
 import { ReduxState } from '../../../../store';
 import { parseFormFieldsToTask, TTUnitsWithFormFields } from './parseFormFieldsToTask';
 import { TaskType } from '../../../../types/Tasks';
+import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface FormTaskUnits extends UnitsFormFields, BaseTaskCreationFormFields {
   taskName: string;
@@ -34,7 +35,7 @@ const initValues: FormTaskUnits = {
   modifierPercentage: false,
 };
 
-const TaskCreateUnits: React.FC = () => {
+const TaskCreateUnits: React.FC<TaskCreateProps> = ({ createTaskHandler }) => {
   const dispatch = useDispatch();
   const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
 
@@ -54,7 +55,7 @@ const TaskCreateUnits: React.FC = () => {
   const onSubmitHandler = useCallback(
     (values: FormTaskUnits) => {
       if (newTaskSharedProps) {
-        console.log(
+        createTaskHandler(
           parseFormFieldsToTask<TTUnitsWithFormFields>(newTaskSharedProps, {
             taskType: TaskType.UNITS,
             fields: values,
@@ -63,7 +64,7 @@ const TaskCreateUnits: React.FC = () => {
         );
       }
     },
-    [newTaskSharedProps, units],
+    [createTaskHandler, newTaskSharedProps, units],
   );
 
   return (

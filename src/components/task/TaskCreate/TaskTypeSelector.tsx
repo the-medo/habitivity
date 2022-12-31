@@ -27,7 +27,7 @@ export const TaskTypeWrapper = styled.div<TaskTypeWrapperProps>`
 `;
 
 const TaskTypeSelector: React.FC = () => {
-  const { selectedTaskType } = useSelector((state: ReduxState) => state.taskReducer);
+  const { selectedTaskType } = useSelector((state: ReduxState) => state.taskCreationReducer);
 
   return (
     <>

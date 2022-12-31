@@ -1,15 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deduplicateExamples, ExampleType } from './TaskType/ExampleBox';
-import { TaskShared } from '../../../types/Tasks';
+import { TaskShared, TaskType } from '../../../types/Tasks';
 
 export interface TaskState {
   examples: ExampleType[];
   newTaskSharedProps?: TaskShared;
+  selectedTaskType?: TaskType;
 }
 
 const initialState: TaskState = {
   examples: [],
   newTaskSharedProps: undefined,
+  selectedTaskType: undefined,
 };
 
 export const taskCreationSlice = createSlice({
@@ -30,10 +32,14 @@ export const taskCreationSlice = createSlice({
         };
       }
     },
+    setSelectedTaskType: (state, action: PayloadAction<TaskType | undefined>) => {
+      console.log('Setting to... ', action.payload);
+      state.selectedTaskType = action.payload;
+    },
   },
 });
 
-export const { setExamples, setNewTaskSharedProps, updateNewTaskSharedProps } =
+export const { setExamples, setNewTaskSharedProps, updateNewTaskSharedProps, setSelectedTaskType } =
   taskCreationSlice.actions;
 
 export const taskCreationReducer = taskCreationSlice.reducer;

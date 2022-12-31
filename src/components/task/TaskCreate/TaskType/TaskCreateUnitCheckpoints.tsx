@@ -26,6 +26,7 @@ import TaskModifiers from './TaskModifiers';
 import { ReduxState } from '../../../../store';
 import { parseFormFieldsToTask, TTUnitCheckpointsWithFormFields } from './parseFormFieldsToTask';
 import { TaskType } from '../../../../types/Tasks';
+import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface UnitCheckpoint {
   pointCount?: string;
@@ -46,7 +47,7 @@ const initValues: FormTaskUnitCheckpoints = {
   modifierPercentage: false,
 };
 
-const TaskCreateUnitCheckpoints: React.FC = () => {
+const TaskCreateUnitCheckpoints: React.FC<TaskCreateProps> = ({ createTaskHandler }) => {
   const dispatch = useDispatch();
   const { newTaskSharedProps } = useSelector((state: ReduxState) => state.taskCreationReducer);
   const defaultNewOption: UnitCheckpoint = useMemo(
@@ -84,7 +85,7 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
   const onSubmitHandler = useCallback(
     (values: FormTaskUnitCheckpoints) => {
       if (newTaskSharedProps) {
-        console.log(
+        createTaskHandler(
           parseFormFieldsToTask<TTUnitCheckpointsWithFormFields>(newTaskSharedProps, {
             taskType: TaskType.UNIT_CHECKPOINTS,
             fields: values,
@@ -93,7 +94,7 @@ const TaskCreateUnitCheckpoints: React.FC = () => {
         );
       }
     },
-    [newTaskSharedProps, units],
+    [createTaskHandler, newTaskSharedProps, units],
   );
 
   return (

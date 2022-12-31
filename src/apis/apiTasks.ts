@@ -1,5 +1,5 @@
 import { ReduxState } from '../store';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { apiSlice } from './api';
 import { Task, taskConverter } from '../types/Tasks';
@@ -34,7 +34,30 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
             ]
           : [{ type: 'Task', id: 'LIST' }],
     }),
+
+    createTask: builder.mutation<Task, Task>({
+      queryFn: async (newTask, api) => {
+        console.log('======== API ============ inside createTask ====================');
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
+
+        if (newTask.userId !== userId) {
+          return { error: 'Error: User ID in task and store is different!' };
+        }
+
+        try {
+          const taskRef = doc(db, '/Users/' + userId + '/Tasks/' + newTask.id).withConverter(
+            taskConverter,
+          );
+          await setDoc(taskRef, newTask);
+          return { data: newTask };
+        } catch (e) {
+          return { error: e };
+        }
+      },
+      invalidatesTags: [{ type: 'Task', id: 'LIST' }],
+    }),
   }),
 });
 
-export const { useGetTasksByTaskListQuery } = apiTask;
+export const { useGetTasksByTaskListQuery, useCreateTaskMutation } = apiTask;
