@@ -16,6 +16,7 @@ import {
   TOP_MENU_BIG,
   TOP_MENU_SMALL,
 } from '../styles/CustomStyles';
+import Notifications from './Notifications';
 
 const StyledContent = styled(Layout.Content)<{
   $isLeftMenuCollapsed: boolean;
@@ -50,6 +51,7 @@ const PageLayout: React.FC = () => {
 
   return (
     <Layout>
+      <Notifications />
       <MenuTop />
       <Layout>
         <MenuLeft />
