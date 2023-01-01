@@ -13,9 +13,10 @@ import TaskCreateTime from './TaskType/TaskCreateTime';
 import TaskCreateUnits from './TaskType/TaskCreateUnits';
 import TaskCreateUnitCheckpoints from './TaskType/TaskCreateUnitCheckpoints';
 import TaskCreateOptions from './TaskType/TaskCreateOptions';
-import { notification, Spin } from 'antd';
+import { Spin } from 'antd';
 import { useCreateTaskMutation } from '../../../apis/apiTasks';
 import { setSelectedTaskType } from './taskCreationSlice';
+import { setNotification } from '../../../store/notificationSlice';
 
 const TaskCreateFormWrapper = styled.div`
   display: flex;
@@ -29,7 +30,6 @@ export interface TaskCreateProps {
 
 const TaskCreateForm: React.FC = () => {
   const dispatch = useDispatch();
-  const [api, contextHolder] = notification.useNotification();
   const { selectedTaskType } = useSelector((state: ReduxState) => state.taskCreationReducer);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const [createTask, { isLoading: isCreatingTask }] = useCreateTaskMutation();
@@ -46,28 +46,33 @@ const TaskCreateForm: React.FC = () => {
         createTask(task).then(res => {
           if ('data' in res) {
             console.log('Creating notification');
-            api.success({
-              message: `Task created!`,
-              description: `Your task "${res.data.taskName}" has been created successfully!`,
-              placement: 'topRight',
-            });
+            dispatch(
+              setNotification({
+                type: 'success',
+                message: `Task created!`,
+                description: `Your task "${res.data.taskName}" has been created successfully!`,
+                placement: 'topRight',
+              }),
+            );
           } else if ('error' in res) {
             console.log('Creating notification');
-            api.error({
-              message: `There was an error while creating your task.`,
-              description: `${res.error ?? 'Unknown error'}`,
-              placement: 'topRight',
-            });
+            dispatch(
+              setNotification({
+                type: 'error',
+                message: `There was an error while creating your task.`,
+                description: `${res.error ?? 'Unknown error'}`,
+                placement: 'topRight',
+              }),
+            );
           }
         });
       }
     },
-    [api, createTask, dispatch],
+    [createTask, dispatch],
   );
 
   return (
     <Spin spinning={isCreatingTask}>
-      {contextHolder}
       {taskTypeWithDescription === undefined && <TaskTypeSelector />}
       {taskTypeWithDescription !== undefined && (
         <TaskCreateFormWrapper>
