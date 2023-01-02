@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import {generate} from '@ant-design/colors';
+import { generate } from '@ant-design/colors';
 
 /* https://ant.design/docs/spec/colors */
 const primaryColors = generate('#1da57a');
 
 export const COLORS = {
-    PRIMARY: primaryColors[5],
-    PRIMARY_LIGHT: primaryColors[0],
-    PRIMARY_DARK: primaryColors[8],
-    PRIMARY_STEPS: primaryColors,
-    WHITE: 'white',
-    GREY: 'grey',
-    GREY_BORDER: '#f4f4f4',
-    GREY_LIGHT: '#fafafa',
-    GREY_MEDIUM: '#d9d9d9',
-    GREY_DARK: 'darkgrey',
-    BACKGROUND: '#fff',
-    BLUE_LIGHT: '#cdd9ee',
-    BLUE_GREY_DARK: 'rgb(77 92 106)',
-    BLUE_DARK: '#001529',
+  PRIMARY: primaryColors[5],
+  PRIMARY_LIGHT: primaryColors[0],
+  PRIMARY_DARK: primaryColors[8],
+  PRIMARY_STEPS: primaryColors,
+  WHITE: 'white',
+  GREY: 'grey',
+  GREY_BORDER: '#f4f4f4',
+  GREY_LIGHT: '#fafafa',
+  GREY_MEDIUM: '#d9d9d9',
+  GREY_DARK: 'darkgrey',
+  BACKGROUND: '#fff',
+  BLUE_LIGHT: '#cdd9ee',
+  BLUE_GREY_DARK: 'rgb(77 92 106)',
+  BLUE_DARK: '#001529',
 };
 
 export const STYLE = {
@@ -39,7 +39,7 @@ export const STYLE = {
   LINE_HEIGHT_BASE: 1.5,
 
   //other
-  BASE_SHADOW: `0 0 10px 2px rgba(0,0,0,0.3)`,
+  BASE_SHADOW: `0 0 5px 2px rgba(0,0,0,0.1)`,
 }; /* rest of the sizes are in REM */
 
 export const SIDER_COLLAPSED_SIZE = 3;

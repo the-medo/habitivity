@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelectedTaskList } from '../../hooks/useSelectedTaskList';
 import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
-import TodayTaskGroup from './TaskGroup/TodayTaskGroup';
 import styled from 'styled-components';
+import TodayTaskGroup from './TaskGroup/TodayTaskGroup';
 
 const TodayTaskGroupWrapper = styled.div`
   display: flex;

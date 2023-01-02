@@ -10,15 +10,14 @@ interface EmptyGroupMessageProps {
 
 const EmptyGroupMessageWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.5rem;
 `;
 
 const EmptyGroupMessage: React.FC<EmptyGroupMessageProps> = ({ taskGroupId }) => {
   return (
     <EmptyGroupMessageWrapper>
-      <span>Oops, this group looks empty!</span>
+      <span>Oops, this group looks empty! </span>
       <Link to={`new-task/${taskGroupId}`}>
         <Button icon={icons[IconType.PLUS_OUTLINED]}>Create task</Button>
       </Link>
