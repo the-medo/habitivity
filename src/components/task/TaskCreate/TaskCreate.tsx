@@ -6,7 +6,7 @@ import { useUser } from '../../../hooks/useUser';
 import { useSelectedTaskList } from '../../../hooks/useSelectedTaskList';
 import { generateID } from '../../../helpers/generateID';
 import { useDispatch } from 'react-redux';
-import { setNewTaskSharedProps } from './taskCreationSlice';
+import { setNewTaskSharedProps, setSelectedTaskType } from './taskCreationSlice';
 
 const TaskCreate: React.FC = () => {
   const { taskGroupId } = useParams();
@@ -15,6 +15,12 @@ const TaskCreate: React.FC = () => {
   const dispatch = useDispatch();
   const user = useUser();
   const selectedTaskList = useSelectedTaskList();
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSelectedTaskType(undefined));
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (user?.id && selectedTaskList?.id) {

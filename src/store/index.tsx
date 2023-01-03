@@ -7,14 +7,16 @@ import { taskReducer } from './taskSlice';
 import { apiSlice } from '../apis/api';
 import { taskCreationReducer } from '../components/task/TaskCreate/taskCreationSlice';
 import { notificationReducer } from './notificationSlice';
+import { todayReducer } from '../screens/Today/todaySlice';
 
 export const store = configureStore({
   reducer: {
     userReducer,
-    menuReducer: menuReducer,
-    taskReducer: taskReducer,
-    notificationReducer: notificationReducer,
-    taskCreationReducer: taskCreationReducer,
+    menuReducer,
+    taskReducer,
+    notificationReducer,
+    taskCreationReducer,
+    todayReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),

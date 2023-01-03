@@ -7,6 +7,7 @@ import { COLORS } from '../../../styles/CustomStyles';
 import EmptyGroupMessage from './EmptyGroupMessage';
 import { icons, IconType } from '../../../components/icons/icons';
 import { Button, Tooltip } from 'antd';
+import { Link } from 'react-router-dom';
 
 interface TodayTaskGroupProps {
   group: TaskGroup;
@@ -39,6 +40,7 @@ const HeaderTitle = styled.h2`
 
 const HeaderPoints = styled.div`
   background-color: ${COLORS.PRIMARY_LIGHT};
+  margin-left: 0.5rem;
   padding: 0.7rem;
   font-weight: bold;
   border-radius: 50%;
@@ -47,11 +49,9 @@ const HeaderPoints = styled.div`
 const HeaderPart = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  gap: 0.5rem;
   align-items: center;
 `;
-
-const EditModeButton = styled(Button)``;
 
 const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
   const taskInfo = useTasksByGroup(group.id);
@@ -71,9 +71,16 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
         </HeaderPart>
         <HeaderPart>
           {taskInfo.tasks.length === 0 && <EmptyGroupMessage taskGroupId={group.id} />}
+          {taskInfo.tasks.length > 0 && (
+            <Tooltip title="New task">
+              <Link to={`new-task/${group.id}`}>
+                <Button icon={icons[IconType.PLUS_OUTLINED]} />
+              </Link>
+            </Tooltip>
+          )}
           {group.position === 0 && !editMode && (
             <Tooltip title="Edit mode">
-              <EditModeButton
+              <Button
                 onClick={toggleEditMode}
                 type="primary"
                 icon={icons[IconType.EDIT_OUTLINED]}
