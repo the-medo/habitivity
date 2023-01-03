@@ -15,6 +15,10 @@ import {
   LineChartOutlined,
   CalendarOutlined,
   CarryOutOutlined,
+  CloseOutlined,
+  CheckOutlined,
+  AppstoreOutlined,
+  BarsOutlined,
 } from '@ant-design/icons';
 
 export enum IconType {
@@ -33,6 +37,10 @@ export enum IconType {
   LINE_CHART_OUTLINED,
   CALENDAR_OUTLINED,
   CARRY_OUT_OUTLINED,
+  CLOSE_OUTLINED,
+  CHECK_OUTLINED,
+  APPSTORE_OUTLINED,
+  BARS_OUTLINED,
 }
 
 export const icons: Record<IconType, React.ReactNode> = {
@@ -51,4 +59,8 @@ export const icons: Record<IconType, React.ReactNode> = {
   [IconType.LINE_CHART_OUTLINED]: React.createElement(LineChartOutlined),
   [IconType.CALENDAR_OUTLINED]: React.createElement(CalendarOutlined),
   [IconType.CARRY_OUT_OUTLINED]: React.createElement(CarryOutOutlined),
+  [IconType.CLOSE_OUTLINED]: React.createElement(CloseOutlined),
+  [IconType.CHECK_OUTLINED]: React.createElement(CheckOutlined),
+  [IconType.APPSTORE_OUTLINED]: React.createElement(AppstoreOutlined),
+  [IconType.BARS_OUTLINED]: React.createElement(BarsOutlined),
 };

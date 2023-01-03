@@ -56,12 +56,6 @@ const HeaderPart = styled.div`
 const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
   const taskInfo = useTasksByGroup(group.id);
 
-  const [editMode, setEditMode] = useState(false);
-
-  const toggleEditMode = useCallback(() => {
-    setEditMode(p => !p);
-  }, []);
-
   return (
     <TaskGroupWrapper>
       <TaskGroupHeader>
@@ -76,15 +70,6 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
               <Link to={`new-task/${group.id}`}>
                 <Button icon={icons[IconType.PLUS_OUTLINED]} />
               </Link>
-            </Tooltip>
-          )}
-          {group.position === 0 && !editMode && (
-            <Tooltip title="Edit mode">
-              <Button
-                onClick={toggleEditMode}
-                type="primary"
-                icon={icons[IconType.EDIT_OUTLINED]}
-              />
             </Tooltip>
           )}
         </HeaderPart>
