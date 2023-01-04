@@ -1,7 +1,7 @@
 import { ExampleType } from '../ExampleBox';
-import { dayjsToMinutes } from '../../../../../helpers/dayjs/dayjsToMinutes';
+import { dayjsToMinutes } from '../../../../helpers/dayjs/dayjsToMinutes';
 import { TimeCheckpoint } from '../TaskCreateTime';
-import { countableString, pointCountable } from '../../../../../helpers/unitSyntaxHelpers';
+import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 
 const getInterval = (timeDiff: number): number => {
   if (timeDiff > 60) return 60;

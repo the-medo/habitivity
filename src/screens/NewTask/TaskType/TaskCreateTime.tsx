@@ -6,24 +6,24 @@ import {
   FormItem,
   FormWrapper,
   ruleRequiredNoMessage,
-} from '../../../forms/AntdFormComponents';
+} from '../../../components/forms/AntdFormComponents';
 import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import { ValidatorRule } from 'rc-field-form/lib/interface';
-import NewCheckpointButton from '../../../forms/NewCheckpointButton';
+import NewCheckpointButton from '../../../components/forms/NewCheckpointButton';
 import FieldsCheckpointsTime from './FieldsCheckpointsTime';
-import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
+import { countableString, pointCountable } from '../../../helpers/unitSyntaxHelpers';
 import { Dayjs } from 'dayjs';
 import { examplesTime } from './currentSetupExamples/examplesTime';
 import {
   checkForDuplicatesInDynamicFields,
   DuplicateCheck,
-} from '../../../forms/checkForDuplicatesInDynamicFields';
-import { useAntdForm } from '../../../../hooks/useAntdForm';
+} from '../../../components/forms/checkForDuplicatesInDynamicFields';
+import { useAntdForm } from '../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
 import { parseFormFieldsToTask, TTTimeWithFormFields } from './parseFormFieldsToTask';
-import { TaskType } from '../../../../types/Tasks';
-import { ReduxState } from '../../../../store';
+import { TaskType } from '../../../types/Tasks';
+import { ReduxState } from '../../../store';
 import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface TimeCheckpoint {

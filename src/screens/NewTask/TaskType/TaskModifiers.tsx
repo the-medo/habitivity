@@ -1,5 +1,9 @@
 import React from 'react';
-import { FormInlineText, FormItem, FormItemInline } from '../../../forms/AntdFormComponents';
+import {
+  FormInlineText,
+  FormItem,
+  FormItemInline,
+} from '../../../components/forms/AntdFormComponents';
 import { Switch } from 'antd';
 
 const TaskModifiers: React.FC = () => {

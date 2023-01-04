@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import TaskCreateForm from './TaskCreateForm';
-import { Header1 } from '../../global/Headers';
+import { Header1 } from '../../components/global/Headers';
 import { useParams } from 'react-router-dom';
-import { useUser } from '../../../hooks/useUser';
-import { useSelectedTaskList } from '../../../hooks/useSelectedTaskList';
-import { generateID } from '../../../helpers/generateID';
+import { useUser } from '../../hooks/useUser';
+import { useSelectedTaskList } from '../../hooks/useSelectedTaskList';
+import { generateID } from '../../helpers/generateID';
 import { useDispatch } from 'react-redux';
 import { setNewTaskSharedProps, setSelectedTaskType } from './taskCreationSlice';
 

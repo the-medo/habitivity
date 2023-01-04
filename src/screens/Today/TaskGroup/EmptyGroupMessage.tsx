@@ -18,7 +18,7 @@ const EmptyGroupMessage: React.FC<EmptyGroupMessageProps> = ({ taskGroupId }) =>
   return (
     <EmptyGroupMessageWrapper>
       <span>Oops, this group looks empty! </span>
-      <Link to={`new-task/${taskGroupId}`}>
+      <Link to={`/new-task/${taskGroupId}`}>
         <Button icon={icons[IconType.PLUS_OUTLINED]}>Create task</Button>
       </Link>
     </EmptyGroupMessageWrapper>

@@ -7,16 +7,16 @@ import {
   FormItemInline,
   FormWrapper,
   ruleRequiredNoMessage,
-} from '../../../forms/AntdFormComponents';
+} from '../../../components/forms/AntdFormComponents';
 import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import { examplesCheckbox } from './currentSetupExamples/examplesCheckbox';
-import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
-import { useAntdForm } from '../../../../hooks/useAntdForm';
+import { countableString, pointCountable } from '../../../helpers/unitSyntaxHelpers';
+import { useAntdForm } from '../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
-import { ReduxState } from '../../../../store';
+import { ReduxState } from '../../../store';
 import { parseFormFieldsToTask, TTCheckboxWithFormFields } from './parseFormFieldsToTask';
-import { TaskType } from '../../../../types/Tasks';
+import { TaskType } from '../../../types/Tasks';
 import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface FormTaskCheckbox extends BaseTaskCreationFormFields {

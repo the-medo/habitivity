@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deduplicateExamples, ExampleType } from './TaskType/ExampleBox';
-import { TaskShared, TaskType } from '../../../types/Tasks';
+import { TaskShared, TaskType } from '../../types/Tasks';
 
 export interface TaskState {
   examples: ExampleType[];

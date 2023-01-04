@@ -4,7 +4,7 @@ import {
   FormItem,
   FormItemInline,
   ruleRequiredNoMessage,
-} from '../../../forms/AntdFormComponents';
+} from '../../../components/forms/AntdFormComponents';
 import { Input } from 'antd';
 
 const CustomUnitDefinition: React.FC = () => {

@@ -2,10 +2,10 @@ import React, { useCallback, useMemo } from 'react';
 import TaskTypeSelector from './TaskTypeSelector';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { ReduxState } from '../../../store';
+import { ReduxState } from '../../store';
 import { taskTypesWithDescription } from './taskTypesWithDescription';
 import TaskTypeItem from './TaskType/TaskTypeItem';
-import { Task, TaskType } from '../../../types/Tasks';
+import { Task, TaskType } from '../../types/Tasks';
 import TaskCreateDuration from './TaskType/TaskCreateDuration';
 import ExampleBox from './TaskType/ExampleBox';
 import TaskCreateCheckbox from './TaskType/TaskCreateCheckbox';
@@ -14,9 +14,9 @@ import TaskCreateUnits from './TaskType/TaskCreateUnits';
 import TaskCreateUnitCheckpoints from './TaskType/TaskCreateUnitCheckpoints';
 import TaskCreateOptions from './TaskType/TaskCreateOptions';
 import { Spin } from 'antd';
-import { useCreateTaskMutation } from '../../../apis/apiTasks';
+import { useCreateTaskMutation } from '../../apis/apiTasks';
 import { setSelectedTaskType } from './taskCreationSlice';
-import { setNotification } from '../../../store/notificationSlice';
+import { setNotification } from '../../store/notificationSlice';
 
 const TaskCreateFormWrapper = styled.div`
   display: flex;

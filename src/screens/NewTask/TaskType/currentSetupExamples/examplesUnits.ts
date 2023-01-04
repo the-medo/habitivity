@@ -1,8 +1,4 @@
-import {
-  countableString,
-  pointCountable,
-  UnitSyntax,
-} from '../../../../../helpers/unitSyntaxHelpers';
+import { countableString, pointCountable, UnitSyntax } from '../../../../helpers/unitSyntaxHelpers';
 import { ExampleType } from '../ExampleBox';
 
 export const examplesUnits = (

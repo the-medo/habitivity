@@ -8,14 +8,14 @@ import {
   TTTime,
   TTUnitCheckpoints,
   TTUnits,
-} from '../../../../types/Tasks';
+} from '../../../types/Tasks';
 import { FormTaskCheckbox } from './TaskCreateCheckbox';
 import { FormTaskDuration } from './TaskCreateDuration';
 import { FormTaskOptions } from './TaskCreateOptions';
 import { FormTaskTime } from './TaskCreateTime';
 import { FormTaskUnitCheckpoints } from './TaskCreateUnitCheckpoints';
 import { FormTaskUnits } from './TaskCreateUnits';
-import { UnitSyntax } from '../../../../helpers/unitSyntaxHelpers';
+import { UnitSyntax } from '../../../helpers/unitSyntaxHelpers';
 
 export interface TTCheckboxWithFormFields {
   taskType: TaskType.CHECKBOX;

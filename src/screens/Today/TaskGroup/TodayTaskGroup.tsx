@@ -67,7 +67,7 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
           {taskInfo.tasks.length === 0 && <EmptyGroupMessage taskGroupId={group.id} />}
           {taskInfo.tasks.length > 0 && (
             <Tooltip title="New task">
-              <Link to={`new-task/${group.id}`}>
+              <Link to={`/new-task/${group.id}`}>
                 <Button icon={icons[IconType.PLUS_OUTLINED]} />
               </Link>
             </Tooltip>

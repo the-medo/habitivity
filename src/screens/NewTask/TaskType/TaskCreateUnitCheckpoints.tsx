@@ -8,24 +8,24 @@ import {
   changeableFieldValidator,
   UnitsFormFields,
   BaseTaskCreationFormFields,
-} from '../../../forms/AntdFormComponents';
+} from '../../../components/forms/AntdFormComponents';
 import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import CustomUnitDefinition from './CustomUnitDefinition';
-import { useCustomUnitForm } from '../../../../hooks/useCustomUnitForm';
-import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
+import { useCustomUnitForm } from '../../../hooks/useCustomUnitForm';
+import { countableString, pointCountable } from '../../../helpers/unitSyntaxHelpers';
 import FieldsCheckpointsUnitAndPoints from './FieldsCheckpointsUnitAndPoints';
-import NewCheckpointButton from '../../../forms/NewCheckpointButton';
+import NewCheckpointButton from '../../../components/forms/NewCheckpointButton';
 import { examplesUnitCheckpoint } from './currentSetupExamples/examplesUnitCheckpoints';
 import {
   checkForDuplicatesInDynamicFields,
   DuplicateCheck,
-} from '../../../forms/checkForDuplicatesInDynamicFields';
-import { useAntdForm } from '../../../../hooks/useAntdForm';
+} from '../../../components/forms/checkForDuplicatesInDynamicFields';
+import { useAntdForm } from '../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
-import { ReduxState } from '../../../../store';
+import { ReduxState } from '../../../store';
 import { parseFormFieldsToTask, TTUnitCheckpointsWithFormFields } from './parseFormFieldsToTask';
-import { TaskType } from '../../../../types/Tasks';
+import { TaskType } from '../../../types/Tasks';
 import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface UnitCheckpoint {

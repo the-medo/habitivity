@@ -8,18 +8,18 @@ import {
   ruleRequiredNoMessage,
   UnitsFormFields,
   BaseTaskCreationFormFields,
-} from '../../../forms/AntdFormComponents';
+} from '../../../components/forms/AntdFormComponents';
 import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import CustomUnitDefinition from './CustomUnitDefinition';
-import { useCustomUnitForm } from '../../../../hooks/useCustomUnitForm';
-import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
+import { useCustomUnitForm } from '../../../hooks/useCustomUnitForm';
+import { countableString, pointCountable } from '../../../helpers/unitSyntaxHelpers';
 import { examplesUnits } from './currentSetupExamples/examplesUnits';
-import { useAntdForm } from '../../../../hooks/useAntdForm';
+import { useAntdForm } from '../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
-import { ReduxState } from '../../../../store';
+import { ReduxState } from '../../../store';
 import { parseFormFieldsToTask, TTUnitsWithFormFields } from './parseFormFieldsToTask';
-import { TaskType } from '../../../../types/Tasks';
+import { TaskType } from '../../../types/Tasks';
 import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface FormTaskUnits extends UnitsFormFields, BaseTaskCreationFormFields {

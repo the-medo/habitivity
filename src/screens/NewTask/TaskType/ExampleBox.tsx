@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { COLORS } from '../../../../styles/CustomStyles';
+import { COLORS } from '../../../styles/CustomStyles';
 import { useSelector } from 'react-redux';
-import { ReduxState } from '../../../../store';
+import { ReduxState } from '../../../store';
 
 export type ExampleType = {
   key: string;

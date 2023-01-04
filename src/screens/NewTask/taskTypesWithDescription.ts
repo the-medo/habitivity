@@ -1,13 +1,6 @@
-import {
-  TaskType1,
-  TaskType2,
-  TaskType3,
-  TaskType4,
-  TaskType5,
-  TaskType6,
-} from '../../../assets/svg';
+import { TaskType1, TaskType2, TaskType3, TaskType4, TaskType5, TaskType6 } from '../../assets/svg';
 import { TaskTypeForTTSelector } from './TaskType/TaskTypeItem';
-import { TaskType } from '../../../types/Tasks';
+import { TaskType } from '../../types/Tasks';
 
 export const taskTypesWithDescription: TaskTypeForTTSelector[] = [
   {

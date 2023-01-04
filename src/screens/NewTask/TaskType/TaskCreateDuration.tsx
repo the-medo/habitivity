@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { Button, Form, Input, Select } from 'antd';
-import { DurationUnits, durationUnitsSyntax, TaskType } from '../../../../types/Tasks';
+import { DurationUnits, durationUnitsSyntax, TaskType } from '../../../types/Tasks';
 import {
   BaseTaskCreationFormFields,
   FormInlineText,
@@ -8,15 +8,15 @@ import {
   FormItemInline,
   FormWrapper,
   ruleRequiredNoMessage,
-} from '../../../forms/AntdFormComponents';
+} from '../../../components/forms/AntdFormComponents';
 import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
 import { examplesDuration } from './currentSetupExamples/examplesDuration';
-import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
-import { useAntdForm } from '../../../../hooks/useAntdForm';
+import { countableString, pointCountable } from '../../../helpers/unitSyntaxHelpers';
+import { useAntdForm } from '../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
 import { parseFormFieldsToTask, TTDurationWithFormFields } from './parseFormFieldsToTask';
-import { ReduxState } from '../../../../store';
+import { ReduxState } from '../../../store';
 import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface FormTaskDuration extends BaseTaskCreationFormFields {

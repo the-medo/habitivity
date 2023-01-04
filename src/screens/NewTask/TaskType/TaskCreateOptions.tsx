@@ -6,23 +6,23 @@ import {
   FormItem,
   FormWrapper,
   ruleRequiredNoMessage,
-} from '../../../forms/AntdFormComponents';
+} from '../../../components/forms/AntdFormComponents';
 import { useDispatch, useSelector } from 'react-redux';
 import { setExamples } from '../taskCreationSlice';
-import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
-import NewCheckpointButton from '../../../forms/NewCheckpointButton';
+import { countableString, pointCountable } from '../../../helpers/unitSyntaxHelpers';
+import NewCheckpointButton from '../../../components/forms/NewCheckpointButton';
 import { ValidatorRule } from 'rc-field-form/lib/interface';
 import FieldsOptions from './FieldsOptions';
 import { examplesOptions } from './currentSetupExamples/examplesOptions';
 import {
   checkForDuplicatesInDynamicFields,
   DuplicateCheck,
-} from '../../../forms/checkForDuplicatesInDynamicFields';
-import { useAntdForm } from '../../../../hooks/useAntdForm';
+} from '../../../components/forms/checkForDuplicatesInDynamicFields';
+import { useAntdForm } from '../../../hooks/useAntdForm';
 import TaskModifiers from './TaskModifiers';
-import { ReduxState } from '../../../../store';
+import { ReduxState } from '../../../store';
 import { parseFormFieldsToTask, TTOptionsWithFormFields } from './parseFormFieldsToTask';
-import { TaskType } from '../../../../types/Tasks';
+import { TaskType } from '../../../types/Tasks';
 import { TaskCreateProps } from '../TaskCreateForm';
 
 export interface OptionCheckpoint {

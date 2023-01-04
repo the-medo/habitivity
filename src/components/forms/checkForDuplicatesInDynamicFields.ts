@@ -1,6 +1,6 @@
-import { TimeCheckpoint } from '../task/TaskCreate/TaskType/TaskCreateTime';
-import { OptionCheckpoint } from '../task/TaskCreate/TaskType/TaskCreateOptions';
-import { UnitCheckpoint } from '../task/TaskCreate/TaskType/TaskCreateUnitCheckpoints';
+import { TimeCheckpoint } from '../../screens/NewTask/TaskType/TaskCreateTime';
+import { OptionCheckpoint } from '../../screens/NewTask/TaskType/TaskCreateOptions';
+import { UnitCheckpoint } from '../../screens/NewTask/TaskType/TaskCreateUnitCheckpoints';
 
 export enum DuplicateCheck {
   OPTION,

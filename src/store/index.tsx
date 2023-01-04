@@ -5,7 +5,7 @@ import { userReducer } from './userSlice';
 import { menuReducer } from './menuSlice';
 import { taskReducer } from './taskSlice';
 import { apiSlice } from '../apis/api';
-import { taskCreationReducer } from '../components/task/TaskCreate/taskCreationSlice';
+import { taskCreationReducer } from '../screens/NewTask/taskCreationSlice';
 import { notificationReducer } from './notificationSlice';
 import { todayReducer } from '../screens/Today/todaySlice';
 

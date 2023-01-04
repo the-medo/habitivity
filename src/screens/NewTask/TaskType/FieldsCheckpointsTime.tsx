@@ -4,7 +4,7 @@ import {
   FormItem,
   FormItemInline,
   ruleRequiredNoMessage,
-} from '../../../forms/AntdFormComponents';
+} from '../../../components/forms/AntdFormComponents';
 import { FormListOperation, Input, TimePicker } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 

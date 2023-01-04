@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
-import Svg from '../../../../assets/svg/Svg';
-import { COLORS } from '../../../../styles/CustomStyles';
+import Svg from '../../../assets/svg/Svg';
+import { COLORS } from '../../../styles/CustomStyles';
 import styled, { css } from 'styled-components';
-import { TaskType } from '../../../../types/Tasks';
+import { TaskType } from '../../../types/Tasks';
 import { useDispatch, useSelector } from 'react-redux';
-import { ReduxState } from '../../../../store';
+import { ReduxState } from '../../../store';
 import { setSelectedTaskType } from '../taskCreationSlice';
 import { Button } from 'antd';
-import { icons, IconType } from '../../../icons/icons';
+import { icons, IconType } from '../../../components/icons/icons';
 
 export interface TaskTypeForTTSelector {
   id: TaskType;

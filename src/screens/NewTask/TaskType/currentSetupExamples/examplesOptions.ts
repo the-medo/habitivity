@@ -1,6 +1,6 @@
 import { ExampleType } from '../ExampleBox';
 import { OptionCheckpoint } from '../TaskCreateOptions';
-import { countableString, pointCountable } from '../../../../../helpers/unitSyntaxHelpers';
+import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 
 export const examplesOptions = (options: OptionCheckpoint[] | undefined): ExampleType[] => {
   const examples: ExampleType[] = [];
