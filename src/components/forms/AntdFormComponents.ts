@@ -35,6 +35,7 @@ export const validateTriggerDefault: InternalFieldProps['validateTrigger'] = ['o
 export const ruleRequiredNoMessage: FormRule[] = [{ required: true, message: '' }];
 export const colSpan6: ColProps | undefined = { span: 6 };
 export const colSpan18: ColProps | undefined = { span: 18 };
+export const defaultSelectStyle = { width: 200 };
 export const wrapperColSpanMovedButton: ColProps | undefined = {
   span: 18,
   sm: { offset: 6 },

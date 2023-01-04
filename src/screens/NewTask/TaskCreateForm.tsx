@@ -30,8 +30,9 @@ export interface TaskCreateProps {
 
 const TaskCreateForm: React.FC = () => {
   const dispatch = useDispatch();
-  const { selectedTaskType } = useSelector((state: ReduxState) => state.taskCreationReducer);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const selectedTaskType = useSelector(
+    (state: ReduxState) => state.taskCreationReducer.selectedTaskType,
+  );
   const [createTask, { isLoading: isCreatingTask }] = useCreateTaskMutation();
 
   const taskTypeWithDescription = useMemo(

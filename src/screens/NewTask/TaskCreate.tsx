@@ -3,10 +3,10 @@ import TaskCreateForm from './TaskCreateForm';
 import { Header1 } from '../../components/global/Headers';
 import { useParams } from 'react-router-dom';
 import { useUser } from '../../hooks/useUser';
-import { useSelectedTaskList } from '../../hooks/useSelectedTaskList';
 import { generateID } from '../../helpers/generateID';
 import { useDispatch } from 'react-redux';
 import { setNewTaskSharedProps, setSelectedTaskType } from './taskCreationSlice';
+import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 
 const TaskCreate: React.FC = () => {
   const { taskGroupId } = useParams();
@@ -14,7 +14,7 @@ const TaskCreate: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const dispatch = useDispatch();
   const user = useUser();
-  const selectedTaskList = useSelectedTaskList();
+  const selectedTaskListId = useSelectedTaskListId();
 
   useEffect(() => {
     return () => {
@@ -23,19 +23,19 @@ const TaskCreate: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (user?.id && selectedTaskList?.id) {
+    if (user?.id && selectedTaskListId) {
       dispatch(
         setNewTaskSharedProps({
           id: `task-${generateID(10)}`,
           isActive: true,
           position: 0,
           taskGroupId: taskGroupId ?? 'undefined-task-group',
-          taskListId: selectedTaskList.id,
+          taskListId: selectedTaskListId,
           userId: user.id,
         }),
       );
     }
-  }, [taskGroupId, user?.id, selectedTaskList?.id, dispatch]);
+  }, [taskGroupId, user?.id, selectedTaskListId, dispatch]);
 
   return (
     <>
