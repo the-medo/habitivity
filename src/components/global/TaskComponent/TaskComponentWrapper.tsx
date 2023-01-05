@@ -12,7 +12,6 @@ export const TaskComponentWrapperBox = styled.div`
 export const TaskComponentWrapperRow = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
 `;
 
 interface TaskComponentWrapperProps {

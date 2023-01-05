@@ -38,28 +38,33 @@ const HeaderPoints = styled.div`
 
 const TaskWrapper = styled.div`
   display: flex;
-  box-shadow: ${STYLE.BASE_SHADOW};
   padding: 0.5rem;
   border-radius: 0.5rem;
   margin: 0.25rem;
+
+  &:hover {
+    background-color: ${COLORS.GREY_LIGHT};
+  }
 `;
 
 const TaskWrapperBox = styled(TaskWrapper)`
   flex-direction: column;
   flex: 0 0 12rem;
+  box-shadow: ${STYLE.BASE_SHADOW};
 `;
 
 const TaskWrapperRow = styled(TaskWrapper)`
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
+  border-bottom: 1px solid ${COLORS.GREY_LIGHT};
 
   ${HeaderTitle} {
     flex-basis: 20%;
   }
 
   ${TaskUserInputWrapper} {
-    flex-basis: 30%;
+    flex-basis: 8rem;
   }
 `;
 
