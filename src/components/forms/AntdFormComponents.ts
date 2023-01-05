@@ -42,6 +42,8 @@ export const wrapperColSpanMovedButton: ColProps | undefined = {
   xs: { offset: 0 },
 };
 
+export const timepickerFormat = 'HH:mm';
+
 export const changeableFieldValidator = (
   changeableFieldName: string,
   changeableFieldMinCount: number,

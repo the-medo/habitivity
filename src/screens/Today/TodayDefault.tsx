@@ -8,9 +8,10 @@ import { ReduxState } from '../../store';
 import Title from 'antd/es/typography/Title';
 import { Button, Radio, RadioChangeEvent, Tooltip } from 'antd';
 import { icons, IconType } from '../../components/icons/icons';
-import { setDisplayMode, TodayDisplayMode, toggleEditMode } from './todaySlice';
+import { setDisplayMode, toggleEditMode } from './todaySlice';
 import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
 import { RowGap } from '../../components/global/RowGap';
+import { TaskDisplayMode } from '../../components/global/TaskComponent/TaskComponent';
 
 const TodayTaskGroupWrapper = styled.div`
   display: flex;
@@ -66,10 +67,10 @@ const TodayDefault: React.FC = () => {
             </>
           )}
           <Radio.Group defaultValue={displayMode} buttonStyle="solid" onChange={displayModeHandler}>
-            <Radio.Button value={TodayDisplayMode.BOXES}>
+            <Radio.Button value={TaskDisplayMode.BOXES}>
               <AppstoreOutlined />
             </Radio.Button>
-            <Radio.Button value={TodayDisplayMode.ROWS}>
+            <Radio.Button value={TaskDisplayMode.ROWS}>
               <BarsOutlined />
             </Radio.Button>
           </Radio.Group>
