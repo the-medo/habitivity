@@ -7,9 +7,10 @@ import EmptyGroupMessage from './EmptyGroupMessage';
 import { icons, IconType } from '../../../components/icons/icons';
 import { Button, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
-import TaskComponent, {
-  TaskDisplayMode,
-} from '../../../components/global/TaskComponent/TaskComponent';
+import TaskComponent from '../../../components/global/TaskComponent/TaskComponent';
+import { useSelector } from 'react-redux';
+import { ReduxState } from '../../../store';
+import TaskComponentWrapper from '../../../components/global/TaskComponent/TaskComponentWrapper';
 
 interface TodayTaskGroupProps {
   group: TaskGroup;
@@ -27,13 +28,6 @@ const TaskGroupHeader = styled.div`
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-`;
-
-const TaskGroupContent = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
 `;
 
 const HeaderTitle = styled.h2`
@@ -57,6 +51,7 @@ const HeaderPart = styled.div`
 
 const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
   const taskInfo = useTasksByGroup(group.id);
+  const displayMode = useSelector((state: ReduxState) => state.todayReducer.displayMode);
 
   return (
     <TaskGroupWrapper>
@@ -76,11 +71,11 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
           )}
         </HeaderPart>
       </TaskGroupHeader>
-      <TaskGroupContent>
+      <TaskComponentWrapper displayMode={displayMode}>
         {taskInfo.tasks.map(t => (
-          <TaskComponent key={t.id} task={t} displayMode={TaskDisplayMode.BOXES} />
+          <TaskComponent key={t.id} task={t} displayMode={displayMode} />
         ))}
-      </TaskGroupContent>
+      </TaskComponentWrapper>
     </TaskGroupWrapper>
   );
 };

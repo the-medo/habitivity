@@ -14,18 +14,6 @@ interface TaskComponentProps {
   displayMode: TaskDisplayMode;
 }
 
-const TaskWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  //flex: 0 0 calc(25% - 2rem);
-  flex: 0 0 12rem;
-  margin: 0.25rem;
-  border-radius: 1rem;
-  padding: 0.5rem;
-  background-color: ${COLORS.GREY_LIGHT};
-  box-shadow: ${STYLE.BASE_SHADOW};
-`;
-
 const TaskHeader = styled.div`
   width: 100%;
   display: flex;
@@ -34,9 +22,8 @@ const TaskHeader = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-const TaskContent = styled.div`
-  width: 100%;
-`;
+const TaskContent = styled.div``;
+const TaskUserInputWrapper = styled.div``;
 
 const HeaderTitle = styled.h3`
   margin-bottom: 0;
@@ -49,36 +36,58 @@ const HeaderPoints = styled.div`
   border-radius: 50%;
 `;
 
+const TaskWrapper = styled.div`
+  display: flex;
+  box-shadow: ${STYLE.BASE_SHADOW};
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  margin: 0.25rem;
+`;
+
+const TaskWrapperBox = styled(TaskWrapper)`
+  flex-direction: column;
+  flex: 0 0 12rem;
+`;
+
+const TaskWrapperRow = styled(TaskWrapper)`
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+
+  ${HeaderTitle} {
+    flex-basis: 20%;
+  }
+
+  ${TaskUserInputWrapper} {
+    flex-basis: 30%;
+  }
+`;
+
 const TaskComponent: React.FC<TaskComponentProps> = ({ task, displayMode }) => {
-  if (displayMode === TaskDisplayMode.BOXES) {
-    return (
-      <TaskWrapper>
-        <TaskHeader>
-          <HeaderTitle>{task.taskName}</HeaderTitle>
+  switch (displayMode) {
+    case TaskDisplayMode.BOXES:
+      return (
+        <TaskWrapperBox>
+          <TaskHeader>
+            <HeaderTitle>{task.taskName}</HeaderTitle>
+            <HeaderPoints>12</HeaderPoints>
+          </TaskHeader>
+          <TaskContent>
+            <TaskUserInput task={task} />
+          </TaskContent>
+        </TaskWrapperBox>
+      );
+    case TaskDisplayMode.ROWS:
+      return (
+        <TaskWrapperRow>
           <HeaderPoints>12</HeaderPoints>
-        </TaskHeader>
-        <TaskContent>
-          <TaskUserInput task={task} />
-        </TaskContent>
-      </TaskWrapper>
-    );
-  }
-
-  if (displayMode === TaskDisplayMode.ROWS) {
-    return (
-      <TaskWrapper>
-        <TaskHeader>
           <HeaderTitle>{task.taskName}</HeaderTitle>
-          <HeaderPoints>12</HeaderPoints>
-        </TaskHeader>
-        <TaskContent>
-          <TaskUserInput task={task} />
-        </TaskContent>
-      </TaskWrapper>
-    );
+          <TaskUserInputWrapper>
+            <TaskUserInput task={task} />
+          </TaskUserInputWrapper>
+        </TaskWrapperRow>
+      );
   }
-
-  return null;
 };
 
 export default TaskComponent;
