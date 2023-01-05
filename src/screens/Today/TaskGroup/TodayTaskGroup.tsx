@@ -1,13 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { TaskGroup } from '../../../types/TaskGroup';
 import styled from 'styled-components';
-import TodayTask from './TodayTask';
 import { useTasksByGroup } from '../../../hooks/useTasksByGroup';
 import { COLORS } from '../../../styles/CustomStyles';
 import EmptyGroupMessage from './EmptyGroupMessage';
 import { icons, IconType } from '../../../components/icons/icons';
 import { Button, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
+import TaskComponent, {
+  TaskDisplayMode,
+} from '../../../components/global/TaskComponent/TaskComponent';
 
 interface TodayTaskGroupProps {
   group: TaskGroup;
@@ -76,7 +78,7 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
       </TaskGroupHeader>
       <TaskGroupContent>
         {taskInfo.tasks.map(t => (
-          <TodayTask key={t.id} task={t} />
+          <TaskComponent key={t.id} task={t} displayMode={TaskDisplayMode.BOXES} />
         ))}
       </TaskGroupContent>
     </TaskGroupWrapper>

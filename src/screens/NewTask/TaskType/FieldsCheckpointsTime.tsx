@@ -4,6 +4,7 @@ import {
   FormItem,
   FormItemInline,
   ruleRequiredNoMessage,
+  timepickerFormat,
 } from '../../../components/forms/AntdFormComponents';
 import { FormListOperation, Input, TimePicker } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
@@ -24,8 +25,6 @@ const FieldsCheckpointsTime: React.FC<FieldsCheckpointsTimeProps> = ({
   const removeHandler = useCallback(() => remove(name), [name, remove]);
   const pointCountName = useMemo(() => [name, 'pointCount'], [name]);
   const timeName = useMemo(() => [name, 'time'], [name]);
-
-  const timepickerFormat = 'HH:mm';
 
   return (
     <FormItemInline>

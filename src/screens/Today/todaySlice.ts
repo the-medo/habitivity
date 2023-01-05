@@ -1,19 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getItem, LSKey, setItem } from '../../store/localStore';
-
-export enum TodayDisplayMode {
-  BOXES,
-  ROWS,
-}
+import { TaskDisplayMode } from '../../components/global/TaskComponent/TaskComponent';
 
 export interface TodayState {
   isEditMode: boolean;
-  displayMode: TodayDisplayMode;
+  displayMode: TaskDisplayMode;
 }
 
 const initialState: TodayState = {
   isEditMode: false,
-  displayMode: getItem(LSKey.TODAY_DISPLAY_MODE) ?? TodayDisplayMode.BOXES,
+  displayMode: getItem(LSKey.TODAY_DISPLAY_MODE) ?? TaskDisplayMode.BOXES,
 };
 
 export const todaySlice = createSlice({
@@ -23,7 +19,7 @@ export const todaySlice = createSlice({
     toggleEditMode: state => {
       state.isEditMode = !state.isEditMode;
     },
-    setDisplayMode: (state, action: PayloadAction<TodayDisplayMode>) => {
+    setDisplayMode: (state, action: PayloadAction<TaskDisplayMode>) => {
       setItem(LSKey.TODAY_DISPLAY_MODE, action.payload);
       state.displayMode = action.payload;
     },

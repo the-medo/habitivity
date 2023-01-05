@@ -1,6 +1,6 @@
 import { HabitivityUser } from '../types/HabitivityUser';
 import { RightDrawerStatus } from '../components/menu/DrawerRight/RightDrawer';
-import { TodayDisplayMode } from '../screens/Today/todaySlice';
+import { TaskDisplayMode } from '../components/global/TaskComponent/TaskComponent';
 
 export enum LSKey {
   USER = '1',
@@ -15,7 +15,7 @@ export interface LSValues {
   [LSKey.MENU_COLLAPSED]?: boolean;
   [LSKey.RIGHT_DRAWER_COLLAPSED]?: RightDrawerStatus;
   [LSKey.SELECTED_TASK_LIST_ID]?: string;
-  [LSKey.TODAY_DISPLAY_MODE]?: TodayDisplayMode;
+  [LSKey.TODAY_DISPLAY_MODE]?: TaskDisplayMode;
 }
 
 export function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {
