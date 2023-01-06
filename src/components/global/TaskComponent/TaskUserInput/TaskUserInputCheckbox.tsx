@@ -1,6 +1,6 @@
 import React from 'react';
-import { UserInputWrapper } from './TaskUserInputComponents';
 import { Switch } from 'antd';
+import { UserInputWrapper } from './TaskUserInputComponents';
 
 interface TaskUserInputCheckboxProps {
   value: number;

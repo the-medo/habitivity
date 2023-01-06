@@ -3,6 +3,7 @@ import { Task } from '../../../types/Tasks';
 import styled from 'styled-components';
 import { COLORS, STYLE } from '../../../styles/CustomStyles';
 import TaskUserInput from './TaskUserInput';
+import TaskModifiers from './TaskModifiers';
 
 export enum TaskDisplayMode {
   BOXES,
@@ -22,7 +23,6 @@ const TaskHeader = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-const TaskContent = styled.div``;
 const TaskUserInputWrapper = styled.div``;
 
 const HeaderTitle = styled.h3`
@@ -50,17 +50,18 @@ const TaskWrapper = styled.div`
 const TaskWrapperBox = styled(TaskWrapper)`
   flex-direction: column;
   flex: 0 0 12rem;
+  gap: 0.5rem;
   box-shadow: ${STYLE.BASE_SHADOW};
 `;
 
 const TaskWrapperRow = styled(TaskWrapper)`
   flex-direction: row;
-  gap: 0.5rem;
+  gap: 1.5rem;
   align-items: center;
   border-bottom: 1px solid ${COLORS.GREY_LIGHT};
 
   ${HeaderTitle} {
-    flex-basis: 20%;
+    flex-basis: 15rem;
   }
 
   ${TaskUserInputWrapper} {
@@ -77,9 +78,8 @@ const TaskComponent: React.FC<TaskComponentProps> = ({ task, displayMode }) => {
             <HeaderTitle>{task.taskName}</HeaderTitle>
             <HeaderPoints>12</HeaderPoints>
           </TaskHeader>
-          <TaskContent>
-            <TaskUserInput task={task} />
-          </TaskContent>
+          <TaskUserInput task={task} />
+          <TaskModifiers value={50} taskModifiers={task.taskModifiers} />
         </TaskWrapperBox>
       );
     case TaskDisplayMode.ROWS:
@@ -90,6 +90,7 @@ const TaskComponent: React.FC<TaskComponentProps> = ({ task, displayMode }) => {
           <TaskUserInputWrapper>
             <TaskUserInput task={task} />
           </TaskUserInputWrapper>
+          <TaskModifiers value={50} taskModifiers={task.taskModifiers} />
         </TaskWrapperRow>
       );
   }
