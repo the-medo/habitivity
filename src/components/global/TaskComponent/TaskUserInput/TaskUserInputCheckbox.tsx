@@ -2,8 +2,8 @@ import React from 'react';
 import { Select, SelectProps } from 'antd';
 import { UserInputWrapper } from './TaskUserInputComponents';
 import styled from 'styled-components';
-import { icons, IconType } from '../../../icons/icons';
 import { COLORS } from '../../../../styles/CustomStyles';
+import { ImCheckmark2, ImCross } from 'react-icons/all';
 
 interface TaskUserInputCheckboxProps {
   value: number;
@@ -32,7 +32,9 @@ const checkboxSelectOptions: SelectProps['options'] = [
     value: 1,
     label: (
       <OptionWrapper $checked={true}>
-        <OptionIcon>{icons[IconType.CHECK_OUTLINED]}</OptionIcon>
+        <OptionIcon>
+          <ImCheckmark2 />
+        </OptionIcon>
         <OptionTitle>Done</OptionTitle>
       </OptionWrapper>
     ),
@@ -41,7 +43,9 @@ const checkboxSelectOptions: SelectProps['options'] = [
     value: 0,
     label: (
       <OptionWrapper $checked={false}>
-        <OptionIcon>{icons[IconType.CLOSE_OUTLINED]}</OptionIcon>
+        <OptionIcon>
+          <ImCross />
+        </OptionIcon>
         <OptionTitle>No :(</OptionTitle>
       </OptionWrapper>
     ),
