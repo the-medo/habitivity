@@ -17,7 +17,9 @@ const ModifiersWrapper = styled.div`
   align-items: center;
 `;
 
-const ModifiersTitle = styled(Text)``;
+const ModifiersTitle = styled(Text)`
+  flex-grow: 1;
+`;
 
 const ModifiersInput = styled(Input)`
   width: 4.5rem;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Task } from '../../../types/Tasks';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { COLORS, STYLE } from '../../../styles/CustomStyles';
 import TaskUserInput from './TaskUserInput';
 import TaskModifiers from './TaskModifiers';
@@ -16,11 +16,9 @@ interface TaskComponentProps {
 }
 
 const TaskHeader = styled.div`
-  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
 `;
 
 const TaskUserInputWrapper = styled.div``;
@@ -32,11 +30,11 @@ const HeaderTitle = styled.h3`
 const HeaderPoints = styled.div`
   background-color: ${COLORS.PRIMARY_LIGHT};
   padding: 0.5rem;
-  font-weight: bold;
+  //font-weight: bold;
   border-radius: 50%;
 `;
 
-const TaskWrapper = styled.div`
+const TaskWrapper = styled.div<{ displayMode: TaskDisplayMode }>`
   display: flex;
   padding: 0.5rem;
   border-radius: 0.5rem;
@@ -45,55 +43,57 @@ const TaskWrapper = styled.div`
   &:hover {
     background-color: ${COLORS.GREY_LIGHT};
   }
-`;
 
-const TaskWrapperBox = styled(TaskWrapper)`
-  flex-direction: column;
-  flex: 0 0 12rem;
-  gap: 0.5rem;
-  box-shadow: ${STYLE.BASE_SHADOW};
-`;
+  ${({ displayMode }) =>
+    displayMode === TaskDisplayMode.BOXES &&
+    css`
+      flex-direction: column;
+      flex: 0 0 12rem;
+      gap: 0.5rem;
+      box-shadow: ${STYLE.BASE_SHADOW};
 
-const TaskWrapperRow = styled(TaskWrapper)`
-  flex-direction: row;
-  gap: 1.5rem;
-  align-items: center;
-  border-bottom: 1px solid ${COLORS.GREY_LIGHT};
+      ${TaskHeader} {
+        width: 100%;
+      }
+    `}
 
-  ${HeaderTitle} {
-    flex-basis: 15rem;
-  }
+  ${({ displayMode }) =>
+    displayMode === TaskDisplayMode.ROWS &&
+    css`
+      flex-direction: row;
+      gap: 1.5rem;
+      align-items: center;
+      border-bottom: 1px solid ${COLORS.GREY_LIGHT};
 
-  ${TaskUserInputWrapper} {
-    flex-basis: 8rem;
-  }
+      ${TaskHeader} {
+        flex-basis: 15rem;
+        flex-direction: row-reverse;
+        gap: 1rem;
+
+        ${HeaderTitle} {
+          flex-grow: 1;
+        }
+      }
+
+      ${TaskUserInputWrapper} {
+        flex-basis: 8rem;
+      }
+    `}
 `;
 
 const TaskComponent: React.FC<TaskComponentProps> = ({ task, displayMode }) => {
-  switch (displayMode) {
-    case TaskDisplayMode.BOXES:
-      return (
-        <TaskWrapperBox>
-          <TaskHeader>
-            <HeaderTitle>{task.taskName}</HeaderTitle>
-            <HeaderPoints>12</HeaderPoints>
-          </TaskHeader>
-          <TaskUserInput task={task} />
-          <TaskModifiers value={50} taskModifiers={task.taskModifiers} />
-        </TaskWrapperBox>
-      );
-    case TaskDisplayMode.ROWS:
-      return (
-        <TaskWrapperRow>
-          <HeaderPoints>12</HeaderPoints>
-          <HeaderTitle>{task.taskName}</HeaderTitle>
-          <TaskUserInputWrapper>
-            <TaskUserInput task={task} />
-          </TaskUserInputWrapper>
-          <TaskModifiers value={50} taskModifiers={task.taskModifiers} />
-        </TaskWrapperRow>
-      );
-  }
+  return (
+    <TaskWrapper displayMode={displayMode}>
+      <TaskHeader>
+        <HeaderTitle>{task.taskName}</HeaderTitle>
+        <HeaderPoints>12</HeaderPoints>
+      </TaskHeader>
+      <TaskUserInputWrapper>
+        <TaskUserInput task={task} />
+      </TaskUserInputWrapper>
+      <TaskModifiers value={50} taskModifiers={task.taskModifiers} />
+    </TaskWrapper>
+  );
 };
 
 export default TaskComponent;
