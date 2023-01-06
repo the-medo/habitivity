@@ -21,6 +21,7 @@ import {
   TopMenuHeader,
   TopMenuNavLink,
 } from './MenuTopComponents';
+import { width100percent } from '../../forms/AntdFormComponents';
 
 export const menuTopItemsLeftDefault: ItemType[] = [
   {
@@ -85,8 +86,6 @@ const MenuTop: React.FC = () => {
     signOut(auth).then(() => navigate('/'));
   }, [navigate]);
 
-  const buttonWidth = useMemo(() => ({ width: '100%' }), []);
-
   const taskListDropdownItems: ItemType[] = useMemo(() => {
     return taskLists
       .filter(tl => tl.id !== selectedTaskListId)
@@ -109,7 +108,7 @@ const MenuTop: React.FC = () => {
           ? [
               {
                 label: (
-                  <Button style={buttonWidth} icon={icons[IconType.EDIT_OUTLINED]}>
+                  <Button style={width100percent} icon={icons[IconType.EDIT_OUTLINED]}>
                     Edit current task list
                   </Button>
                 ),
@@ -121,7 +120,7 @@ const MenuTop: React.FC = () => {
         [
           {
             label: (
-              <Button type="primary" style={buttonWidth} icon={icons[IconType.PLUS_OUTLINED]}>
+              <Button type="primary" style={width100percent} icon={icons[IconType.PLUS_OUTLINED]}>
                 Create new task list
               </Button>
             ),
@@ -130,7 +129,7 @@ const MenuTop: React.FC = () => {
           },
         ],
       );
-  }, [buttonWidth, navigate, selectedTaskList, selectedTaskListId, taskLists]);
+  }, [navigate, selectedTaskList, selectedTaskListId, taskLists]);
 
   const dropdownTrigger: DropdownProps['trigger'] = useMemo(() => ['click', 'hover'], []);
   const dropdownLeftMenu: DropdownProps['menu'] = useMemo(

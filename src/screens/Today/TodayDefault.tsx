@@ -67,12 +67,16 @@ const TodayDefault: React.FC = () => {
             </>
           )}
           <Radio.Group defaultValue={displayMode} buttonStyle="solid" onChange={displayModeHandler}>
-            <Radio.Button value={TaskDisplayMode.BOXES}>
-              <AppstoreOutlined />
-            </Radio.Button>
-            <Radio.Button value={TaskDisplayMode.ROWS}>
-              <BarsOutlined />
-            </Radio.Button>
+            <Tooltip title="Box mode">
+              <Radio.Button value={TaskDisplayMode.BOXES}>
+                <AppstoreOutlined />
+              </Radio.Button>
+            </Tooltip>
+            <Tooltip title="Row mode">
+              <Radio.Button value={TaskDisplayMode.ROWS}>
+                <BarsOutlined />
+              </Radio.Button>
+            </Tooltip>
           </Radio.Group>
         </RowGap>
       </TitleRow>
