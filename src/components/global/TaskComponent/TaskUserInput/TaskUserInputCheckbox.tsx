@@ -4,6 +4,7 @@ import { UserInputWrapper } from './TaskUserInputComponents';
 import styled from 'styled-components';
 import { COLORS } from '../../../../styles/CustomStyles';
 import { ImCheckmark2, ImCross } from 'react-icons/all';
+import { width100percent } from '../../../forms/AntdFormComponents';
 
 interface TaskUserInputCheckboxProps {
   value: number;
@@ -55,7 +56,7 @@ const checkboxSelectOptions: SelectProps['options'] = [
 const TaskUserInputCheckbox: React.FC<TaskUserInputCheckboxProps> = ({ value }) => {
   return (
     <UserInputWrapper>
-      <Select defaultValue={0} options={checkboxSelectOptions} style={{ width: '100%' }} />
+      <Select defaultValue={0} options={checkboxSelectOptions} style={width100percent} />
     </UserInputWrapper>
   );
 };

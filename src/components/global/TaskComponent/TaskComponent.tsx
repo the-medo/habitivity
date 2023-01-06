@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { COLORS, STYLE } from '../../../styles/CustomStyles';
 import TaskUserInput from './TaskUserInput';
 import TaskModifiers from './TaskModifiers';
+import { Header5 } from '../Headers';
 
 export enum TaskDisplayMode {
   BOXES,
@@ -23,7 +24,7 @@ const TaskHeader = styled.div`
 
 const TaskUserInputWrapper = styled.div``;
 
-const HeaderTitle = styled.h3`
+const HeaderTitle = styled(Header5)`
   margin-bottom: 0;
 `;
 
@@ -54,6 +55,12 @@ const TaskWrapper = styled.div<{ displayMode: TaskDisplayMode }>`
 
       ${TaskHeader} {
         width: 100%;
+        min-height: 3.5rem;
+        align-items: flex-start;
+
+        ${HeaderTitle} {
+          padding: 0.5rem;
+        }
       }
     `}
 

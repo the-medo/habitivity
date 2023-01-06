@@ -41,7 +41,7 @@ export const wrapperColSpanMovedButton: ColProps | undefined = {
   sm: { offset: 6 },
   xs: { offset: 0 },
 };
-
+export const width100percent = { width: '100%' };
 export const timepickerFormat = 'HH:mm';
 
 export const changeableFieldValidator = (

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Select, SelectProps } from 'antd';
 import { OptionCheckpoint } from '../../../../types/Tasks';
+import { width100percent } from '../../../forms/AntdFormComponents';
 
 interface TaskUserInputOptionsProps {
   value: number;
@@ -17,7 +18,7 @@ const TaskUserInputOptions: React.FC<TaskUserInputOptionsProps> = ({ value, opti
     <Select
       defaultValue={value}
       options={selectOptions}
-      style={{ width: '100%' }}
+      style={width100percent}
       placeholder="Select your option"
     />
   );
