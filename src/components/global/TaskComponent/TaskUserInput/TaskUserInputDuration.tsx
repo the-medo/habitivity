@@ -1,6 +1,5 @@
 import React from 'react';
 import { UnitSyntax } from '../../../../helpers/unitSyntaxHelpers';
-import { UserInputWrapper } from './TaskUserInputComponents';
 import { Input } from 'antd';
 
 interface TaskUserInputDurationProps {
@@ -9,11 +8,7 @@ interface TaskUserInputDurationProps {
 }
 
 const TaskUserInputDuration: React.FC<TaskUserInputDurationProps> = ({ value, units }) => {
-  return (
-    <UserInputWrapper>
-      <Input type="number" defaultValue={value} suffix={units.zero} />
-    </UserInputWrapper>
-  );
+  return <Input type="number" defaultValue={value} suffix={units.zero} />;
 };
 
 export default TaskUserInputDuration;

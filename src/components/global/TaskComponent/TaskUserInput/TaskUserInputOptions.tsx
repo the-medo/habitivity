@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { UserInputWrapper } from './TaskUserInputComponents';
 import { Select, SelectProps } from 'antd';
 import { OptionCheckpoint } from '../../../../types/Tasks';
 
@@ -15,14 +14,12 @@ const TaskUserInputOptions: React.FC<TaskUserInputOptionsProps> = ({ value, opti
   );
 
   return (
-    <UserInputWrapper>
-      <Select
-        defaultValue={value}
-        options={selectOptions}
-        style={{ width: '100%' }}
-        placeholder="Select your option"
-      />
-    </UserInputWrapper>
+    <Select
+      defaultValue={value}
+      options={selectOptions}
+      style={{ width: '100%' }}
+      placeholder="Select your option"
+    />
   );
 };
 
