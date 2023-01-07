@@ -3,7 +3,7 @@ import { Select, SelectProps } from 'antd';
 import { UserInputWrapper } from './TaskUserInputComponents';
 import styled from 'styled-components';
 import { COLORS } from '../../../../styles/CustomStyles';
-import { ImCheckmark2, ImCross } from 'react-icons/all';
+import { ImCheckmark2, ImCross } from 'react-icons/im';
 import { width100percent } from '../../../forms/AntdFormComponents';
 
 interface TaskUserInputCheckboxProps {
