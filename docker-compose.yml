@@ -1,7 +1,6 @@
 version: '3.7'
 
 services:
-
   frontend-dev:
     container_name: frontend-dev
     image: europe-west3-docker.pkg.dev/habitivity-363118/hbt-docker/frontend:develop
@@ -12,6 +11,6 @@ services:
       - '.:/frontend'
       - '/frontend/node_modules'
     ports:
-      - "3001:5173"
+      - '3001:5173'
     environment:
       - CHOKIDAR_USEPOLLING=true

@@ -1,7 +1,7 @@
 export interface HabitivityUser {
-    id: string;
-    email: string;
-    name: string;
-    token: string;
-    photoUrl: string | null;
+  id: string;
+  email: string;
+  name: string;
+  token: string;
+  photoUrl: string | null;
 }
