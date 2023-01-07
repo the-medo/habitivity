@@ -1,7 +1,7 @@
 import { ReduxState } from '../store';
 import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { db } from '../firebase';
-import { apiSlice } from './api';
+import { apiSlice, providesList } from './api';
 import { Task, taskConverter } from '../types/Tasks';
 
 export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).injectEndpoints({
@@ -26,13 +26,7 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
           return { error: e };
         }
       },
-      providesTags: result =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Task', id } as const)),
-              { type: 'Task', id: 'LIST' },
-            ]
-          : [{ type: 'Task', id: 'LIST' }],
+      providesTags: result => providesList(result, 'Task'),
     }),
 
     createTask: builder.mutation<Task, Task>({
