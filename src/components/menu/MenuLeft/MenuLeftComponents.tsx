@@ -8,6 +8,7 @@ import {
   TOP_MENU_BIG,
   TOP_MENU_SMALL,
 } from '../../../styles/CustomStyles';
+import { DynamicIconWrapper } from '../../global/DynamicIcon';
 
 const { Sider } = Layout;
 
@@ -15,6 +16,7 @@ export const LeftMenu = styled(Menu)`
   padding-top: 0.25rem;
   background-color: transparent;
   height: 100%;
+  transition: 0.3s all;
 
   & > li.ant-menu-item[role='menuitem'] {
     /* left menu, otherwise could be:  "aside ul.ant-menu" */
@@ -34,9 +36,7 @@ export interface MenuLeftProps {
   isManuallyCollapsed: boolean;
 }
 
-export const LeftSider = styled(Sider)<
-  Pick<MenuLeftProps, '$isAutomaticallyCollapsed' | '$isCollapsed'>
->`
+export const LeftSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyCollapsed' | '$isCollapsed'>>`
   overflow-y: auto;
   height: calc(
     100vh - ${({ $isCollapsed }) => ($isCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG)}rem${({ $isAutomaticallyCollapsed }) => !$isAutomaticallyCollapsed && ` - ${SIDER_COLLAPSED_SIZE}rem`}
@@ -46,6 +46,7 @@ export const LeftSider = styled(Sider)<
   top: ${({ $isCollapsed }) => ($isCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG)}rem;
   bottom: ${SIDER_COLLAPSED_SIZE}rem;
   background-color: ${COLORS.GREY_LIGHT} !important;
+  transition: 0.3s all !important;
 
   ${withScrollbar}
 `;
@@ -64,9 +65,13 @@ export const MenuCollapsor = styled.div<Pick<MenuLeftProps, '$isCollapsed'>>`
   justify-content: flex-end;
   align-items: center;
   background-color: ${COLORS.GREY_LIGHT};
-  border-right: 1px solid ${COLORS.GREY_BORDER};
+  border-inline-end: 1px solid ${COLORS.GREY_MENU_BORDER};
+  overflow: hidden;
+`;
 
-  & > span > svg {
-    transition: 0.3s all;
+export const MenuCollapsorIcon = styled(DynamicIconWrapper)<Pick<MenuLeftProps, '$isCollapsed'>>`
+  svg {
+    transition: 0.8s all;
+    transform: rotate(${({ $isCollapsed }) => ($isCollapsed ? 180 : 0)}deg);
   }
 `;

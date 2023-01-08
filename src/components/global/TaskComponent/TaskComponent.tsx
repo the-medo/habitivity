@@ -35,7 +35,7 @@ const HeaderPoints = styled.div`
   border-radius: 50%;
 `;
 
-const TaskWrapper = styled.div<{ displayMode: TaskDisplayMode }>`
+const TaskWrapper = styled.div<{ $displayMode: TaskDisplayMode }>`
   display: flex;
   padding: 0.5rem;
   border-radius: 0.5rem;
@@ -45,8 +45,8 @@ const TaskWrapper = styled.div<{ displayMode: TaskDisplayMode }>`
     background-color: ${COLORS.GREY_LIGHT};
   }
 
-  ${({ displayMode }) =>
-    displayMode === TaskDisplayMode.BOXES &&
+  ${({ $displayMode }) =>
+    $displayMode === TaskDisplayMode.BOXES &&
     css`
       flex-direction: column;
       flex: 0 0 12rem;
@@ -64,8 +64,8 @@ const TaskWrapper = styled.div<{ displayMode: TaskDisplayMode }>`
       }
     `}
 
-  ${({ displayMode }) =>
-    displayMode === TaskDisplayMode.ROWS &&
+  ${({ $displayMode }) =>
+    $displayMode === TaskDisplayMode.ROWS &&
     css`
       flex-direction: row;
       gap: 1.5rem;
@@ -90,7 +90,7 @@ const TaskWrapper = styled.div<{ displayMode: TaskDisplayMode }>`
 
 const TaskComponent: React.FC<TaskComponentProps> = ({ task, displayMode }) => {
   return (
-    <TaskWrapper displayMode={displayMode}>
+    <TaskWrapper $displayMode={displayMode}>
       <TaskHeader>
         <HeaderTitle>{task.taskName}</HeaderTitle>
         <HeaderPoints>12</HeaderPoints>

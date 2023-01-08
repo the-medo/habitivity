@@ -1,23 +1,22 @@
 import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
-import { IconType } from '../../icons/icons';
 import {
   setLeftMenuAutomaticallyCollapsed,
   toggleLeftMenuManuallyCollapsed,
 } from '../../../store/menuSlice';
-import { DoubleLeftOutlined } from '@ant-design/icons';
 import { useSlider } from '../../../hooks/useSlider';
-import { LeftMenu, LeftSider, MenuCollapsor } from './MenuLeftComponents';
+import { LeftMenu, LeftSider, MenuCollapsor, MenuCollapsorIcon } from './MenuLeftComponents';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import LeftMenuItem from './LeftMenuItem';
 import { LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE } from '../../../styles/CustomStyles';
+import DynamicIcon from '../../global/DynamicIcon';
 
 export interface MenuLeftItem {
   key: string;
   to: string;
   label: string;
-  icon?: IconType;
+  icon?: string;
   isDefault?: boolean;
   childItems: MenuLeftSubItem[];
 }
@@ -35,12 +34,8 @@ export type MenuLeftSubItem = Omit<MenuLeftItem, 'childItems'>;
 const MenuLeft: React.FC = () => {
   const dispatch = useDispatch();
   const { items } = useSelector((state: ReduxState) => state.menuReducer);
-  const {
-    isLeftMenuCollapsed,
-    isLeftMenuWithContent,
-    leftMenuAutomaticallyCollapsed,
-    leftMenuManuallyCollapsed,
-  } = useSlider();
+  const { isLeftMenuCollapsed, isLeftMenuWithContent, leftMenuAutomaticallyCollapsed } =
+    useSlider();
 
   const leftMenuItems = useMemo(() => items.map(i => parseMenuLeftItem(i)), [items]);
 
@@ -53,6 +48,8 @@ const MenuLeft: React.FC = () => {
     () => dispatch(toggleLeftMenuManuallyCollapsed()),
     [dispatch],
   );
+
+  console.log('MenuLeft render - isLeftMenuCollapsed', isLeftMenuCollapsed);
 
   if (!isLeftMenuWithContent) {
     return null;
@@ -70,8 +67,10 @@ const MenuLeft: React.FC = () => {
     >
       {leftMenuItems.length > 0 && <LeftMenu mode="inline" items={leftMenuItems} />}
       {!leftMenuAutomaticallyCollapsed && (
-        <MenuCollapsor $isCollapsed={leftMenuManuallyCollapsed} onClick={onCollapseHandler}>
-          <DoubleLeftOutlined rotate={leftMenuManuallyCollapsed ? 180 : 0} />
+        <MenuCollapsor $isCollapsed={isLeftMenuCollapsed} onClick={onCollapseHandler}>
+          <MenuCollapsorIcon $isCollapsed={isLeftMenuCollapsed}>
+            <DynamicIcon icon="AiOutlineDoubleLeft" showWrapper={false} />
+          </MenuCollapsorIcon>
         </MenuCollapsor>
       )}
     </LeftSider>

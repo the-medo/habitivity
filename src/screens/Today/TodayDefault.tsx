@@ -7,11 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../store';
 import Title from 'antd/es/typography/Title';
 import { Button, Radio, RadioChangeEvent, Tooltip } from 'antd';
-import { icons, IconType } from '../../components/icons/icons';
 import { setDisplayMode, toggleEditMode } from './todaySlice';
-import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
 import { RowGap } from '../../components/global/RowGap';
 import { TaskDisplayMode } from '../../components/global/TaskComponent/TaskComponent';
+import DynamicIcon from '../../components/global/DynamicIcon';
 
 const TodayTaskGroupWrapper = styled.div`
   display: flex;
@@ -43,7 +42,11 @@ const TodayDefault: React.FC = () => {
         <Title level={2}>Your day</Title>
         <RowGap>
           {!isEditMode && (
-            <Button onClick={editModeHandler} type="default" icon={icons[IconType.EDIT_OUTLINED]}>
+            <Button
+              onClick={editModeHandler}
+              type="default"
+              icon={<DynamicIcon icon="AiOutlineEdit" />}
+            >
               Edit mode
             </Button>
           )}
@@ -52,7 +55,7 @@ const TodayDefault: React.FC = () => {
               <Button
                 onClick={editModeHandler}
                 type="primary"
-                icon={icons[IconType.CHECK_OUTLINED]}
+                icon={<DynamicIcon icon="AiOutlineCheck" />}
               >
                 Save and continue
               </Button>
@@ -61,7 +64,7 @@ const TodayDefault: React.FC = () => {
                   onClick={editModeHandler}
                   type="default"
                   danger
-                  icon={icons[IconType.CLOSE_OUTLINED]}
+                  icon={<DynamicIcon icon="AiOutlineClose" />}
                 />
               </Tooltip>
             </>
@@ -69,18 +72,17 @@ const TodayDefault: React.FC = () => {
           <Radio.Group defaultValue={displayMode} buttonStyle="solid" onChange={displayModeHandler}>
             <Tooltip title="Box mode">
               <Radio.Button value={TaskDisplayMode.BOXES}>
-                <AppstoreOutlined />
+                <DynamicIcon icon="AiOutlineAppstore" />
               </Radio.Button>
             </Tooltip>
             <Tooltip title="Row mode">
               <Radio.Button value={TaskDisplayMode.ROWS}>
-                <BarsOutlined />
+                <DynamicIcon icon="AiOutlineBars" />
               </Radio.Button>
             </Tooltip>
           </Radio.Group>
         </RowGap>
       </TitleRow>
-
       {existingGroups.map(g => (
         <TodayTaskGroup key={g.id} group={g} />
       ))}

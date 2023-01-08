@@ -1,5 +1,4 @@
 import { MenuLeftItem } from '../components/menu/MenuLeft/MenuLeft';
-import { IconType } from '../components/icons/icons';
 
 export const exampleMenuLeftItems: MenuLeftItem[] = [
   {
@@ -7,7 +6,7 @@ export const exampleMenuLeftItems: MenuLeftItem[] = [
     to: '/home/page-1',
     label: 'Home menu item1',
     isDefault: true,
-    icon: IconType.HOME_OUTLINED,
+    icon: 'AiOutlineHome',
     childItems: [
       {
         key: 'home1-1',
@@ -25,7 +24,7 @@ export const exampleMenuLeftItems: MenuLeftItem[] = [
     key: 'home2',
     to: '/home/page-2',
     label: 'Home menu item2',
-    icon: IconType.HOME_FILLED,
+    icon: 'AiFillHome',
     childItems: [
       {
         key: 'home2-1',

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import { setSelectedTaskType } from '../taskCreationSlice';
 import { Button } from 'antd';
-import { icons, IconType } from '../../../components/icons/icons';
+import DynamicIcon from '../../../components/global/DynamicIcon';
 
 export interface TaskTypeForTTSelector {
   id: TaskType;
@@ -93,7 +93,7 @@ const TaskTypeItem: React.FC<TaskTypeItemProps> = ({ taskType }) => {
         </ul>
       </TaskTypeItemExamples>
       {isCurrentSelected && (
-        <Button onClick={setSelectedTaskTypeHandler} icon={icons[IconType.EDIT_OUTLINED]}>
+        <Button onClick={setSelectedTaskTypeHandler} icon={<DynamicIcon icon="AiOutlineEdit" />}>
           Change type
         </Button>
       )}

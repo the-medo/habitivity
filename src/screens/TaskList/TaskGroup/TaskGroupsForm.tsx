@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Form, Spin } from 'antd';
 import { TaskGroup } from '../../../types/TaskGroup';
-import { PlusOutlined } from '@ant-design/icons';
 import TaskGroupInput from './TaskGroupInput';
 import {
   useCreateTaskGroupsMutation,
@@ -20,6 +19,7 @@ import {
   colSpan6,
   wrapperColSpanMovedButton,
 } from '../../../components/forms/AntdFormComponents';
+import DynamicIcon from '../../../components/global/DynamicIcon';
 
 type TaskGroupFormValues = Record<string, string>;
 
@@ -51,7 +51,7 @@ const TaskGroupsForm: React.FC = () => {
   const [items, setItems] = useState<ReorderTaskGroupType[]>([]);
   const [deletedItems, setDeletedItems] = useState<ReorderTaskGroupType[]>([]);
 
-  const plusIcon = useMemo(() => <PlusOutlined />, []);
+  const plusIcon = useMemo(() => <DynamicIcon icon="AiOutlinePlus" />, []);
   const onReorder = useCallback(
     (x: ReorderTaskGroupType[]) => setItems(x.map((g, i) => ({ ...g, position: i }))),
     [],

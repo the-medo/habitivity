@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from 'antd';
-import { icons, IconType } from '../../../components/icons/icons';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import DynamicIcon from '../../../components/global/DynamicIcon';
 
 interface EmptyGroupMessageProps {
   taskGroupId: string;
@@ -19,7 +19,7 @@ const EmptyGroupMessage: React.FC<EmptyGroupMessageProps> = ({ taskGroupId }) =>
     <EmptyGroupMessageWrapper>
       <span>Oops, this group looks empty! </span>
       <Link to={`/new-task/${taskGroupId}`}>
-        <Button icon={icons[IconType.PLUS_OUTLINED]}>Create task</Button>
+        <Button icon={<DynamicIcon icon="AiOutlinePlus" />}>Create task</Button>
       </Link>
     </EmptyGroupMessageWrapper>
   );

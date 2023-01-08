@@ -3,7 +3,6 @@ import { useSlider } from '../../../hooks/useSlider';
 import { withScrollbar } from '../../../styles/GlobalStyleAndTheme';
 import { setRightDrawerStatus } from '../../../store/menuSlice';
 import { Button, Layout } from 'antd';
-import { DoubleLeftOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import {
@@ -14,6 +13,7 @@ import {
   TOP_MENU_BIG,
   TOP_MENU_SMALL,
 } from '../../../styles/CustomStyles';
+import DynamicIcon from '../../global/DynamicIcon';
 
 const { Sider } = Layout;
 
@@ -104,7 +104,7 @@ const RightDrawer: React.FC = () => {
         $isRightDrawerCollapsed={isRightDrawerCollapsed}
         onClick={collapseRightDrawer}
       >
-        <DoubleLeftOutlined rotate={isRightDrawerCollapsed ? 0 : 180} />
+        <DynamicIcon icon={isRightDrawerCollapsed ? 'AiOutlineRight' : 'AiOutlineLeft'} />
       </RightDrawerCollapsor>
     </StyledSider>
   );

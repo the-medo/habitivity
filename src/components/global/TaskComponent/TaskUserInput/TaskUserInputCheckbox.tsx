@@ -3,8 +3,8 @@ import { Select, SelectProps } from 'antd';
 import { UserInputWrapper } from './TaskUserInputComponents';
 import styled from 'styled-components';
 import { COLORS } from '../../../../styles/CustomStyles';
-import { ImCheckmark2, ImCross } from 'react-icons/im';
 import { width100percent } from '../../../forms/AntdFormComponents';
+import DynamicIcon from '../../DynamicIcon';
 
 interface TaskUserInputCheckboxProps {
   value: number;
@@ -34,7 +34,7 @@ const checkboxSelectOptions: SelectProps['options'] = [
     label: (
       <OptionWrapper $checked={true}>
         <OptionIcon>
-          <ImCheckmark2 />
+          <DynamicIcon icon="ImCheckmark2" />
         </OptionIcon>
         <OptionTitle>Done</OptionTitle>
       </OptionWrapper>
@@ -45,7 +45,7 @@ const checkboxSelectOptions: SelectProps['options'] = [
     label: (
       <OptionWrapper $checked={false}>
         <OptionIcon>
-          <ImCross />
+          <DynamicIcon icon="ImCross" />
         </OptionIcon>
         <OptionTitle>No :(</OptionTitle>
       </OptionWrapper>
