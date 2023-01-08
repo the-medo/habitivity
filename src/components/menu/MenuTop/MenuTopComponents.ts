@@ -23,7 +23,7 @@ export const TopMenuNavLink = styled(NavLink)`
 
   transition: 0.3s all;
 
-  span svg {
+  svg {
     margin-right: 0.5rem;
     font-size: 1.25rem;
     color: ${COLORS.BLUE_LIGHT};

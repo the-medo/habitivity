@@ -6,7 +6,7 @@ import {
   ruleRequiredNoMessage,
 } from '../../../components/forms/AntdFormComponents';
 import { FormListOperation, Input } from 'antd';
-import { MinusCircleOutlined } from '@ant-design/icons';
+import DynamicIcon from '../../../components/global/DynamicIcon';
 
 interface FieldsCheckpointsUnitAndPointsProps {
   name: number;
@@ -51,7 +51,7 @@ const FieldsCheckpointsUnitAndPoints: React.FC<FieldsCheckpointsUnitAndPointsPro
         {' '}
         <b>{labelPoints}</b>{' '}
       </FormInlineText>
-      <MinusCircleOutlined onClick={removeHandler} />
+      <DynamicIcon icon="AiOutlineMinusCircle" onClick={removeHandler} />
     </FormItemInline>
   );
 };

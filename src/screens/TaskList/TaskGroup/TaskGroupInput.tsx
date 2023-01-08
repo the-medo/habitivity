@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 import { Button, Form, Input, Tooltip } from 'antd';
-import { DeleteOutlined, DragOutlined, MinusCircleOutlined, RestOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { getLabelColWidth, getLabelOffsetSM, getLabelOffsetXS } from '../../../helpers/formHelpers';
 import { COLORS } from '../../../styles/CustomStyles';
 import { ReorderTaskGroupType } from './TaskGroupsForm';
 import { validateTriggerDefault } from '../../../components/forms/AntdFormComponents';
+import DynamicIcon from '../../../components/global/DynamicIcon';
 
 interface TaskGroupInputProps {
   item: ReorderTaskGroupType;
@@ -17,7 +17,7 @@ interface TaskGroupInputProps {
 
 const StyledInput = styled(Input)``;
 const StyledInputGroup = styled(Input.Group)``;
-const HandleIcon = styled(DragOutlined)``;
+const HandleIcon = styled(DynamicIcon).attrs({ icon: 'AiOutlineDrag', small: true })``;
 
 const StyledRow = styled.div`
   display: flex;
@@ -33,10 +33,6 @@ const StyledRow = styled.div`
 
   &:hover ${HandleIcon} {
     opacity: 1;
-  }
-
-  svg {
-    margin: 0.25rem;
   }
 
   ${StyledInputGroup} {
@@ -95,9 +91,11 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
     [item, removeFromItems],
   );
 
-  const deleteOutlinedIcon = useMemo(() => <DeleteOutlined />, []);
-  const restOutlinedIcon = useMemo(() => <RestOutlined />, []);
-  const minusCircleOutlinedIcon = useMemo(() => <MinusCircleOutlined />, []);
+  const deleteOutlinedIcon = useMemo(() => <DynamicIcon icon="AiOutlineDelete" />, []);
+  const deleteSmallOutlinedIcon = useMemo(() => <DynamicIcon icon="AiOutlineDelete" small />, []);
+  // const deleteOutlinedIcon = useMemo(() => <DeleteOutlined />, []);
+  const restOutlinedIcon = useMemo(() => <DynamicIcon icon="AiOutlineRest" />, []);
+  const minusCircleOutlinedIcon = useMemo(() => <DynamicIcon icon="AiOutlineMinusCircle" />, []);
   const handleIcon = useMemo(() => <HandleIcon />, []);
 
   return (
@@ -116,28 +114,24 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
       <StyledRow>
         <StyledInputGroup compact>
           <StyledInput
-            prefix={isDeleted ? deleteOutlinedIcon : handleIcon}
+            prefix={isDeleted ? deleteSmallOutlinedIcon : handleIcon}
             placeholder="Task group name"
             defaultValue={initialValue}
             disabled={isDeleted}
           />
           {isDeleted && (
             <Tooltip placement="left" title="Restore">
-              <Button onClick={returnToItemsHandler} icon={restOutlinedIcon}></Button>
+              <Button onClick={returnToItemsHandler} icon={restOutlinedIcon} />
             </Tooltip>
           )}
           {!isDeleted && isNew && (
             <Tooltip placement="left" title="Remove">
-              <Button
-                danger
-                onClick={removeFromItemsHandler}
-                icon={minusCircleOutlinedIcon}
-              ></Button>
+              <Button danger onClick={removeFromItemsHandler} icon={minusCircleOutlinedIcon} />
             </Tooltip>
           )}
           {!isDeleted && !isNew && (
             <Tooltip placement="left" title="Delete">
-              <Button danger onClick={removeFromItemsHandler} icon={deleteOutlinedIcon}></Button>
+              <Button danger onClick={removeFromItemsHandler} icon={deleteOutlinedIcon} />
             </Tooltip>
           )}
         </StyledInputGroup>

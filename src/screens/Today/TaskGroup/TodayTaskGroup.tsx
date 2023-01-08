@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import { useTasksByGroup } from '../../../hooks/useTasksByGroup';
 import { COLORS } from '../../../styles/CustomStyles';
 import EmptyGroupMessage from './EmptyGroupMessage';
-import { icons, IconType } from '../../../components/icons/icons';
 import { Button, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import TaskComponent from '../../../components/global/TaskComponent/TaskComponent';
 import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import TaskComponentWrapper from '../../../components/global/TaskComponent/TaskComponentWrapper';
+import DynamicIcon from '../../../components/global/DynamicIcon';
 
 interface TodayTaskGroupProps {
   group: TaskGroup;
@@ -65,7 +65,7 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
           {taskInfo.tasks.length > 0 && (
             <Tooltip title="New task">
               <Link to={`/new-task/${group.id}`}>
-                <Button icon={icons[IconType.PLUS_OUTLINED]} />
+                <Button icon={<DynamicIcon icon="AiOutlinePlus" />} />
               </Link>
             </Tooltip>
           )}

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { Button, FormListOperation } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import DynamicIcon from '../global/DynamicIcon';
 
 interface NewCheckpointButtonProps<T> {
   add: FormListOperation['add'];
@@ -13,7 +13,7 @@ const NewCheckpointButton = <T,>({
   text,
   defaultValues,
 }: NewCheckpointButtonProps<T>): JSX.Element => {
-  const plusIcon = useMemo(() => <PlusOutlined />, []);
+  const plusIcon = useMemo(() => <DynamicIcon icon="AiOutlinePlus" />, []);
   const addCallback = useCallback(() => add(defaultValues), [add, defaultValues]);
 
   return (

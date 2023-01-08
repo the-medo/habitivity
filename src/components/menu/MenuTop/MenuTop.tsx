@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Dropdown, DropdownProps } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { icons, IconType } from '../../icons/icons';
 import { useSlider } from '../../../hooks/useSlider';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebase';
@@ -22,24 +21,34 @@ import {
   TopMenuNavLink,
 } from './MenuTopComponents';
 import { width100percent } from '../../forms/AntdFormComponents';
+import DynamicIcon from '../../global/DynamicIcon';
 
 export const menuTopItemsLeftDefault: ItemType[] = [
   {
     key: 'today',
-    label: <TopMenuNavLink to="/today">{icons[IconType.CARRY_OUT_OUTLINED]}Today</TopMenuNavLink>,
+    label: (
+      <TopMenuNavLink to="/today">
+        <DynamicIcon icon="AiOutlineCarryOut" />
+        Today
+      </TopMenuNavLink>
+    ),
   },
   {
     key: 'dashboard',
     label: (
       <TopMenuNavLink to="/dashboard">
-        {icons[IconType.LINE_CHART_OUTLINED]}Dashboard
+        <DynamicIcon icon="AiOutlineLineChart" />
+        Dashboard
       </TopMenuNavLink>
     ),
   },
   {
     key: 'calendar',
     label: (
-      <TopMenuNavLink to="/calendar">{icons[IconType.CALENDAR_OUTLINED]}Calendar</TopMenuNavLink>
+      <TopMenuNavLink to="/calendar">
+        <DynamicIcon icon="AiOutlineCalendar" />
+        Calendar
+      </TopMenuNavLink>
     ),
   },
 ];
@@ -49,7 +58,8 @@ export const menuTopItemsLeftWhenNoTaskList: ItemType[] = [
     key: 'create-task-list',
     label: (
       <TopMenuNavLink to="/task-list/create">
-        {icons[IconType.PLUS_OUTLINED]}Create new task list
+        <DynamicIcon icon="AiOutlinePlus" />
+        Create new task list
       </TopMenuNavLink>
     ),
   },
@@ -94,7 +104,7 @@ const MenuTop: React.FC = () => {
           label: tl.name,
           key: `tl-${tl.id}`,
           onClick: () => navigate(`/task-list/${tl.id}`),
-          icon: icons[IconType.RIGHT_OUTLINED],
+          icon: <DynamicIcon icon="AiOutlineRight" />,
           style: { marginLeft: '.5rem' },
         }),
       )
@@ -108,7 +118,7 @@ const MenuTop: React.FC = () => {
           ? [
               {
                 label: (
-                  <Button style={width100percent} icon={icons[IconType.EDIT_OUTLINED]}>
+                  <Button style={width100percent} icon={<DynamicIcon icon="AiOutlineEdit" />}>
                     Edit current task list
                   </Button>
                 ),
@@ -120,7 +130,11 @@ const MenuTop: React.FC = () => {
         [
           {
             label: (
-              <Button type="primary" style={width100percent} icon={icons[IconType.PLUS_OUTLINED]}>
+              <Button
+                type="primary"
+                style={width100percent}
+                icon={<DynamicIcon icon="AiOutlinePlus" />}
+              >
                 Create new task list
               </Button>
             ),
@@ -147,7 +161,7 @@ const MenuTop: React.FC = () => {
         {
           label: 'Settings',
           key: '1',
-          icon: icons[IconType.SETTING_OUTLINED],
+          icon: <DynamicIcon icon="AiOutlineSetting" />,
           onClick: () => navigate('/settings'),
         },
         {
@@ -156,7 +170,7 @@ const MenuTop: React.FC = () => {
         {
           label: 'Logout',
           key: '3',
-          icon: icons[IconType.LOGOUT_OUTLINED],
+          icon: <DynamicIcon icon="AiOutlineLogout" />,
           onClick: logoutHandler,
         },
       ],
