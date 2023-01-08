@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { MenuLeftItem } from './MenuLeft';
 import React from 'react';
 import { useSlider } from '../../../hooks/useSlider';
-import { icons, IconType } from '../../icons/icons';
 import { COLORS } from '../../../styles/CustomStyles';
+import DynamicIcon from '../../global/DynamicIcon';
 
 export interface LeftMenuNavLinkStyledProps {
   $isCollapsed: boolean;
@@ -63,8 +63,8 @@ const LeftMenuItem: React.FC<LeftMenuNavLinkProps> = ({ item }) => {
   return (
     <LeftMenuNavLinkStyled to={item.to} $isCollapsed={isLeftMenuCollapsed}>
       <LeftLinkIcon>
-        {item.icon && icons[item.icon]}
-        {!item.icon && isLeftMenuCollapsed && icons[IconType.RIGHT_CIRCLE_OUTLINED]}
+        {item.icon && <DynamicIcon icon={item.icon} />}
+        {!item.icon && isLeftMenuCollapsed && <DynamicIcon icon="AiOutlineRightCircle" />}
       </LeftLinkIcon>
       <LeftLinkLabel>{item.label}</LeftLinkLabel>
     </LeftMenuNavLinkStyled>

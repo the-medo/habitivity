@@ -15,6 +15,7 @@ export const COLORS = {
   GREY_LIGHT: '#fafafa',
   GREY_MEDIUM: '#d9d9d9',
   GREY_DARK: 'darkgrey',
+  GREY_MENU_BORDER: 'rgba(5, 5, 5, 0.06)',
   BACKGROUND: '#fff',
   BLUE_LIGHT: '#cdd9ee',
   BLUE_GREY_DARK: 'rgb(77 92 106)',

@@ -7,7 +7,7 @@ import {
   timepickerFormat,
 } from '../../../components/forms/AntdFormComponents';
 import { FormListOperation, Input, TimePicker } from 'antd';
-import { MinusCircleOutlined } from '@ant-design/icons';
+import DynamicIcon from '../../../components/global/DynamicIcon';
 
 interface FieldsCheckpointsTimeProps {
   name: number;
@@ -40,7 +40,7 @@ const FieldsCheckpointsTime: React.FC<FieldsCheckpointsTimeProps> = ({
       <FormItem {...restField} $width="6rem" name={timeName} rules={ruleRequiredNoMessage}>
         <TimePicker format={timepickerFormat} minuteStep={5} placeholder="06:00" />
       </FormItem>
-      <MinusCircleOutlined onClick={removeHandler} />
+      <DynamicIcon icon="AiOutlineMinusCircle" onClick={removeHandler} />
     </FormItemInline>
   );
 };

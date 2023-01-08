@@ -6,7 +6,7 @@ import {
   ruleRequiredNoMessage,
 } from '../../../components/forms/AntdFormComponents';
 import { FormListOperation, Input } from 'antd';
-import { MinusCircleOutlined } from '@ant-design/icons';
+import DynamicIcon from '../../../components/global/DynamicIcon';
 
 interface FieldsOptionsProps {
   name: number;
@@ -35,7 +35,7 @@ const FieldsOptions: React.FC<FieldsOptionsProps> = ({ name, restField, remove, 
       <FormInlineText $isItalic $minWidth="1rem">
         <b>{labelPoints}</b>
       </FormInlineText>
-      <MinusCircleOutlined onClick={removeHandler} />
+      <DynamicIcon icon="AiOutlineMinusCircle" onClick={removeHandler} />
     </FormItemInline>
   );
 };
