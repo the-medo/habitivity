@@ -3,6 +3,7 @@ import { ColorResult, TwitterPicker } from 'react-color';
 import styled from 'styled-components';
 import { STYLE } from '../../styles/CustomStyles';
 import { Position } from '../../helpers/types/Position';
+import { computeOffsetsAfterClick } from '../../helpers/computeOffsetsAfterClick';
 
 const ColorPickerWrapper = styled.div`
   height: 100%;
@@ -56,16 +57,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, setColor }) => {
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
 
   const toggleDisplayColorPicker: MouseEventHandler<HTMLDivElement> = useCallback(e => {
-    setPosition({
-      x:
-        e.clientX + STYLE.COLORPICKER_WIDTH > window.innerWidth
-          ? e.clientX - STYLE.COLORPICKER_WIDTH
-          : e.clientX,
-      y:
-        e.clientY + STYLE.COLORPICKER_HEIGHT > window.innerHeight
-          ? e.clientY - STYLE.COLORPICKER_HEIGHT
-          : e.clientY,
-    });
+    setPosition(computeOffsetsAfterClick(e, STYLE.COLORPICKER_WIDTH, STYLE.COLORPICKER_HEIGHT));
     setDisplayColorPicker(p => !p);
   }, []);
 
