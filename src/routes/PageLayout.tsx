@@ -17,6 +17,7 @@ import {
   TOP_MENU_SMALL,
 } from '../styles/CustomStyles';
 import Notifications from './Notifications';
+import Backdrop from '../components/global/Backdrop';
 
 const StyledContent = styled(Layout.Content)<{
   $isLeftMenuCollapsed: boolean;
@@ -64,6 +65,7 @@ const PageLayout: React.FC = () => {
         </StyledContent>
         <RightDrawer />
       </Layout>
+      <Backdrop />
     </Layout>
   );
 };

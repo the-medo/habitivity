@@ -8,9 +8,11 @@ import { apiSlice } from '../apis/api';
 import { taskCreationReducer } from '../screens/NewTask/taskCreationSlice';
 import { notificationReducer } from './notificationSlice';
 import { todayReducer } from '../screens/Today/todaySlice';
+import { appReducer } from './appSlice';
 
 export const store = configureStore({
   reducer: {
+    appReducer,
     userReducer,
     menuReducer,
     taskReducer,

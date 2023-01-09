@@ -108,6 +108,7 @@ const TaskGroupsForm: React.FC = () => {
       taskListId: selectedTaskListId,
       position: rtg.position,
       color: values[`${rtg.inputName}-color`],
+      icon: values[`${rtg.inputName}-icon`],
     }),
     [selectedTaskListId],
   );

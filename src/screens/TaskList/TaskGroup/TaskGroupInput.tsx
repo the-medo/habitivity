@@ -6,7 +6,8 @@ import { COLORS } from '../../../styles/CustomStyles';
 import { ReorderTaskGroupType } from './TaskGroupsForm';
 import { validateTriggerDefault } from '../../../components/forms/AntdFormComponents';
 import DynamicIcon from '../../../components/global/DynamicIcon';
-import ColorPicker from '../../../components/global/ColorPicker';
+import ColorPickerCircle from '../../../components/global/ColorPickerCircle';
+import IconPickerCircle from '../../../components/global/IconPickerCircle';
 
 interface TaskGroupInputProps {
   item: ReorderTaskGroupType;
@@ -68,6 +69,7 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
 }) => {
   const name = item.inputName;
   const colorFieldName = `${item.inputName}-color`;
+  const iconFieldName = `${item.inputName}-icon`;
   const taskGroup = item.taskGroup;
   const isNew = taskGroup === undefined;
   const initialValue = !isNew ? taskGroup.name : undefined;
@@ -75,6 +77,8 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
   const [color, setColor] = useState<CSSProperties['color']>(
     taskGroup?.color ?? COLORS.BLUE_GREY_DARK,
   );
+  const [icon, setIcon] = useState<string>(taskGroup?.icon ?? 'AiOutlineRightCircle');
+
   const labelCol = useMemo(() => ({ span: getLabelColWidth(isFirst) }), [isFirst]);
   const wrapperCol = useMemo(
     () => ({
@@ -109,6 +113,10 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
     form?.setFieldValue(colorFieldName, color);
   }, [color, form, colorFieldName]);
 
+  useEffect(() => {
+    form?.setFieldValue(iconFieldName, icon);
+  }, [icon, form, iconFieldName]);
+
   return (
     <Form.Item
       validateTrigger={validateTriggerDefault}
@@ -122,7 +130,13 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
       tooltip={isDeleted && 'You need to save changes to apply deletion of groups'}
     >
       <StyledRow>
-        <ColorPicker color={color} setColor={setColor} />
+        <IconPickerCircle
+          icon={icon}
+          setIcon={setIcon}
+          title="Task group icon"
+          description="This icon will be displayed in the left menu."
+        />
+        <ColorPickerCircle color={color} setColor={setColor} />
         <StyledInputGroup compact>
           <StyledInput
             prefix={isDeleted ? deleteSmallOutlinedIcon : handleIcon}
@@ -147,6 +161,9 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
           )}
         </StyledInputGroup>
         <Form.Item noStyle name={colorFieldName} initialValue={color}>
+          <Input type="hidden" />
+        </Form.Item>
+        <Form.Item noStyle name={iconFieldName} initialValue={color}>
           <Input type="hidden" />
         </Form.Item>
       </StyledRow>

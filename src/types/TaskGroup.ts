@@ -8,6 +8,7 @@ export interface TaskGroup {
   name: string;
   taskListId: string;
   color?: CSSProperties['color'];
+  icon?: string;
 }
 
 // noinspection JSUnusedGlobalSymbols

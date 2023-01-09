@@ -46,7 +46,6 @@ const TaskCreateForm: React.FC = () => {
         dispatch(setSelectedTaskType(undefined));
         createTask(task).then(res => {
           if ('data' in res) {
-            console.log('Creating notification');
             dispatch(
               setNotification({
                 type: 'success',
@@ -56,7 +55,6 @@ const TaskCreateForm: React.FC = () => {
               }),
             );
           } else if ('error' in res) {
-            console.log('Creating notification');
             dispatch(
               setNotification({
                 type: 'error',

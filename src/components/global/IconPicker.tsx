@@ -1,55 +1,10 @@
-import React, { MouseEventHandler, useCallback, useState } from 'react';
-import { STYLE } from '../../styles/CustomStyles';
-import { computeOffsetsAfterClick } from '../../helpers/computeOffsetsAfterClick';
-import { Position } from '../../helpers/types/Position';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import DynamicIcon from './DynamicIcon';
+import { useDispatch, useSelector } from 'react-redux';
+import { ReduxState } from '../../store';
+import { setIcon } from '../../store/appSlice';
 import { Input } from 'antd';
-
-interface IconPickerProps {
-  title?: string;
-  description?: string;
-  icon: string;
-  setIcon: React.Dispatch<React.SetStateAction<string>>;
-}
-
-const PickerWrapper = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Swatch = styled.div`
-  padding: 0.15rem;
-  height: 1.75rem;
-  width: 1.75rem;
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
-  background: #fff;
-  border-radius: 100%;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Popover = styled.div<{ $position: Position }>`
-  position: fixed;
-  z-index: 2;
-  left: ${props => (props.$position.x ? `${props.$position.x}px` : `0`)};
-  top: ${props => (props.$position.y ? `${props.$position.y}px` : `0`)};
-`;
-
-const Cover = styled.div`
-  position: fixed;
-  background-color: #e3e3e3;
-  opacity: 0.2;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-`;
 
 const Picker = styled.div`
   display: flex;
@@ -87,57 +42,46 @@ const LinkWrapper = styled.a`
   font-weight: bold;
 `;
 
-const IconPicker: React.FC<IconPickerProps> = ({ title, description, icon, setIcon }) => {
-  const [displayPicker, setDisplayPicker] = useState(false);
-  const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
+const IconPicker: React.FC = () => {
+  const dispatch = useDispatch();
+  const globalIcon = useSelector((state: ReduxState) => state.appReducer.icon);
+  const iconName = globalIcon?.icon ?? 'AiOutlineRightCircle';
 
-  const toggleDisplayPicker: MouseEventHandler<HTMLDivElement> = useCallback(e => {
-    setPosition(computeOffsetsAfterClick(e, STYLE.COLORPICKER_WIDTH, STYLE.COLORPICKER_HEIGHT));
-    setDisplayPicker(p => !p);
-  }, []);
-
-  const onChange = useCallback(
+  const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setIcon(e.target.value);
+      dispatch(
+        setIcon({
+          ...globalIcon,
+          icon: e.target.value,
+        }),
+      );
     },
-    [setIcon],
+    [dispatch, globalIcon],
   );
 
   return (
-    <>
-      <PickerWrapper>
-        <Swatch onClick={toggleDisplayPicker}>
-          <DynamicIcon icon={icon} />
-        </Swatch>
-      </PickerWrapper>
-      {displayPicker && (
-        <Popover $position={position}>
-          <Cover onClick={toggleDisplayPicker} />
-          <Picker>
-            {title && <h2>{title}</h2>}
-            <span>
-              Choose any icon from these{' '}
-              <LinkWrapper
-                href="https://react-icons.github.io/react-icons/icons?name=fa"
-                rel="noreferrer"
-                target="_blank"
-              >
-                icon sets [<DynamicIcon icon="AiOutlineLink" small />]
-              </LinkWrapper>{' '}
-              and copy-paste its name here.
-            </span>
-            <InputAndPreview>
-              <input onChange={onChange} />
-              <Preview>
-                <PreviewLabel>Preview</PreviewLabel>
-                <DynamicIcon icon={icon} fallback={<DynamicIcon icon="AiOutlineRightCircle" />} />
-              </Preview>
-            </InputAndPreview>
-            {description && <span>{description}</span>}
-          </Picker>
-        </Popover>
-      )}
-    </>
+    <Picker>
+      {globalIcon?.title && <h2>{globalIcon.title}</h2>}
+      <span>
+        Choose any icon from these{' '}
+        <LinkWrapper
+          href="https://react-icons.github.io/react-icons/icons?name=fa"
+          rel="noreferrer"
+          target="_blank"
+        >
+          icon sets [<DynamicIcon icon="AiOutlineLink" small />]
+        </LinkWrapper>{' '}
+        and copy-paste its name here.
+      </span>
+      <InputAndPreview>
+        <Input onChange={handleChange} />
+        <Preview>
+          <PreviewLabel>Preview</PreviewLabel>
+          <DynamicIcon icon={iconName} fallback={<DynamicIcon icon="AiOutlineRightCircle" />} />
+        </Preview>
+      </InputAndPreview>
+      {globalIcon?.description && <span>{globalIcon.description}</span>}
+    </Picker>
   );
 };
 
