@@ -1,11 +1,12 @@
-import React, { useCallback, useMemo } from 'react';
-import { Button, Form, Input, Tooltip } from 'antd';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
+import { Button, Form, FormInstance, Input, Tooltip } from 'antd';
 import styled from 'styled-components';
 import { getLabelColWidth, getLabelOffsetSM, getLabelOffsetXS } from '../../../helpers/formHelpers';
 import { COLORS } from '../../../styles/CustomStyles';
 import { ReorderTaskGroupType } from './TaskGroupsForm';
 import { validateTriggerDefault } from '../../../components/forms/AntdFormComponents';
 import DynamicIcon from '../../../components/global/DynamicIcon';
+import ColorPicker from '../../../components/global/ColorPicker';
 
 interface TaskGroupInputProps {
   item: ReorderTaskGroupType;
@@ -13,6 +14,7 @@ interface TaskGroupInputProps {
   isDeleted?: boolean;
   removeFromItems?: (item: ReorderTaskGroupType) => void;
   returnToItems?: (item: ReorderTaskGroupType) => void;
+  form: FormInstance | undefined;
 }
 
 const StyledInput = styled(Input)``;
@@ -62,12 +64,17 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
   isDeleted = false,
   removeFromItems,
   returnToItems,
+  form,
 }) => {
   const name = item.inputName;
+  const colorFieldName = `${item.inputName}-color`;
   const taskGroup = item.taskGroup;
   const isNew = taskGroup === undefined;
   const initialValue = !isNew ? taskGroup.name : undefined;
 
+  const [color, setColor] = useState<CSSProperties['color']>(
+    taskGroup?.color ?? COLORS.BLUE_GREY_DARK,
+  );
   const labelCol = useMemo(() => ({ span: getLabelColWidth(isFirst) }), [isFirst]);
   const wrapperCol = useMemo(
     () => ({
@@ -98,13 +105,16 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
   const minusCircleOutlinedIcon = useMemo(() => <DynamicIcon icon="AiOutlineMinusCircle" />, []);
   const handleIcon = useMemo(() => <HandleIcon />, []);
 
+  useEffect(() => {
+    form?.setFieldValue(colorFieldName, color);
+  }, [color, form, colorFieldName]);
+
   return (
     <Form.Item
       validateTrigger={validateTriggerDefault}
       label={isFirst && (isDeleted ? 'Will be deleted' : 'Groups')}
       labelCol={labelCol}
       wrapperCol={wrapperCol}
-      // wrapperCol={ !isFirst ? { offset: 0, span: 18 } : undefined}
       colon={false}
       name={name}
       rules={rules}
@@ -112,6 +122,7 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
       tooltip={isDeleted && 'You need to save changes to apply deletion of groups'}
     >
       <StyledRow>
+        <ColorPicker color={color} setColor={setColor} />
         <StyledInputGroup compact>
           <StyledInput
             prefix={isDeleted ? deleteSmallOutlinedIcon : handleIcon}
@@ -135,6 +146,9 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
             </Tooltip>
           )}
         </StyledInputGroup>
+        <Form.Item noStyle name={colorFieldName} initialValue={color}>
+          <Input type="hidden" />
+        </Form.Item>
       </StyledRow>
     </Form.Item>
   );

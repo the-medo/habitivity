@@ -39,6 +39,7 @@ const StyledReorderGroup = styled(Reorder.Group)`
 `;
 
 const TaskGroupsForm: React.FC = () => {
+  const [form] = Form.useForm();
   const selectedTaskListId = useSelectedTaskList()?.id ?? 'undefined';
 
   const { data: existingGroups = [], isLoading } =
@@ -106,6 +107,7 @@ const TaskGroupsForm: React.FC = () => {
       name: values[rtg.inputName],
       taskListId: selectedTaskListId,
       position: rtg.position,
+      color: values[`${rtg.inputName}-color`],
     }),
     [selectedTaskListId],
   );
@@ -163,6 +165,7 @@ const TaskGroupsForm: React.FC = () => {
   return (
     <Spin spinning={isDoingSomething}>
       <Form
+        form={form}
         labelCol={colSpan6}
         wrapperCol={colSpan18}
         layout="horizontal"
@@ -174,6 +177,7 @@ const TaskGroupsForm: React.FC = () => {
           {items.map(item => (
             <Reorder.Item key={item.initialIndex} value={item}>
               <TaskGroupInput
+                form={form}
                 item={item}
                 isFirst={item.position === 0}
                 removeFromItems={removeFromItems}
@@ -185,6 +189,7 @@ const TaskGroupsForm: React.FC = () => {
           .filter(item => !item.isNew)
           .map((item, i) => (
             <TaskGroupInput
+              form={form}
               key={`deleted-${item.initialIndex}`}
               item={item}
               isFirst={i === 0}

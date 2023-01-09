@@ -91,7 +91,7 @@ const loadedPackages: Record<IconPackages, any> = {
   wi: undefined,
 };
 
-export const DynamicIconWrapper = styled.span<{ $small: boolean }>`
+export const DynamicIconWrapper = styled.span<{ $small?: boolean }>`
   display: inline-flex;
   align-items: center;
   font-style: normal;

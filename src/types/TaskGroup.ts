@@ -1,11 +1,13 @@
 import firebase from 'firebase/compat';
 import { QueryDocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
+import { CSSProperties } from 'react';
 
 export interface TaskGroup {
   id: string;
   position: number;
   name: string;
   taskListId: string;
+  color?: CSSProperties['color'];
 }
 
 // noinspection JSUnusedGlobalSymbols
