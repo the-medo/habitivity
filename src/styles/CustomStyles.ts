@@ -38,6 +38,8 @@ export const STYLE = {
   LAYOUT_BODY_BACKGROUND: COLORS.BACKGROUND,
   FONT_SIZE_BASE: '1rem', //fcks up dropdown menu (??)
   LINE_HEIGHT_BASE: 1.5,
+  COLORPICKER_WIDTH: 276,
+  COLORPICKER_HEIGHT: 100,
 
   //other
   BASE_SHADOW: `0 0 5px 2px rgba(0,0,0,0.1)`,
