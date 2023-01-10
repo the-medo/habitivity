@@ -7,6 +7,8 @@ export interface MenuLeftState {
   leftMenuAutomaticallyCollapsed: boolean;
   leftMenuManuallyCollapsed: boolean;
   items: MenuLeftItem[];
+  itemsSelected: Record<string, boolean | undefined>;
+
   rightDrawerStatus: RightDrawerStatus;
 }
 
@@ -14,6 +16,7 @@ const initialState: MenuLeftState = {
   leftMenuAutomaticallyCollapsed: false,
   leftMenuManuallyCollapsed: getItem(LSKey.MENU_COLLAPSED) ?? false,
   items: [],
+  itemsSelected: {},
   rightDrawerStatus: getItem(LSKey.RIGHT_DRAWER_COLLAPSED) ?? 'opened',
 };
 
@@ -38,6 +41,23 @@ export const menuSlice = createSlice({
       } else {
         state.rightDrawerStatus = 'hidden';
       }
+    },
+    setItemsSelected: (state, action: PayloadAction<string[]>) => {
+      Object.keys(state.itemsSelected).forEach(i => {
+        if (!action.payload.includes(i)) {
+          state.itemsSelected[i] = false;
+        }
+      });
+
+      action.payload.forEach(i => {
+        state.itemsSelected[i] = true;
+      });
+    },
+    itemSelect: (state, action: PayloadAction<string>) => {
+      state.itemsSelected[action.payload] = true;
+    },
+    itemDeselect: (state, action: PayloadAction<string>) => {
+      state.itemsSelected[action.payload] = false;
     },
     setRightDrawerStatus: (state, action: PayloadAction<RightDrawerStatus>) => {
       let newStatus = action.payload;
@@ -73,6 +93,9 @@ export const {
   setLeftMenuAutomaticallyCollapsed,
   toggleLeftMenuManuallyCollapsed,
   setMenuLeftItems,
+  setItemsSelected,
+  itemSelect,
+  itemDeselect,
   setRightDrawerStatus,
 } = menuSlice.actions;
 

@@ -1,8 +1,11 @@
-import React, { CSSProperties, useCallback, useMemo } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import {
+  itemDeselect,
+  itemSelect,
   setLeftMenuAutomaticallyCollapsed,
+  setMenuLeftItems,
   toggleLeftMenuManuallyCollapsed,
 } from '../../../store/menuSlice';
 import { useSlider } from '../../../hooks/useSlider';
@@ -11,10 +14,14 @@ import { ItemType } from 'antd/es/menu/hooks/useItems';
 import LeftMenuItem from './LeftMenuItem';
 import { LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE } from '../../../styles/CustomStyles';
 import DynamicIcon from '../../global/DynamicIcon';
+import { useGetTaskGroupsByTaskListQuery } from '../../../apis/apiTaskGroup';
+import { useSelectedTaskListId } from '../../../hooks/useSelectedTaskListId';
+import { useGetTasksByTaskListQuery } from '../../../apis/apiTasks';
+import { MenuProps } from 'antd/es/menu';
 
 export interface MenuLeftItem {
+  type: 'task-group' | 'task';
   key: string;
-  to: string;
   label: string;
   icon?: string;
   color?: CSSProperties['color'];
@@ -27,6 +34,7 @@ const parseMenuLeftItem = (item: MenuLeftItem): ItemType => {
     key: item.key,
     title: item.label,
     label: <LeftMenuItem item={item} />,
+    className: `${item.type}-type`,
   };
 };
 
@@ -34,6 +42,52 @@ export type MenuLeftSubItem = Omit<MenuLeftItem, 'childItems'>;
 
 const MenuLeft: React.FC = () => {
   const dispatch = useDispatch();
+
+  const selectedTaskListId = useSelectedTaskListId();
+  const { data: existingGroups = [], isFetching: isFetchingTaskGroups } =
+    useGetTaskGroupsByTaskListQuery(selectedTaskListId);
+  const { data: existingTasks = [], isFetching: isFetchingTasks } =
+    useGetTasksByTaskListQuery(selectedTaskListId);
+
+  const isReady = useMemo(
+    () => !isFetchingTaskGroups && !isFetchingTasks,
+    [isFetchingTaskGroups, isFetchingTasks],
+  );
+
+  useEffect(() => {
+    if (isReady) {
+      const menuItems: MenuLeftItem[] = existingGroups
+        .map(g => {
+          const result: MenuLeftItem[] = [];
+          result.push({
+            type: 'task-group',
+            key: g.id,
+            label: g.name,
+            childItems: [],
+            icon: g.icon,
+            color: g.color,
+          });
+
+          existingTasks
+            .filter(t => t.taskGroupId === g.id)
+            .map(t => {
+              result.push({
+                type: 'task',
+                key: t.id,
+                label: t.taskName,
+                childItems: [],
+                icon: Math.random() < 0.5 ? 'RiCheckboxBlankCircleLine' : 'BsCheck', //'BsSquare', //BsCheckSquare
+              });
+            });
+
+          return result;
+        })
+        .flat();
+
+      dispatch(setMenuLeftItems(menuItems));
+    }
+  }, [dispatch, isReady, existingGroups, existingTasks]);
+
   const items = useSelector((state: ReduxState) => state.menuReducer.items);
   const { isLeftMenuCollapsed, isLeftMenuWithContent, leftMenuAutomaticallyCollapsed } =
     useSlider();
@@ -50,7 +104,20 @@ const MenuLeft: React.FC = () => {
     [dispatch],
   );
 
-  console.log('MenuLeft render - isLeftMenuCollapsed', isLeftMenuCollapsed);
+  //some weird problem with typing...
+  const onSelectHandler: MenuProps['onSelect'] = useCallback(
+    (x: { key: string }) => {
+      dispatch(itemSelect(x.key));
+    },
+    [dispatch],
+  );
+
+  const onDeselectHandler: MenuProps['onSelect'] = useCallback(
+    (x: { key: string }) => {
+      dispatch(itemDeselect(x.key));
+    },
+    [dispatch],
+  );
 
   if (!isLeftMenuWithContent) {
     return null;
@@ -66,7 +133,15 @@ const MenuLeft: React.FC = () => {
       $isCollapsed={isLeftMenuCollapsed}
       $isAutomaticallyCollapsed={leftMenuAutomaticallyCollapsed}
     >
-      {leftMenuItems.length > 0 && <LeftMenu mode="inline" items={leftMenuItems} />}
+      {leftMenuItems.length > 0 && (
+        <LeftMenu
+          mode="inline"
+          multiple
+          items={leftMenuItems}
+          onSelect={onSelectHandler}
+          onDeselect={onDeselectHandler}
+        />
+      )}
       {!leftMenuAutomaticallyCollapsed && (
         <MenuCollapsor $isCollapsed={isLeftMenuCollapsed} onClick={onCollapseHandler}>
           <MenuCollapsorIcon $isCollapsed={isLeftMenuCollapsed}>
