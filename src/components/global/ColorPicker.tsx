@@ -22,6 +22,22 @@ const ColorPicker: React.FC = () => {
       color={globalColor}
       onChange={handleChange}
       triangle="hide"
+      colors={[
+        '#006d75',
+        '#08979c',
+        '#0958d9',
+        '#1d39c4',
+        '#531dab',
+        '#c41d7f',
+        '#cf1322',
+        '#d4380d',
+        '#d46b08',
+        '#d48806',
+        '#d4b106',
+        '#7cb305',
+        '#389e0d',
+        '#237804',
+      ]}
     />
   );
 };

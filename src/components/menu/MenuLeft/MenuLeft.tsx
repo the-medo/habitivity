@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { CSSProperties, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import {
@@ -17,6 +17,7 @@ export interface MenuLeftItem {
   to: string;
   label: string;
   icon?: string;
+  color?: CSSProperties['color'];
   isDefault?: boolean;
   childItems: MenuLeftSubItem[];
 }
@@ -33,7 +34,7 @@ export type MenuLeftSubItem = Omit<MenuLeftItem, 'childItems'>;
 
 const MenuLeft: React.FC = () => {
   const dispatch = useDispatch();
-  const { items } = useSelector((state: ReduxState) => state.menuReducer);
+  const items = useSelector((state: ReduxState) => state.menuReducer.items);
   const { isLeftMenuCollapsed, isLeftMenuWithContent, leftMenuAutomaticallyCollapsed } =
     useSlider();
 

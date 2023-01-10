@@ -20,6 +20,8 @@ const Today: React.FC = () => {
           to: generatePath(`/today/:groupId`, { groupId: g.id }),
           label: g.name,
           childItems: [],
+          icon: g.icon,
+          color: g.color,
         };
       });
       dispatch(setMenuLeftItems(menuItems));

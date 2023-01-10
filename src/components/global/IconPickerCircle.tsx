@@ -55,8 +55,8 @@ const IconPickerCircle: React.FC<IconPickerProps> = ({ title, description, icon,
           pickerOpened: PickerType.ICON,
           pickerPosition: computeOffsetsAfterClick(
             e,
-            STYLE.COLORPICKER_WIDTH,
-            STYLE.COLORPICKER_HEIGHT,
+            STYLE.ICONPICKER_WIDTH,
+            STYLE.ICONPICKER_HEIGHT,
           ),
           icon: {
             icon,
