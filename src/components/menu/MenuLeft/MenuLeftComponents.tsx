@@ -18,14 +18,22 @@ export const LeftMenu = styled(Menu)`
   height: 100%;
   transition: 0.3s all;
 
-  & > li.ant-menu-item[role='menuitem'] {
+  & > li.ant-menu-item {
     /* left menu, otherwise could be:  "aside ul.ant-menu" */
+    border-radius: 0;
+    background-color: transparent !important;
     padding: 0 calc(0.5rem - 1px) 0 0.5rem !important;
-    margin: 0 0 0.5rem;
+    margin: 0;
     width: 100%;
 
-    &:hover {
-      background-color: transparent !important;
+    &:not(:first-of-type) {
+      margin-top: 0.5rem;
+    }
+
+    &.task-type {
+      height: 2rem;
+      margin: 0;
+      cursor: default;
     }
   }
 `;
@@ -36,7 +44,9 @@ export interface MenuLeftProps {
   isManuallyCollapsed: boolean;
 }
 
-export const LeftSider = styled(Sider)<Pick<MenuLeftProps, '$isAutomaticallyCollapsed' | '$isCollapsed'>>`
+export const LeftSider = styled(Sider)<
+  Pick<MenuLeftProps, '$isAutomaticallyCollapsed' | '$isCollapsed'>
+>`
   overflow-y: auto;
   height: calc(
     100vh - ${({ $isCollapsed }) => ($isCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG)}rem${({ $isAutomaticallyCollapsed }) => !$isAutomaticallyCollapsed && ` - ${SIDER_COLLAPSED_SIZE}rem`}
