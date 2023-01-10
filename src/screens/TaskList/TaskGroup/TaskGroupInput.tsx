@@ -110,6 +110,14 @@ const TaskGroupInput: React.FC<TaskGroupInputProps> = ({
   const handleIcon = useMemo(() => <HandleIcon />, []);
 
   useEffect(() => {
+    if (taskGroup?.icon) setIcon(taskGroup.icon);
+  }, [taskGroup?.icon]);
+
+  useEffect(() => {
+    if (taskGroup?.color) setColor(taskGroup.color);
+  }, [taskGroup?.color]);
+
+  useEffect(() => {
     form?.setFieldValue(colorFieldName, color);
   }, [color, form, colorFieldName]);
 

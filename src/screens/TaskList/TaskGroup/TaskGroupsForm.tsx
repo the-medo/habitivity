@@ -59,9 +59,9 @@ const TaskGroupsForm: React.FC = () => {
   );
 
   const setDefaults = useCallback(() => {
-    setItems(
+    setItems(oldItems =>
       existingGroups.map((g, i) => ({
-        initialIndex: i,
+        initialIndex: oldItems.find(oi => oi.inputName === g.id)?.initialIndex ?? i,
         position: i,
         taskGroup: g,
         isNew: false,
