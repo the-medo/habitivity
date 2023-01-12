@@ -4,6 +4,11 @@ import { db } from '../firebase';
 import { apiSlice, providesList } from './api';
 import { Task, taskConverter } from '../types/Tasks';
 
+interface CreateTaskPayload {
+  newTask: Omit<Task, 'id'>;
+  taskId: string;
+}
+
 export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).injectEndpoints({
   endpoints: builder => ({
     getTasksByTaskList: builder.query<Task[], string | undefined>({
@@ -29,8 +34,8 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
       providesTags: result => providesList(result, 'Task'),
     }),
 
-    createTask: builder.mutation<Task, Task>({
-      queryFn: async (newTask, api) => {
+    createTask: builder.mutation<CreateTaskPayload, CreateTaskPayload>({
+      queryFn: async ({ newTask, taskId }, api) => {
         console.log('======== API ============ inside createTask ====================');
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
@@ -40,11 +45,16 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
         }
 
         try {
-          const taskRef = doc(db, '/Users/' + userId + '/Tasks/' + newTask.id).withConverter(
+          const taskRef = doc(db, '/Users/' + userId + '/Tasks/' + taskId).withConverter(
             taskConverter,
           );
           await setDoc(taskRef, newTask);
-          return { data: newTask };
+          return {
+            data: {
+              newTask,
+              taskId,
+            },
+          };
         } catch (e) {
           return { error: e };
         }
