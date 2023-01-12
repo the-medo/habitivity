@@ -4,11 +4,13 @@ import { ReduxState } from '../../../store';
 import {
   itemDeselect,
   itemSelect,
+  setItemsSelected,
+  setItemsSelectedInitialized,
   setLeftMenuAutomaticallyCollapsed,
   setMenuLeftItems,
   toggleLeftMenuManuallyCollapsed,
 } from '../../../store/menuSlice';
-import { useSlider } from '../../../hooks/useSlider';
+import { useLeftMenu } from '../../../hooks/useLeftMenu';
 import { LeftMenu, LeftSider, MenuCollapsor, MenuCollapsorIcon } from './MenuLeftComponents';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import LeftMenuItem from './LeftMenuItem';
@@ -18,6 +20,7 @@ import { useGetTaskGroupsByTaskListQuery } from '../../../apis/apiTaskGroup';
 import { useSelectedTaskListId } from '../../../hooks/useSelectedTaskListId';
 import { useGetTasksByTaskListQuery } from '../../../apis/apiTasks';
 import { MenuProps } from 'antd/es/menu';
+import { useLeftMenuSelected } from '../../../hooks/useLeftMenuSelected';
 
 export interface MenuLeftItem {
   type: 'task-group' | 'task';
@@ -48,6 +51,12 @@ const MenuLeft: React.FC = () => {
     useGetTaskGroupsByTaskListQuery(selectedTaskListId);
   const { data: existingTasks = [], isFetching: isFetchingTasks } =
     useGetTasksByTaskListQuery(selectedTaskListId);
+
+  const items = useSelector((state: ReduxState) => state.menuReducer.items);
+  const { itemsSelectedInitialized, itemsSelectedArray } = useLeftMenuSelected();
+
+  const { isLeftMenuCollapsed, isLeftMenuWithContent, leftMenuAutomaticallyCollapsed } =
+    useLeftMenu();
 
   const isReady = useMemo(
     () => !isFetchingTaskGroups && !isFetchingTasks,
@@ -84,13 +93,15 @@ const MenuLeft: React.FC = () => {
         })
         .flat();
 
+      if (!itemsSelectedInitialized) {
+        const allGroups = existingGroups.map(g => g.id);
+        console.log(allGroups);
+        dispatch(setItemsSelectedInitialized(true));
+        dispatch(setItemsSelected(allGroups));
+      }
       dispatch(setMenuLeftItems(menuItems));
     }
-  }, [dispatch, isReady, existingGroups, existingTasks]);
-
-  const items = useSelector((state: ReduxState) => state.menuReducer.items);
-  const { isLeftMenuCollapsed, isLeftMenuWithContent, leftMenuAutomaticallyCollapsed } =
-    useSlider();
+  }, [dispatch, isReady, existingGroups, existingTasks, itemsSelectedInitialized]);
 
   const leftMenuItems = useMemo(() => items.map(i => parseMenuLeftItem(i)), [items]);
 
@@ -137,6 +148,7 @@ const MenuLeft: React.FC = () => {
         <LeftMenu
           mode="inline"
           multiple
+          selectedKeys={itemsSelectedArray}
           items={leftMenuItems}
           onSelect={onSelectHandler}
           onDeselect={onDeselectHandler}

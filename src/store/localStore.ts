@@ -8,6 +8,7 @@ export enum LSKey {
   RIGHT_DRAWER_COLLAPSED = '3',
   SELECTED_TASK_LIST_ID = '4',
   TODAY_DISPLAY_MODE = '5',
+  SELECTED_TASK_GROUPS = '6',
 }
 
 export interface LSValues {
@@ -16,6 +17,7 @@ export interface LSValues {
   [LSKey.RIGHT_DRAWER_COLLAPSED]?: RightDrawerStatus;
   [LSKey.SELECTED_TASK_LIST_ID]?: string;
   [LSKey.TODAY_DISPLAY_MODE]?: TaskDisplayMode;
+  [LSKey.SELECTED_TASK_GROUPS]?: Record<string, boolean | undefined>;
 }
 
 export function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {

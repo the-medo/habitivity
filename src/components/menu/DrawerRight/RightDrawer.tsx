@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useSlider } from '../../../hooks/useSlider';
+import { useLeftMenu } from '../../../hooks/useLeftMenu';
 import { withScrollbar } from '../../../styles/GlobalStyleAndTheme';
 import { setRightDrawerStatus } from '../../../store/menuSlice';
 import { Button, Layout } from 'antd';
@@ -14,6 +14,7 @@ import {
   TOP_MENU_SMALL,
 } from '../../../styles/CustomStyles';
 import DynamicIcon from '../../global/DynamicIcon';
+import { useRightDrawer } from '../../../hooks/useRightDrawer';
 
 const { Sider } = Layout;
 
@@ -68,7 +69,8 @@ const RightDrawerCollapsor = styled.div<Pick<RightDrawerProps, '$isRightDrawerCo
 
 const RightDrawer: React.FC = () => {
   const dispatch = useDispatch();
-  const { isRightDrawerCollapsed, isLeftMenuCollapsed, isRightDrawerHidden } = useSlider();
+  const { isLeftMenuCollapsed } = useLeftMenu();
+  const { isRightDrawerCollapsed, isRightDrawerHidden } = useRightDrawer();
 
   const clickHandler = useCallback(() => {
     return;

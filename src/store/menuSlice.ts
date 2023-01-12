@@ -7,6 +7,7 @@ export interface MenuLeftState {
   leftMenuAutomaticallyCollapsed: boolean;
   leftMenuManuallyCollapsed: boolean;
   items: MenuLeftItem[];
+  itemsSelectedInitialized: boolean;
   itemsSelected: Record<string, boolean | undefined>;
 
   rightDrawerStatus: RightDrawerStatus;
@@ -16,7 +17,8 @@ const initialState: MenuLeftState = {
   leftMenuAutomaticallyCollapsed: false,
   leftMenuManuallyCollapsed: getItem(LSKey.MENU_COLLAPSED) ?? false,
   items: [],
-  itemsSelected: {},
+  itemsSelectedInitialized: getItem(LSKey.SELECTED_TASK_GROUPS) !== undefined,
+  itemsSelected: getItem(LSKey.SELECTED_TASK_GROUPS) ?? {},
   rightDrawerStatus: getItem(LSKey.RIGHT_DRAWER_COLLAPSED) ?? 'opened',
 };
 
@@ -42,6 +44,9 @@ export const menuSlice = createSlice({
         state.rightDrawerStatus = 'hidden';
       }
     },
+    setItemsSelectedInitialized: (state, action: PayloadAction<true>) => {
+      state.itemsSelectedInitialized = action.payload;
+    },
     setItemsSelected: (state, action: PayloadAction<string[]>) => {
       Object.keys(state.itemsSelected).forEach(i => {
         if (!action.payload.includes(i)) {
@@ -52,12 +57,18 @@ export const menuSlice = createSlice({
       action.payload.forEach(i => {
         state.itemsSelected[i] = true;
       });
+
+      setItem(LSKey.SELECTED_TASK_GROUPS, state.itemsSelected);
     },
     itemSelect: (state, action: PayloadAction<string>) => {
       state.itemsSelected[action.payload] = true;
+
+      setItem(LSKey.SELECTED_TASK_GROUPS, state.itemsSelected);
     },
     itemDeselect: (state, action: PayloadAction<string>) => {
       state.itemsSelected[action.payload] = false;
+
+      setItem(LSKey.SELECTED_TASK_GROUPS, state.itemsSelected);
     },
     setRightDrawerStatus: (state, action: PayloadAction<RightDrawerStatus>) => {
       let newStatus = action.payload;
@@ -94,6 +105,7 @@ export const {
   toggleLeftMenuManuallyCollapsed,
   setMenuLeftItems,
   setItemsSelected,
+  setItemsSelectedInitialized,
   itemSelect,
   itemDeselect,
   setRightDrawerStatus,

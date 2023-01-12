@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Dropdown, DropdownProps } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useSlider } from '../../../hooks/useSlider';
+import { useLeftMenu } from '../../../hooks/useLeftMenu';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebase';
 import UserAvatar from '../../global/UserAvatar';
@@ -70,7 +70,7 @@ const DivPointerCursor = styled.div`
 `;
 
 const MenuTop: React.FC = () => {
-  const { isLeftMenuCollapsed } = useSlider();
+  const { isLeftMenuCollapsed } = useLeftMenu();
   const navigate = useNavigate();
 
   const { data: taskLists = [] } = useGetTaskListsQuery();

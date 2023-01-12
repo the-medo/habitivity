@@ -6,7 +6,7 @@ import LoginPage from '../components/auth/LoginPage';
 import MenuTop from '../components/menu/MenuTop/MenuTop';
 import MenuLeft from '../components/menu/MenuLeft/MenuLeft';
 import styled from 'styled-components';
-import { useSlider } from '../hooks/useSlider';
+import { useLeftMenu } from '../hooks/useLeftMenu';
 import RightDrawer from '../components/menu/DrawerRight/RightDrawer';
 import { useUser } from '../hooks/useUser';
 import {
@@ -18,6 +18,7 @@ import {
 } from '../styles/CustomStyles';
 import Notifications from './Notifications';
 import Backdrop from '../components/global/Backdrop';
+import { useRightDrawer } from '../hooks/useRightDrawer';
 
 const StyledContent = styled(Layout.Content)<{
   $isLeftMenuCollapsed: boolean;
@@ -44,7 +45,8 @@ const StyledContent = styled(Layout.Content)<{
 
 const PageLayout: React.FC = () => {
   const user = useUser();
-  const { isLeftMenuCollapsed, isRightDrawerCollapsed, isLeftMenuWithContent } = useSlider();
+  const { isLeftMenuCollapsed, isLeftMenuWithContent } = useLeftMenu();
+  const { isRightDrawerCollapsed } = useRightDrawer();
 
   if (!user) {
     return <LoginPage />;

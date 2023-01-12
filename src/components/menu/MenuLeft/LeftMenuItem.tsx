@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { MenuLeftItem } from './MenuLeft';
 import React, { CSSProperties } from 'react';
-import { useSlider } from '../../../hooks/useSlider';
+import { useLeftMenu } from '../../../hooks/useLeftMenu';
 import { COLORS } from '../../../styles/CustomStyles';
 import DynamicIcon from '../../global/DynamicIcon';
 import { generate } from '@ant-design/colors';
@@ -68,7 +68,7 @@ interface LeftMenuNavLinkProps {
 }
 
 const LeftMenuItem: React.FC<LeftMenuNavLinkProps> = ({ item }) => {
-  const { isLeftMenuCollapsed } = useSlider();
+  const { isLeftMenuCollapsed } = useLeftMenu();
   const isSelected =
     useSelector((state: ReduxState) => state.menuReducer.itemsSelected[item.key]) ?? false;
 
