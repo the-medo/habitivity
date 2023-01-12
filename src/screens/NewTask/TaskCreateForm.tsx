@@ -17,6 +17,7 @@ import { Spin } from 'antd';
 import { useCreateTaskMutation } from '../../apis/apiTasks';
 import { setSelectedTaskType } from './taskCreationSlice';
 import { setNotification } from '../../store/notificationSlice';
+import { generateID } from '../../helpers/generateID';
 
 const TaskCreateFormWrapper = styled.div`
   display: flex;
@@ -44,13 +45,13 @@ const TaskCreateForm: React.FC = () => {
     (task?: Task) => {
       if (task) {
         dispatch(setSelectedTaskType(undefined));
-        createTask(task).then(res => {
+        createTask({ newTask: task, taskId: `task-${generateID(10)}` }).then(res => {
           if ('data' in res) {
             dispatch(
               setNotification({
                 type: 'success',
                 message: `Task created!`,
-                description: `Your task "${res.data.taskName}" has been created successfully!`,
+                description: `Your task "${res.data.newTask.taskName}" has been created successfully!`,
                 placement: 'topRight',
               }),
             );

@@ -4,7 +4,7 @@ import { TaskShared, TaskType } from '../../types/Tasks';
 
 export interface TaskState {
   examples: ExampleType[];
-  newTaskSharedProps?: TaskShared;
+  newTaskSharedProps?: Omit<TaskShared, 'id'>;
   selectedTaskType?: TaskType;
 }
 
@@ -21,10 +21,16 @@ export const taskCreationSlice = createSlice({
     setExamples: (state, action: PayloadAction<ExampleType[]>) => {
       state.examples = deduplicateExamples(action.payload);
     },
-    setNewTaskSharedProps: (state, action: PayloadAction<TaskShared | undefined>) => {
+    setNewTaskSharedProps: (
+      state,
+      action: PayloadAction<TaskState['newTaskSharedProps'] | undefined>,
+    ) => {
       state.newTaskSharedProps = action.payload;
     },
-    updateNewTaskSharedProps: (state, action: PayloadAction<Partial<TaskShared> | undefined>) => {
+    updateNewTaskSharedProps: (
+      state,
+      action: PayloadAction<Partial<TaskState['newTaskSharedProps']> | undefined>,
+    ) => {
       if (state.newTaskSharedProps && action.payload) {
         state.newTaskSharedProps = {
           ...state.newTaskSharedProps,

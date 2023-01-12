@@ -26,7 +26,6 @@ const TaskCreate: React.FC = () => {
     if (user?.id && selectedTaskListId) {
       dispatch(
         setNewTaskSharedProps({
-          id: `task-${generateID(10)}`,
           isActive: true,
           position: 0,
           taskGroupId: taskGroupId ?? 'undefined-task-group',
