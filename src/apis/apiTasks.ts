@@ -9,6 +9,17 @@ interface CreateTaskPayload {
   taskId: string;
 }
 
+const getAllTasks = async (userId: string, taskListId: string) => {
+  let data: Task[] = [];
+  const tasksRef = collection(db, '/Users/' + userId + '/Tasks').withConverter(taskConverter);
+  const q = query(tasksRef, where('taskListId', '==', taskListId)); //, orderBy("position")
+  await getDocs(q).then(snapshot => {
+    data = snapshot.docs.map(x => x.data());
+  });
+
+  return data;
+};
+
 export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).injectEndpoints({
   endpoints: builder => ({
     getTasksByTaskList: builder.query<Task[], string | undefined>({
@@ -18,14 +29,9 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
         const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
 
         try {
-          let data: Task[] = [];
-          const tasksRef = collection(db, '/Users/' + userId + '/Tasks').withConverter(
-            taskConverter,
+          const data = (await getAllTasks(userId, taskListId ?? 'undefined')).sort(
+            (a, b) => a.position - b.position,
           );
-          const q = query(tasksRef, where('taskListId', '==', taskListId)); //, orderBy("position")
-          await getDocs(q).then(snapshot => {
-            data = snapshot.docs.map(x => x.data());
-          });
           return { data };
         } catch (e) {
           return { error: e };
@@ -43,6 +49,14 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
         if (newTask.userId !== userId) {
           return { error: 'Error: User ID in task and store is different!' };
         }
+
+        //get max position from all tasks in group
+        const allTasks = await getAllTasks(userId, newTask.taskListId);
+
+        newTask.position =
+          allTasks.reduce((p, c) => {
+            return c.taskGroupId === newTask.taskGroupId && p < c.position ? c.position : p;
+          }, 0) + 1;
 
         try {
           const taskRef = doc(db, '/Users/' + userId + '/Tasks/' + taskId).withConverter(
