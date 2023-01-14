@@ -11,6 +11,7 @@ import { setDisplayMode, toggleEditMode } from './todaySlice';
 import { RowGap } from '../../components/global/RowGap';
 import { TaskDisplayMode } from '../../components/global/TaskComponent/TaskComponent';
 import DynamicIcon from '../../components/global/DynamicIcon';
+import TodayTaskGroupRearrange from './TaskGroup/TodayTaskGroupRearrange';
 
 const TodayTaskGroupWrapper = styled.div`
   display: flex;
@@ -83,9 +84,13 @@ const TodayDefault: React.FC = () => {
           </Radio.Group>
         </RowGap>
       </TitleRow>
-      {existingGroups.map(g => (
-        <TodayTaskGroup key={g.id} group={g} />
-      ))}
+      {existingGroups.map(g =>
+        isEditMode ? (
+          <TodayTaskGroupRearrange key={g.id} group={g} />
+        ) : (
+          <TodayTaskGroup key={g.id} group={g} />
+        ),
+      )}
     </TodayTaskGroupWrapper>
   );
 };
