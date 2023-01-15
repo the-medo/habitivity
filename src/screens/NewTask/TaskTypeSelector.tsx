@@ -10,6 +10,7 @@ import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
 import { defaultSelectStyle } from '../../components/forms/AntdFormComponents';
 import { RowGap } from '../../components/global/RowGap';
 import { useNavigate, useParams } from 'react-router-dom';
+import TaskGroupSelect from '../../components/global/TaskGroupSelect/TaskGroupSelect';
 
 interface TaskTypeWrapperProps {
   $isTaskTypeSelected: boolean;
@@ -55,25 +56,12 @@ const TaskTypeSelector: React.FC = () => {
     }
   }, [taskGroupId, taskGroupValue, existingGroups]);
 
-  const options = useMemo(() => {
-    return existingGroups.map(g => ({
-      value: g.id,
-      label: g.name,
-    }));
-  }, [existingGroups]);
-
   return (
     <>
       <RowGap>
         <h2>Choose task group:</h2>
         <Spin spinning={isTaskGroupsLoading}>
-          <Select
-            value={taskGroupValue}
-            onChange={handleTaskGroupChange}
-            options={options}
-            style={defaultSelectStyle}
-            dropdownMatchSelectWidth={false}
-          />
+          <TaskGroupSelect value={taskGroupValue} onChangeHandler={handleTaskGroupChange} />
         </Spin>
       </RowGap>
       <h2>Choose task type:</h2>
