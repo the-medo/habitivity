@@ -72,9 +72,10 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
         </HeaderPart>
       </TaskGroupHeader>
       <TaskComponentWrapper displayMode={displayMode}>
-        {taskInfo.tasks.map(t => (
-          <TaskComponent key={t.id} task={t} displayMode={displayMode} />
-        ))}
+        {taskInfo.tasks.map(t => {
+          console.log('WTF', t.id);
+          return <TaskComponent key={t.id} task={t} displayMode={displayMode} />;
+        })}
       </TaskComponentWrapper>
     </TaskGroupWrapper>
   );

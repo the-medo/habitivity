@@ -51,7 +51,7 @@ const TaskCreateForm: React.FC = () => {
               setNotification({
                 type: 'success',
                 message: `Task created!`,
-                description: `Your task "${res.data.newTask.taskName}" has been created successfully!`,
+                description: `Your task "${res.data.taskName}" has been created successfully!`,
                 placement: 'topRight',
               }),
             );
