@@ -17,6 +17,7 @@ export interface TaskModifier {
 export interface TaskShared {
   id: string;
   position: number;
+  version: number;
   userId: string;
   taskGroupId: string;
   taskListId: string;

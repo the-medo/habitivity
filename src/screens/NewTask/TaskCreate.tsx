@@ -3,7 +3,6 @@ import TaskCreateForm from './TaskCreateForm';
 import { Header1 } from '../../components/global/Headers';
 import { useParams } from 'react-router-dom';
 import { useUser } from '../../hooks/useUser';
-import { generateID } from '../../helpers/generateID';
 import { useDispatch } from 'react-redux';
 import { setNewTaskSharedProps, setSelectedTaskType } from './taskCreationSlice';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
@@ -28,6 +27,7 @@ const TaskCreate: React.FC = () => {
         setNewTaskSharedProps({
           isActive: true,
           position: 0,
+          version: 1,
           taskGroupId: taskGroupId ?? 'undefined-task-group',
           taskListId: selectedTaskListId,
           userId: user.id,
