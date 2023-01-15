@@ -1,12 +1,17 @@
 import { ReduxState } from '../store';
-import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, where, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import { apiSlice, providesList } from './api';
 import { Task, taskConverter } from '../types/Tasks';
+import { TodayEditModeFormFields } from '../screens/Today/TaskGroup/TodayEditMode';
 
 interface CreateTaskPayload {
   newTask: Omit<Task, 'id'>;
   taskId: string;
+}
+
+interface RearrangeTaskPayload {
+  newNames: TodayEditModeFormFields;
 }
 
 const getAllTasks = async (userId: string, taskListId: string) => {
@@ -79,7 +84,67 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
       },
       invalidatesTags: [{ type: 'Task', id: 'LIST' }],
     }),
+
+    rearrangeTasks: builder.mutation<undefined, RearrangeTaskPayload>({
+      queryFn: async ({ newNames }, api) => {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const taskListId = (api.getState() as ReduxState).taskReducer.selectedTaskListId;
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const editItems = (api.getState() as ReduxState).todayReducer.editItems;
+
+        try {
+          if (userId && taskListId) {
+            const allTasks = await getAllTasks(userId, taskListId);
+
+            const batch = writeBatch(db);
+
+            allTasks.forEach(task => {
+              const groupId = Object.keys(editItems).find(
+                g => editItems[g]?.find(t => t.taskId === task.id) !== undefined,
+              );
+              if (groupId) {
+                const foundTaskEdited = editItems[groupId]?.find(t => t.taskId === task.id);
+                if (foundTaskEdited) {
+                  const taskRef = doc(db, `/Users/${userId}/Tasks/${task.id}`).withConverter(
+                    taskConverter,
+                  );
+                  const needsToBeUpdated =
+                    groupId !== task.taskGroupId ||
+                    foundTaskEdited.position !== task.position ||
+                    task.taskName !== newNames[task.id] ||
+                    (foundTaskEdited.additionalAction === 'archive' && task.isActive) ||
+                    (foundTaskEdited.additionalAction === false && !task.isActive);
+
+                  if (foundTaskEdited.additionalAction === 'delete') {
+                    batch.delete(taskRef);
+                  } else if (needsToBeUpdated) {
+                    const patch: Partial<Task> = {
+                      isActive: foundTaskEdited.additionalAction === false,
+                      taskName: newNames[task.id],
+                      taskGroupId: groupId,
+                      position: foundTaskEdited.position,
+                    };
+
+                    batch.update(taskRef, patch);
+                  }
+                }
+              }
+            });
+
+            await batch.commit();
+          }
+
+          return { data: undefined };
+        } catch (e) {
+          return { error: e };
+        }
+      },
+      invalidatesTags: [{ type: 'Task', id: 'LIST' }],
+    }),
   }),
 });
 
-export const { useGetTasksByTaskListQuery, useCreateTaskMutation } = apiTask;
+export const { useGetTasksByTaskListQuery, useCreateTaskMutation, useRearrangeTasksMutation } =
+  apiTask;

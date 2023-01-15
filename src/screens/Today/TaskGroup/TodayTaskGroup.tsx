@@ -50,7 +50,7 @@ const HeaderPart = styled.div`
 `;
 
 const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
-  const taskInfo = useTasksByGroup(group.id);
+  const { tasksActive } = useTasksByGroup(group.id);
   const displayMode = useSelector((state: ReduxState) => state.todayReducer.displayMode);
 
   return (
@@ -61,8 +61,8 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
           <HeaderPoints>20</HeaderPoints>
         </HeaderPart>
         <HeaderPart>
-          {taskInfo.tasks.length === 0 && <EmptyGroupMessage taskGroupId={group.id} />}
-          {taskInfo.tasks.length > 0 && (
+          {tasksActive.length === 0 && <EmptyGroupMessage taskGroupId={group.id} />}
+          {tasksActive.length > 0 && (
             <Tooltip title="New task">
               <Link to={`/new-task/${group.id}`}>
                 <Button icon={<DynamicIcon icon="AiOutlinePlus" />} />
@@ -72,10 +72,9 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
         </HeaderPart>
       </TaskGroupHeader>
       <TaskComponentWrapper displayMode={displayMode}>
-        {taskInfo.tasks.map(t => {
-          console.log('WTF', t.id);
-          return <TaskComponent key={t.id} task={t} displayMode={displayMode} />;
-        })}
+        {tasksActive.map(t => (
+          <TaskComponent key={t.id} task={t} displayMode={displayMode} />
+        ))}
       </TaskComponentWrapper>
     </TaskGroupWrapper>
   );

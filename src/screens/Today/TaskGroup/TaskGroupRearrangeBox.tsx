@@ -1,10 +1,13 @@
-import React, { useCallback } from 'react';
-import { ReorderTask, TasksByGroup } from './TodayEditMode';
+import React, { useCallback, useEffect } from 'react';
+import { ReorderTask } from './TodayEditMode';
 import styled from 'styled-components';
 import { Reorder } from 'framer-motion';
 import { TaskGroup } from '../../../types/TaskGroup';
 import TaskRearrangeRow from './TaskRearrangeRow';
 import { COLORS } from '../../../styles/CustomStyles';
+import { useDispatch, useSelector } from 'react-redux';
+import { setEditItemsGroup } from '../todaySlice';
+import { ReduxState } from '../../../store';
 
 const StyledReorderGroup = styled(Reorder.Group)`
   list-style-type: none;
@@ -16,24 +19,29 @@ const StyledReorderGroup = styled(Reorder.Group)`
 
 interface TaskGroupRearrangeBoxProps {
   taskGroup: TaskGroup;
-  items: ReorderTask[];
-  setItems: React.Dispatch<React.SetStateAction<TasksByGroup>>;
 }
 
-const TaskGroupRearrangeBox: React.FC<TaskGroupRearrangeBoxProps> = ({
-  items,
-  setItems,
-  taskGroup,
-}) => {
+const TaskGroupRearrangeBox: React.FC<TaskGroupRearrangeBoxProps> = ({ taskGroup }) => {
+  const dispatch = useDispatch();
+  const items = useSelector(
+    (state: ReduxState) =>
+      state.todayReducer.editItems[taskGroup.id]?.filter(t => t.additionalAction === false) ?? [],
+  );
+
+  useEffect(() => {
+    console.log(items);
+  }, [items]);
+
   const onReorder = useCallback(
     (x: ReorderTask[]) => {
-      console.log(x);
-      setItems(i => ({
-        ...i,
-        [taskGroup.id]: x,
-      }));
+      dispatch(
+        setEditItemsGroup({
+          taskGroupId: taskGroup.id,
+          items: x.map((t, i) => ({ ...t, position: i + 1 })),
+        }),
+      );
     },
-    [setItems, taskGroup.id],
+    [dispatch, taskGroup.id],
   );
 
   if (items.length === 0) return null;

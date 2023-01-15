@@ -1,11 +1,13 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { ReorderTask } from './TodayEditMode';
 import TaskGroupSelect from '../../../components/global/TaskGroupSelect/TaskGroupSelect';
 import { FormItem, validateTriggerDefault } from '../../../components/forms/AntdFormComponents';
-import { Input } from 'antd';
+import { Button, Input } from 'antd';
 import DynamicIcon from '../../../components/global/DynamicIcon';
 import { COLORS } from '../../../styles/CustomStyles';
+import { useDispatch } from 'react-redux';
+import { changeGroupOfEditItem, setEditItemsTask } from '../todaySlice';
 
 const StyledInput = styled(Input)``;
 
@@ -34,10 +36,56 @@ interface TaskRearrangeRowProps {
 const HandleIcon = styled(DynamicIcon).attrs({ icon: 'AiOutlineDrag', small: true })``;
 
 const TaskRearrangeRow: React.FC<TaskRearrangeRowProps> = ({ taskReorder, taskGroupId }) => {
-  const onChangeHandler = useCallback(() => {}, []);
+  const dispatch = useDispatch();
+  const [initialTaskName] = useState(taskReorder.taskName);
+
+  const onChangeGroupHandler = useCallback(
+    (opt: string) => {
+      dispatch(
+        changeGroupOfEditItem({
+          originalTaskGroupId: taskGroupId,
+          newTaskGroupId: opt,
+          taskId: taskReorder.taskId,
+        }),
+      );
+      console.log(opt);
+    },
+    [dispatch, taskGroupId, taskReorder],
+  );
+
+  const onArchiveHandler = useCallback(() => {
+    dispatch(
+      setEditItemsTask({
+        taskGroupId,
+        item: { ...taskReorder, additionalAction: 'archive' },
+      }),
+    );
+  }, [dispatch, taskGroupId, taskReorder]);
+
+  const onDeleteHandler = useCallback(() => {
+    dispatch(
+      setEditItemsTask({
+        taskGroupId,
+        item: { ...taskReorder, additionalAction: 'delete' },
+      }),
+    );
+  }, [dispatch, taskGroupId, taskReorder]);
+
+  const onRestoreHandler = useCallback(() => {
+    dispatch(
+      setEditItemsTask({
+        taskGroupId,
+        item: { ...taskReorder, additionalAction: false },
+      }),
+    );
+  }, [dispatch, taskGroupId, taskReorder]);
+
   const handleIcon = useMemo(() => <HandleIcon />, []);
+  const deleteOutlinedIcon = useMemo(() => <DynamicIcon icon="AiOutlineDelete" />, []);
+  const archiveIcon = useMemo(() => <DynamicIcon icon="GoArchive" />, []);
+  const restoreIcon = useMemo(() => <DynamicIcon icon="AiOutlineRest" />, []);
   const initialValue = taskReorder.taskName;
-  const rules = useMemo(() => [{ required: true, message: `Please input name of task` }], []);
+  const rules = useMemo(() => [{ required: true, message: `` }], []);
 
   return (
     <RowWrapper>
@@ -48,9 +96,29 @@ const TaskRearrangeRow: React.FC<TaskRearrangeRowProps> = ({ taskReorder, taskGr
         rules={rules}
         initialValue={initialValue}
       >
-        <StyledInput prefix={handleIcon} placeholder="Task name" />
+        <StyledInput
+          prefix={handleIcon}
+          placeholder={initialTaskName}
+          disabled={taskReorder.additionalAction !== false}
+        />
       </FormItem>
-      <TaskGroupSelect value={taskGroupId} onChangeHandler={onChangeHandler} />
+      <TaskGroupSelect
+        isDisabled={taskReorder.additionalAction !== false}
+        value={taskGroupId}
+        onChangeHandler={onChangeGroupHandler}
+      />
+      {taskReorder.additionalAction !== 'archive' && (
+        <Button icon={archiveIcon} onClick={onArchiveHandler} />
+      )}
+      {taskReorder.additionalAction === 'archive' && (
+        <Button icon={restoreIcon} onClick={onRestoreHandler} />
+      )}
+      {taskReorder.additionalAction !== 'delete' && (
+        <Button icon={deleteOutlinedIcon} onClick={onDeleteHandler} danger />
+      )}
+      {taskReorder.additionalAction === 'delete' && (
+        <Button icon={restoreIcon} onClick={onRestoreHandler} />
+      )}
     </RowWrapper>
   );
 };

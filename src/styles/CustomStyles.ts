@@ -20,6 +20,7 @@ export const COLORS = {
   BLUE_LIGHT: '#cdd9ee',
   BLUE_GREY_DARK: 'rgb(77 92 106)',
   BLUE_DARK: '#001529',
+  DANGER_BACKGROUND: '#ffe9e9',
 };
 
 export const STYLE = {
