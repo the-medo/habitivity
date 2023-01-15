@@ -11,7 +11,7 @@ import { setDisplayMode, toggleEditMode } from './todaySlice';
 import { RowGap } from '../../components/global/RowGap';
 import { TaskDisplayMode } from '../../components/global/TaskComponent/TaskComponent';
 import DynamicIcon from '../../components/global/DynamicIcon';
-import TodayTaskGroupRearrange from './TaskGroup/TodayTaskGroupRearrange';
+import TodayEditMode from './TaskGroup/TodayEditMode';
 
 const TodayTaskGroupWrapper = styled.div`
   display: flex;
@@ -51,25 +51,6 @@ const TodayDefault: React.FC = () => {
               Edit mode
             </Button>
           )}
-          {isEditMode && (
-            <>
-              <Button
-                onClick={editModeHandler}
-                type="primary"
-                icon={<DynamicIcon icon="AiOutlineCheck" />}
-              >
-                Save and continue
-              </Button>
-              <Tooltip title="Close">
-                <Button
-                  onClick={editModeHandler}
-                  type="default"
-                  danger
-                  icon={<DynamicIcon icon="AiOutlineClose" />}
-                />
-              </Tooltip>
-            </>
-          )}
           <Radio.Group defaultValue={displayMode} buttonStyle="solid" onChange={displayModeHandler}>
             <Tooltip title="Box mode">
               <Radio.Button value={TaskDisplayMode.BOXES}>
@@ -84,13 +65,8 @@ const TodayDefault: React.FC = () => {
           </Radio.Group>
         </RowGap>
       </TitleRow>
-      {existingGroups.map(g =>
-        isEditMode ? (
-          <TodayTaskGroupRearrange key={g.id} group={g} />
-        ) : (
-          <TodayTaskGroup key={g.id} group={g} />
-        ),
-      )}
+      {isEditMode && <TodayEditMode />}
+      {!isEditMode && existingGroups.map(g => <TodayTaskGroup key={g.id} group={g} />)}
     </TodayTaskGroupWrapper>
   );
 };

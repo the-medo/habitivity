@@ -40,7 +40,7 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
       providesTags: result => providesList(result, 'Task'),
     }),
 
-    createTask: builder.mutation<CreateTaskPayload, CreateTaskPayload>({
+    createTask: builder.mutation<Task, CreateTaskPayload>({
       queryFn: async ({ newTask, taskId }, api) => {
         console.log('======== API ============ inside createTask ====================');
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -58,16 +58,20 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
             return c.taskGroupId === newTask.taskGroupId && p < c.position ? c.position : p;
           }, 0) + 1;
 
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const newTaskFull = Object.assign(newTask, {
+          id: taskId,
+        }) as Task;
+
         try {
           const taskRef = doc(db, '/Users/' + userId + '/Tasks/' + taskId).withConverter(
             taskConverter,
           );
-          await setDoc(taskRef, newTask);
+
+          await setDoc(taskRef, newTaskFull);
+
           return {
-            data: {
-              newTask,
-              taskId,
-            },
+            data: newTaskFull,
           };
         } catch (e) {
           return { error: e };
