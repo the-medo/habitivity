@@ -42,6 +42,7 @@ const TodayTaskGroupRearrange: React.FC<TodayTaskGroupRearrangeProps> = ({ group
         position: t.position,
         taskId: t.id,
         taskName: t.taskName,
+        taskGroup: t.taskGroupId,
       })),
     );
   }, [taskInfo.tasks]);
