@@ -78,7 +78,7 @@ const MenuLeft: React.FC = () => {
           });
 
           existingTasks
-            .filter(t => t.taskGroupId === g.id)
+            .filter(t => t.taskGroupId === g.id && t.isActive)
             .map(t => {
               result.push({
                 type: 'task',

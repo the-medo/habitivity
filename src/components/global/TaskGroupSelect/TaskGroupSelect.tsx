@@ -19,11 +19,16 @@ const IconWrapper = styled.span`
 `;
 
 interface TaskGroupSelectProps {
+  isDisabled: boolean;
   value: string | undefined;
   onChangeHandler: (opt: string) => void;
 }
 
-const TaskGroupSelect: React.FC<TaskGroupSelectProps> = ({ value, onChangeHandler }) => {
+const TaskGroupSelect: React.FC<TaskGroupSelectProps> = ({
+  isDisabled,
+  value,
+  onChangeHandler,
+}) => {
   const selectedTaskListId = useSelectedTaskListId();
   const { data: existingGroups = [], isLoading: isTaskGroupsLoading } =
     useGetTaskGroupsByTaskListQuery(selectedTaskListId);
@@ -45,6 +50,7 @@ const TaskGroupSelect: React.FC<TaskGroupSelectProps> = ({ value, onChangeHandle
   return (
     <Spin spinning={isTaskGroupsLoading}>
       <Select
+        disabled={isDisabled}
         value={value}
         onChange={onChangeHandler}
         options={options}

@@ -5,24 +5,22 @@ import { useSelectedTaskListId } from './useSelectedTaskListId';
 
 export interface TasksByGroup {
   taskGroupId: string;
-  tasks: Task[];
+  tasksAll: Task[];
+  tasksActive: Task[];
   isLoading: boolean;
 }
 
 export function useTasksByGroup(taskGroupId: string): TasksByGroup {
   const selectedTaskListId = useSelectedTaskListId();
   const { data: tasks = [], isLoading } = useGetTasksByTaskListQuery(selectedTaskListId);
-  const filteredTasks = useMemo(
-    () => tasks.filter(t => t.taskGroupId === taskGroupId),
-    [tasks, taskGroupId],
-  );
 
   return useMemo(
     () => ({
       taskGroupId,
-      tasks: filteredTasks,
+      tasksAll: tasks.filter(t => t.taskGroupId === taskGroupId),
+      tasksActive: tasks.filter(t => t.taskGroupId === taskGroupId && t.isActive),
       isLoading,
     }),
-    [filteredTasks, isLoading, taskGroupId],
+    [tasks, isLoading, taskGroupId],
   );
 }
