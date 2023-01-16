@@ -7,7 +7,8 @@ import { width100percent } from '../../../forms/AntdFormComponents';
 import DynamicIcon from '../../DynamicIcon';
 
 interface TaskUserInputCheckboxProps {
-  value: number;
+  value: number | undefined;
+  onChange: SelectProps['onChange'];
 }
 
 const OptionWrapper = styled.div<{ $checked: boolean }>`
@@ -53,10 +54,16 @@ const checkboxSelectOptions: SelectProps['options'] = [
   },
 ];
 
-const TaskUserInputCheckbox: React.FC<TaskUserInputCheckboxProps> = ({ value }) => {
+const TaskUserInputCheckbox: React.FC<TaskUserInputCheckboxProps> = ({ value, onChange }) => {
   return (
     <UserInputWrapper>
-      <Select defaultValue={0} options={checkboxSelectOptions} style={width100percent} />
+      <Select
+        defaultValue={value}
+        placeholder="Yes / no"
+        options={checkboxSelectOptions}
+        style={width100percent}
+        onChange={onChange}
+      />
     </UserInputWrapper>
   );
 };
