@@ -4,11 +4,16 @@ import { OptionCheckpoint } from '../../../../types/Tasks';
 import { width100percent } from '../../../forms/AntdFormComponents';
 
 interface TaskUserInputOptionsProps {
-  value: number;
+  value: number | undefined;
   options: OptionCheckpoint[];
+  onChange: SelectProps['onChange'];
 }
 
-const TaskUserInputOptions: React.FC<TaskUserInputOptionsProps> = ({ value, options }) => {
+const TaskUserInputOptions: React.FC<TaskUserInputOptionsProps> = ({
+  value,
+  options,
+  onChange,
+}) => {
   const selectOptions: SelectProps['options'] = useMemo(
     () => options.map(o => ({ value: o.optionId, label: o.option })),
     [options],
@@ -19,7 +24,8 @@ const TaskUserInputOptions: React.FC<TaskUserInputOptionsProps> = ({ value, opti
       defaultValue={value}
       options={selectOptions}
       style={width100percent}
-      placeholder="Select your option"
+      placeholder="Select option"
+      onChange={onChange}
     />
   );
 };
