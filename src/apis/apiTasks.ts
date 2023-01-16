@@ -1,9 +1,27 @@
 import { ReduxState } from '../store';
-import { collection, doc, getDocs, query, setDoc, where, writeBatch } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+  writeBatch,
+  getDoc,
+} from 'firebase/firestore';
 import { db } from '../firebase';
 import { apiSlice, providesList } from './api';
-import { Task, taskConverter } from '../types/Tasks';
+import {
+  Task,
+  TaskCompleted,
+  taskCompletedConverter,
+  taskConverter,
+  UsedModifiers,
+} from '../types/Tasks';
 import { TodayEditModeFormFields } from '../screens/Today/TaskGroup/TodayEditMode';
+import { CompletedDay, completedDayConverter } from '../helpers/types/CompletedDay';
+
+// import DocumentReference = firebase.firestore.DocumentReference;
 
 interface CreateTaskPayload {
   newTask: Omit<Task, 'id'>;
@@ -12,6 +30,14 @@ interface CreateTaskPayload {
 
 interface RearrangeTaskPayload {
   newNames: TodayEditModeFormFields;
+}
+
+interface CompleteTaskPayload {
+  task: Task;
+  points: number;
+  value: number;
+  date: string;
+  usedModifiers?: UsedModifiers;
 }
 
 const getAllTasks = async (userId: string, taskListId: string) => {
@@ -143,8 +169,106 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
       },
       invalidatesTags: [{ type: 'Task', id: 'LIST' }],
     }),
+
+    completeTask: builder.mutation<TaskCompleted, CompleteTaskPayload>({
+      queryFn: async ({ task, date, points, value, usedModifiers }, api) => {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
+
+        console.log('=========== INSIDE completeTask ===========');
+
+        const patch = {
+          points,
+          value,
+          usedModifiers: usedModifiers ?? {
+            percentage: null,
+          },
+        };
+        console.log('== patch ', patch);
+
+        const completedTask: TaskCompleted = {
+          ...task,
+          date,
+          ...patch,
+        };
+        console.log('== completedTask ', completedTask);
+
+        const completedTaskRefPath = '/Users/' + userId + '/CompletedTasks/' + `${date}-${task.id}`;
+        const completedDayRefPath = '/Users/' + userId + '/CompletedDays/' + date;
+
+        try {
+          const batch = writeBatch(db);
+          console.log('== batch ', batch);
+          console.log('== refIds ', completedTaskRefPath, completedDayRefPath);
+
+          const completedDayRef = doc(db, completedDayRefPath).withConverter(completedDayConverter);
+
+          let completedDay: CompletedDay = {
+            date,
+            taskLists: {
+              [task.taskListId]: 0,
+            },
+            taskGroups: {
+              [task.taskGroupId]: 0,
+            },
+            tasks: {
+              [task.id]: patch,
+            },
+          };
+
+          const completedDaySnap = await getDoc(completedDayRef);
+          if (completedDaySnap.exists()) {
+            console.log('== completedDaySnap exists!!!');
+            completedDay = completedDaySnap.data();
+          }
+          console.log('== completedDay ', completedDay);
+
+          const taskCompletedRef = doc(db, completedTaskRefPath).withConverter(
+            taskCompletedConverter,
+          );
+
+          const taskCompletedSnap = await getDoc(taskCompletedRef);
+          let pointDifference;
+          if (taskCompletedSnap.exists()) {
+            console.log('== taskCompletedSnap exists!!! - will update');
+            const taskCompletedOld = taskCompletedSnap.data();
+            batch.update(taskCompletedRef, patch);
+            pointDifference = patch.points - taskCompletedOld.points;
+          } else {
+            console.log('== taskCompletedSnap doesnt exist - will set');
+            batch.set(taskCompletedRef, completedTask);
+            pointDifference = patch.points;
+          }
+          console.log('== pointDifference', pointDifference);
+
+          if (pointDifference !== 0) {
+            completedDay.taskLists[task.taskListId] =
+              (completedDay.taskLists[task.taskListId] ?? 0) + pointDifference;
+            completedDay.taskGroups[task.taskGroupId] =
+              (completedDay.taskGroups[task.taskGroupId] ?? 0) + pointDifference;
+          }
+          completedDay.tasks = {
+            ...completedDay.tasks,
+            [task.id]: patch,
+          };
+          console.log('== NEW completedDay ', completedDay);
+
+          batch.set(completedDayRef, completedDay);
+
+          await batch.commit();
+          return { data: completedTask };
+        } catch (e) {
+          console.error(e);
+          return { error: e };
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetTasksByTaskListQuery, useCreateTaskMutation, useRearrangeTasksMutation } =
-  apiTask;
+export const {
+  useGetTasksByTaskListQuery,
+  useCreateTaskMutation,
+  useRearrangeTasksMutation,
+  useCompleteTaskMutation,
+} = apiTask;
