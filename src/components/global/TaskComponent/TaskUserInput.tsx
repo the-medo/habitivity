@@ -6,25 +6,40 @@ import TaskUserInputUnitCheckpoints from './TaskUserInput/TaskUserInputUnitCheck
 import TaskUserInputCheckbox from './TaskUserInput/TaskUserInputCheckbox';
 import TaskUserInputTime from './TaskUserInput/TaskUserInputTime';
 import TaskUserInputOptions from './TaskUserInput/TaskUserInputOptions';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { DefaultOptionType } from 'antd/es/select';
 import { dayjsToMinutes } from '../../../helpers/dayjs/dayjsToMinutes';
 import debounce from 'lodash.debounce';
 import { getPointsBasedOnTimeCheckpoints } from '../../../helpers/getPointsBasedOnTimeCheckpoints';
 import { getPointsBasedOnUnitCheckpoints } from '../../../helpers/getPointsBasedOnUnitCheckpoints';
+import { useCompleteTaskMutation } from '../../../apis/apiTasks';
+import { Spin } from 'antd';
 
 interface TaskUserInputProps {
   task: Task;
 }
 
 const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
+  const [completeTask, { isLoading: isCompleting }] = useCompleteTaskMutation();
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const updatePoints = useCallback(
     debounce((points: number, value: number) => {
       points = Math.ceil(points * 100) / 100;
-      console.log('IN DEBOUNCE -  points: ', points, ' value: ', value);
+      const date = dayjs().format('YYYY-MM-DD');
+
+      console.log('=========== GOING TO COMPLETE TASK ===========');
+      completeTask({
+        task,
+        date,
+        points,
+        value,
+        usedModifiers: {
+          percentage: null,
+        },
+      });
     }, 500),
-    [],
+    [completeTask],
   );
 
   const onChangeInputHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -59,13 +74,9 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
     (value: number, option: DefaultOptionType | DefaultOptionType[]) => {
       let points = 0;
       if (task.taskType === TaskType.CHECKBOX) {
-        points = task.taskPoints;
+        points = value === 0 ? 0 : task.taskPoints;
       } else if (task.taskType === TaskType.OPTIONS) {
         points = task.taskCheckpoints[value].points;
-      }
-
-      if (value) {
-        console.log('SELECT: ', value, option);
       }
       console.log('POINTS: ', points);
       updatePoints(points, value);
@@ -77,43 +88,59 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
   switch (task.taskType) {
     case TaskType.DURATION:
       return (
-        <TaskUserInputDuration
-          value={undefined}
-          units={task.taskUnits}
-          onChange={onChangeInputHandler}
-        />
+        <Spin spinning={isCompleting}>
+          <TaskUserInputDuration
+            value={undefined}
+            units={task.taskUnits}
+            onChange={onChangeInputHandler}
+          />
+        </Spin>
       );
     case TaskType.TIME: {
-      return <TaskUserInputTime value={undefined} onChange={onChangeTimeHandler} />;
+      return (
+        <Spin spinning={isCompleting}>
+          <TaskUserInputTime value={undefined} onChange={onChangeTimeHandler} />
+        </Spin>
+      );
     }
     case TaskType.CHECKBOX: {
-      return <TaskUserInputCheckbox value={undefined} onChange={onChangeSelectHandler} />;
+      return (
+        <Spin spinning={isCompleting}>
+          <TaskUserInputCheckbox value={undefined} onChange={onChangeSelectHandler} />
+        </Spin>
+      );
     }
     case TaskType.UNITS: {
       return (
-        <TaskUserInputUnits
-          value={undefined}
-          units={task.taskUnits}
-          onChange={onChangeInputHandler}
-        />
+        <Spin spinning={isCompleting}>
+          <TaskUserInputUnits
+            value={undefined}
+            units={task.taskUnits}
+            onChange={onChangeInputHandler}
+          />
+        </Spin>
       );
     }
     case TaskType.UNIT_CHECKPOINTS: {
       return (
-        <TaskUserInputUnitCheckpoints
-          value={undefined}
-          units={task.taskUnits}
-          onChange={onChangeInputHandler}
-        />
+        <Spin spinning={isCompleting}>
+          <TaskUserInputUnitCheckpoints
+            value={undefined}
+            units={task.taskUnits}
+            onChange={onChangeInputHandler}
+          />
+        </Spin>
       );
     }
     case TaskType.OPTIONS: {
       return (
-        <TaskUserInputOptions
-          value={undefined}
-          options={task.taskCheckpoints}
-          onChange={onChangeSelectHandler}
-        />
+        <Spin spinning={isCompleting}>
+          <TaskUserInputOptions
+            value={undefined}
+            options={task.taskCheckpoints}
+            onChange={onChangeSelectHandler}
+          />
+        </Spin>
       );
     }
   }

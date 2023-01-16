@@ -15,7 +15,7 @@ export interface TaskModifier {
 }
 
 export interface TaskShared {
-  id?: string;
+  id: string;
   position: number;
   version: number;
   userId: string;
@@ -128,6 +128,17 @@ export type TTOptions = TaskShared & {
 
 export type Task = TTTime | TTDuration | TTCheckbox | TTUnits | TTUnitCheckpoints | TTOptions;
 
+export interface UsedModifiers {
+  percentage: number | null;
+}
+
+export type TaskCompleted = Omit<Task, 'position'> & {
+  value: number;
+  points: number;
+  date: string;
+  usedModifiers: UsedModifiers;
+};
+
 // noinspection JSUnusedGlobalSymbols
 export const taskConverter = {
   toFirestore(task: Task): firebase.firestore.DocumentData {
@@ -138,5 +149,18 @@ export const taskConverter = {
     const data = snapshot.data(options);
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return data as Task;
+  },
+};
+
+// noinspection JSUnusedGlobalSymbols
+export const taskCompletedConverter = {
+  toFirestore(task: TaskCompleted): firebase.firestore.DocumentData {
+    return task;
+  },
+
+  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): TaskCompleted {
+    const data = snapshot.data(options);
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return data as TaskCompleted;
   },
 };
