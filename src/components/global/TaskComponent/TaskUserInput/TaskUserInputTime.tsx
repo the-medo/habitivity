@@ -3,7 +3,7 @@ import { TimePicker } from 'antd';
 import { timepickerFormat, width100percent } from '../../../forms/AntdFormComponents';
 import { PickerTimeProps } from 'antd/es/date-picker/generatePicker';
 import { Dayjs } from 'dayjs';
-import { minutesToDayjs } from '../../../../helpers/dayjs/minutesToDayjs';
+import { minutesToDayjs } from '../../../../helpers/date/minutesToDayjs';
 
 interface TaskUserInputTimeProps {
   value: number | undefined;

@@ -10,6 +10,10 @@ import { ReduxDispatch } from './store';
 import { auth } from './firebase';
 import Helmet from 'react-helmet';
 import LogoIcon from './assets/svg/habitivity-logo-favicon.svg';
+import utc from 'dayjs/plugin/utc';
+import dayjs from 'dayjs';
+
+dayjs.extend(utc);
 
 const App: React.FC = () => {
   const dispatch: ReduxDispatch = useDispatch();

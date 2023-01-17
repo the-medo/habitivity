@@ -135,7 +135,7 @@ export interface UsedModifiers {
 export type TaskCompleted = Omit<Task, 'position'> & {
   value: number;
   points: number;
-  date: string;
+  date: Date;
   usedModifiers: UsedModifiers;
 };
 

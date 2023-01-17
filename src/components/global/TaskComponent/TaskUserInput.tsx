@@ -5,15 +5,16 @@ import TaskUserInputUnits from './TaskUserInput/TaskUserInputUnits';
 import TaskUserInputUnitCheckpoints from './TaskUserInput/TaskUserInputUnitCheckpoints';
 import TaskUserInputCheckbox from './TaskUserInput/TaskUserInputCheckbox';
 import TaskUserInputTime from './TaskUserInput/TaskUserInputTime';
+import { Dayjs } from 'dayjs';
 import TaskUserInputOptions from './TaskUserInput/TaskUserInputOptions';
-import dayjs, { Dayjs } from 'dayjs';
 import { DefaultOptionType } from 'antd/es/select';
-import { dayjsToMinutes } from '../../../helpers/dayjs/dayjsToMinutes';
+import { dayjsToMinutes } from '../../../helpers/date/dayjsToMinutes';
 import debounce from 'lodash.debounce';
 import { getPointsBasedOnTimeCheckpoints } from '../../../helpers/getPointsBasedOnTimeCheckpoints';
 import { getPointsBasedOnUnitCheckpoints } from '../../../helpers/getPointsBasedOnUnitCheckpoints';
 import { useCompleteTaskMutation } from '../../../apis/apiTasks';
 import { Spin } from 'antd';
+import { dayjsToMiddayDate } from '../../../helpers/date/dayjsToMiddayDate';
 
 interface TaskUserInputProps {
   task: Task;
@@ -26,7 +27,7 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
   const updatePoints = useCallback(
     debounce((points: number, value: number) => {
       points = Math.ceil(points * 100) / 100;
-      const date = dayjs().format('YYYY-MM-DD');
+      const date = dayjsToMiddayDate();
 
       console.log('=========== GOING TO COMPLETE TASK ===========');
       completeTask({
