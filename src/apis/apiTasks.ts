@@ -20,6 +20,7 @@ import {
 } from '../types/Tasks';
 import { TodayEditModeFormFields } from '../screens/Today/TaskGroup/TodayEditMode';
 import { CompletedDay, completedDayConverter } from '../helpers/types/CompletedDay';
+import { dateBasicFormat } from '../helpers/date/dateBasicFormat';
 
 // import DocumentReference = firebase.firestore.DocumentReference;
 
@@ -36,7 +37,7 @@ interface CompleteTaskPayload {
   task: Task;
   points: number;
   value: number;
-  date: string;
+  date: Date;
   usedModifiers?: UsedModifiers;
 }
 
@@ -174,6 +175,7 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
       queryFn: async ({ task, date, points, value, usedModifiers }, api) => {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
+        const dateFormatted = dateBasicFormat(date);
 
         console.log('=========== INSIDE completeTask ===========');
 
@@ -193,8 +195,8 @@ export const apiTask = apiSlice.enhanceEndpoints({ addTagTypes: ['Task'] }).inje
         };
         console.log('== completedTask ', completedTask);
 
-        const completedTaskRefPath = '/Users/' + userId + '/CompletedTasks/' + `${date}-${task.id}`;
-        const completedDayRefPath = '/Users/' + userId + '/CompletedDays/' + date;
+        const completedTaskRefPath = `/Users/${userId}/CompletedTasks/${dateFormatted}-${task.id}`;
+        const completedDayRefPath = `/Users/${userId}/CompletedDays/${dateFormatted}`;
 
         try {
           const batch = writeBatch(db);

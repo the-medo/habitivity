@@ -1,5 +1,5 @@
 import { ExampleType } from '../ExampleBox';
-import { dayjsToMinutes } from '../../../../helpers/dayjs/dayjsToMinutes';
+import { dayjsToMinutes } from '../../../../helpers/date/dayjsToMinutes';
 import { TimeCheckpoint } from '../TaskCreateTime';
 import { countableString, pointCountable } from '../../../../helpers/unitSyntaxHelpers';
 
