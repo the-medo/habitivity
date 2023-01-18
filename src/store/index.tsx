@@ -9,6 +9,7 @@ import { taskCreationReducer } from '../screens/NewTask/taskCreationSlice';
 import { notificationReducer } from './notificationSlice';
 import { todayReducer } from '../screens/Today/todaySlice';
 import { appReducer } from './appSlice';
+import { routerReducer, routerSlice } from '../routes/routerSlice';
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     notificationReducer,
     taskCreationReducer,
     todayReducer,
+    [routerSlice.name]: routerReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),

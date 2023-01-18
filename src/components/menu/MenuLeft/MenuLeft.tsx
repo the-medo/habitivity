@@ -18,18 +18,19 @@ import { LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE } from '../../../styles/CustomSty
 import DynamicIcon from '../../global/DynamicIcon';
 import { useGetTaskGroupsByTaskListQuery } from '../../../apis/apiTaskGroup';
 import { useSelectedTaskListId } from '../../../hooks/useSelectedTaskListId';
-import { useGetTasksByTaskListQuery } from '../../../apis/apiTasks';
+import { useGetCompletedDayQuery, useGetTasksByTaskListQuery } from '../../../apis/apiTasks';
 import { MenuProps } from 'antd/es/menu';
 import { useLeftMenuSelected } from '../../../hooks/useLeftMenuSelected';
+import { AvailablePages } from '../../../routes/routerSlice';
 
 export interface MenuLeftItem {
   type: 'task-group' | 'task';
   key: string;
   label: string;
   icon?: string;
+  points?: number;
   color?: CSSProperties['color'];
   isDefault?: boolean;
-  childItems: MenuLeftSubItem[];
 }
 
 const parseMenuLeftItem = (item: MenuLeftItem): ItemType => {
@@ -41,30 +42,35 @@ const parseMenuLeftItem = (item: MenuLeftItem): ItemType => {
   };
 };
 
-export type MenuLeftSubItem = Omit<MenuLeftItem, 'childItems'>;
-
 const MenuLeft: React.FC = () => {
   const dispatch = useDispatch();
 
   const selectedTaskListId = useSelectedTaskListId();
+  const { itemsSelectedInitialized, itemsSelectedArray } = useLeftMenuSelected();
+  const { isLeftMenuCollapsed, isLeftMenuWithContent, leftMenuAutomaticallyCollapsed } =
+    useLeftMenu();
+  const items = useSelector((state: ReduxState) => state.menuReducer.items);
+  const openedPage = useSelector((state: ReduxState) => state.router.openedPage);
+  const selectedDate = useSelector((state: ReduxState) => state.todayReducer.selectedDate);
+
   const { data: existingGroups = [], isFetching: isFetchingTaskGroups } =
     useGetTaskGroupsByTaskListQuery(selectedTaskListId);
   const { data: existingTasks = [], isFetching: isFetchingTasks } =
     useGetTasksByTaskListQuery(selectedTaskListId);
-
-  const items = useSelector((state: ReduxState) => state.menuReducer.items);
-  const { itemsSelectedInitialized, itemsSelectedArray } = useLeftMenuSelected();
-
-  const { isLeftMenuCollapsed, isLeftMenuWithContent, leftMenuAutomaticallyCollapsed } =
-    useLeftMenu();
+  const { data: completedDay, isFetching: isFetchingCompletedDay } = useGetCompletedDayQuery({
+    date: selectedDate,
+  });
 
   const isReady = useMemo(
-    () => !isFetchingTaskGroups && !isFetchingTasks,
-    [isFetchingTaskGroups, isFetchingTasks],
+    () => !isFetchingTaskGroups && !isFetchingTasks && !isFetchingCompletedDay,
+    [isFetchingTaskGroups, isFetchingTasks, isFetchingCompletedDay],
   );
 
   useEffect(() => {
     if (isReady) {
+      console.log('READY!');
+      console.log('completedDay', completedDay);
+
       const menuItems: MenuLeftItem[] = existingGroups
         .map(g => {
           const result: MenuLeftItem[] = [];
@@ -72,20 +78,34 @@ const MenuLeft: React.FC = () => {
             type: 'task-group',
             key: g.id,
             label: g.name,
-            childItems: [],
             icon: g.icon,
             color: g.color,
+            points:
+              completedDay !== false && openedPage === AvailablePages.TODAY
+                ? completedDay?.taskGroups[g.id]
+                : undefined,
           });
 
           existingTasks
             .filter(t => t.taskGroupId === g.id && t.isActive)
             .map(t => {
+              let icon: MenuLeftItem['icon'] = 'RiCheckboxBlankCircleLine';
+              let points: MenuLeftItem['points'] = undefined;
+
+              if (openedPage === AvailablePages.TODAY && completedDay !== false) {
+                const completedDayTask = completedDay?.tasks[t.id];
+                if (completedDayTask !== undefined) {
+                  icon = 'BsCheck';
+                  points = completedDayTask.points;
+                }
+              }
+
               result.push({
                 type: 'task',
                 key: t.id,
                 label: t.taskName,
-                childItems: [],
-                icon: Math.random() < 0.5 ? 'RiCheckboxBlankCircleLine' : 'BsCheck', //'BsSquare', //BsCheckSquare
+                points,
+                icon, //'BsSquare', //BsCheckSquare
               });
             });
 
@@ -101,7 +121,16 @@ const MenuLeft: React.FC = () => {
       }
       dispatch(setMenuLeftItems(menuItems));
     }
-  }, [dispatch, isReady, existingGroups, existingTasks, itemsSelectedInitialized]);
+  }, [
+    dispatch,
+    isReady,
+    existingGroups,
+    existingTasks,
+    itemsSelectedInitialized,
+    openedPage,
+    selectedDate,
+    completedDay,
+  ]);
 
   const leftMenuItems = useMemo(() => items.map(i => parseMenuLeftItem(i)), [items]);
 

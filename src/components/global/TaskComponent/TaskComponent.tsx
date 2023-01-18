@@ -7,6 +7,7 @@ import TaskModifiers from './TaskModifiers';
 import { Header5 } from '../Headers';
 import { Dayjs } from 'dayjs';
 import { CompletedDayTask } from '../../../helpers/types/CompletedDay';
+import { formatPoints } from '../../../helpers/numbers/formatPoints';
 
 export enum TaskDisplayMode {
   BOXES,
@@ -110,7 +111,7 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
     <TaskWrapper $displayMode={displayMode}>
       <TaskHeader>
         <HeaderTitle>{task.taskName}</HeaderTitle>
-        <HeaderPoints>{completedDayTask?.points ?? '-'}</HeaderPoints>
+        <HeaderPoints>{formatPoints(completedDayTask?.points)}</HeaderPoints>
       </TaskHeader>
       <TaskUserInputWrapper>
         {isEmpty ? (

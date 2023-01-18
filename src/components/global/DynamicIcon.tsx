@@ -100,16 +100,14 @@ export const DynamicIconWrapper = styled.span<{ $small?: boolean }>`
   text-transform: none;
   vertical-align: -0.25em;
   text-rendering: optimizeLegibility;
+  width: ${({ $small }) => ($small ? '1em' : '1.25em')};
+  height: ${({ $small }) => ($small ? '1em' : '1.25em')};
 
   svg {
     display: inline-block;
     line-height: 1;
     width: ${({ $small }) => ($small ? '1em' : '1.25em')};
     height: ${({ $small }) => ($small ? '1em' : '1.25em')};
-  }
-
-  & + span {
-    margin-left: 0.5rem;
   }
 `;
 
@@ -182,7 +180,7 @@ const DynamicIcon: React.FC<DynamicIconProps> = ({
   );
 
   return (
-    <Suspense fallback={fallback}>
+    <Suspense fallback={fallback ?? <DynamicIconWrapper $small={small} />}>
       {showWrapper ? (
         <DynamicIconWrapper $small={small}>
           <Icon {...props} />
