@@ -20,6 +20,8 @@ interface TaskComponentProps {
   selectedDate: Dayjs;
   completedDayTask: CompletedDayTask | undefined;
   isEmpty: boolean;
+  colorDark: string;
+  colorLight: string;
 }
 
 const TaskHeader = styled.div`
@@ -38,7 +40,6 @@ const HeaderPoints = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${COLORS.PRIMARY_LIGHT};
   padding: 0.5rem;
   //font-weight: bold;
   border-radius: 50%;
@@ -47,23 +48,33 @@ const HeaderPoints = styled.div`
   height: 2rem;
 `;
 
-const TaskWrapper = styled.div<{ $displayMode: TaskDisplayMode }>`
+interface TaskWrapperProps {
+  $displayMode: TaskDisplayMode;
+  $colorLight: string;
+  $colorDark: string;
+}
+
+const TaskWrapper = styled.div<TaskWrapperProps>`
   display: flex;
   padding: 0.5rem;
-  border-radius: 0.5rem;
+  //border-radius: 0.5rem;
   margin: 0.25rem;
+
+  ${HeaderPoints} {
+    background-color: ${p => p.$colorLight};
+  }
 
   &:hover {
     background-color: ${COLORS.GREY_LIGHT};
   }
 
-  ${({ $displayMode }) =>
+  ${({ $displayMode, $colorLight }) =>
     $displayMode === TaskDisplayMode.BOXES &&
     css`
       flex-direction: column;
       flex: 0 0 12rem;
       gap: 0.5rem;
-      box-shadow: ${STYLE.BASE_SHADOW};
+      border: 1px solid ${$colorLight};
 
       ${TaskHeader} {
         width: 100%;
@@ -76,7 +87,7 @@ const TaskWrapper = styled.div<{ $displayMode: TaskDisplayMode }>`
       }
     `}
 
-  ${({ $displayMode }) =>
+  ${({ $displayMode, $colorLight }) =>
     $displayMode === TaskDisplayMode.ROWS &&
     css`
       flex-direction: row;
@@ -106,9 +117,11 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
   selectedDate,
   completedDayTask,
   isEmpty,
+  colorDark,
+  colorLight,
 }) => {
   return (
-    <TaskWrapper $displayMode={displayMode}>
+    <TaskWrapper $displayMode={displayMode} $colorLight={colorLight} $colorDark={colorDark}>
       <TaskHeader>
         <HeaderTitle>{task.taskName}</HeaderTitle>
         <HeaderPoints>{formatPoints(completedDayTask?.points)}</HeaderPoints>

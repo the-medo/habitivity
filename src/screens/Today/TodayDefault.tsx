@@ -14,6 +14,9 @@ import DynamicIcon from '../../components/global/DynamicIcon';
 import TodayEditMode from './TaskGroup/TodayEditMode';
 import dayjs, { Dayjs } from 'dayjs';
 import { datepickerFormat } from '../../components/forms/AntdFormComponents';
+import { Link } from 'react-router-dom';
+import { COLORS } from '../../styles/CustomStyles';
+import TaskComponentWrapper from '../../components/global/TaskComponent/TaskComponentWrapper';
 
 const TodayTaskGroupWrapper = styled.div`
   display: flex;
@@ -23,7 +26,16 @@ const TodayTaskGroupWrapper = styled.div`
 
 const TitleRow = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-between;
+`;
+
+const TaskWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+  border-bottom: 1px solid ${COLORS.GREY_BORDER};
 `;
 
 const TodayDefault: React.FC = () => {
@@ -49,8 +61,8 @@ const TodayDefault: React.FC = () => {
   return (
     <TodayTaskGroupWrapper>
       <TitleRow>
-        <Title level={2}>Your day</Title>
         <RowGap>
+          <Title level={2}>Your day</Title>
           <DatePicker
             size="large"
             bordered={false}
@@ -70,6 +82,9 @@ const TodayDefault: React.FC = () => {
               Edit mode
             </Button>
           )}
+          <Link to="/new-task">
+            <Button icon={<DynamicIcon icon="AiOutlinePlus" />}>Create task</Button>
+          </Link>
           <Radio.Group defaultValue={displayMode} buttonStyle="solid" onChange={displayModeHandler}>
             <Tooltip title="Box mode">
               <Radio.Button value={TaskDisplayMode.BOXES}>
@@ -85,7 +100,15 @@ const TodayDefault: React.FC = () => {
         </RowGap>
       </TitleRow>
       {isEditMode && <TodayEditMode />}
-      {!isEditMode && existingGroups.map(g => <TodayTaskGroup key={g.id} group={g} />)}
+      {!isEditMode && (
+        <TaskWrapper>
+          <TaskComponentWrapper displayMode={displayMode}>
+            {existingGroups.map(g => (
+              <TodayTaskGroup key={g.id} group={g} />
+            ))}
+          </TaskComponentWrapper>
+        </TaskWrapper>
+      )}
     </TodayTaskGroupWrapper>
   );
 };

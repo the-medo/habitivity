@@ -1,5 +1,5 @@
 export const formatPoints = (p: number | undefined): string => {
-  if (p) {
+  if (p !== undefined) {
     const fixed2points = p * 100 - Math.floor(p) * 100;
 
     let digitCount = fixed2points % 10 !== 0 ? 2 : 0;
