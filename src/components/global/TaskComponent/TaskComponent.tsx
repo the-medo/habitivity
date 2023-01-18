@@ -5,6 +5,8 @@ import { COLORS, STYLE } from '../../../styles/CustomStyles';
 import TaskUserInput from './TaskUserInput';
 import TaskModifiers from './TaskModifiers';
 import { Header5 } from '../Headers';
+import { Dayjs } from 'dayjs';
+import { CompletedDayTask } from '../../../helpers/types/CompletedDay';
 
 export enum TaskDisplayMode {
   BOXES,
@@ -14,6 +16,9 @@ export enum TaskDisplayMode {
 interface TaskComponentProps {
   task: Task;
   displayMode: TaskDisplayMode;
+  selectedDate: Dayjs;
+  completedDayTask: CompletedDayTask | undefined;
+  isEmpty: boolean;
 }
 
 const TaskHeader = styled.div`
@@ -29,10 +34,16 @@ const HeaderTitle = styled(Header5)`
 `;
 
 const HeaderPoints = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: ${COLORS.PRIMARY_LIGHT};
   padding: 0.5rem;
   //font-weight: bold;
   border-radius: 50%;
+  font-size: 12px;
+  width: 2rem;
+  height: 2rem;
 `;
 
 const TaskWrapper = styled.div<{ $displayMode: TaskDisplayMode }>`
@@ -88,17 +99,30 @@ const TaskWrapper = styled.div<{ $displayMode: TaskDisplayMode }>`
     `}
 `;
 
-const TaskComponent: React.FC<TaskComponentProps> = ({ task, displayMode }) => {
+const TaskComponent: React.FC<TaskComponentProps> = ({
+  task,
+  displayMode,
+  selectedDate,
+  completedDayTask,
+  isEmpty,
+}) => {
   return (
     <TaskWrapper $displayMode={displayMode}>
       <TaskHeader>
         <HeaderTitle>{task.taskName}</HeaderTitle>
-        <HeaderPoints>12</HeaderPoints>
+        <HeaderPoints>{completedDayTask?.points ?? '-'}</HeaderPoints>
       </TaskHeader>
       <TaskUserInputWrapper>
-        <TaskUserInput task={task} />
+        {isEmpty ? (
+          <div>
+            {/* placeholder DIV wrapper */}
+            <TaskUserInput date={selectedDate} task={task} completedDayTask={undefined} />
+          </div>
+        ) : (
+          <TaskUserInput date={selectedDate} task={task} completedDayTask={completedDayTask} />
+        )}
       </TaskUserInputWrapper>
-      <TaskModifiers value={50} taskModifiers={task.taskModifiers} />
+      <TaskModifiers value={100} taskModifiers={task.taskModifiers} />
     </TaskWrapper>
   );
 };

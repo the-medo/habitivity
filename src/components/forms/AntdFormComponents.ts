@@ -43,6 +43,7 @@ export const wrapperColSpanMovedButton: ColProps | undefined = {
 };
 export const width100percent = { width: '100%' };
 export const timepickerFormat = 'HH:mm';
+export const datepickerFormat = 'DD. MM. YYYY';
 
 export const changeableFieldValidator = (
   changeableFieldName: string,

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { Task, TaskType } from '../../../types/Tasks';
 import TaskUserInputDuration from './TaskUserInput/TaskUserInputDuration';
 import TaskUserInputUnits from './TaskUserInput/TaskUserInputUnits';
@@ -13,63 +13,78 @@ import debounce from 'lodash.debounce';
 import { getPointsBasedOnTimeCheckpoints } from '../../../helpers/getPointsBasedOnTimeCheckpoints';
 import { getPointsBasedOnUnitCheckpoints } from '../../../helpers/getPointsBasedOnUnitCheckpoints';
 import { useCompleteTaskMutation } from '../../../apis/apiTasks';
-import { Spin } from 'antd';
-import { dayjsToMiddayDate } from '../../../helpers/date/dayjsToMiddayDate';
+import { Input, Spin } from 'antd';
+import { dateBasicFormatFromDayjs } from '../../../helpers/date/dateBasicFormatFromDate';
+import { CompletedDayTask } from '../../../helpers/types/CompletedDay';
 
 interface TaskUserInputProps {
   task: Task;
+  date: Dayjs;
+  completedDayTask: CompletedDayTask | undefined;
 }
 
-const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
+const TaskUserInput: React.FC<TaskUserInputProps> = ({ task, date, completedDayTask }) => {
   const [completeTask, { isLoading: isCompleting }] = useCompleteTaskMutation();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updatePoints = useCallback(
-    debounce((points: number, value: number) => {
+    (points: number, value: number) => {
       points = Math.ceil(points * 100) / 100;
-      const date = dayjsToMiddayDate();
 
       console.log('=========== GOING TO COMPLETE TASK ===========');
       completeTask({
         task,
-        date,
         points,
+        date: dateBasicFormatFromDayjs(date),
         value,
         usedModifiers: {
           percentage: null,
         },
       });
-    }, 500),
-    [completeTask],
+    },
+    [completeTask, date, task],
   );
 
-  const onChangeInputHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value) {
-      const value = parseInt(e.target.value);
-      console.log('INPUT: ', e.target.value);
-      let points = 0;
-      if (task.taskType === TaskType.DURATION) {
-        points = task.taskPoints * (value / task.taskUnitCount);
-      } else if (task.taskType === TaskType.UNITS) {
-        points = task.taskPoints * (value / task.taskUnitCount);
-      } else if (task.taskType === TaskType.UNIT_CHECKPOINTS) {
-        console.log(task.taskCheckpoints);
-        points = getPointsBasedOnUnitCheckpoints(task.taskCheckpoints, value);
-      }
-      updatePoints(points, value);
-    }
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const updatePointsDebounce = useCallback(
+    debounce((points: number, value: number) => updatePoints(points, value), 500),
+    [updatePoints, completeTask, date],
+  );
 
-  const onChangeTimeHandler = useCallback((value: Dayjs | null) => {
-    let time: number | undefined = undefined;
-    if (task.taskType === TaskType.TIME) {
-      if (value) {
-        time = dayjsToMinutes(value);
-        const points = getPointsBasedOnTimeCheckpoints(task.taskCheckpoints, time);
-        updatePoints(points, time);
+  const onChangeInputHandler = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target.value) {
+        const value = parseInt(e.target.value);
+        console.log('INPUT: ', e.target.value);
+        let points = 0;
+        if (task.taskType === TaskType.DURATION) {
+          points = task.taskPoints * (value / task.taskUnitCount);
+        } else if (task.taskType === TaskType.UNITS) {
+          points = task.taskPoints * (value / task.taskUnitCount);
+        } else if (task.taskType === TaskType.UNIT_CHECKPOINTS) {
+          console.log(task.taskCheckpoints);
+          points = getPointsBasedOnUnitCheckpoints(task.taskCheckpoints, value);
+        }
+        updatePointsDebounce(points, value);
       }
-    }
-  }, []);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [updatePointsDebounce],
+  );
+
+  const onChangeTimeHandler = useCallback(
+    (value: Dayjs | null) => {
+      let time: number | undefined = undefined;
+      if (task.taskType === TaskType.TIME) {
+        if (value) {
+          time = dayjsToMinutes(value);
+          const points = getPointsBasedOnTimeCheckpoints(task.taskCheckpoints, time);
+          updatePointsDebounce(points, time);
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [updatePointsDebounce],
+  );
 
   const onChangeSelectHandler = useCallback(
     (value: number, option: DefaultOptionType | DefaultOptionType[]) => {
@@ -83,7 +98,7 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
       updatePoints(points, value);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [task.taskType],
+    [updatePoints, task.taskType],
   );
 
   switch (task.taskType) {
@@ -91,7 +106,7 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
       return (
         <Spin spinning={isCompleting}>
           <TaskUserInputDuration
-            value={undefined}
+            value={completedDayTask?.value}
             units={task.taskUnits}
             onChange={onChangeInputHandler}
           />
@@ -100,14 +115,14 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
     case TaskType.TIME: {
       return (
         <Spin spinning={isCompleting}>
-          <TaskUserInputTime value={undefined} onChange={onChangeTimeHandler} />
+          <TaskUserInputTime value={completedDayTask?.value} onChange={onChangeTimeHandler} />
         </Spin>
       );
     }
     case TaskType.CHECKBOX: {
       return (
         <Spin spinning={isCompleting}>
-          <TaskUserInputCheckbox value={undefined} onChange={onChangeSelectHandler} />
+          <TaskUserInputCheckbox value={completedDayTask?.value} onChange={onChangeSelectHandler} />
         </Spin>
       );
     }
@@ -115,7 +130,7 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
       return (
         <Spin spinning={isCompleting}>
           <TaskUserInputUnits
-            value={undefined}
+            value={completedDayTask?.value}
             units={task.taskUnits}
             onChange={onChangeInputHandler}
           />
@@ -126,7 +141,7 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
       return (
         <Spin spinning={isCompleting}>
           <TaskUserInputUnitCheckpoints
-            value={undefined}
+            value={completedDayTask?.value}
             units={task.taskUnits}
             onChange={onChangeInputHandler}
           />
@@ -137,7 +152,7 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task }) => {
       return (
         <Spin spinning={isCompleting}>
           <TaskUserInputOptions
-            value={undefined}
+            value={completedDayTask?.value}
             options={task.taskCheckpoints}
             onChange={onChangeSelectHandler}
           />
