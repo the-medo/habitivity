@@ -14,6 +14,7 @@ import DynamicIcon from '../../../components/global/DynamicIcon';
 import dayjs from 'dayjs';
 import { useGetCompletedDayQuery } from '../../../apis/apiTasks';
 import { formatPoints } from '../../../helpers/numbers/formatPoints';
+import { generate } from '@ant-design/colors';
 
 interface TodayTaskGroupProps {
   group: TaskGroup;
@@ -63,6 +64,11 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
   const selectedDate = useSelector((state: ReduxState) => state.todayReducer.selectedDate);
 
   const [selectedDateChanged, setSelectedDateChanged] = useState(true);
+  const colorLight = useMemo(
+    () => (group.color ? generate(group.color)[0] : COLORS.PRIMARY_LIGHT),
+    [group.color],
+  );
+  const colorDark = useMemo(() => group.color ?? COLORS.PRIMARY, [group.color]);
 
   useEffect(() => {
     setSelectedDateChanged(true);
@@ -78,42 +84,49 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
   });
 
   return (
-    <TaskGroupWrapper>
+    completedDay !== undefined &&
+    tasksActive.map(t => (
+      <Spin spinning={completedDay === undefined && isFetching}>
+        <TaskComponent
+          key={t.id}
+          task={t}
+          displayMode={displayMode}
+          selectedDate={dayjs(selectedDate)}
+          completedDayTask={completedDay === false ? undefined : completedDay.tasks[t.id]}
+          isEmpty={selectedDateChanged || isFetching}
+          colorLight={colorLight}
+          colorDark={colorDark}
+        />
+      </Spin>
+    ))
+  );
+};
+
+export default TodayTaskGroup;
+
+/*
+
+<TaskGroupWrapper>
       <TaskGroupHeader>
         <HeaderPart>
           <HeaderTitle>{group.name}</HeaderTitle>
           <HeaderPoints>
             {formatPoints(completedDay === false ? undefined : completedDay?.taskGroups[group.id])}
           </HeaderPoints>
-        </HeaderPart>
-        <HeaderPart>
-          {tasksActive.length === 0 && <EmptyGroupMessage taskGroupId={group.id} />}
-          {tasksActive.length > 0 && (
-            <Tooltip title="New task">
-              <Link to={`/new-task/${group.id}`}>
-                <Button icon={<DynamicIcon icon="AiOutlinePlus" />} />
-              </Link>
-            </Tooltip>
-          )}
-        </HeaderPart>
-      </TaskGroupHeader>
+    </HeaderPart>
+    <HeaderPart>
+      {tasksActive.length === 0 && <EmptyGroupMessage taskGroupId={group.id} />}
+      {tasksActive.length > 0 && (
+        <Tooltip title="New task">
+          <Link to={`/new-task/${group.id}`}>
+            <Button icon={<DynamicIcon icon="AiOutlinePlus" />} />
+          </Link>
+        </Tooltip>
+      )}
+    </HeaderPart>
       <TaskComponentWrapper displayMode={displayMode}>
-        <Spin spinning={completedDay === undefined && isFetching}>
-          {completedDay !== undefined &&
-            tasksActive.map(t => (
-              <TaskComponent
-                key={t.id}
-                task={t}
-                displayMode={displayMode}
-                selectedDate={dayjs(selectedDate)}
-                completedDayTask={completedDay === false ? undefined : completedDay.tasks[t.id]}
-                isEmpty={selectedDateChanged || isFetching}
-              />
-            ))}
-        </Spin>
       </TaskComponentWrapper>
+    </TaskGroupHeader>
     </TaskGroupWrapper>
-  );
-};
 
-export default TodayTaskGroup;
+ */

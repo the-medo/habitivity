@@ -53,7 +53,7 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task, date, completedDayT
   const onChangeInputHandler = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.value) {
-        const value = parseInt(e.target.value);
+        const value = parseFloat(e.target.value);
         console.log('INPUT: ', e.target.value);
         let points = 0;
         if (task.taskType === TaskType.DURATION) {
