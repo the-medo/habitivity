@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TaskGroup } from '../../../types/TaskGroup';
 import styled from 'styled-components';
 import { useTasksByGroup } from '../../../hooks/useTasksByGroup';
 import { COLORS } from '../../../styles/CustomStyles';
 import EmptyGroupMessage from './EmptyGroupMessage';
-import { Button, Tooltip } from 'antd';
+import { Button, Spin, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import TaskComponent from '../../../components/global/TaskComponent/TaskComponent';
 import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import TaskComponentWrapper from '../../../components/global/TaskComponent/TaskComponentWrapper';
 import DynamicIcon from '../../../components/global/DynamicIcon';
+import dayjs from 'dayjs';
+import { useGetCompletedDayQuery } from '../../../apis/apiTasks';
 
 interface TodayTaskGroupProps {
   group: TaskGroup;
@@ -50,8 +52,23 @@ const HeaderPart = styled.div`
 `;
 
 const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
-  const { tasksActive } = useTasksByGroup(group.id);
   const displayMode = useSelector((state: ReduxState) => state.todayReducer.displayMode);
+  const selectedDate = useSelector((state: ReduxState) => state.todayReducer.selectedDate);
+
+  const [selectedDateChanged, setSelectedDateChanged] = useState(true);
+
+  useEffect(() => {
+    setSelectedDateChanged(true);
+  }, [selectedDate]);
+
+  useEffect(() => {
+    if (selectedDateChanged) setSelectedDateChanged(false);
+  }, [selectedDateChanged]);
+
+  const { tasksActive } = useTasksByGroup(group.id);
+  const { data: completedDay, isFetching } = useGetCompletedDayQuery({
+    date: selectedDate,
+  });
 
   return (
     <TaskGroupWrapper>
@@ -72,9 +89,19 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
         </HeaderPart>
       </TaskGroupHeader>
       <TaskComponentWrapper displayMode={displayMode}>
-        {tasksActive.map(t => (
-          <TaskComponent key={t.id} task={t} displayMode={displayMode} />
-        ))}
+        <Spin spinning={completedDay === undefined && isFetching}>
+          {completedDay !== undefined &&
+            tasksActive.map(t => (
+              <TaskComponent
+                key={t.id}
+                task={t}
+                displayMode={displayMode}
+                selectedDate={dayjs(selectedDate)}
+                completedDayTask={completedDay === false ? undefined : completedDay.tasks[t.id]}
+                isEmpty={selectedDateChanged || isFetching}
+              />
+            ))}
+        </Spin>
       </TaskComponentWrapper>
     </TaskGroupWrapper>
   );

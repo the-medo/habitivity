@@ -9,7 +9,7 @@ export interface CompletedDayTask {
 }
 
 export interface CompletedDay {
-  date: Date;
+  date: string;
   taskLists: Record<string, number | undefined>;
   taskGroups: Record<string, number | undefined>;
   tasks: Record<string, CompletedDayTask | undefined>;

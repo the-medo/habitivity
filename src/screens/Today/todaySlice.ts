@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getItem, LSKey, setItem } from '../../store/localStore';
 import { TaskDisplayMode } from '../../components/global/TaskComponent/TaskComponent';
 import { ReorderTask, TasksByGroup } from './TaskGroup/TodayEditMode';
+import dayjs, { Dayjs } from 'dayjs';
+import { dateBasicFormatFromDayjs } from '../../helpers/date/dateBasicFormatFromDate';
 
 interface SetEditItemsGroupPayload {
   taskGroupId: string;
@@ -23,12 +25,14 @@ export interface TodayState {
   isEditMode: boolean;
   displayMode: TaskDisplayMode;
   editItems: TasksByGroup;
+  selectedDate: string;
 }
 
 const initialState: TodayState = {
   isEditMode: false,
   displayMode: getItem(LSKey.TODAY_DISPLAY_MODE) ?? TaskDisplayMode.BOXES,
   editItems: {},
+  selectedDate: dateBasicFormatFromDayjs(dayjs()),
 };
 
 export const todaySlice = createSlice({
@@ -102,6 +106,9 @@ export const todaySlice = createSlice({
         }
       }
     },
+    setSelectedDate: (state, action: PayloadAction<string>) => {
+      state.selectedDate = action.payload;
+    },
   },
 });
 
@@ -112,6 +119,7 @@ export const {
   setEditItemsGroup,
   setEditItemsTask,
   changeGroupOfEditItem,
+  setSelectedDate,
 } = todaySlice.actions;
 
 export const todayReducer = todaySlice.reducer;
