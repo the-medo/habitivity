@@ -73,11 +73,12 @@ export const apiTask = apiSlice
         providesTags: result => providesList(result, 'Task'),
       }),
 
-      getCompletedDay: builder.query<CompletedDay | false, { date: string }>({
+      getCompletedDay: builder.query<CompletedDay | false, { date: string | undefined }>({
         queryFn: async ({ date }, api) => {
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
           try {
+            if (date === undefined) return { data: false };
             const completedDayRefPath = `/Users/${userId}/CompletedDays/${date}`;
             const completedDayRef = doc(db, completedDayRefPath).withConverter(
               completedDayConverter,

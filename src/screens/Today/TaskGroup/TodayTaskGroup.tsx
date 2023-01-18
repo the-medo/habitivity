@@ -13,6 +13,7 @@ import TaskComponentWrapper from '../../../components/global/TaskComponent/TaskC
 import DynamicIcon from '../../../components/global/DynamicIcon';
 import dayjs from 'dayjs';
 import { useGetCompletedDayQuery } from '../../../apis/apiTasks';
+import { formatPoints } from '../../../helpers/numbers/formatPoints';
 
 interface TodayTaskGroupProps {
   group: TaskGroup;
@@ -39,7 +40,13 @@ const HeaderTitle = styled.h2`
 const HeaderPoints = styled.div`
   background-color: ${COLORS.PRIMARY_LIGHT};
   margin-left: 0.5rem;
-  padding: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 1rem;
+  font-size: 90%;
   font-weight: bold;
   border-radius: 50%;
 `;
@@ -75,7 +82,9 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
       <TaskGroupHeader>
         <HeaderPart>
           <HeaderTitle>{group.name}</HeaderTitle>
-          <HeaderPoints>20</HeaderPoints>
+          <HeaderPoints>
+            {formatPoints(completedDay === false ? undefined : completedDay?.taskGroups[group.id])}
+          </HeaderPoints>
         </HeaderPart>
         <HeaderPart>
           {tasksActive.length === 0 && <EmptyGroupMessage taskGroupId={group.id} />}

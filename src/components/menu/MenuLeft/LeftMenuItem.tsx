@@ -7,6 +7,7 @@ import DynamicIcon from '../../global/DynamicIcon';
 import { generate } from '@ant-design/colors';
 import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
+import { formatPoints } from '../../../helpers/numbers/formatPoints';
 
 export interface LeftMenuNavLinkStyledProps {
   $isSubmenu: boolean;
@@ -17,6 +18,7 @@ export interface LeftMenuNavLinkStyledProps {
 
 const LeftLinkIcon = styled.span``;
 const LeftLinkLabel = styled.span``;
+const LeftLinkPoints = styled.span``;
 
 export const LeftMenuItemStyled = styled.div<LeftMenuNavLinkStyledProps>`
   display: flex;
@@ -31,7 +33,7 @@ export const LeftMenuItemStyled = styled.div<LeftMenuNavLinkStyledProps>`
           height: 1.75rem;
           font-size: 0.75rem;
           line-height: 0.75rem;
-          padding: 0.25rem 0.25rem 0.25rem ${p.$isCollapsed ? 0.25 : 0.75}rem;
+          padding: 0.25rem 0.25rem 0.25rem ${p.$isCollapsed ? 0.25 : 0.35}rem;
           background-color: transparent;
         `
       : css`
@@ -61,6 +63,19 @@ export const LeftMenuItemStyled = styled.div<LeftMenuNavLinkStyledProps>`
     text-overflow: ellipsis;
     align-items: center;
   }
+
+  ${LeftLinkPoints} {
+    display: ${p => (p.$isCollapsed ? 'none' : 'flex')};
+    align-items: center;
+    justify-content: center;
+    height: 1.5rem;
+    width: 1.5rem;
+    background-color: ${p => (p.$color ? p.$color : COLORS.PRIMARY_DARK)};
+    color: ${p => (p.$color ? generate(p.$color)[0] : COLORS.PRIMARY_LIGHT)};
+    border-radius: 50%;
+    padding: 0.75rem;
+    font-size: 75%;
+  }
 `;
 
 interface LeftMenuNavLinkProps {
@@ -89,6 +104,7 @@ const LeftMenuItem: React.FC<LeftMenuNavLinkProps> = ({ item }) => {
         {!item.icon && isLeftMenuCollapsed && <DynamicIcon icon="AiOutlineRightCircle" />}
       </LeftLinkIcon>
       <LeftLinkLabel>{item.label}</LeftLinkLabel>
+      <LeftLinkPoints>{formatPoints(item.points)}</LeftLinkPoints>
     </LeftMenuItemStyled>
   );
 };

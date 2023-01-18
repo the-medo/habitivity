@@ -6,6 +6,7 @@ import { useUser } from '../../hooks/useUser';
 import { useDispatch } from 'react-redux';
 import { setNewTaskSharedProps, setSelectedTaskType } from './taskCreationSlice';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
+import { AvailablePages, setOpenedPage } from '../../routes/routerSlice';
 
 const TaskCreate: React.FC = () => {
   const { taskGroupId } = useParams();
@@ -16,6 +17,8 @@ const TaskCreate: React.FC = () => {
   const selectedTaskListId = useSelectedTaskListId();
 
   useEffect(() => {
+    dispatch(setOpenedPage(AvailablePages.NEW_TASK));
+
     return () => {
       dispatch(setSelectedTaskType(undefined));
     };
