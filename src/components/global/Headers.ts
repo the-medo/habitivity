@@ -25,7 +25,8 @@ export const Header2 = styled.h2<HeaderProps>`
   ${headerFontMixin};
 `;
 
-export const Header5 = styled.h5<HeaderProps>`
+export const Header5 = styled.span<HeaderProps>`
   ${marginMixin};
   font-size: 1.13em;
+  font-weight: 500;
 `;

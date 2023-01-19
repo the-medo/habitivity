@@ -30,7 +30,7 @@ const TaskHeader = styled.div`
   align-items: center;
 `;
 
-const TaskUserInputWrapper = styled.div``;
+const TaskUserInputsWrapper = styled.div``;
 
 const HeaderTitle = styled(Header5)`
   margin-bottom: 0;
@@ -56,12 +56,10 @@ interface TaskWrapperProps {
 
 const TaskWrapper = styled.div<TaskWrapperProps>`
   display: flex;
-  padding: 0.5rem;
-  //border-radius: 0.5rem;
-  margin: 0.25rem;
 
   ${HeaderPoints} {
-    background-color: ${p => p.$colorLight};
+    background-color: ${p => p.$colorDark};
+    color: white;
   }
 
   &:hover {
@@ -77,20 +75,39 @@ const TaskWrapper = styled.div<TaskWrapperProps>`
       border: 1px solid ${$colorLight};
 
       ${TaskHeader} {
-        width: 100%;
-        min-height: 3.5rem;
-        align-items: flex-start;
+        width: 12rem;
+        min-height: 2rem;
+        height: 2rem;
+        align-items: center;
+        background-color: ${$colorLight};
+        padding: 0.25rem;
 
         ${HeaderTitle} {
-          padding: 0.5rem;
+          width: calc(12rem - 3rem);
+          padding: 0.25rem;
+          white-space: nowrap;
+          display: inline;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
+
+        ${HeaderPoints} {
+          width: 1.5rem;
+          height: 1.5rem;
+          font-size: 75%;
+        }
+      }
+
+      ${TaskUserInputsWrapper} {
+        padding: 0.5rem;
       }
     `}
 
-  ${({ $displayMode, $colorLight }) =>
+  ${({ $displayMode }) =>
     $displayMode === TaskDisplayMode.ROWS &&
     css`
       flex-direction: row;
+      padding: 0.5rem;
       gap: 1.5rem;
       align-items: center;
       border-bottom: 1px solid ${COLORS.GREY_LIGHT};
@@ -102,10 +119,11 @@ const TaskWrapper = styled.div<TaskWrapperProps>`
 
         ${HeaderTitle} {
           flex-grow: 1;
+          align-items: center;
         }
       }
 
-      ${TaskUserInputWrapper} {
+      ${TaskUserInputsWrapper} {
         flex-basis: 8rem;
       }
     `}
@@ -126,7 +144,7 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
         <HeaderTitle>{task.taskName}</HeaderTitle>
         <HeaderPoints>{formatPoints(completedDayTask?.points)}</HeaderPoints>
       </TaskHeader>
-      <TaskUserInputWrapper>
+      <TaskUserInputsWrapper>
         {isEmpty ? (
           <div>
             {/* placeholder DIV wrapper */}
@@ -135,7 +153,7 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
         ) : (
           <TaskUserInput date={selectedDate} task={task} completedDayTask={completedDayTask} />
         )}
-      </TaskUserInputWrapper>
+      </TaskUserInputsWrapper>
       <TaskModifiers value={100} taskModifiers={task.taskModifiers} />
     </TaskWrapper>
   );
