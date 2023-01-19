@@ -9,6 +9,7 @@ export enum LSKey {
   SELECTED_TASK_LIST_ID = '4',
   TODAY_DISPLAY_MODE = '5',
   SELECTED_TASK_GROUPS = '6',
+  SELECTED_DATE_TODAY = '7',
 }
 
 export interface LSValues {
@@ -18,6 +19,7 @@ export interface LSValues {
   [LSKey.SELECTED_TASK_LIST_ID]?: string;
   [LSKey.TODAY_DISPLAY_MODE]?: TaskDisplayMode;
   [LSKey.SELECTED_TASK_GROUPS]?: Record<string, boolean | undefined>;
+  [LSKey.SELECTED_DATE_TODAY]?: Record<string, string | undefined>;
 }
 
 export function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {

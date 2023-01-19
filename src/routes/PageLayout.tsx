@@ -1,5 +1,5 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Layout } from 'antd';
 import 'antd/dist/reset.css';
 import LoginPage from '../components/auth/LoginPage';
@@ -47,6 +47,14 @@ const PageLayout: React.FC = () => {
   const user = useUser();
   const { isLeftMenuCollapsed, isLeftMenuWithContent } = useLeftMenu();
   const { isRightDrawerCollapsed } = useRightDrawer();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.pathname === '/') navigate('/today');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   if (!user) {
     return <LoginPage />;
