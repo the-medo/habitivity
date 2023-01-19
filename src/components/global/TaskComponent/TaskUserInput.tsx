@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ChangeEvent, useCallback } from 'react';
 import { Task, TaskType } from '../../../types/Tasks';
 import TaskUserInputDuration from './TaskUserInput/TaskUserInputDuration';
 import TaskUserInputUnits from './TaskUserInput/TaskUserInputUnits';
@@ -7,15 +7,13 @@ import TaskUserInputCheckbox from './TaskUserInput/TaskUserInputCheckbox';
 import TaskUserInputTime from './TaskUserInput/TaskUserInputTime';
 import { Dayjs } from 'dayjs';
 import TaskUserInputOptions from './TaskUserInput/TaskUserInputOptions';
-import { DefaultOptionType } from 'antd/es/select';
 import { dayjsToMinutes } from '../../../helpers/date/dayjsToMinutes';
 import debounce from 'lodash.debounce';
-import { getPointsBasedOnTimeCheckpoints } from '../../../helpers/getPointsBasedOnTimeCheckpoints';
-import { getPointsBasedOnUnitCheckpoints } from '../../../helpers/getPointsBasedOnUnitCheckpoints';
 import { useCompleteTaskMutation } from '../../../apis/apiTasks';
-import { Input, Spin } from 'antd';
+import { Spin } from 'antd';
 import { dateBasicFormatFromDayjs } from '../../../helpers/date/dateBasicFormatFromDate';
 import { CompletedDayTask } from '../../../helpers/types/CompletedDay';
+import { computePoints, ComputePointsResponse } from '../../../helpers/points/computePoints';
 
 interface TaskUserInputProps {
   task: Task;
@@ -27,18 +25,14 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task, date, completedDayT
   const [completeTask, { isLoading: isCompleting }] = useCompleteTaskMutation();
 
   const updatePoints = useCallback(
-    (points: number, value: number) => {
-      points = Math.ceil(points * 100) / 100;
-
+    (p: ComputePointsResponse) => {
       console.log('=========== GOING TO COMPLETE TASK ===========');
       completeTask({
         task,
-        points,
+        points: p.points,
         date: dateBasicFormatFromDayjs(date),
-        value,
-        usedModifiers: {
-          percentage: null,
-        },
+        value: p.value ?? 0,
+        usedModifiers: p.usedModifiers,
       });
     },
     [completeTask, date, task],
@@ -46,7 +40,7 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task, date, completedDayT
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const updatePointsDebounce = useCallback(
-    debounce((points: number, value: number) => updatePoints(points, value), 500),
+    debounce((p: ComputePointsResponse) => updatePoints(p), 500),
     [updatePoints, completeTask, date],
   );
 
@@ -54,51 +48,30 @@ const TaskUserInput: React.FC<TaskUserInputProps> = ({ task, date, completedDayT
     (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.value) {
         const value = parseFloat(e.target.value);
-        console.log('INPUT: ', e.target.value);
-        let points = 0;
-        if (task.taskType === TaskType.DURATION) {
-          points = task.taskPoints * (value / task.taskUnitCount);
-        } else if (task.taskType === TaskType.UNITS) {
-          points = task.taskPoints * (value / task.taskUnitCount);
-        } else if (task.taskType === TaskType.UNIT_CHECKPOINTS) {
-          console.log(task.taskCheckpoints);
-          points = getPointsBasedOnUnitCheckpoints(task.taskCheckpoints, value);
-        }
-        updatePointsDebounce(points, value);
+        updatePointsDebounce(computePoints(task, value, undefined, completedDayTask));
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [updatePointsDebounce],
+    [updatePointsDebounce, task, completedDayTask],
   );
 
   const onChangeTimeHandler = useCallback(
     (value: Dayjs | null) => {
-      let time: number | undefined = undefined;
       if (task.taskType === TaskType.TIME) {
         if (value) {
-          time = dayjsToMinutes(value);
-          const points = getPointsBasedOnTimeCheckpoints(task.taskCheckpoints, time);
-          updatePointsDebounce(points, time);
+          updatePointsDebounce(
+            computePoints(task, dayjsToMinutes(value), undefined, completedDayTask),
+          );
         }
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [updatePointsDebounce],
+    [updatePointsDebounce, task, completedDayTask],
   );
 
   const onChangeSelectHandler = useCallback(
-    (value: number, option: DefaultOptionType | DefaultOptionType[]) => {
-      let points = 0;
-      if (task.taskType === TaskType.CHECKBOX) {
-        points = value === 0 ? 0 : task.taskPoints;
-      } else if (task.taskType === TaskType.OPTIONS) {
-        points = task.taskCheckpoints[value].points;
-      }
-      console.log('POINTS: ', points);
-      updatePoints(points, value);
+    (value: number) => {
+      updatePoints(computePoints(task, value, undefined, completedDayTask));
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [updatePoints, task.taskType],
+    [updatePoints, task, completedDayTask],
   );
 
   switch (task.taskType) {

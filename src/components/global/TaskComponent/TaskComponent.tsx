@@ -1,9 +1,9 @@
 import React from 'react';
 import { Task } from '../../../types/Tasks';
 import styled, { css } from 'styled-components';
-import { COLORS, STYLE } from '../../../styles/CustomStyles';
+import { COLORS } from '../../../styles/CustomStyles';
 import TaskUserInput from './TaskUserInput';
-import TaskModifiers from './TaskModifiers';
+import TaskModifiers, { ModifiersWrapper } from './TaskModifiers';
 import { Header5 } from '../Headers';
 import { Dayjs } from 'dayjs';
 import { CompletedDayTask } from '../../../helpers/types/CompletedDay';
@@ -126,6 +126,10 @@ const TaskWrapper = styled.div<TaskWrapperProps>`
       ${TaskUserInputsWrapper} {
         flex-basis: 8rem;
       }
+
+      ${ModifiersWrapper} {
+        padding-bottom: 0;
+      }
     `}
 `;
 
@@ -154,7 +158,13 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
           <TaskUserInput date={selectedDate} task={task} completedDayTask={completedDayTask} />
         )}
       </TaskUserInputsWrapper>
-      <TaskModifiers value={100} taskModifiers={task.taskModifiers} />
+      <TaskModifiers
+        percentValue={completedDayTask?.usedModifiers.percentage ?? 100}
+        date={selectedDate}
+        task={task}
+        completedDayTask={completedDayTask}
+        isReloading={isEmpty}
+      />
     </TaskWrapper>
   );
 };
