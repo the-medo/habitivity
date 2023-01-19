@@ -15,6 +15,7 @@ const ModifiersWrapper = styled.div`
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
+  padding: 0 0.5rem 0.5rem;
 `;
 
 const ModifiersTitle = styled(Text)`
