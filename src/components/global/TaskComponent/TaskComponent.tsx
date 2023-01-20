@@ -8,6 +8,7 @@ import { Header5 } from '../Headers';
 import { Dayjs } from 'dayjs';
 import { CompletedDayTask } from '../../../helpers/types/CompletedDay';
 import { formatPoints } from '../../../helpers/numbers/formatPoints';
+import { PointCircle } from '../PointCircle';
 
 export enum TaskDisplayMode {
   BOXES,
@@ -36,18 +37,6 @@ const HeaderTitle = styled(Header5)`
   margin-bottom: 0;
 `;
 
-const HeaderPoints = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  //font-weight: bold;
-  border-radius: 50%;
-  font-size: 12px;
-  width: 2rem;
-  height: 2rem;
-`;
-
 interface TaskWrapperProps {
   $displayMode: TaskDisplayMode;
   $colorLight: string;
@@ -56,11 +45,6 @@ interface TaskWrapperProps {
 
 const TaskWrapper = styled.div<TaskWrapperProps>`
   display: flex;
-
-  ${HeaderPoints} {
-    background-color: ${p => p.$colorDark};
-    color: white;
-  }
 
   &:hover {
     background-color: ${COLORS.GREY_LIGHT};
@@ -89,12 +73,6 @@ const TaskWrapper = styled.div<TaskWrapperProps>`
           display: inline;
           overflow: hidden;
           text-overflow: ellipsis;
-        }
-
-        ${HeaderPoints} {
-          width: 1.5rem;
-          height: 1.5rem;
-          font-size: 75%;
         }
       }
 
@@ -146,7 +124,12 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
     <TaskWrapper $displayMode={displayMode} $colorLight={colorLight} $colorDark={colorDark}>
       <TaskHeader>
         <HeaderTitle>{task.taskName}</HeaderTitle>
-        <HeaderPoints>{formatPoints(completedDayTask?.points)}</HeaderPoints>
+        <PointCircle
+          $color={colorDark}
+          $size={displayMode === TaskDisplayMode.BOXES ? 'small' : 'default'}
+        >
+          {formatPoints(completedDayTask?.points)}
+        </PointCircle>
       </TaskHeader>
       <TaskUserInputsWrapper>
         {isEmpty ? (
