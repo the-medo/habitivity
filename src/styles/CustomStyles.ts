@@ -54,3 +54,4 @@ export const LEFT_MENU_WIDTH = 13;
 export const RIGHT_DRAWER_WIDTH = 13;
 export const TOP_MENU_SMALL = 3;
 export const TOP_MENU_BIG = 4;
+export const LEFT_MENU_BOTTOM_HEIGHT = 4;

@@ -19,6 +19,7 @@ export interface LeftMenuNavLinkStyledProps {
 
 const LeftLinkIcon = styled.span``;
 const LeftLinkLabel = styled.span``;
+const PointsWrapper = styled.span``;
 
 export const LeftMenuItemStyled = styled.div<LeftMenuNavLinkStyledProps>`
   display: flex;
@@ -46,6 +47,12 @@ export const LeftMenuItemStyled = styled.div<LeftMenuNavLinkStyledProps>`
             background-color: ${p.$color ? generate(p.$color)[0] : COLORS.PRIMARY_LIGHT};
           `};
 
+          ${PointsWrapper} {
+            ${PointCircle} {
+              border-radius: 0.5rem;
+            }
+          }
+
           &:hover,
           &[aria-current='page'].active {
             background-color: ${p.$color ? generate(p.$color)[0] : COLORS.PRIMARY_LIGHT};
@@ -62,6 +69,13 @@ export const LeftMenuItemStyled = styled.div<LeftMenuNavLinkStyledProps>`
     height: 100%;
     text-overflow: ellipsis;
     align-items: center;
+  }
+
+  ${PointsWrapper} {
+    min-width: 2rem;
+    display: ${p => (p.$isCollapsed ? 'none' : 'flex')};
+    justify-content: center;
+    margin-right: -0.125rem;
   }
 `;
 
@@ -91,13 +105,16 @@ const LeftMenuItem: React.FC<LeftMenuNavLinkProps> = ({ item }) => {
         {!item.icon && isLeftMenuCollapsed && <DynamicIcon icon="AiOutlineRightCircle" />}
       </LeftLinkIcon>
       <LeftLinkLabel>{item.label}</LeftLinkLabel>
-      <PointCircle
-        $size={item.type === 'task-group' ? 'default' : 'small'}
-        $color={item.color}
-        $visible={!isLeftMenuCollapsed}
-      >
-        {formatPoints(item.points)}
-      </PointCircle>
+      <PointsWrapper>
+        <PointCircle
+          $size={item.type === 'task-group' ? 'default' : 'small'}
+          $shape={item.type === 'task-group' ? 'square' : 'circle'}
+          $color={item.color}
+          $visible={!isLeftMenuCollapsed}
+        >
+          {formatPoints(item.points ?? (item.type === 'task-group' ? 0 : undefined))}
+        </PointCircle>
+      </PointsWrapper>
     </LeftMenuItemStyled>
   );
 };

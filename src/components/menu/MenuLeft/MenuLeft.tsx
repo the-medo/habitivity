@@ -11,7 +11,15 @@ import {
   toggleLeftMenuManuallyCollapsed,
 } from '../../../store/menuSlice';
 import { useLeftMenu } from '../../../hooks/useLeftMenu';
-import { LeftMenu, LeftSider, MenuCollapsor, MenuCollapsorIcon } from './MenuLeftComponents';
+import {
+  BottomLabel,
+  BottomPoints,
+  BottomWrapper,
+  LeftMenu,
+  LeftSider,
+  MenuCollapsor,
+  MenuCollapsorIcon,
+} from './MenuLeftComponents';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import LeftMenuItem from './LeftMenuItem';
 import { LEFT_MENU_WIDTH, SIDER_COLLAPSED_SIZE } from '../../../styles/CustomStyles';
@@ -22,6 +30,9 @@ import { useGetCompletedDayQuery, useGetTasksByTaskListQuery } from '../../../ap
 import { MenuProps } from 'antd/es/menu';
 import { useLeftMenuSelected } from '../../../hooks/useLeftMenuSelected';
 import { AvailablePages } from '../../../routes/routerSlice';
+import dayjs from 'dayjs';
+import { formatPoints } from '../../../helpers/numbers/formatPoints';
+import { Tooltip } from 'antd';
 
 export interface MenuLeftItem {
   type: 'task-group' | 'task';
@@ -65,6 +76,24 @@ const MenuLeft: React.FC = () => {
     () => !isFetchingTaskGroups && !isFetchingTasks && !isFetchingCompletedDay,
     [isFetchingTaskGroups, isFetchingTasks, isFetchingCompletedDay],
   );
+
+  const taskListPoints = useMemo(
+    () =>
+      completedDay && selectedTaskListId ? completedDay.taskLists[selectedTaskListId] : undefined,
+    [completedDay, selectedTaskListId],
+  );
+
+  const bottomLabel = useMemo(() => {
+    const diff = dayjs().diff(selectedDate, 'day');
+    console.log('diff', diff);
+    if (diff === 0) {
+      return 'Today';
+    } else if (diff === 1) {
+      return 'Yesterday';
+    } else {
+      return `${diff} days ago`;
+    }
+  }, [selectedDate]);
 
   useEffect(() => {
     if (isReady) {
@@ -183,6 +212,12 @@ const MenuLeft: React.FC = () => {
           onDeselect={onDeselectHandler}
         />
       )}
+      <BottomWrapper $isCollapsed={isLeftMenuCollapsed}>
+        <BottomLabel>
+          <Tooltip title={new Date(selectedDate).toLocaleDateString()}>{bottomLabel}</Tooltip>
+        </BottomLabel>
+        <BottomPoints>{formatPoints(taskListPoints)}</BottomPoints>
+      </BottomWrapper>
       {!leftMenuAutomaticallyCollapsed && (
         <MenuCollapsor $isCollapsed={isLeftMenuCollapsed} onClick={onCollapseHandler}>
           <MenuCollapsorIcon $isCollapsed={isLeftMenuCollapsed}>

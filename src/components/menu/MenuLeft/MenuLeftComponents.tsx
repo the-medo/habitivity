@@ -1,8 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { withScrollbar } from '../../../styles/GlobalStyleAndTheme';
 import { Layout, Menu } from 'antd';
 import {
   COLORS,
+  LEFT_MENU_BOTTOM_HEIGHT,
   LEFT_MENU_WIDTH,
   SIDER_COLLAPSED_SIZE,
   TOP_MENU_BIG,
@@ -15,7 +16,7 @@ const { Sider } = Layout;
 export const LeftMenu = styled(Menu)`
   padding-top: 0.25rem;
   background-color: transparent;
-  height: 100%;
+  height: calc(100%);
   transition: 0.3s all;
 
   & > li.ant-menu-item {
@@ -49,7 +50,7 @@ export const LeftSider = styled(Sider)<
 >`
   overflow-y: auto;
   height: calc(
-    100vh - ${({ $isCollapsed }) => ($isCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG)}rem${({ $isAutomaticallyCollapsed }) => !$isAutomaticallyCollapsed && ` - ${SIDER_COLLAPSED_SIZE}rem`}
+    100vh - ${({ $isCollapsed }) => ($isCollapsed ? TOP_MENU_SMALL : TOP_MENU_BIG)}rem${({ $isAutomaticallyCollapsed }) => !$isAutomaticallyCollapsed && ` - ${SIDER_COLLAPSED_SIZE}rem - ${LEFT_MENU_BOTTOM_HEIGHT}rem`}
   );
   position: fixed !important;
   left: 0;
@@ -59,6 +60,50 @@ export const LeftSider = styled(Sider)<
   transition: 0.3s all !important;
 
   ${withScrollbar}
+`;
+
+export const BottomLabel = styled.div`
+  font-weight: 500;
+  font-size: 1.15rem;
+`;
+
+export const BottomPoints = styled.div`
+  font-weight: 500;
+  font-size: 1.5rem;
+`;
+
+export const BottomWrapper = styled.div<Pick<MenuLeftProps, '$isCollapsed'>>`
+  position: fixed;
+  left: 0;
+  bottom: ${SIDER_COLLAPSED_SIZE}rem;
+  transition: 0.3s all;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: ${LEFT_MENU_BOTTOM_HEIGHT}rem;
+  min-height: ${LEFT_MENU_BOTTOM_HEIGHT}rem;
+  width: ${({ $isCollapsed }) => ($isCollapsed ? SIDER_COLLAPSED_SIZE : LEFT_MENU_WIDTH)}rem;
+  border-inline-end: 1px solid ${COLORS.GREY_MENU_BORDER};
+  background-color: ${COLORS.PRIMARY_LIGHT};
+  color: ${COLORS.PRIMARY_DARK};
+
+  ${p =>
+    p.$isCollapsed
+      ? css`
+          ${BottomLabel} {
+            display: none;
+          }
+
+          ${BottomPoints} {
+            font-size: 1rem;
+          }
+        `
+      : css`
+          ${BottomLabel} {
+            display: flex;
+          }
+        `}
 `;
 
 export const MenuCollapsor = styled.div<Pick<MenuLeftProps, '$isCollapsed'>>`
