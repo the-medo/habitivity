@@ -142,7 +142,7 @@ export const apiTask = apiSlice
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          const taskListId = (api.getState() as ReduxState).taskReducer.selectedTaskListId;
+          const taskListId = (api.getState() as ReduxState).router.selectedTaskListId;
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const editItems = (api.getState() as ReduxState).todayReducer.editItems;
 

@@ -34,7 +34,7 @@ const TaskListEdit: React.FC = () => {
         };
 
         void updateTaskList(updatedTaskList).then(() => {
-          navigate(`/task-list/${taskList.id}`);
+          navigate(`/${taskList.id}`);
         });
       }
     },
@@ -46,7 +46,7 @@ const TaskListEdit: React.FC = () => {
       console.log('Gonna delete this task list... ', taskList);
 
       void deleteTaskList(taskList.id).then(() => {
-        navigate(`/task-list/create`);
+        navigate(`/create`);
       });
     }
   }, [deleteTaskList, navigate, taskList, user]);

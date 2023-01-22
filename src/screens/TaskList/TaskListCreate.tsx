@@ -5,11 +5,11 @@ import { stringToPretty } from '../../helpers/stringToPretty';
 import { generateID } from '../../helpers/generateID';
 import { TaskList, TaskListType } from '../../types/TaskLists';
 import { useNavigate } from 'react-router-dom';
-import { setSelectedTaskListId } from '../../store/taskSlice';
 import { useDispatch } from 'react-redux';
 import { useCreateTaskListMutation } from '../../apis/apiTaskList';
 import TaskListForm from './TaskListForm';
 import { Header2 } from '../../components/global/Headers';
+import { setSelectedTaskListId } from '../../routes/routerSlice';
 
 export interface FormTaskListCreate {
   taskListName: string;
@@ -35,8 +35,7 @@ const TaskListCreate: React.FC = () => {
         };
 
         createTaskList(newTaskList).then(() => {
-          dispatch(setSelectedTaskListId(newId));
-          navigate(`/task-list/${newId}`);
+          dispatch(setSelectedTaskListId({ taskListId: newId }));
         });
       }
     },

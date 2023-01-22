@@ -3,7 +3,6 @@ import { AnyAction, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { userReducer } from './userSlice';
 import { menuReducer } from './menuSlice';
-import { taskReducer } from './taskSlice';
 import { apiSlice } from '../apis/api';
 import { taskCreationReducer } from '../screens/NewTask/taskCreationSlice';
 import { notificationReducer } from './notificationSlice';
@@ -16,7 +15,6 @@ export const store = configureStore({
     appReducer,
     userReducer,
     menuReducer,
-    taskReducer,
     notificationReducer,
     taskCreationReducer,
     todayReducer,

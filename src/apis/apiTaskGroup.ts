@@ -76,7 +76,7 @@ export const apiTaskList = apiSlice
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const state = api.getState() as ReduxState;
           const userId = state.userReducer.user?.id ?? 'no-user-id';
-          const selectedTaskListId = state.taskReducer.selectedTaskListId ?? 'undefined';
+          const selectedTaskListId = state.router.selectedTaskListId ?? 'undefined';
 
           try {
             const batch = writeBatch(db);
@@ -108,7 +108,7 @@ export const apiTaskList = apiSlice
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const state = api.getState() as ReduxState;
           const userId = state.userReducer.user?.id ?? 'no-user-id';
-          const selectedTaskListId = state.taskReducer.selectedTaskListId ?? 'undefined';
+          const selectedTaskListId = state.router.selectedTaskListId ?? 'undefined';
 
           try {
             const batch = writeBatch(db);

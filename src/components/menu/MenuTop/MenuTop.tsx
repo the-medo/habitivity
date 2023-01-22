@@ -23,41 +23,11 @@ import {
 import { width100percent } from '../../forms/AntdFormComponents';
 import DynamicIcon from '../../global/DynamicIcon';
 
-export const menuTopItemsLeftDefault: ItemType[] = [
-  {
-    key: 'today',
-    label: (
-      <TopMenuNavLink to="/today">
-        <DynamicIcon icon="AiOutlineCarryOut" />
-        Today
-      </TopMenuNavLink>
-    ),
-  },
-  {
-    key: 'dashboard',
-    label: (
-      <TopMenuNavLink to="/dashboard">
-        <DynamicIcon icon="AiOutlineLineChart" />
-        Dashboard
-      </TopMenuNavLink>
-    ),
-  },
-  {
-    key: 'calendar',
-    label: (
-      <TopMenuNavLink to="/calendar">
-        <DynamicIcon icon="AiOutlineCalendar" />
-        Calendar
-      </TopMenuNavLink>
-    ),
-  },
-];
-
 export const menuTopItemsLeftWhenNoTaskList: ItemType[] = [
   {
     key: 'create-task-list',
     label: (
-      <TopMenuNavLink to="/task-list/create">
+      <TopMenuNavLink to="/create">
         <DynamicIcon icon="AiOutlinePlus" />
         Create new task list
       </TopMenuNavLink>
@@ -75,11 +45,45 @@ const MenuTop: React.FC = () => {
 
   const { data: taskLists = [] } = useGetTaskListsQuery();
 
-  // const taskLists = useSelector((state: ReduxState) => selectTaskLists(state));
-  const selectedTaskListId = useSelector(
-    (state: ReduxState) => state.taskReducer.selectedTaskListId,
-  );
+  const selectedTaskListId = useSelector((state: ReduxState) => state.router.selectedTaskListId);
   const selectedTaskList = useSelectedTaskList();
+
+  const menuTopItemsLeftDefault: ItemType[] = useMemo(
+    () =>
+      selectedTaskListId
+        ? [
+            {
+              key: 'today',
+              label: (
+                <TopMenuNavLink to={`/${selectedTaskListId}/today`}>
+                  <DynamicIcon icon="AiOutlineCarryOut" />
+                  Today
+                </TopMenuNavLink>
+              ),
+            },
+            {
+              key: 'dashboard',
+              label: (
+                <TopMenuNavLink to={`/${selectedTaskListId}/dashboard`}>
+                  <DynamicIcon icon="AiOutlineLineChart" />
+                  Dashboard
+                </TopMenuNavLink>
+              ),
+            },
+            {
+              key: 'calendar',
+              label: (
+                <TopMenuNavLink to={`/${selectedTaskListId}/calendar`}>
+                  <DynamicIcon icon="AiOutlineCalendar" />
+                  Calendar
+                </TopMenuNavLink>
+              ),
+            },
+          ]
+        : [],
+    [selectedTaskListId],
+  );
+
   const [leftTopMenuItems, setLeftTopMenuItems] = useState<ItemType[]>(
     selectedTaskListId !== undefined ? menuTopItemsLeftDefault : menuTopItemsLeftWhenNoTaskList,
   );
@@ -90,7 +94,7 @@ const MenuTop: React.FC = () => {
     } else {
       setLeftTopMenuItems(menuTopItemsLeftWhenNoTaskList);
     }
-  }, [selectedTaskListId, taskLists]);
+  }, [selectedTaskListId, menuTopItemsLeftDefault, taskLists]);
 
   const logoutHandler = useCallback(() => {
     signOut(auth).then(() => navigate('/'));
@@ -103,7 +107,7 @@ const MenuTop: React.FC = () => {
         (tl): ItemType => ({
           label: tl.name,
           key: `tl-${tl.id}`,
-          onClick: () => navigate(`/task-list/${tl.id}`),
+          onClick: () => navigate(`/${tl.id}/today`),
           icon: <DynamicIcon icon="AiOutlineRight" />,
           style: { marginLeft: '.5rem' },
         }),
@@ -114,7 +118,7 @@ const MenuTop: React.FC = () => {
             type: 'divider',
           },
         ],
-        selectedTaskList
+        selectedTaskList && selectedTaskListId
           ? [
               {
                 label: (
@@ -123,7 +127,7 @@ const MenuTop: React.FC = () => {
                   </Button>
                 ),
                 key: `tl-edit`,
-                onClick: () => navigate(`/task-list/edit`),
+                onClick: () => navigate(`/${selectedTaskListId}/edit`),
               },
             ]
           : [],
@@ -139,7 +143,7 @@ const MenuTop: React.FC = () => {
               </Button>
             ),
             key: `tl-create`,
-            onClick: () => navigate(`/task-list/create`),
+            onClick: () => navigate(`/create`),
           },
         ],
       );

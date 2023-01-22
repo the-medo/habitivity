@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth';
+import { EmailAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
 import styled from 'styled-components';
 import img from '../../assets/images/login-bg.jpg';
@@ -9,13 +9,14 @@ import { useUser } from '../../hooks/useUser';
 import { COLORS } from '../../styles/CustomStyles';
 import { LogoBig } from '../../assets/svg';
 import Svg from '../../assets/svg/Svg';
+import { getItem, LSKey } from '../../store/localStore';
 
 // Configure FirebaseUI.
 const uiConfig = {
   // Popup sign in flow rather than redirect flow.
   signInFlow: 'popup',
   // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-  signInSuccessUrl: '/today',
+  signInSuccessUrl: `/${getItem(LSKey.SELECTED_TASK_LIST_ID) ?? ''}`,
   // We will display Google and Facebook as auth providers.
   signInOptions: [GoogleAuthProvider.PROVIDER_ID, EmailAuthProvider.PROVIDER_ID],
 };
