@@ -19,8 +19,7 @@ import localeData from 'dayjs/plugin/localeData';
 dayjs.extend(weekday);
 dayjs.extend(localeData);
 
-// import utc from 'dayjs/plugin/utc';
-// dayjs.extend(utc);
+console.log(import.meta.env);
 
 const App: React.FC = () => {
   const dispatch: ReduxDispatch = useDispatch();

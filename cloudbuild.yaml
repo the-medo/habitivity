@@ -15,6 +15,10 @@ steps:
     args:
       - 'push'
       - 'europe-west3-docker.pkg.dev/$PROJECT_ID/hbt-docker/frontend:$BRANCH_NAME'
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/vite_configs/versions/1
+      env: 'VITE_SECRET'
 options:
   logging: CLOUD_LOGGING_ONLY
 #europe-west3-docker.pkg.dev/habitivity-363118/hbt-docker
