@@ -9,6 +9,7 @@ steps:
       - '-t'
       - 'europe-west3-docker.pkg.dev/$PROJECT_ID/hbt-docker/frontend:${_TAG}'
       - '.'
+    secretEnv: [ 'VITE_SECRET' ]
   # This step pushes the image to Artifact Registry
   # The PROJECT_ID and SHORT_SHA variables are automatically
   # replaced by Cloud Build.
@@ -30,6 +31,7 @@ steps:
         '--region',
         'europe-west1 ',
       ]
+    secretEnv: [ 'VITE_SECRET' ]
 availableSecrets:
   secretManager:
     - versionName: projects/$PROJECT_ID/secrets/vite_configs/versions/1
