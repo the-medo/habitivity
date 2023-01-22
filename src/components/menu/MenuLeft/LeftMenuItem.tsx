@@ -4,11 +4,11 @@ import React, { CSSProperties } from 'react';
 import { useLeftMenu } from '../../../hooks/useLeftMenu';
 import { COLORS } from '../../../styles/CustomStyles';
 import DynamicIcon from '../../global/DynamicIcon';
-import { generate } from '@ant-design/colors';
 import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import { formatPoints } from '../../../helpers/numbers/formatPoints';
 import { PointCircle } from '../../global/PointCircle';
+import { generateColor } from '../../../helpers/generateColor';
 
 export interface LeftMenuNavLinkStyledProps {
   $isSubmenu: boolean;
@@ -44,7 +44,7 @@ export const LeftMenuItemStyled = styled.div<LeftMenuNavLinkStyledProps>`
           padding: 0.5rem 0.25rem;
           ${p.$isSelected &&
           css`
-            background-color: ${p.$color ? generate(p.$color)[0] : COLORS.PRIMARY_LIGHT};
+            background-color: ${p.$color ? generateColor(p.$color, 0) : COLORS.PRIMARY_LIGHT};
           `};
 
           ${PointsWrapper} {
@@ -55,7 +55,7 @@ export const LeftMenuItemStyled = styled.div<LeftMenuNavLinkStyledProps>`
 
           &:hover,
           &[aria-current='page'].active {
-            background-color: ${p.$color ? generate(p.$color)[0] : COLORS.PRIMARY_LIGHT};
+            background-color: ${p.$color ? generateColor(p.$color) : COLORS.PRIMARY_LIGHT};
           }
         `}
 

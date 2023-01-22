@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import dayjs from 'dayjs';
 import { useGetCompletedDayQuery } from '../../../apis/apiTasks';
-import { generate } from '@ant-design/colors';
+import { generateColor } from '../../../helpers/generateColor';
 
 interface TodayTaskGroupProps {
   group: TaskGroup;
@@ -19,7 +19,7 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
 
   const [selectedDateChanged, setSelectedDateChanged] = useState(true);
   const colorLight = useMemo(
-    () => (group.color ? generate(group.color)[0] : COLORS.PRIMARY_LIGHT),
+    () => (group.color ? generateColor(group.color, 0) : COLORS.PRIMARY_LIGHT),
     [group.color],
   );
   const colorDark = useMemo(() => group.color ?? COLORS.PRIMARY, [group.color]);

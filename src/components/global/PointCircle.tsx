@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { generate } from '@ant-design/colors';
 import { COLORS } from '../../styles/CustomStyles';
+import { generateColor } from '../../helpers/generateColor';
 
 interface PointCircleProps {
   $visible?: boolean;
@@ -20,7 +20,7 @@ export const PointCircle = styled.div<PointCircleProps>`
     let fontSize = 0.8;
     let fontWeight = 'normal';
     let colorBg = p.$color ? p.$color : COLORS.PRIMARY_DARK;
-    let colorText = generate(colorBg)[0];
+    let colorText = generateColor(colorBg, 0);
 
     if (p.$mode === 'light') {
       const temp = colorBg;

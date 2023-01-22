@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { generate } from '@ant-design/colors';
+import { generateColor } from '../helpers/generateColor';
 
 /* https://ant.design/docs/spec/colors */
-const primaryColors = generate('#1da57a');
+const primaryColor = generateColor();
 
 export const COLORS = {
-  PRIMARY: primaryColors[5],
-  PRIMARY_LIGHT: primaryColors[0],
-  PRIMARY_DARK: primaryColors[8],
-  PRIMARY_STEPS: primaryColors,
+  PRIMARY: primaryColor,
+  PRIMARY_LIGHT: generateColor(primaryColor, 0),
+  PRIMARY_DARK: generateColor(primaryColor, 8),
   WHITE: 'white',
   GREY: 'grey',
   GREY_BORDER: '#f4f4f4',
