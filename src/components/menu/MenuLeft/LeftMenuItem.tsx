@@ -55,7 +55,7 @@ export const LeftMenuItemStyled = styled.div<LeftMenuNavLinkStyledProps>`
 
           &:hover,
           &[aria-current='page'].active {
-            background-color: ${p.$color ? generateColor(p.$color) : COLORS.PRIMARY_LIGHT};
+            background-color: ${p.$color ? generateColor(p.$color, 2) : COLORS.PRIMARY_LIGHT};
           }
         `}
 
