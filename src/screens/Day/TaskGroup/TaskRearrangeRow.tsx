@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { ReorderTask } from './TodayEditMode';
+import { ReorderTask } from './DayEditMode';
 import TaskGroupSelect from '../../../components/global/TaskGroupSelect/TaskGroupSelect';
 import { FormItem, validateTriggerDefault } from '../../../components/forms/AntdFormComponents';
 import { Button, Input } from 'antd';
 import DynamicIcon from '../../../components/global/DynamicIcon';
 import { COLORS } from '../../../styles/CustomStyles';
 import { useDispatch } from 'react-redux';
-import { changeGroupOfEditItem, setEditItemsTask } from '../todaySlice';
+import { changeGroupOfEditItem, setEditItemsTask } from '../daySlice';
 
 const StyledInput = styled(Input)``;
 

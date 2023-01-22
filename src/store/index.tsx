@@ -6,7 +6,7 @@ import { menuReducer } from './menuSlice';
 import { apiSlice } from '../apis/api';
 import { taskCreationReducer } from '../screens/NewTask/taskCreationSlice';
 import { notificationReducer } from './notificationSlice';
-import { todayReducer } from '../screens/Today/todaySlice';
+import { dayReducer } from '../screens/Day/daySlice';
 import { appReducer } from './appSlice';
 import { routerReducer, routerSlice } from '../routes/routerSlice';
 
@@ -17,7 +17,7 @@ export const store = configureStore({
     menuReducer,
     notificationReducer,
     taskCreationReducer,
-    todayReducer,
+    dayReducer,
     [routerSlice.name]: routerReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },

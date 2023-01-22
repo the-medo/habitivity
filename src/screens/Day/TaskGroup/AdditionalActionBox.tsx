@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdditionalActionType } from './TodayEditMode';
+import { AdditionalActionType } from './DayEditMode';
 import styled from 'styled-components';
 import { COLORS } from '../../../styles/CustomStyles';
 import { useSelector } from 'react-redux';
@@ -41,7 +41,7 @@ interface AdditionalActionBoxProps {
 }
 
 const AdditionalActionBox: React.FC<AdditionalActionBoxProps> = ({ action }) => {
-  const items = useSelector((state: ReduxState) => state.todayReducer.editItems);
+  const items = useSelector((state: ReduxState) => state.dayReducer.editItems);
 
   switch (action) {
     case 'archive':

@@ -2,23 +2,23 @@ import React, { useCallback } from 'react';
 import { useSelectedTaskList } from '../../hooks/useSelectedTaskList';
 import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
 import styled from 'styled-components';
-import TodayTaskGroup from './TaskGroup/TodayTaskGroup';
+import DayTaskGroup from './TaskGroup/DayTaskGroup';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../store';
 import Title from 'antd/es/typography/Title';
 import { Button, DatePicker, Radio, RadioChangeEvent, Tooltip } from 'antd';
-import { setDisplayMode, setSelectedDate, toggleEditMode } from './todaySlice';
+import { setDisplayMode, setSelectedDate, toggleEditMode } from './daySlice';
 import { RowGap } from '../../components/global/RowGap';
 import { TaskDisplayMode } from '../../components/global/TaskComponent/TaskComponent';
 import DynamicIcon from '../../components/global/DynamicIcon';
-import TodayEditMode from './TaskGroup/TodayEditMode';
+import DayEditMode from './TaskGroup/DayEditMode';
 import dayjs, { Dayjs } from 'dayjs';
 import { datepickerFormat } from '../../components/forms/AntdFormComponents';
 import { Link } from 'react-router-dom';
 import { COLORS } from '../../styles/CustomStyles';
 import TaskComponentWrapper from '../../components/global/TaskComponent/TaskComponentWrapper';
 
-const TodayTaskGroupWrapper = styled.div`
+const DayTaskGroupWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -38,12 +38,12 @@ const TaskWrapper = styled.div`
   border-bottom: 1px solid ${COLORS.GREY_BORDER};
 `;
 
-const TodayDefault: React.FC = () => {
+const DayDefault: React.FC = () => {
   const dispatch = useDispatch();
   const selectedTaskListId = useSelectedTaskList()?.id ?? 'undefined';
-  const isEditMode = useSelector((state: ReduxState) => state.todayReducer.isEditMode);
-  const displayMode = useSelector((state: ReduxState) => state.todayReducer.displayMode);
-  const selectedDate = useSelector((state: ReduxState) => dayjs(state.todayReducer.selectedDate));
+  const isEditMode = useSelector((state: ReduxState) => state.dayReducer.isEditMode);
+  const displayMode = useSelector((state: ReduxState) => state.dayReducer.displayMode);
+  const selectedDate = useSelector((state: ReduxState) => dayjs(state.dayReducer.selectedDate));
   const { data: existingGroups = [] } = useGetTaskGroupsByTaskListQuery(selectedTaskListId);
 
   const editModeHandler = useCallback(() => dispatch(toggleEditMode()), [dispatch]);
@@ -59,7 +59,7 @@ const TodayDefault: React.FC = () => {
   }, []);
 
   return (
-    <TodayTaskGroupWrapper>
+    <DayTaskGroupWrapper>
       <TitleRow>
         <RowGap>
           <Title level={2}>Your day</Title>
@@ -99,18 +99,18 @@ const TodayDefault: React.FC = () => {
           </Radio.Group>
         </RowGap>
       </TitleRow>
-      {isEditMode && <TodayEditMode />}
+      {isEditMode && <DayEditMode />}
       {!isEditMode && (
         <TaskWrapper>
           <TaskComponentWrapper displayMode={displayMode}>
             {existingGroups.map(g => (
-              <TodayTaskGroup key={g.id} group={g} />
+              <DayTaskGroup key={g.id} group={g} />
             ))}
           </TaskComponentWrapper>
         </TaskWrapper>
       )}
-    </TodayTaskGroupWrapper>
+    </DayTaskGroupWrapper>
   );
 };
 
-export default TodayDefault;
+export default DayDefault;

@@ -3,14 +3,14 @@ import { Outlet } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AvailablePages, setOpenedPage } from '../../routes/routerSlice';
 
-const Today: React.FC = () => {
+const Day: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setOpenedPage(AvailablePages.TODAY));
+    dispatch(setOpenedPage(AvailablePages.DAY));
   }, [dispatch]);
 
   return <Outlet />;
 };
 
-export default Today;
+export default Day;

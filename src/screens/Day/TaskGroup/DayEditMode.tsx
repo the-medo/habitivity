@@ -6,7 +6,7 @@ import { useGetTasksByTaskListQuery, useRearrangeTasksMutation } from '../../../
 import TaskGroupRearrangeBox from './TaskGroupRearrangeBox';
 import { Button, Form, Spin } from 'antd';
 import DynamicIcon from '../../../components/global/DynamicIcon';
-import { setEditItems, toggleEditMode } from '../todaySlice';
+import { setEditItems, toggleEditMode } from '../daySlice';
 import { useDispatch } from 'react-redux';
 import ButtonWrapper from '../../../components/global/ButtonWrapper';
 import AdditionalActionBox from './AdditionalActionBox';
@@ -30,11 +30,11 @@ const TaskGroupWrapper = styled.div`
 
 export type TasksByGroup = Record<string, ReorderTask[] | undefined>;
 
-export type TodayEditModeFormFields = Record<string, string | undefined>;
+export type DayEditModeFormFields = Record<string, string | undefined>;
 
-const TodayEditMode: React.FC = () => {
+const DayEditMode: React.FC = () => {
   const dispatch = useDispatch();
-  const [form] = Form.useForm<TodayEditModeFormFields>();
+  const [form] = Form.useForm<DayEditModeFormFields>();
   // const formData = Form.useWatch<FormInstance<FormFields>>([], form);
   const selectedTaskListId = useSelectedTaskListId();
   const { data: existingGroups = [], isFetching: isFetchingTaskGroups } =
@@ -72,7 +72,7 @@ const TodayEditMode: React.FC = () => {
   }, [existingTasks, existingGroups, isFetched, dispatch]);
 
   const onSubmit = useCallback(
-    (values: TodayEditModeFormFields) => {
+    (values: DayEditModeFormFields) => {
       if (isFetched) {
         rearrangeAndUpdateTasks({ newNames: values });
       }
@@ -109,4 +109,4 @@ const TodayEditMode: React.FC = () => {
   );
 };
 
-export default TodayEditMode;
+export default DayEditMode;

@@ -18,7 +18,7 @@ import {
   taskConverter,
   UsedModifiers,
 } from '../types/Tasks';
-import { TodayEditModeFormFields } from '../screens/Today/TaskGroup/TodayEditMode';
+import { DayEditModeFormFields } from '../screens/Day/TaskGroup/DayEditMode';
 import { CompletedDay, completedDayConverter } from '../helpers/types/CompletedDay';
 
 // import DocumentReference = firebase.firestore.DocumentReference;
@@ -29,7 +29,7 @@ interface CreateTaskPayload {
 }
 
 interface RearrangeTaskPayload {
-  newNames: TodayEditModeFormFields;
+  newNames: DayEditModeFormFields;
 }
 
 interface CompleteTaskPayload {
@@ -144,7 +144,7 @@ export const apiTask = apiSlice
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const taskListId = (api.getState() as ReduxState).router.selectedTaskListId;
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          const editItems = (api.getState() as ReduxState).todayReducer.editItems;
+          const editItems = (api.getState() as ReduxState).dayReducer.editItems;
 
           try {
             if (userId && taskListId) {

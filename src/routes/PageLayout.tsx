@@ -52,7 +52,7 @@ const PageLayout: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (location.pathname === '/') navigate('/today');
+    if (location.pathname === '/') navigate('/day');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 

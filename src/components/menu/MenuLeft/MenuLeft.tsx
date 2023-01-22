@@ -62,7 +62,7 @@ const MenuLeft: React.FC = () => {
     useLeftMenu();
   const items = useSelector((state: ReduxState) => state.menuReducer.items);
   const openedPage = useSelector((state: ReduxState) => state.router.openedPage);
-  const selectedDate = useSelector((state: ReduxState) => state.todayReducer.selectedDate);
+  const selectedDate = useSelector((state: ReduxState) => state.dayReducer.selectedDate);
 
   const { data: existingGroups = [], isFetching: isFetchingTaskGroups } =
     useGetTaskGroupsByTaskListQuery(selectedTaskListId);
@@ -110,7 +110,7 @@ const MenuLeft: React.FC = () => {
             icon: g.icon,
             color: g.color,
             points:
-              completedDay !== false && openedPage === AvailablePages.TODAY
+              completedDay !== false && openedPage === AvailablePages.DAY
                 ? completedDay?.taskGroups[g.id]
                 : undefined,
           });
@@ -121,7 +121,7 @@ const MenuLeft: React.FC = () => {
               let icon: MenuLeftItem['icon'] = 'RiCheckboxBlankCircleLine';
               let points: MenuLeftItem['points'] = undefined;
 
-              if (openedPage === AvailablePages.TODAY && completedDay !== false) {
+              if (openedPage === AvailablePages.DAY && completedDay !== false) {
                 const completedDayTask = completedDay?.tasks[t.id];
                 if (completedDayTask !== undefined) {
                   icon = 'BsCheck';

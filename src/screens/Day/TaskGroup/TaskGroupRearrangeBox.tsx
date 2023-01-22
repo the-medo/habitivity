@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
-import { ReorderTask } from './TodayEditMode';
+import { ReorderTask } from './DayEditMode';
 import styled from 'styled-components';
 import { Reorder } from 'framer-motion';
 import { TaskGroup } from '../../../types/TaskGroup';
 import TaskRearrangeRow from './TaskRearrangeRow';
 import { COLORS } from '../../../styles/CustomStyles';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEditItemsGroup } from '../todaySlice';
+import { setEditItemsGroup } from '../daySlice';
 import { ReduxState } from '../../../store';
 
 const StyledReorderGroup = styled(Reorder.Group)`
@@ -25,7 +25,7 @@ const TaskGroupRearrangeBox: React.FC<TaskGroupRearrangeBoxProps> = ({ taskGroup
   const dispatch = useDispatch();
   const items = useSelector(
     (state: ReduxState) =>
-      state.todayReducer.editItems[taskGroup.id]?.filter(t => t.additionalAction === false) ?? [],
+      state.dayReducer.editItems[taskGroup.id]?.filter(t => t.additionalAction === false) ?? [],
   );
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getItem, LSKey, setItem } from '../store/localStore';
 
 export enum AvailablePages {
-  TODAY = 'today',
+  DAY = 'day',
   DASHBOARD = 'dashboard',
   TASK_LIST = 'task-list',
   NEW_TASK = 'new-task',
@@ -41,7 +41,7 @@ export const routerSlice = createSlice({
 
         if (redirect) {
           window.location.replace(
-            `/${action.payload.taskListId ? action.payload.taskListId + '/today' : 'create'}`,
+            `/${action.payload.taskListId ? action.payload.taskListId + '/day' : 'create'}`,
           );
         }
       }

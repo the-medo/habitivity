@@ -9,13 +9,13 @@ import dayjs from 'dayjs';
 import { useGetCompletedDayQuery } from '../../../apis/apiTasks';
 import { generateColor } from '../../../helpers/generateColor';
 
-interface TodayTaskGroupProps {
+interface DayTaskGroupProps {
   group: TaskGroup;
 }
 
-const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
-  const displayMode = useSelector((state: ReduxState) => state.todayReducer.displayMode);
-  const selectedDate = useSelector((state: ReduxState) => state.todayReducer.selectedDate);
+const DayTaskGroup: React.FC<DayTaskGroupProps> = ({ group }) => {
+  const displayMode = useSelector((state: ReduxState) => state.dayReducer.displayMode);
+  const selectedDate = useSelector((state: ReduxState) => state.dayReducer.selectedDate);
 
   const [selectedDateChanged, setSelectedDateChanged] = useState(true);
   const colorLight = useMemo(
@@ -57,4 +57,4 @@ const TodayTaskGroup: React.FC<TodayTaskGroupProps> = ({ group }) => {
   );
 };
 
-export default TodayTaskGroup;
+export default DayTaskGroup;

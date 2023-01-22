@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getItem, LSKey, setItem } from '../../store/localStore';
 import { TaskDisplayMode } from '../../components/global/TaskComponent/TaskComponent';
-import { ReorderTask, TasksByGroup } from './TaskGroup/TodayEditMode';
+import { ReorderTask, TasksByGroup } from './TaskGroup/DayEditMode';
 import dayjs from 'dayjs';
 import { dateBasicFormatFromDayjs } from '../../helpers/date/dateBasicFormatFromDate';
 
@@ -21,31 +21,31 @@ interface ChangeGroupOfEditItemPayload {
   taskId: string;
 }
 
-export interface TodayState {
+export interface DayState {
   isEditMode: boolean;
   displayMode: TaskDisplayMode;
   editItems: TasksByGroup;
   selectedDate: string;
 }
 
-const initialState: TodayState = {
+const initialState: DayState = {
   isEditMode: false,
-  displayMode: getItem(LSKey.TODAY_DISPLAY_MODE) ?? TaskDisplayMode.BOXES,
+  displayMode: getItem(LSKey.DAY_DISPLAY_MODE) ?? TaskDisplayMode.BOXES,
   editItems: {},
   selectedDate:
-    getItem(LSKey.SELECTED_DATE_TODAY)?.[dateBasicFormatFromDayjs(dayjs())] ??
+    getItem(LSKey.SELECTED_DATE_SCREEN_DAY)?.[dateBasicFormatFromDayjs(dayjs())] ??
     dateBasicFormatFromDayjs(dayjs()),
 };
 
-export const todaySlice = createSlice({
-  name: 'today',
+export const daySlice = createSlice({
+  name: 'day',
   initialState,
   reducers: {
     toggleEditMode: state => {
       state.isEditMode = !state.isEditMode;
     },
     setDisplayMode: (state, action: PayloadAction<TaskDisplayMode>) => {
-      setItem(LSKey.TODAY_DISPLAY_MODE, action.payload);
+      setItem(LSKey.DAY_DISPLAY_MODE, action.payload);
       state.displayMode = action.payload;
     },
     setEditItems: (state, action: PayloadAction<TasksByGroup>) => {
@@ -110,7 +110,9 @@ export const todaySlice = createSlice({
     },
     setSelectedDate: (state, action: PayloadAction<string>) => {
       state.selectedDate = action.payload;
-      setItem(LSKey.SELECTED_DATE_TODAY, { [dateBasicFormatFromDayjs(dayjs())]: action.payload });
+      setItem(LSKey.SELECTED_DATE_SCREEN_DAY, {
+        [dateBasicFormatFromDayjs(dayjs())]: action.payload,
+      });
     },
   },
 });
@@ -123,6 +125,6 @@ export const {
   setEditItemsTask,
   changeGroupOfEditItem,
   setSelectedDate,
-} = todaySlice.actions;
+} = daySlice.actions;
 
-export const todayReducer = todaySlice.reducer;
+export const dayReducer = daySlice.reducer;

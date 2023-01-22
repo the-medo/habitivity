@@ -53,11 +53,11 @@ const MenuTop: React.FC = () => {
       selectedTaskListId
         ? [
             {
-              key: 'today',
+              key: 'day',
               label: (
-                <TopMenuNavLink to={`/${selectedTaskListId}/today`}>
+                <TopMenuNavLink to={`/${selectedTaskListId}/day`}>
                   <DynamicIcon icon="AiOutlineCarryOut" />
-                  Today
+                  Day
                 </TopMenuNavLink>
               ),
             },
@@ -107,7 +107,7 @@ const MenuTop: React.FC = () => {
         (tl): ItemType => ({
           label: tl.name,
           key: `tl-${tl.id}`,
-          onClick: () => navigate(`/${tl.id}/today`),
+          onClick: () => navigate(`/${tl.id}/day`),
           icon: <DynamicIcon icon="AiOutlineRight" />,
           style: { marginLeft: '.5rem' },
         }),
