@@ -17,6 +17,7 @@ import { datepickerFormat } from '../../components/forms/AntdFormComponents';
 import { Link } from 'react-router-dom';
 import { COLORS } from '../../styles/CustomStyles';
 import TaskComponentWrapper from '../../components/global/TaskComponent/TaskComponentWrapper';
+import DayPieGraph from './TaskGroup/DayPieGraph';
 
 const DayTaskGroupWrapper = styled.div`
   display: flex;
@@ -32,10 +33,18 @@ const TitleRow = styled.div`
 
 const TaskWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   padding: 1rem;
   gap: 1rem;
   border-bottom: 1px solid ${COLORS.GREY_BORDER};
+`;
+
+const DayGraphWrapper = styled.div`
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 `;
 
 const DayDefault: React.FC = () => {
@@ -107,6 +116,9 @@ const DayDefault: React.FC = () => {
               <DayTaskGroup key={g.id} group={g} />
             ))}
           </TaskComponentWrapper>
+          <DayGraphWrapper>
+            <DayPieGraph selectedDate={selectedDate} existingGroups={existingGroups} />
+          </DayGraphWrapper>
         </TaskWrapper>
       )}
     </DayTaskGroupWrapper>

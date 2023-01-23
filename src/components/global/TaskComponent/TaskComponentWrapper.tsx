@@ -6,12 +6,14 @@ export const TaskComponentWrapperBox = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  flex-grow: 1;
   gap: 1rem;
 `;
 
 export const TaskComponentWrapperRow = styled.div`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 `;
 
 interface TaskComponentWrapperProps {
