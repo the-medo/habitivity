@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import { formatPoints } from '../../../helpers/numbers/formatPoints';
 import { PointCircle } from '../../global/PointCircle';
-import { generateColor } from '../../../helpers/generateColor';
+import { generateColor } from '../../../helpers/colors/generateColor';
 
 export interface LeftMenuNavLinkStyledProps {
   $isSubmenu: boolean;

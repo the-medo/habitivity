@@ -4,7 +4,6 @@ const generatedColors: Record<string, string[] | undefined> = {};
 
 export const generateColor = (c?: string, step = 5): string => {
   if (!c) c = '#1da57a';
-
   c = c.replace('#', '');
 
   if (!generatedColors[c]) {
@@ -15,4 +14,12 @@ export const generateColor = (c?: string, step = 5): string => {
   else if (step < 0) step = 0;
 
   return generatedColors[c]?.[step] ?? 'error';
+};
+
+export const getGeneratedColors = (c: string): string[] => {
+  c = c.replace('#', '');
+  if (!generatedColors[c]) {
+    generatedColors[c] = generate(c);
+  }
+  return generatedColors[c] ?? [];
 };

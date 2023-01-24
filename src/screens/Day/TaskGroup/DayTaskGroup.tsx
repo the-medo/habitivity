@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import dayjs from 'dayjs';
 import { useGetCompletedDayQuery } from '../../../apis/apiTasks';
-import { generateColor } from '../../../helpers/generateColor';
+import { generateColor } from '../../../helpers/colors/generateColor';
 
 interface DayTaskGroupProps {
   group: TaskGroup;
