@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { generateColor } from '../helpers/generateColor';
+import { generateColor } from '../helpers/colors/generateColor';
 
 /* https://ant.design/docs/spec/colors */
 const primaryColor = generateColor();

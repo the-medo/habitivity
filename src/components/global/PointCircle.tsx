@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { COLORS } from '../../styles/CustomStyles';
-import { generateColor } from '../../helpers/generateColor';
+import { generateColor } from '../../helpers/colors/generateColor';
 
 interface PointCircleProps {
   $visible?: boolean;
