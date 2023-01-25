@@ -1655,7 +1655,7 @@
     "@react-spring/web" "9.4.5"
     lodash "^4.17.21"
 
-"@nivo/arcs@0.80.0":
+"@nivo/arcs@0.80.0", "@nivo/arcs@^0.80.0":
   version "0.80.0"
   resolved "https://registry.yarnpkg.com/@nivo/arcs/-/arcs-0.80.0.tgz#87b8308403e245bdc4486cd7f61d2477c5830cd2"
   integrity sha512-g5m/wM36Ey45J3hrVDBPMw1Z6GOgIRwgb5zTh7TFoPuhRBZEDQLmctk8XYOm0xOMVCzsm6WkU5wlSQUeBY6IHQ==

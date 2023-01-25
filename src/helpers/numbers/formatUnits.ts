@@ -11,8 +11,6 @@ export const formatUnits = (task: Task, p: number | undefined): string => {
     let digitCount = fixed2points % 10 !== 0 ? 2 : 0;
     if (digitCount === 0) digitCount = fixed2points > 9 ? 1 : 0;
 
-    console.log('FORMAT POINTS ', p, ' digitCount', digitCount, 'fixed2points', fixed2points);
-
     if (p >= 100) num = p.toFixed(Math.min(0, digitCount));
     else if (p >= 10) num = p.toFixed(Math.min(1, digitCount));
     else num = p.toFixed(Math.min(2, digitCount));
