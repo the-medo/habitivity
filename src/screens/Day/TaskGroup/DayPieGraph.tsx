@@ -1,15 +1,26 @@
-import React, { CSSProperties, useCallback, useMemo } from 'react';
-import { DataProps, DefaultRawDatum, Pie, PieCustomLayerProps, PieTooltipProps } from '@nivo/pie';
+import React, { CSSProperties, useMemo, useState } from 'react';
+import {
+  CommonPieProps,
+  ComputedDatum,
+  DataProps,
+  DefaultRawDatum,
+  Pie,
+  PieCustomLayerProps,
+  PieLayer,
+} from '@nivo/pie';
 import { useGetCompletedDayQuery, useGetTasksByTaskListQuery } from '../../../apis/apiTasks';
 import { Dayjs } from 'dayjs';
 import { COLORS } from '../../../styles/CustomStyles';
-import { dayPieGraphLegends } from '../../../helpers/graphs/legendsDefinitions';
 import { useSelectedTaskListId } from '../../../hooks/useSelectedTaskListId';
 import { useGetTaskGroupsByTaskListQuery } from '../../../apis/apiTaskGroup';
 import { Task } from '../../../types/Tasks';
 import { CompletedDay } from '../../../helpers/types/CompletedDay';
 import { chooseColorsBasedOnCount } from '../../../helpers/colors/chooseColorsBasedOnCount';
-import GroupPieTooltip from '../../../helpers/graphs/GroupPieTooltip';
+import DayPieTooltipGroups from '../../../helpers/graphs/DayPieTooltipGroups';
+import DayPieTooltipTasks from '../../../helpers/graphs/DayPieTooltipTasks';
+import { ArcLinkLabelsProps } from '@nivo/arcs';
+import { Spin } from 'antd';
+import { DayPieGraphDisplayType } from './DayPieGraphWrapper';
 
 const CenteredMetric = ({
   dataWithArc,
@@ -39,8 +50,13 @@ const CenteredMetric = ({
   );
 };
 
+function getPieLayers<T extends GroupRawData | TaskRawData>(): PieLayer<T>[] {
+  return ['arcs', 'arcLabels', 'arcLinkLabels', CenteredMetric];
+}
+
 interface DayPieGraphProps {
   selectedDate?: Dayjs;
+  dayPieGraphDisplayType: DayPieGraphDisplayType;
 }
 
 export interface GroupRawData extends DefaultRawDatum {
@@ -55,6 +71,8 @@ export interface GroupRawData extends DefaultRawDatum {
 export interface TaskRawData extends DefaultRawDatum {
   label: string;
   color: CSSProperties['color'];
+  task: Task;
+  groupInfo: GroupRawData;
   completedDay: false | CompletedDay | undefined;
 }
 
@@ -63,19 +81,20 @@ interface DataInterface {
   tasks: DataProps<TaskRawData>['data'];
 }
 
-const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate }) => {
+const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisplayType }) => {
   const selectedTaskListId = useSelectedTaskListId();
-  const { data: existingTasks = [], isLoading } = useGetTasksByTaskListQuery(selectedTaskListId);
-  const { data: existingGroups = [] } = useGetTaskGroupsByTaskListQuery(selectedTaskListId);
-  const { data: completedDay, isFetching } = useGetCompletedDayQuery({
+  const { data: existingTasks = [], isFetching: isFetchingTasks } =
+    useGetTasksByTaskListQuery(selectedTaskListId);
+  const { data: existingGroups = [], isFetching: isFetchingGroups } =
+    useGetTaskGroupsByTaskListQuery(selectedTaskListId);
+  const { data: completedDay, isFetching: isFetchingDay } = useGetCompletedDayQuery({
     date: selectedDate?.format('YYYY-MM-DD'),
   });
 
-  console.log('existingTasks', existingTasks);
-  console.log('completedDay', completedDay);
-  console.log('existingGroups', existingGroups);
-
-  console.log('COLOR TEST: ', chooseColorsBasedOnCount('#abcdef', 13));
+  const isLoading = useMemo(
+    () => isFetchingTasks || isFetchingGroups || isFetchingDay,
+    [isFetchingDay, isFetchingGroups, isFetchingTasks],
+  );
 
   const data: DataInterface = useMemo(() => {
     const d: DataInterface = {
@@ -89,7 +108,7 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate }) => {
       const tasks = existingTasks.filter(t => t.taskGroupId === g.id);
       const taskColors = chooseColorsBasedOnCount(baseColor, tasks.length);
 
-      d.groups.push({
+      const group = {
         id: g.id,
         label: g.name,
         value,
@@ -98,7 +117,9 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate }) => {
         tasks: tasks,
         taskColors,
         completedDay: completedDay,
-      });
+      };
+
+      d.groups.push(group);
 
       tasks.forEach((t, i) => {
         d.tasks.push({
@@ -106,6 +127,8 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate }) => {
           label: t.taskName,
           value: completedDay ? Math.round((completedDay.tasks[t.id]?.points ?? 0) * 100) / 100 : 0,
           color: taskColors[i],
+          task: t,
+          groupInfo: group,
           completedDay: completedDay,
         });
       });
@@ -114,46 +137,80 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate }) => {
     return d;
   }, [existingTasks, existingGroups, completedDay]);
 
+  const commonProperties = useMemo(
+    () => ({
+      width: 500,
+      height: 500,
+      margin: { top: 20, right: 100, bottom: 120, left: 100 },
+      animate: true,
+      activeOuterRadiusOffset: 8,
+      innerRadius: 0.6,
+      padAngle: 0.5,
+      cornerRadius: 5,
+      colors: {
+        datum: 'data.color',
+      },
+      motionConfig: 'wobbly',
+      arcLabelsSkipAngle: 20,
+      arcLinkLabelsSkipAngle: 5,
+      arcLabelsTextColor: 'white',
+      arcLinkLabel: 'label',
+      arcLinkLabelsThickness: 3,
+      arcLinkLabelsColor: {
+        from: 'color',
+      },
+    }),
+    [],
+  );
+
+  const arcLinkLabelsTextColor: ArcLinkLabelsProps<
+    ComputedDatum<GroupRawData | TaskRawData>
+  >['arcLinkLabelsTextColor'] = useMemo(
+    () => ({
+      from: 'color',
+      modifiers: [['darker', 1.2]],
+    }),
+    [],
+  );
+
+  const borderColor: CommonPieProps<GroupRawData | TaskRawData>['borderColor'] = useMemo(
+    () => ({
+      from: 'color',
+      modifiers: [['darker', 0.2]],
+    }),
+    [],
+  );
+
   if (completedDay === undefined || selectedDate === undefined) return null;
 
-  const commonProperties = {
-    width: 500,
-    height: 500,
-    margin: { top: 20, right: 100, bottom: 120, left: 100 },
-    animate: true,
-    activeOuterRadiusOffset: 8,
-  };
-
-  return (
-    <Pie
-      {...commonProperties}
-      innerRadius={0.6}
-      padAngle={0.5}
-      cornerRadius={5}
-      data={data.groups}
-      borderColor={{
-        from: 'color',
-        modifiers: [['darker', 0.2]],
-      }}
-      colors={{ datum: 'data.color' }}
-      tooltip={GroupPieTooltip}
-      motionConfig="wobbly"
-      arcLabelsSkipAngle={20}
-      arcLinkLabelsSkipAngle={5}
-      arcLabelsTextColor="white"
-      arcLinkLabel="label"
-      arcLinkLabelsThickness={3}
-      arcLinkLabelsTextColor={{
-        from: 'color',
-        modifiers: [['darker', 1.2]],
-      }}
-      arcLinkLabelsColor={{
-        from: 'color',
-      }}
-      legends={dayPieGraphLegends}
-      layers={['arcs', 'arcLabels', 'arcLinkLabels', 'legends', CenteredMetric]}
-    />
-  );
+  switch (dayPieGraphDisplayType) {
+    case DayPieGraphDisplayType.GROUPS:
+      return (
+        <Spin spinning={isLoading}>
+          <Pie<GroupRawData>
+            {...commonProperties}
+            data={data.groups}
+            tooltip={DayPieTooltipGroups}
+            arcLinkLabelsTextColor={arcLinkLabelsTextColor}
+            borderColor={borderColor}
+            layers={getPieLayers<GroupRawData>()}
+          />
+        </Spin>
+      );
+    case DayPieGraphDisplayType.TASKS:
+      return (
+        <Spin spinning={isLoading}>
+          <Pie<TaskRawData>
+            {...commonProperties}
+            data={data.tasks}
+            tooltip={DayPieTooltipTasks}
+            arcLinkLabelsTextColor={arcLinkLabelsTextColor}
+            borderColor={borderColor}
+            layers={getPieLayers<TaskRawData>()}
+          />
+        </Spin>
+      );
+  }
 };
 
 export default DayPieGraph;

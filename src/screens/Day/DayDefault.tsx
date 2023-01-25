@@ -17,7 +17,7 @@ import { datepickerFormat } from '../../components/forms/AntdFormComponents';
 import { Link } from 'react-router-dom';
 import { COLORS } from '../../styles/CustomStyles';
 import TaskComponentWrapper from '../../components/global/TaskComponent/TaskComponentWrapper';
-import DayPieGraph from './TaskGroup/DayPieGraph';
+import DayPieGraphWrapper from './TaskGroup/DayPieGraphWrapper';
 
 const DayTaskGroupWrapper = styled.div`
   display: flex;
@@ -37,14 +37,6 @@ const TaskWrapper = styled.div`
   padding: 1rem;
   gap: 1rem;
   border-bottom: 1px solid ${COLORS.GREY_BORDER};
-`;
-
-const DayGraphWrapper = styled.div`
-  display: flex;
-  flex-grow: 1;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
 `;
 
 const DayDefault: React.FC = () => {
@@ -91,7 +83,7 @@ const DayDefault: React.FC = () => {
               Edit mode
             </Button>
           )}
-          <Link to="/new-task">
+          <Link to={`/${selectedTaskListId}/new-task`}>
             <Button icon={<DynamicIcon icon="AiOutlinePlus" />}>Create task</Button>
           </Link>
           <Radio.Group defaultValue={displayMode} buttonStyle="solid" onChange={displayModeHandler}>
@@ -116,9 +108,7 @@ const DayDefault: React.FC = () => {
               <DayTaskGroup key={g.id} group={g} />
             ))}
           </TaskComponentWrapper>
-          <DayGraphWrapper>
-            <DayPieGraph selectedDate={selectedDate} existingGroups={existingGroups} />
-          </DayGraphWrapper>
+          <DayPieGraphWrapper selectedDate={selectedDate} />
         </TaskWrapper>
       )}
     </DayTaskGroupWrapper>

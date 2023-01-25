@@ -4,4 +4,4 @@ export const initials = (str: string): string =>
     ?.join('')
     .match(/(^\S|\S$)?/g)
     ?.join('')
-    .toUpperCase();
+    .toUpperCase() ?? '-';

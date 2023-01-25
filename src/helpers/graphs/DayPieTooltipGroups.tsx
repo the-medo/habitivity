@@ -73,8 +73,12 @@ const TaskGroupHeader = styled.div<{ $color: string }>`
   justify-content: space-between;
 `;
 
-const GroupPieTooltip: React.FC<PieTooltipProps<GroupRawData>> = e => {
+const DayPieTooltipGroups: React.FC<PieTooltipProps<GroupRawData>> = e => {
   const t = e.datum;
+
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (!t.data?.tasks) return null;
+
   const completedDay = t.data.completedDay;
 
   return (
@@ -116,4 +120,4 @@ const GroupPieTooltip: React.FC<PieTooltipProps<GroupRawData>> = e => {
   );
 };
 
-export default GroupPieTooltip;
+export default DayPieTooltipGroups;
