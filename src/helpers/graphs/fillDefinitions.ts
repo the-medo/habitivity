@@ -1,6 +1,23 @@
+import { ArrayElement } from '../types/ArrayElement';
+import { SvgDefsAndFill } from '@nivo/core';
+import { ComputedDatum } from '@nivo/pie';
+
+export enum GraphFill {
+  DOTS = 'dots',
+  LINES = 'lines',
+}
+
+export const createFillMatch = <T>(
+  id: string,
+  type: GraphFill = GraphFill.DOTS,
+): ArrayElement<NonNullable<SvgDefsAndFill<ComputedDatum<T>>['fill']>> => ({
+  match: { id },
+  id: type,
+});
+
 export const fillDefinitions = [
   {
-    id: 'dots',
+    id: GraphFill.DOTS,
     type: 'patternDots',
     background: 'inherit',
     color: 'rgba(255, 255, 255, 0.3)',
@@ -9,7 +26,7 @@ export const fillDefinitions = [
     stagger: true,
   },
   {
-    id: 'lines',
+    id: GraphFill.LINES,
     type: 'patternLines',
     background: 'inherit',
     color: 'rgba(255, 255, 255, 0.3)',

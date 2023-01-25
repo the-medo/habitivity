@@ -1,12 +1,12 @@
-import React, { CSSProperties, useMemo, useState } from 'react';
+import React, { CSSProperties, useCallback, useMemo } from 'react';
 import {
   CommonPieProps,
   ComputedDatum,
   DataProps,
   DefaultRawDatum,
   Pie,
-  PieCustomLayerProps,
   PieLayer,
+  PieLayerId,
 } from '@nivo/pie';
 import { useGetCompletedDayQuery, useGetTasksByTaskListQuery } from '../../../apis/apiTasks';
 import { Dayjs } from 'dayjs';
@@ -21,38 +21,10 @@ import DayPieTooltipTasks from '../../../helpers/graphs/DayPieTooltipTasks';
 import { ArcLinkLabelsProps } from '@nivo/arcs';
 import { Spin } from 'antd';
 import { DayPieGraphDisplayType } from './DayPieGraphWrapper';
-
-const CenteredMetric = ({
-  dataWithArc,
-  centerX,
-  centerY,
-}: PieCustomLayerProps<GroupRawData | TaskRawData>) => {
-  console.log('dataWithArc', dataWithArc, centerX, centerY);
-
-  let total = 0;
-  dataWithArc.forEach(datum => {
-    total += datum.value;
-  });
-
-  return (
-    <text
-      x={centerX}
-      y={centerY}
-      textAnchor="middle"
-      dominantBaseline="central"
-      style={{
-        fontSize: '52px',
-        fontWeight: 600,
-      }}
-    >
-      {Math.round(total * 100) / 100}
-    </text>
-  );
-};
-
-function getPieLayers<T extends GroupRawData | TaskRawData>(): PieLayer<T>[] {
-  return ['arcs', 'arcLabels', 'arcLinkLabels', CenteredMetric];
-}
+import { formatPoints } from '../../../helpers/numbers/formatPoints';
+import { createFillMatch, fillDefinitions } from '../../../helpers/graphs/fillDefinitions';
+import { SvgDefsAndFill } from '@nivo/core';
+import { CenteredMetricGroups, CenteredMetricTasks } from '../../../helpers/graphs/CenteredMetric';
 
 interface DayPieGraphProps {
   selectedDate?: Dayjs;
@@ -60,6 +32,7 @@ interface DayPieGraphProps {
 }
 
 export interface GroupRawData extends DefaultRawDatum {
+  realValue: number;
   label: string;
   color: CSSProperties['color'];
   icon: string;
@@ -69,6 +42,7 @@ export interface GroupRawData extends DefaultRawDatum {
 }
 
 export interface TaskRawData extends DefaultRawDatum {
+  realValue: number;
   label: string;
   color: CSSProperties['color'];
   task: Task;
@@ -78,7 +52,11 @@ export interface TaskRawData extends DefaultRawDatum {
 
 interface DataInterface {
   groups: DataProps<GroupRawData>['data'];
+  groupFills: SvgDefsAndFill<ComputedDatum<GroupRawData>>['fill'];
+  groupLayers: PieLayer<GroupRawData>[];
   tasks: DataProps<TaskRawData>['data'];
+  taskFills: SvgDefsAndFill<ComputedDatum<TaskRawData>>['fill'];
+  taskLayers: PieLayer<TaskRawData>[];
 }
 
 const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisplayType }) => {
@@ -97,10 +75,24 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisp
   );
 
   const data: DataInterface = useMemo(() => {
+    const baseLayers: PieLayerId[] = ['arcs', 'arcLabels', 'arcLinkLabels'];
     const d: DataInterface = {
       groups: [],
+      groupFills: [],
+      groupLayers: [...baseLayers, CenteredMetricGroups],
       tasks: [],
+      taskFills: [],
+      taskLayers: [...baseLayers, CenteredMetricTasks],
     };
+
+    let totalPointsAbs = 0;
+    existingGroups.forEach(
+      g =>
+        (totalPointsAbs += Math.abs(
+          completedDay ? Math.round((completedDay.taskGroups[g.id] ?? 0) * 100) / 100 : 0,
+        )),
+    );
+    const twoDegreeAnglePoints = totalPointsAbs > 0 ? (totalPointsAbs / 360) * 2 : 0.1;
 
     existingGroups.forEach(g => {
       const value = completedDay ? Math.round((completedDay.taskGroups[g.id] ?? 0) * 100) / 100 : 0;
@@ -111,7 +103,9 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisp
       const group = {
         id: g.id,
         label: g.name,
-        value,
+        formattedValue: formatPoints(value),
+        value: value === 0 ? twoDegreeAnglePoints : Math.abs(value),
+        realValue: value,
         color: baseColor,
         icon: g.icon ?? 'AiOutlineRightCircle',
         tasks: tasks,
@@ -121,11 +115,20 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisp
 
       d.groups.push(group);
 
+      if (value < 0) d.groupFills?.push(createFillMatch(g.id));
+
       tasks.forEach((t, i) => {
+        const value = completedDay
+          ? Math.round((completedDay.tasks[t.id]?.points ?? 0) * 100) / 100
+          : 0;
+
+        if (value < 0) d.taskFills?.push(createFillMatch(t.id));
+
         d.tasks.push({
           id: t.id,
           label: t.taskName,
-          value: completedDay ? Math.round((completedDay.tasks[t.id]?.points ?? 0) * 100) / 100 : 0,
+          value: value === 0 ? twoDegreeAnglePoints : Math.abs(value),
+          realValue: value,
           color: taskColors[i],
           task: t,
           groupInfo: group,
@@ -137,20 +140,35 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisp
     return d;
   }, [existingTasks, existingGroups, completedDay]);
 
+  const arcLabelCallback = useCallback(
+    (e: ComputedDatum<GroupRawData | TaskRawData>) => e.data.realValue.toString(),
+    [],
+  );
+
+  const size = useMemo(() => {
+    const width = window.innerWidth / 2 - 250;
+    const height = window.innerHeight - 150;
+
+    return Math.max(Math.min(width, height, 600), 500);
+  }, []);
+
   const commonProperties = useMemo(
     () => ({
-      width: 500,
-      height: 500,
-      margin: { top: 20, right: 100, bottom: 120, left: 100 },
+      width: size,
+      height: size - 150,
+      margin: { top: 20, right: 120, bottom: 0, left: 120 },
       animate: true,
       activeOuterRadiusOffset: 8,
       innerRadius: 0.6,
       padAngle: 0.5,
       cornerRadius: 5,
+      valueFormat: ' >-1.2~f',
       colors: {
         datum: 'data.color',
       },
+      defs: fillDefinitions,
       motionConfig: 'wobbly',
+      arcLabel: arcLabelCallback,
       arcLabelsSkipAngle: 20,
       arcLinkLabelsSkipAngle: 5,
       arcLabelsTextColor: 'white',
@@ -160,7 +178,7 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisp
         from: 'color',
       },
     }),
-    [],
+    [size, arcLabelCallback],
   );
 
   const arcLinkLabelsTextColor: ArcLinkLabelsProps<
@@ -193,7 +211,8 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisp
             tooltip={DayPieTooltipGroups}
             arcLinkLabelsTextColor={arcLinkLabelsTextColor}
             borderColor={borderColor}
-            layers={getPieLayers<GroupRawData>()}
+            layers={data.groupLayers}
+            fill={data.groupFills}
           />
         </Spin>
       );
@@ -206,7 +225,8 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisp
             tooltip={DayPieTooltipTasks}
             arcLinkLabelsTextColor={arcLinkLabelsTextColor}
             borderColor={borderColor}
-            layers={getPieLayers<TaskRawData>()}
+            layers={data.taskLayers}
+            fill={data.taskFills}
           />
         </Spin>
       );

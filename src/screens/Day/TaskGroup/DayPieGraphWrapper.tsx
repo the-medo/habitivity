@@ -12,6 +12,7 @@ const DayGraphWrapper = styled.div`
   flex-grow: 1;
   align-items: center;
   justify-content: center;
+  width: 50%;
   height: 100%;
 `;
 
