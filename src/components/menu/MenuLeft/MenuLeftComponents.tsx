@@ -72,10 +72,10 @@ export const BottomPoints = styled.div`
   font-size: 1.5rem;
 `;
 
-export const BottomWrapper = styled.div<Pick<MenuLeftProps, '$isCollapsed'>>`
+export const BottomWrapper = styled.div<Omit<MenuLeftProps, 'isManuallyCollapsed'>>`
   position: fixed;
   left: 0;
-  bottom: ${SIDER_COLLAPSED_SIZE}rem;
+  bottom: ${p => (p.$isAutomaticallyCollapsed ? 0 : SIDER_COLLAPSED_SIZE)}rem;
   transition: 0.3s all;
   display: flex;
   flex-direction: column;
