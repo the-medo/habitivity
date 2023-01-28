@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Task } from '../../../types/Tasks';
 import styled, { css } from 'styled-components';
 import { COLORS } from '../../../styles/CustomStyles';
@@ -9,6 +9,10 @@ import { Dayjs } from 'dayjs';
 import { CompletedDayTask } from '../../../helpers/types/CompletedDay';
 import { formatPoints } from '../../../helpers/numbers/formatPoints';
 import { PointCircle } from '../PointCircle';
+import { Dropdown, DropdownProps } from 'antd';
+import { AiOutlineComment, AiOutlineEdit } from 'react-icons/ai';
+import { RowGap } from '../RowGap';
+import DynamicIcon from '../DynamicIcon';
 
 export enum TaskDisplayMode {
   BOXES,
@@ -22,7 +26,6 @@ interface TaskComponentProps {
   completedDayTask: CompletedDayTask | undefined;
   isEmpty: boolean;
   colorDark: string;
-  colorLight: string;
 }
 
 const TaskHeader = styled.div`
@@ -44,8 +47,6 @@ const HeaderTitle = styled(Header5)`
 
 interface TaskWrapperProps {
   $displayMode: TaskDisplayMode;
-  $colorLight: string;
-  $colorDark: string;
 }
 
 const TaskWrapper = styled.div<TaskWrapperProps>`
@@ -55,24 +56,25 @@ const TaskWrapper = styled.div<TaskWrapperProps>`
     background-color: ${COLORS.GREY_LIGHT};
   }
 
-  ${({ $displayMode, $colorLight }) =>
+  ${({ $displayMode }) =>
     $displayMode === TaskDisplayMode.BOXES &&
     css`
       flex-direction: column;
       flex: 0 0 12rem;
       gap: 0.5rem;
-      border: 1px solid ${$colorLight};
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid ${COLORS.GREY_BORDER};
 
       ${TaskHeader} {
-        width: 12rem;
+        //width: 10rem;
         min-height: 2rem;
         height: 2rem;
         align-items: center;
-        background-color: ${$colorLight};
-        padding: 0.25rem;
+        padding: 0;
 
         ${HeaderTitle} {
-          width: calc(12rem - 3rem);
+          width: calc(10rem - 3rem);
           padding: 0.25rem;
           white-space: nowrap;
           display: inline;
@@ -102,8 +104,6 @@ const TaskWrapper = styled.div<TaskWrapperProps>`
 
       ${TaskHeader} {
         flex-basis: 15rem;
-        flex-direction: row-reverse;
-        gap: 1rem;
 
         ${HeaderTitle} {
           flex-grow: 1;
@@ -149,16 +149,9 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
   completedDayTask,
   isEmpty,
   colorDark,
-  colorLight,
 }) => {
-  return (
-    <TaskWrapper $displayMode={displayMode} $colorLight={colorLight} $colorDark={colorDark}>
-      <TaskHeader>
-        <HeaderTitle>{task.taskName}</HeaderTitle>
-        <PointCircle $color={colorDark} $size="small">
-          {formatPoints(completedDayTask?.points)}
-        </PointCircle>
-      </TaskHeader>
+  const taskInputs = useMemo(
+    () => (
       <TaskInputsAndModifiersWrapper>
         <TaskUserInputsWrapper>
           {isEmpty ? (
@@ -178,6 +171,49 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
           isReloading={isEmpty}
         />
       </TaskInputsAndModifiersWrapper>
+    ),
+    [completedDayTask, isEmpty, selectedDate, task],
+  );
+
+  const extraItems: DropdownProps['menu'] = useMemo(
+    () => ({
+      items: [
+        {
+          label: 'Add a comment',
+          key: '1',
+          icon: <AiOutlineComment />,
+        },
+        {
+          label: 'Edit task definition',
+          key: '2',
+          icon: <AiOutlineEdit />,
+        },
+      ],
+    }),
+    [],
+  );
+
+  const taskHeader = useMemo(
+    () => (
+      <TaskHeader>
+        <RowGap>
+          <PointCircle $color={colorDark} $size="small">
+            {formatPoints(completedDayTask?.points)}
+          </PointCircle>{' '}
+          <HeaderTitle>{task.taskName}</HeaderTitle>
+        </RowGap>
+        <Dropdown menu={extraItems}>
+          <DynamicIcon icon="BsThreeDotsVertical" />
+        </Dropdown>
+      </TaskHeader>
+    ),
+    [colorDark, completedDayTask?.points, task.taskName, extraItems],
+  );
+
+  return (
+    <TaskWrapper $displayMode={displayMode}>
+      {taskHeader}
+      {taskInputs}
     </TaskWrapper>
   );
 };

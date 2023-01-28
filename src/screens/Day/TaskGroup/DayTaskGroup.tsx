@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import dayjs from 'dayjs';
 import { useGetCompletedDayQuery } from '../../../apis/apiTasks';
-import { generateColor } from '../../../helpers/colors/generateColor';
 
 interface DayTaskGroupProps {
   group: TaskGroup;
@@ -18,10 +17,6 @@ const DayTaskGroup: React.FC<DayTaskGroupProps> = ({ group }) => {
   const selectedDate = useSelector((state: ReduxState) => state.dayReducer.selectedDate);
 
   const [selectedDateChanged, setSelectedDateChanged] = useState(true);
-  const colorLight = useMemo(
-    () => (group.color ? generateColor(group.color, 0) : COLORS.PRIMARY_LIGHT),
-    [group.color],
-  );
   const colorDark = useMemo(() => group.color ?? COLORS.PRIMARY, [group.color]);
 
   useEffect(() => {
@@ -49,7 +44,6 @@ const DayTaskGroup: React.FC<DayTaskGroupProps> = ({ group }) => {
           selectedDate={dayjs(selectedDate)}
           completedDayTask={completedDay === false ? undefined : completedDay.tasks[t.id]}
           isEmpty={selectedDateChanged || isFetching}
-          colorLight={colorLight}
           colorDark={colorDark}
         />
       ))}

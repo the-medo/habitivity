@@ -42,10 +42,13 @@ const TaskTypeSelector: React.FC = () => {
   const navigate = useNavigate();
   const [taskGroupValue, setTaskGroupValue] = useState<string>();
 
-  const handleTaskGroupChange = useCallback((opt: string) => {
-    navigate(`/new-task/${opt}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleTaskGroupChange = useCallback(
+    (opt: string) => {
+      if (selectedTaskListId) navigate(`/${selectedTaskListId}/new-task/${opt}`);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [selectedTaskListId],
+  );
 
   useEffect(() => {
     if (taskGroupId && existingGroups.length > 0) {

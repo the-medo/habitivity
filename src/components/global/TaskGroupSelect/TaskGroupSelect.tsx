@@ -19,7 +19,7 @@ const IconWrapper = styled.span`
 `;
 
 interface TaskGroupSelectProps {
-  isDisabled: boolean;
+  isDisabled?: boolean;
   value: string | undefined;
   onChangeHandler: (opt: string) => void;
 }

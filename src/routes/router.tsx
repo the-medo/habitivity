@@ -24,10 +24,7 @@ export const router = createBrowserRouter(
         <Route path="day" element={<Day />}>
           <Route index element={<DayDefault />} />
         </Route>
-        <Route path="new-task">
-          <Route index element={<TaskCreate />} />
-          <Route path=":taskGroupId" element={<TaskCreate />} />
-        </Route>
+        <Route path="new-task/:taskGroupId?" element={<TaskCreate />}></Route>
         <Route path="calendar" element={<Calendar />} />
       </Route>
     </Route>,
