@@ -12,7 +12,6 @@ const DayGraphWrapper = styled.div`
   flex-grow: 1;
   align-items: center;
   justify-content: center;
-  width: 50%;
   height: 100%;
 `;
 
@@ -53,6 +52,7 @@ const DayPieGraphWrapper: React.FC<DayPieGraphWrapperProps> = ({ selectedDate })
   return (
     <DayGraphWrapper>
       <Segmented
+        block={true}
         defaultValue={displayTypeString}
         options={segmentedOptions}
         onChange={handleDisplayTypeChange}

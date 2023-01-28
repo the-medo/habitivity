@@ -3,7 +3,7 @@ import { Task } from '../../../types/Tasks';
 import styled, { css } from 'styled-components';
 import { COLORS } from '../../../styles/CustomStyles';
 import TaskUserInput from './TaskUserInput';
-import TaskModifiers, { ModifiersWrapper } from './TaskModifiers';
+import TaskModifiers, { ModifiersInput, ModifiersWrapper } from './TaskModifiers';
 import { Header5 } from '../Headers';
 import { Dayjs } from 'dayjs';
 import { CompletedDayTask } from '../../../helpers/types/CompletedDay';
@@ -31,6 +31,11 @@ const TaskHeader = styled.div`
   align-items: center;
 `;
 
+const TaskInputsAndModifiersWrapper = styled.div`
+  //width: 100%;
+  display: flex;
+  flex-direction: row;
+`;
 const TaskUserInputsWrapper = styled.div``;
 
 const HeaderTitle = styled(Header5)`
@@ -79,15 +84,20 @@ const TaskWrapper = styled.div<TaskWrapperProps>`
       ${TaskUserInputsWrapper} {
         padding: 0.5rem;
       }
+
+      ${TaskInputsAndModifiersWrapper} {
+        //flex-basis: 8rem;
+        flex-direction: column;
+      }
     `}
 
   ${({ $displayMode }) =>
     $displayMode === TaskDisplayMode.ROWS &&
     css`
       flex-direction: row;
-      padding: 0.5rem;
+      padding: 0.25rem;
       gap: 1.5rem;
-      align-items: center;
+      align-items: flex-start;
       border-bottom: 1px solid ${COLORS.GREY_LIGHT};
 
       ${TaskHeader} {
@@ -103,6 +113,27 @@ const TaskWrapper = styled.div<TaskWrapperProps>`
 
       ${TaskUserInputsWrapper} {
         flex-basis: 8rem;
+      }
+
+      ${TaskInputsAndModifiersWrapper} {
+        flex-basis: 8rem;
+        flex-direction: column;
+
+        ${ModifiersWrapper} {
+          flex-grow: 1;
+          padding: 0;
+          justify-content: stretch;
+          align-items: stretch;
+          flex-direction: column;
+
+          ${ModifiersInput} {
+            width: 100%;
+          }
+        }
+
+        ${TaskUserInputsWrapper} {
+          flex-basis: initial;
+        }
       }
 
       ${ModifiersWrapper} {
@@ -124,30 +155,29 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
     <TaskWrapper $displayMode={displayMode} $colorLight={colorLight} $colorDark={colorDark}>
       <TaskHeader>
         <HeaderTitle>{task.taskName}</HeaderTitle>
-        <PointCircle
-          $color={colorDark}
-          $size={displayMode === TaskDisplayMode.BOXES ? 'small' : 'default'}
-        >
+        <PointCircle $color={colorDark} $size="small">
           {formatPoints(completedDayTask?.points)}
         </PointCircle>
       </TaskHeader>
-      <TaskUserInputsWrapper>
-        {isEmpty ? (
-          <div>
-            {/* placeholder DIV wrapper */}
-            <TaskUserInput date={selectedDate} task={task} completedDayTask={undefined} />
-          </div>
-        ) : (
-          <TaskUserInput date={selectedDate} task={task} completedDayTask={completedDayTask} />
-        )}
-      </TaskUserInputsWrapper>
-      <TaskModifiers
-        percentValue={completedDayTask?.usedModifiers.percentage ?? 100}
-        date={selectedDate}
-        task={task}
-        completedDayTask={completedDayTask}
-        isReloading={isEmpty}
-      />
+      <TaskInputsAndModifiersWrapper>
+        <TaskUserInputsWrapper>
+          {isEmpty ? (
+            <div>
+              {/* placeholder DIV wrapper */}
+              <TaskUserInput date={selectedDate} task={task} completedDayTask={undefined} />
+            </div>
+          ) : (
+            <TaskUserInput date={selectedDate} task={task} completedDayTask={completedDayTask} />
+          )}
+        </TaskUserInputsWrapper>
+        <TaskModifiers
+          percentValue={completedDayTask?.usedModifiers.percentage ?? 100}
+          date={selectedDate}
+          task={task}
+          completedDayTask={completedDayTask}
+          isReloading={isEmpty}
+        />
+      </TaskInputsAndModifiersWrapper>
     </TaskWrapper>
   );
 };

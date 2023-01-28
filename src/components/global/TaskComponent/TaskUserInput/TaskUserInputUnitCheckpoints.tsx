@@ -20,6 +20,7 @@ const TaskUserInputUnitCheckpoints: React.FC<TaskUserInputUnitCheckpointsProps> 
       suffix={units.zero}
       placeholder="0"
       onChange={onChange}
+      size="small"
     />
   );
 };

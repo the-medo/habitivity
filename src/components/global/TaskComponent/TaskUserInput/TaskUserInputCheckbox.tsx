@@ -63,6 +63,7 @@ const TaskUserInputCheckbox: React.FC<TaskUserInputCheckboxProps> = ({ value, on
         options={checkboxSelectOptions}
         style={width100percent}
         onChange={onChange}
+        size="small"
       />
     </UserInputWrapper>
   );

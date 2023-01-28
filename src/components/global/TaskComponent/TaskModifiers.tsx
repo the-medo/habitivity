@@ -23,7 +23,7 @@ const ModifiersTitle = styled(Text)`
   flex-grow: 1;
 `;
 
-const ModifiersInput = styled(Input)`
+export const ModifiersInput = styled(Input)`
   width: 4.5rem;
 `;
 
@@ -88,6 +88,7 @@ const TaskModifiers: React.FC<TaskModifiersProps> = ({
             onChange={onChangeInputHandler}
             defaultValue={percentValue}
             suffix="%"
+            size="small"
           />
         ) : (
           <div>
@@ -96,6 +97,7 @@ const TaskModifiers: React.FC<TaskModifiersProps> = ({
               onChange={onChangeInputHandler}
               defaultValue={percentValue}
               suffix="%"
+              size="small"
             />
           </div>
         )}

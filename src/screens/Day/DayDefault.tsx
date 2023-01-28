@@ -16,7 +16,10 @@ import dayjs, { Dayjs } from 'dayjs';
 import { datepickerFormat } from '../../components/forms/AntdFormComponents';
 import { Link } from 'react-router-dom';
 import { COLORS } from '../../styles/CustomStyles';
-import TaskComponentWrapper from '../../components/global/TaskComponent/TaskComponentWrapper';
+import TaskComponentWrapper, {
+  TaskComponentWrapperBox,
+  TaskComponentWrapperRow,
+} from '../../components/global/TaskComponent/TaskComponentWrapper';
 import DayPieGraphWrapper from './TaskGroup/DayPieGraphWrapper';
 
 const DayTaskGroupWrapper = styled.div`
@@ -34,9 +37,14 @@ const TitleRow = styled.div`
 const TaskWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   padding: 1rem;
   gap: 1rem;
   border-bottom: 1px solid ${COLORS.GREY_BORDER};
+
+  ${TaskComponentWrapperBox}, ${TaskComponentWrapperRow} {
+    flex-basis: max(35%, 20rem);
+  }
 `;
 
 const DayDefault: React.FC = () => {

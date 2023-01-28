@@ -16,6 +16,7 @@ const TaskUserInputUnits: React.FC<TaskUserInputUnitsProps> = ({ value, units, o
       defaultValue={value}
       suffix={units.zero}
       onChange={onChange}
+      size="small"
     />
   );
 };

@@ -26,6 +26,7 @@ const TaskUserInputOptions: React.FC<TaskUserInputOptionsProps> = ({
       style={width100percent}
       placeholder="Select option"
       onChange={onChange}
+      size="small"
     />
   );
 };

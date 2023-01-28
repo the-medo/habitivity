@@ -149,7 +149,7 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisp
     const width = window.innerWidth / 2 - 250;
     const height = window.innerHeight - 150;
 
-    return Math.max(Math.min(width, height, 600), 500);
+    return Math.max(Math.min(width, height, 500), 400);
   }, []);
 
   const commonProperties = useMemo(

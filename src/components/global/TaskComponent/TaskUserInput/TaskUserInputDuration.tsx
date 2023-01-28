@@ -20,6 +20,7 @@ const TaskUserInputDuration: React.FC<TaskUserInputDurationProps> = ({
       placeholder="0"
       defaultValue={value}
       suffix={units.zero}
+      size="small"
     />
   );
 };

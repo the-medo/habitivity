@@ -19,6 +19,7 @@ const TaskUserInputTime: React.FC<TaskUserInputTimeProps> = ({ value, onChange }
       minuteStep={5}
       placeholder="06:00"
       style={width100percent}
+      size="small"
     />
   );
 };
