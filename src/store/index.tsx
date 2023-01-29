@@ -9,6 +9,7 @@ import { notificationReducer } from './notificationSlice';
 import { dayReducer } from '../screens/Day/daySlice';
 import { appReducer } from './appSlice';
 import { routerReducer, routerSlice } from '../routes/routerSlice';
+import { dashboardReducer, dashboardSlice } from '../screens/Dashboard/dashboardSlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     notificationReducer,
     taskCreationReducer,
     dayReducer,
+    [dashboardSlice.name]: dashboardReducer,
     [routerSlice.name]: routerReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },

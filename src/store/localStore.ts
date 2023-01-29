@@ -1,6 +1,8 @@
 import { HabitivityUser } from '../types/HabitivityUser';
 import { RightDrawerStatus } from '../components/menu/DrawerRight/RightDrawer';
 import { TaskDisplayMode } from '../components/global/TaskComponent/TaskComponent';
+import { DashboardSubpage } from '../screens/Dashboard/dashboardSlice';
+import { DateRange } from '../helpers/types/DateRange';
 
 export enum LSKey {
   USER = '1',
@@ -10,6 +12,8 @@ export enum LSKey {
   DAY_DISPLAY_MODE = '5',
   SELECTED_TASK_GROUPS = '6',
   SELECTED_DATE_SCREEN_DAY = '7',
+  DASHBOARD_SUBPAGE = '8',
+  DASHBOARD_DATERANGE = '9',
 }
 
 export interface LSValues {
@@ -20,6 +24,8 @@ export interface LSValues {
   [LSKey.DAY_DISPLAY_MODE]?: TaskDisplayMode;
   [LSKey.SELECTED_TASK_GROUPS]?: Record<string, boolean | undefined>;
   [LSKey.SELECTED_DATE_SCREEN_DAY]?: Record<string, string | undefined>;
+  [LSKey.DASHBOARD_SUBPAGE]?: DashboardSubpage;
+  [LSKey.DASHBOARD_DATERANGE]?: DateRange;
 }
 
 export function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {
