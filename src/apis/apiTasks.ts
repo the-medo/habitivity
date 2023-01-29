@@ -19,7 +19,7 @@ import {
   UsedModifiers,
 } from '../types/Tasks';
 import { DayEditModeFormFields } from '../screens/Day/TaskGroup/DayEditMode';
-import { CompletedDay, completedDayConverter } from '../helpers/types/CompletedDay';
+import { CompletedDay, completedDayConverter, CompletedDays } from '../helpers/types/CompletedDay';
 
 // import DocumentReference = firebase.firestore.DocumentReference;
 
@@ -38,6 +38,11 @@ interface CompleteTaskPayload {
   value: number;
   date: string;
   usedModifiers?: UsedModifiers;
+}
+
+export interface GetCompletedDaysPayload {
+  startDate: string;
+  endDate: string;
 }
 
 const getAllTasks = async (userId: string, taskListId: string) => {
@@ -95,6 +100,38 @@ export const apiTask = apiSlice
           }
         },
         providesTags: (result, error, arg) => [{ type: 'CompletedDay', id: arg.date }],
+      }),
+
+      getCompletedDays: builder.query<CompletedDays, GetCompletedDaysPayload>({
+        queryFn: async ({ startDate, endDate }, api) => {
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
+
+          try {
+            const data: CompletedDays = {};
+            const completedDaysRef = collection(
+              db,
+              '/Users/' + userId + '/CompletedDays',
+            ).withConverter(completedDayConverter);
+            const q = query(
+              completedDaysRef,
+              where('date', '>=', startDate),
+              where('date', '<=', endDate),
+            );
+            await getDocs(q).then(snapshot => {
+              snapshot.docs.forEach(x => {
+                const cd = x.data();
+                data[cd.date] = cd;
+              });
+            });
+            return { data };
+          } catch (e) {
+            return { error: e };
+          }
+        },
+        providesTags: (result, error, arg) => [
+          { type: 'CompletedDay', id: `${arg.startDate}-${arg.endDate}` },
+        ],
       }),
 
       createTask: builder.mutation<Task, CreateTaskPayload>({
@@ -297,6 +334,7 @@ export const apiTask = apiSlice
 export const {
   useGetTasksByTaskListQuery,
   useGetCompletedDayQuery,
+  useGetCompletedDaysQuery,
   useCreateTaskMutation,
   useRearrangeTasksMutation,
   useCompleteTaskMutation,

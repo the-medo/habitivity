@@ -15,6 +15,8 @@ export interface CompletedDay {
   tasks: Record<string, CompletedDayTask | undefined>;
 }
 
+export type CompletedDays = Record<string, CompletedDay | false | undefined>;
+
 // noinspection JSUnusedGlobalSymbols
 export const completedDayConverter = {
   toFirestore(task: CompletedDay): firebase.firestore.DocumentData {
