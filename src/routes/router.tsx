@@ -12,6 +12,10 @@ import Dashboard from '../screens/Dashboard/Dashboard';
 import DayDefault from '../screens/Day/DayDefault';
 import TaskCreate from '../screens/NewTask/TaskCreate';
 import TaskListDefault from '../screens/TaskList/TaskListDefault';
+import DashboardOverview from '../screens/Dashboard/DashboardOverview';
+import DashboardMonth from '../screens/Dashboard/DashboardMonth';
+import DashboardTargets from '../screens/Dashboard/DashboardTargets';
+import DashboardDefault from '../screens/Dashboard/DashboardDefault';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +24,12 @@ export const router = createBrowserRouter(
       <Route path="settings" element={<Settings />} />
       <Route path=":taskListId" element={<TaskListDefault />}>
         <Route path="edit" element={<TaskListEdit />} />
-        <Route path="dashboard" element={<Dashboard />}></Route>
+        <Route path="dashboard" element={<Dashboard />}>
+          <Route index element={<DashboardDefault />} />
+          <Route path="overview" element={<DashboardOverview />} />
+          <Route path="month" element={<DashboardMonth />} />
+          <Route path="targets" element={<DashboardTargets />} />
+        </Route>
         <Route path="day" element={<Day />}>
           <Route index element={<DayDefault />} />
         </Route>

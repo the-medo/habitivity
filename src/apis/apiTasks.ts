@@ -20,6 +20,7 @@ import {
 } from '../types/Tasks';
 import { DayEditModeFormFields } from '../screens/Day/TaskGroup/DayEditMode';
 import { CompletedDay, completedDayConverter, CompletedDays } from '../helpers/types/CompletedDay';
+import { DateRange } from '../helpers/types/DateRange';
 
 // import DocumentReference = firebase.firestore.DocumentReference;
 
@@ -38,11 +39,6 @@ interface CompleteTaskPayload {
   value: number;
   date: string;
   usedModifiers?: UsedModifiers;
-}
-
-export interface GetCompletedDaysPayload {
-  startDate: string;
-  endDate: string;
 }
 
 const getAllTasks = async (userId: string, taskListId: string) => {
@@ -102,7 +98,7 @@ export const apiTask = apiSlice
         providesTags: (result, error, arg) => [{ type: 'CompletedDay', id: arg.date }],
       }),
 
-      getCompletedDays: builder.query<CompletedDays, GetCompletedDaysPayload>({
+      getCompletedDays: builder.query<CompletedDays, DateRange>({
         queryFn: async ({ startDate, endDate }, api) => {
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
