@@ -8,10 +8,16 @@ import { ConfigProviderProps } from 'antd/es/config-provider';
 const GlobalStyle = createGlobalStyle`
   :root {
     font-size: 100%;
+    box-sizing: border-box;
   }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol" !important;
+    box-sizing: border-box;
+  }
+  
+  * {
+    box-sizing: border-box;
   }
 
   input::-webkit-outer-spin-button,
