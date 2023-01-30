@@ -33,6 +33,7 @@ import { AvailablePages } from '../../../routes/routerSlice';
 import dayjs from 'dayjs';
 import { formatPoints } from '../../../helpers/numbers/formatPoints';
 import { Tooltip } from 'antd';
+import { getDateLabel } from '../../../helpers/date/getDateLabel';
 
 export interface MenuLeftItem {
   type: 'task-group' | 'task';
@@ -88,22 +89,7 @@ const MenuLeft: React.FC = () => {
     [completedDay, selectedTaskListId],
   );
 
-  const bottomLabel = useMemo(() => {
-    const diff = dayjs(dayjs().format('YYYY-MM-DD')).diff(dayjs(selectedDate), 'day');
-    if (diff === 0) {
-      return 'Today';
-    } else if (diff === 1) {
-      return 'Yesterday';
-    } else if (diff === -1) {
-      return 'Tomorrow';
-    } else {
-      const day = Math.abs(diff) === 1 ? 'day' : 'days';
-      if (diff < 0) {
-        return `In ${Math.abs(diff)} ${day}`;
-      }
-      return `${diff} ${day} ago`;
-    }
-  }, [selectedDate]);
+  const bottomLabel = useMemo(() => getDateLabel(selectedDate), [selectedDate]);
 
   useEffect(() => {
     if (isReady) {

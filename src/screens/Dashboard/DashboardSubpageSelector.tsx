@@ -30,6 +30,7 @@ const segmentedOptions: SegmentedLabeledOption[] = [
 const Wrapper = styled(RowGap)`
   align-items: center;
   font-weight: 500;
+  margin-bottom: 1rem;
 `;
 
 const Title = styled.span`
