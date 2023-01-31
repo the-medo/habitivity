@@ -1,53 +1,63 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DashboardSubpage, setSubpage } from './dashboardSlice';
-import Overview from '../../components/global/Overview';
 import styled from 'styled-components';
 import { ReduxState } from '../../store';
 import { useGetCompletedDaysQuery } from '../../apis/apiTasks';
-import DateDisplay from '../../components/global/DateDisplay';
 import dayjs from 'dayjs';
-import { Divider } from 'antd';
+import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
+import DayOverview from './DashboardOverview/DayOverview';
+import { RowGap } from '../../components/global/RowGap';
 
 const OverviewWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 500px;
+`;
+
+const Row1 = styled(RowGap)`
+  gap: 1rem;
 `;
 
 const DashboardOverview: React.FC = () => {
   const dispatch = useDispatch();
+  const selectedTaskListId = useSelectedTaskListId();
   const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
   const { data: lastWeekData } = useGetCompletedDaysQuery(dateRange);
 
   useEffect(() => {
     console.log('completed daaaayyyys: ', lastWeekData);
-  }, [lastWeekData]);
+  }, [lastWeekData, selectedTaskListId]);
 
   useEffect(() => {
     dispatch(setSubpage(DashboardSubpage.OVERVIEW));
   }, [dispatch]);
 
+  const today = useMemo(() => dayjs(), []);
+  const yesterday = useMemo(() => dayjs().subtract(1, 'day'), []);
+  const twoDaysAgo = useMemo(() => dayjs().subtract(2, 'day'), []);
+
   return (
-    <OverviewWrapper>
-      <Overview arrowContent={<DateDisplay date={dayjs().format('YYYY-MM-DD')} />}>
-        Ranxdom content
-        <Divider type="vertical" /> Ranxdom content
-      </Overview>
-      <Overview
-        arrowContent={<DateDisplay date={dayjs().subtract(1, 'day').format('YYYY-MM-DD')} />}
-      >
-        Ranxdom content
-        <Divider type="vertical" />
-        Ranxdom content
-      </Overview>
-      <Overview
-        arrowContent={<DateDisplay date={dayjs().subtract(2, 'day').format('YYYY-MM-DD')} />}
-      >
-        Ranxdom content
-        <Divider type="vertical" /> Ranxdom content
-      </Overview>
-    </OverviewWrapper>
+    <Row1>
+      <OverviewWrapper>
+        <DayOverview
+          date={today}
+          completedDaysData={lastWeekData}
+          selectedTaskListId={selectedTaskListId}
+        />
+        <DayOverview
+          date={yesterday}
+          completedDaysData={lastWeekData}
+          selectedTaskListId={selectedTaskListId}
+        />
+        <DayOverview
+          date={twoDaysAgo}
+          completedDaysData={lastWeekData}
+          selectedTaskListId={selectedTaskListId}
+        />
+      </OverviewWrapper>
+    </Row1>
   );
 };
 
