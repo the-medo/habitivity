@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DashboardSubpage, setSubpage } from './dashboardSlice';
 import styled from 'styled-components';
 import { ReduxState } from '../../store';
-import { useGetCompletedDaysQuery } from '../../apis/apiTasks';
+import { useGetCompletedDaysQuery, useGetTasksByTaskListQuery } from '../../apis/apiTasks';
 import dayjs from 'dayjs';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 import DayOverview from './DashboardOverview/DayOverview';
 import { RowGap } from '../../components/global/RowGap';
+import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
+import LineDashboardOverview from './DashboardOverview/LineDashboardOverview';
 
 const OverviewWrapper = styled.div`
   display: flex;
@@ -23,6 +25,12 @@ const Row1 = styled(RowGap)`
 const DashboardOverview: React.FC = () => {
   const dispatch = useDispatch();
   const selectedTaskListId = useSelectedTaskListId();
+
+  const { data: existingTasks, isFetching: isFetchingTasks } =
+    useGetTasksByTaskListQuery(selectedTaskListId);
+  const { data: existingGroups, isFetching: isFetchingGroups } =
+    useGetTaskGroupsByTaskListQuery(selectedTaskListId);
+
   const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
   const { data: lastWeekData } = useGetCompletedDaysQuery(dateRange);
 
@@ -57,6 +65,14 @@ const DashboardOverview: React.FC = () => {
           selectedTaskListId={selectedTaskListId}
         />
       </OverviewWrapper>
+
+      <LineDashboardOverview
+        dateRange={dateRange}
+        completedDaysData={lastWeekData}
+        selectedTaskListId={selectedTaskListId}
+        taskInfo={existingTasks}
+        taskGroupInfo={existingGroups}
+      />
     </Row1>
   );
 };

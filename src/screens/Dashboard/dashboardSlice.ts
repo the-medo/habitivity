@@ -17,7 +17,7 @@ export interface DashboardState {
 const initialState: DashboardState = {
   subpage: undefined,
   dateRange: getItem(LSKey.DASHBOARD_DATERANGE) ?? {
-    startDate: dayjs().subtract(3, 'day').format('YYYY-MM-DD'),
+    startDate: dayjs().subtract(6, 'day').format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
   },
 };
