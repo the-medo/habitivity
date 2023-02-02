@@ -8,8 +8,14 @@ import { Dimensions } from '@nivo/core';
 import { getDateRange } from '../../../helpers/date/getDateRange';
 import { linearGradient } from '../../../helpers/graphs/fillDefinitions';
 import { lineGraphCustomPointProps } from '../../../helpers/graphs/lineGraphCustomPointProps';
+import { DashboardGroupsOrTasks } from '../dashboardSlice';
+import { COLORS } from '../../../styles/CustomStyles';
+import { chooseColorsBasedOnCount } from '../../../helpers/colors/chooseColorsBasedOnCount';
 
 interface LineDashboardOverviewProps {
+  taskGroup: string;
+  groupsOrTasks: DashboardGroupsOrTasks;
+  stacked: boolean;
   dateRange: DateRange;
   completedDaysData: CompletedDays | undefined;
   taskInfo: Task[] | undefined;
@@ -21,7 +27,66 @@ export interface TaskLineData extends Serie {
   color: CSSProperties['color'];
 }
 
+const createLineFromGroup = (
+  g: TaskGroup,
+  completedDaysData: CompletedDays | undefined,
+  dateRange: DateRange,
+): TaskLineData => {
+  const base: TaskLineData = {
+    id: g.name,
+    color: g.color,
+    data: [],
+    taskGroup: g,
+  };
+
+  getDateRange(dateRange).forEach(date => {
+    const today = date.format('YYYY-MM-DD');
+    const completedToday = completedDaysData?.[today];
+    if (completedToday !== undefined) {
+      const todayPoints = completedToday ? completedToday.taskGroups[g.id] ?? 0 : 0;
+      base.data.push({
+        x: today,
+        y: todayPoints,
+      });
+    }
+  });
+
+  return base;
+};
+
+const createLineFromTask = (
+  t: Task,
+  color: CSSProperties['color'],
+  g: TaskGroup,
+  completedDaysData: CompletedDays | undefined,
+  dateRange: DateRange,
+): TaskLineData => {
+  const base: TaskLineData = {
+    id: t.taskName,
+    color,
+    data: [],
+    taskGroup: g,
+  };
+
+  getDateRange(dateRange).forEach(date => {
+    const today = date.format('YYYY-MM-DD');
+    const completedToday = completedDaysData?.[today];
+    if (completedToday !== undefined) {
+      const todayPoints = completedToday ? completedToday.tasks[t.id]?.points ?? 0 : 0;
+      base.data.push({
+        x: today,
+        y: todayPoints,
+      });
+    }
+  });
+
+  return base;
+};
+
 const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
+  taskGroup,
+  groupsOrTasks,
+  stacked,
   dateRange,
   completedDaysData,
   taskInfo,
@@ -30,31 +95,50 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
   const data = useMemo(() => {
     const dataSeries: TaskLineData[] = [];
 
-    taskGroupInfo?.forEach(taskGroup => {
-      const base: TaskLineData = {
-        id: taskGroup.name,
-        color: taskGroup.color,
-        data: [],
-        taskGroup,
-      };
+    if (taskGroupInfo && taskInfo) {
+      if (taskGroup === 'all') {
+        if (groupsOrTasks === DashboardGroupsOrTasks.GROUPS) {
+          taskGroupInfo.forEach(g =>
+            dataSeries.push(createLineFromGroup(g, completedDaysData, dateRange)),
+          );
 
-      getDateRange(dateRange).forEach(date => {
-        const today = date.format('YYYY-MM-DD');
-        const completedToday = completedDaysData?.[today];
-        if (completedToday !== undefined) {
-          const todayPoints = completedToday ? completedToday.taskGroups[taskGroup.id] ?? 0 : 0;
-          base.data.push({
-            x: today,
-            y: todayPoints,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        } else if (groupsOrTasks === DashboardGroupsOrTasks.TASKS) {
+          taskGroupInfo.forEach(g => {
+            const baseColor = g.color ?? COLORS.PRIMARY;
+            const tasks = taskInfo.filter(t => t.taskGroupId === g.id);
+            const taskColors = chooseColorsBasedOnCount(baseColor, tasks.length);
+
+            tasks.forEach((t, i) =>
+              dataSeries.push(
+                createLineFromTask(t, taskColors[i], g, completedDaysData, dateRange),
+              ),
+            );
           });
         }
-      });
+      } else {
+        // taskGroup !== 'all' => ID of taskGroup
+        const g = taskGroupInfo.find(g => g.id === taskGroup);
+        if (g) {
+          if (groupsOrTasks === DashboardGroupsOrTasks.GROUPS) {
+            dataSeries.push(createLineFromGroup(g, completedDaysData, dateRange));
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          } else if (groupsOrTasks === DashboardGroupsOrTasks.TASKS) {
+            const baseColor = g.color ?? COLORS.PRIMARY;
+            const tasks = taskInfo.filter(t => t.taskGroupId === g.id);
+            const taskColors = chooseColorsBasedOnCount(baseColor, tasks.length);
 
-      dataSeries.push(base);
-    });
-
+            tasks.forEach((t, i) =>
+              dataSeries.push(
+                createLineFromTask(t, taskColors[i], g, completedDaysData, dateRange),
+              ),
+            );
+          }
+        }
+      }
+    }
     return dataSeries;
-  }, [completedDaysData, dateRange, taskGroupInfo]);
+  }, [taskGroup, groupsOrTasks, completedDaysData, dateRange, taskInfo, taskGroupInfo]);
 
   const properties: Partial<LineSvgProps> & Dimensions = useMemo(
     () => ({
@@ -74,7 +158,7 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
       },
       yScale: {
         type: 'linear',
-        stacked: true,
+        stacked,
       },
       colors: { datum: 'color' },
       axisBottom: {
@@ -84,7 +168,7 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
       defs: [linearGradient],
       fill: [{ match: '*', id: 'gradientA' }],
     }),
-    [],
+    [stacked],
   );
 
   if (!taskInfo || !taskGroupInfo) return null;
