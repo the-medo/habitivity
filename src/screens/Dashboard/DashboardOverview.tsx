@@ -1,6 +1,11 @@
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DashboardSubpage, setSubpage } from './dashboardSlice';
+import {
+  DashboardGraphView,
+  DashboardGroupsOrTasks,
+  DashboardSubpage,
+  setSubpage,
+} from './dashboardSlice';
 import styled from 'styled-components';
 import { ReduxState } from '../../store';
 import { useGetCompletedDaysQuery, useGetTasksByTaskListQuery } from '../../apis/apiTasks';
@@ -32,6 +37,11 @@ const DashboardOverview: React.FC = () => {
     useGetTaskGroupsByTaskListQuery(selectedTaskListId);
 
   const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
+  const taskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
+  const groupsOrTasks = useSelector((state: ReduxState) => state.dashboard.segmentGroupsOrTasks);
+  const stacked = useSelector(
+    (state: ReduxState) => state.dashboard.segmentGraphView === DashboardGraphView.STACKED,
+  );
   const { data: lastWeekData } = useGetCompletedDaysQuery(dateRange);
 
   useEffect(() => {
@@ -79,10 +89,13 @@ const DashboardOverview: React.FC = () => {
       </OverviewWrapper>
 
       <LineDashboardOverview
+        taskGroup={taskGroup}
+        groupsOrTasks={groupsOrTasks}
         dateRange={dateRange}
         completedDaysData={lastWeekData}
         taskInfo={existingTasks}
         taskGroupInfo={existingGroups}
+        stacked={stacked}
       />
     </Row1>
   );

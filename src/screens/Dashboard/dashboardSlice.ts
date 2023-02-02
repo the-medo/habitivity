@@ -21,17 +21,18 @@ export enum DashboardGraphView {
 
 export interface DashboardState {
   subpage?: DashboardSubpage;
-  segmentTaskGroup?: string;
-  segmentGroupsOrTasks?: DashboardGroupsOrTasks;
+  segmentTaskGroup: string;
+  segmentGroupsOrTasks: DashboardGroupsOrTasks;
   segmentGraphView?: DashboardGraphView;
   dateRange: DateRange;
 }
 
 const initialState: DashboardState = {
   subpage: undefined,
-  segmentTaskGroup: 'all',
-  segmentGroupsOrTasks: DashboardGroupsOrTasks.GROUPS,
-  segmentGraphView: DashboardGraphView.STACKED,
+  segmentTaskGroup: getItem(LSKey.DASHBOARD_SEGMENT_TASK_GROUP) ?? 'all',
+  segmentGroupsOrTasks:
+    getItem(LSKey.DASHBOARD_SEGMENT_GROUPS_OR_TASKS) ?? DashboardGroupsOrTasks.GROUPS,
+  segmentGraphView: getItem(LSKey.DASHBOARD_SEGMENT_GRAPHS_STACKED) ?? DashboardGraphView.STACKED,
   dateRange: getItem(LSKey.DASHBOARD_DATERANGE) ?? {
     startDate: dayjs().subtract(6, 'day').format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
