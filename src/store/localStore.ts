@@ -21,6 +21,7 @@ export enum LSKey {
   DASHBOARD_SEGMENT_TASK_GROUP = '10',
   DASHBOARD_SEGMENT_GROUPS_OR_TASKS = '11',
   DASHBOARD_SEGMENT_GRAPHS_STACKED = '12',
+  DASHBOARD_SEGMENT_TASK = '13',
 }
 
 export interface LSValues {
@@ -36,6 +37,7 @@ export interface LSValues {
   [LSKey.DASHBOARD_SEGMENT_TASK_GROUP]?: string;
   [LSKey.DASHBOARD_SEGMENT_GROUPS_OR_TASKS]?: DashboardGroupsOrTasks;
   [LSKey.DASHBOARD_SEGMENT_GRAPHS_STACKED]?: DashboardGraphView;
+  [LSKey.DASHBOARD_SEGMENT_TASK]?: string;
 }
 
 export function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {

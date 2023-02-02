@@ -9,6 +9,7 @@ import {
   DashboardSubpage,
   setSegmentGraphView,
   setSegmentGroupsOrTasks,
+  setSegmentTask,
   setSegmentTaskGroup,
 } from './dashboardSlice';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +19,8 @@ import styled from 'styled-components';
 import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 import { COLORS } from '../../styles/CustomStyles';
+import { Divider } from 'antd';
+import { useGetTasksByTaskListQuery } from '../../apis/apiTasks';
 
 const segmentedViewOptions: SegmentedLabeledOption[] = [
   {
@@ -63,10 +66,15 @@ const segmentedGraphViewOptions: SegmentedLabeledOption[] = [
   },
 ];
 
-const Wrapper = styled(RowGap)`
+const ColOfSegments = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const SegmentedRow = styled(RowGap)`
   align-items: center;
   font-weight: 500;
-  margin-bottom: 1rem;
 `;
 
 const Title = styled.span`
@@ -81,11 +89,22 @@ const ColoredSegmentedOption = styled.div<{ $color: CSSProperties['color'] }>`
   font-size: 1rem;
 `;
 
+const AllSegment: SegmentedLabeledOption = {
+  label: (
+    <ColoredSegmentedOption $color={COLORS.PRIMARY_DARK}>
+      <DynamicIcon icon="IoApps" />
+      ALL
+    </ColoredSegmentedOption>
+  ),
+  value: 'all',
+};
+
 const DashboardSegments: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const subpage = useSelector((state: ReduxState) => state.dashboard.subpage);
   const segmentTaskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
+  const segmentTask = useSelector((state: ReduxState) => state.dashboard.segmentTask);
   const segmentGroupsOrTasks = useSelector(
     (state: ReduxState) => state.dashboard.segmentGroupsOrTasks,
   );
@@ -94,19 +113,11 @@ const DashboardSegments: React.FC = () => {
   const selectedTaskListId = useSelectedTaskListId();
   const { data: existingGroups = [], isFetching: isFetchingTaskGroups } =
     useGetTaskGroupsByTaskListQuery(selectedTaskListId);
+  const { data: existingTasks = [], isFetching: isFetchingTasks } =
+    useGetTasksByTaskListQuery(selectedTaskListId);
 
   const segmentsTaskGroups = useMemo(() => {
-    const segments: SegmentedLabeledOption[] = [
-      {
-        label: (
-          <ColoredSegmentedOption $color={COLORS.PRIMARY}>
-            <DynamicIcon icon="IoApps" />
-            ALL
-          </ColoredSegmentedOption>
-        ),
-        value: 'all',
-      },
-    ];
+    const segments: SegmentedLabeledOption[] = [AllSegment];
 
     existingGroups.forEach(taskGroup => {
       segments.push({
@@ -125,6 +136,25 @@ const DashboardSegments: React.FC = () => {
     return segments;
   }, [existingGroups]);
 
+  const segmentsTasks = useMemo(() => {
+    if (segmentTaskGroup === 'all') return [];
+
+    const g = existingGroups.find(g => g.id === segmentTaskGroup);
+    const segments: SegmentedLabeledOption[] = [AllSegment];
+    if (g) {
+      const tasks = existingTasks.filter(t => t.taskGroupId === g.id);
+
+      tasks.forEach(t => {
+        segments.push({
+          label: <ColoredSegmentedOption $color={g.color}>{t.taskName}</ColoredSegmentedOption>,
+          value: t.id,
+        });
+      });
+    }
+
+    return segments;
+  }, [segmentTaskGroup, existingTasks, existingGroups]);
+
   const handleSegmentedViewChange = useCallback(
     (value: SegmentedLabeledOption['value']) => {
       navigate(`${value}`);
@@ -135,6 +165,13 @@ const DashboardSegments: React.FC = () => {
   const handleSegmentedTaskGroupChange = useCallback(
     (value: SegmentedLabeledOption['value']) => {
       dispatch(setSegmentTaskGroup(`${value}`));
+    },
+    [dispatch],
+  );
+
+  const handleSegmentedTaskChange = useCallback(
+    (value: SegmentedLabeledOption['value']) => {
+      dispatch(setSegmentTask(`${value}`));
     },
     [dispatch],
   );
@@ -156,31 +193,42 @@ const DashboardSegments: React.FC = () => {
   );
 
   return (
-    <Wrapper>
-      <Title>View:</Title>
-      {subpage && (
-        <Segmented
-          options={segmentedViewOptions}
-          onChange={handleSegmentedViewChange}
-          value={subpage}
-        />
-      )}
-      <Segmented
-        options={segmentsTaskGroups}
-        onChange={handleSegmentedTaskGroupChange}
-        value={segmentTaskGroup}
-      />
-      <Segmented
-        options={segmentedGroupsOrTasksOptions}
-        onChange={handleSegmentedGroupsOrTasksChange}
-        value={segmentGroupsOrTasks}
-      />
-      <Segmented
-        options={segmentedGraphViewOptions}
-        onChange={handleSegmentedGraphView}
-        value={segmentGraphView}
-      />
-    </Wrapper>
+    <>
+      <ColOfSegments>
+        <SegmentedRow>
+          {subpage && (
+            <Segmented
+              options={segmentedViewOptions}
+              onChange={handleSegmentedViewChange}
+              value={subpage}
+            />
+          )}
+          <Segmented
+            options={segmentedGroupsOrTasksOptions}
+            onChange={handleSegmentedGroupsOrTasksChange}
+            value={segmentGroupsOrTasks}
+          />
+          <Segmented
+            options={segmentedGraphViewOptions}
+            onChange={handleSegmentedGraphView}
+            value={segmentGraphView}
+          />
+        </SegmentedRow>
+        <SegmentedRow>
+          <Segmented
+            options={segmentsTaskGroups}
+            onChange={handleSegmentedTaskGroupChange}
+            value={segmentTaskGroup}
+          />
+          <Segmented
+            options={segmentsTasks}
+            onChange={handleSegmentedTaskChange}
+            value={segmentTask}
+          />
+        </SegmentedRow>
+      </ColOfSegments>
+      <Divider />
+    </>
   );
 };
 

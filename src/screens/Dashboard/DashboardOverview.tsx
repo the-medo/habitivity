@@ -38,6 +38,7 @@ const DashboardOverview: React.FC = () => {
 
   const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
   const taskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
+  const task = useSelector((state: ReduxState) => state.dashboard.segmentTask);
   const groupsOrTasks = useSelector((state: ReduxState) => state.dashboard.segmentGroupsOrTasks);
   const stacked = useSelector(
     (state: ReduxState) => state.dashboard.segmentGraphView === DashboardGraphView.STACKED,
@@ -90,6 +91,7 @@ const DashboardOverview: React.FC = () => {
 
       <LineDashboardOverview
         taskGroup={taskGroup}
+        task={task}
         groupsOrTasks={groupsOrTasks}
         dateRange={dateRange}
         completedDaysData={lastWeekData}
