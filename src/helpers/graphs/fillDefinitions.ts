@@ -1,10 +1,11 @@
 import { ArrayElement } from '../types/ArrayElement';
-import { SvgDefsAndFill } from '@nivo/core';
+import { linearGradientDef, SvgDefsAndFill } from '@nivo/core';
 import { ComputedDatum } from '@nivo/pie';
 
 export enum GraphFill {
   DOTS = 'dots',
   LINES = 'lines',
+  LINEAR_GRADIENT = 'linear-gradient',
 }
 
 export const createFillMatch = <T>(
@@ -35,3 +36,8 @@ export const fillDefinitions = [
     spacing: 10,
   },
 ];
+
+export const linearGradient = linearGradientDef('gradientA', [
+  { offset: 0, color: 'inherit' },
+  { offset: 100, color: 'inherit', opacity: 0 },
+]);
