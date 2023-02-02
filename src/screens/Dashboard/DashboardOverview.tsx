@@ -45,6 +45,8 @@ const DashboardOverview: React.FC = () => {
   const today = useMemo(() => dayjs(), []);
   const yesterday = useMemo(() => dayjs().subtract(1, 'day'), []);
   const twoDaysAgo = useMemo(() => dayjs().subtract(2, 'day'), []);
+  const threeDaysAgo = useMemo(() => dayjs().subtract(3, 'day'), []);
+  const fourDaysAgo = useMemo(() => dayjs().subtract(4, 'day'), []);
 
   return (
     <Row1>
@@ -64,12 +66,21 @@ const DashboardOverview: React.FC = () => {
           completedDaysData={lastWeekData}
           selectedTaskListId={selectedTaskListId}
         />
+        <DayOverview
+          date={threeDaysAgo}
+          completedDaysData={lastWeekData}
+          selectedTaskListId={selectedTaskListId}
+        />
+        <DayOverview
+          date={fourDaysAgo}
+          completedDaysData={lastWeekData}
+          selectedTaskListId={selectedTaskListId}
+        />
       </OverviewWrapper>
 
       <LineDashboardOverview
         dateRange={dateRange}
         completedDaysData={lastWeekData}
-        selectedTaskListId={selectedTaskListId}
         taskInfo={existingTasks}
         taskGroupInfo={existingGroups}
       />
