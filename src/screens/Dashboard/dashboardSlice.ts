@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getItem, LSKey, setItem } from '../../store/localStore';
 import { DateRange } from '../../helpers/types/DateRange';
 import dayjs from 'dayjs';
+import { store } from '../../store';
 
 export enum DashboardSubpage {
   OVERVIEW = 'overview',
@@ -22,6 +23,7 @@ export enum DashboardGraphView {
 export interface DashboardState {
   subpage?: DashboardSubpage;
   segmentTaskGroup: string;
+  segmentTask: string;
   segmentGroupsOrTasks: DashboardGroupsOrTasks;
   segmentGraphView?: DashboardGraphView;
   dateRange: DateRange;
@@ -30,6 +32,7 @@ export interface DashboardState {
 const initialState: DashboardState = {
   subpage: undefined,
   segmentTaskGroup: getItem(LSKey.DASHBOARD_SEGMENT_TASK_GROUP) ?? 'all',
+  segmentTask: getItem(LSKey.DASHBOARD_SEGMENT_TASK) ?? 'all',
   segmentGroupsOrTasks:
     getItem(LSKey.DASHBOARD_SEGMENT_GROUPS_OR_TASKS) ?? DashboardGroupsOrTasks.GROUPS,
   segmentGraphView: getItem(LSKey.DASHBOARD_SEGMENT_GRAPHS_STACKED) ?? DashboardGraphView.STACKED,
@@ -50,6 +53,14 @@ export const dashboardSlice = createSlice({
     setSegmentTaskGroup: (state, action: PayloadAction<string>) => {
       setItem(LSKey.DASHBOARD_SEGMENT_TASK_GROUP, action.payload);
       state.segmentTaskGroup = action.payload;
+
+      // after setting task group, reset task to all
+      setItem(LSKey.DASHBOARD_SEGMENT_TASK, 'all');
+      state.segmentTask = 'all';
+    },
+    setSegmentTask: (state, action: PayloadAction<string>) => {
+      setItem(LSKey.DASHBOARD_SEGMENT_TASK, action.payload);
+      state.segmentTask = action.payload;
     },
     setSegmentGroupsOrTasks: (state, action: PayloadAction<DashboardGroupsOrTasks>) => {
       setItem(LSKey.DASHBOARD_SEGMENT_GROUPS_OR_TASKS, action.payload);
@@ -69,6 +80,7 @@ export const dashboardSlice = createSlice({
 export const {
   setSubpage,
   setSegmentTaskGroup,
+  setSegmentTask,
   setSegmentGroupsOrTasks,
   setSegmentGraphView,
   setDateRange,

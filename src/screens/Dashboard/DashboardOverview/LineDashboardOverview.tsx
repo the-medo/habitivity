@@ -14,6 +14,7 @@ import { chooseColorsBasedOnCount } from '../../../helpers/colors/chooseColorsBa
 
 interface LineDashboardOverviewProps {
   taskGroup: string;
+  task: string;
   groupsOrTasks: DashboardGroupsOrTasks;
   stacked: boolean;
   dateRange: DateRange;
@@ -85,6 +86,7 @@ const createLineFromTask = (
 
 const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
   taskGroup,
+  task,
   groupsOrTasks,
   stacked,
   dateRange,
@@ -120,25 +122,32 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
         // taskGroup !== 'all' => ID of taskGroup
         const g = taskGroupInfo.find(g => g.id === taskGroup);
         if (g) {
-          if (groupsOrTasks === DashboardGroupsOrTasks.GROUPS) {
-            dataSeries.push(createLineFromGroup(g, completedDaysData, dateRange));
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          } else if (groupsOrTasks === DashboardGroupsOrTasks.TASKS) {
-            const baseColor = g.color ?? COLORS.PRIMARY;
-            const tasks = taskInfo.filter(t => t.taskGroupId === g.id);
-            const taskColors = chooseColorsBasedOnCount(baseColor, tasks.length);
+          if (task !== 'all') {
+            const t = taskInfo.find(t => t.id === task);
+            if (t) {
+              dataSeries.push(createLineFromTask(t, g.color, g, completedDaysData, dateRange));
+            }
+          } else {
+            if (groupsOrTasks === DashboardGroupsOrTasks.GROUPS) {
+              dataSeries.push(createLineFromGroup(g, completedDaysData, dateRange));
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            } else if (groupsOrTasks === DashboardGroupsOrTasks.TASKS) {
+              const baseColor = g.color ?? COLORS.PRIMARY;
+              const tasks = taskInfo.filter(t => t.taskGroupId === g.id);
+              const taskColors = chooseColorsBasedOnCount(baseColor, tasks.length);
 
-            tasks.forEach((t, i) =>
-              dataSeries.push(
-                createLineFromTask(t, taskColors[i], g, completedDaysData, dateRange),
-              ),
-            );
+              tasks.forEach((t, i) =>
+                dataSeries.push(
+                  createLineFromTask(t, taskColors[i], g, completedDaysData, dateRange),
+                ),
+              );
+            }
           }
         }
       }
     }
     return dataSeries;
-  }, [taskGroup, groupsOrTasks, completedDaysData, dateRange, taskInfo, taskGroupInfo]);
+  }, [task, taskGroup, groupsOrTasks, completedDaysData, dateRange, taskInfo, taskGroupInfo]);
 
   const properties: Partial<LineSvgProps> & Dimensions = useMemo(
     () => ({
