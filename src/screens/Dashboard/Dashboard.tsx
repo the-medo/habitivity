@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AvailablePages, setOpenedPage } from '../../routes/routerSlice';
-import DashboardSubpageSelector from './DashboardSubpageSelector';
+import DashboardSegments from './DashboardSegments';
 
 const Dashboard: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div>
-      <DashboardSubpageSelector />
+      <DashboardSegments />
       <Outlet />
     </div>
   );
