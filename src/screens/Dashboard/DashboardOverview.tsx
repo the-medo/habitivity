@@ -1,31 +1,56 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  DashboardGraphView,
-  DashboardGroupsOrTasks,
-  DashboardSubpage,
-  setSubpage,
-} from './dashboardSlice';
+import { DashboardGraphView, DashboardSubpage, setSubpage } from './dashboardSlice';
 import styled from 'styled-components';
 import { ReduxState } from '../../store';
 import { useGetCompletedDaysQuery, useGetTasksByTaskListQuery } from '../../apis/apiTasks';
-import dayjs from 'dayjs';
+import { Dayjs } from 'dayjs';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 import DayOverview from './DashboardOverview/DayOverview';
 import { RowGap } from '../../components/global/RowGap';
 import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
 import LineDashboardOverview from './DashboardOverview/LineDashboardOverview';
+import { getDateRange } from '../../helpers/date/getDateRange';
+import { SegmentedLabeledOption } from 'antd/es/segmented';
+import { Segmented } from '../../components/global/Segmented';
+import { RowGapCentered } from '../../components/global/RowGapCentered';
 
 const OverviewWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
   width: 500px;
 `;
 
 const Row1 = styled(RowGap)`
   gap: 1rem;
 `;
+
+const segmentedAverageOptions: SegmentedLabeledOption[] = [
+  {
+    label: 'Daily trend',
+    value: 'daily-trend',
+    // icon: <DynamicIcon icon="MdOutlineStackedLineChart" />,
+  },
+  {
+    label: 'Average',
+    value: 'average',
+    // icon: <DynamicIcon icon="MdOutlineStackedLineChart" />,
+  },
+];
+
+const segmentedUnitOptions: SegmentedLabeledOption[] = [
+  {
+    label: 'Points',
+    value: 'points',
+    // icon: <DynamicIcon icon="MdOutlineStackedLineChart" />,
+  },
+  {
+    label: 'Values',
+    value: 'units',
+    // icon: <DynamicIcon icon="MdOutlineStackedLineChart" />,
+  },
+];
 
 const DashboardOverview: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,6 +60,9 @@ const DashboardOverview: React.FC = () => {
     useGetTasksByTaskListQuery(selectedTaskListId);
   const { data: existingGroups, isFetching: isFetchingGroups } =
     useGetTaskGroupsByTaskListQuery(selectedTaskListId);
+
+  const [displayAverage, setDisplayAverage] = useState(false);
+  const [displayUnits, setDisplayUnits] = useState(false);
 
   const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
   const taskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
@@ -53,40 +81,49 @@ const DashboardOverview: React.FC = () => {
     dispatch(setSubpage(DashboardSubpage.OVERVIEW));
   }, [dispatch]);
 
-  const today = useMemo(() => dayjs(), []);
-  const yesterday = useMemo(() => dayjs().subtract(1, 'day'), []);
-  const twoDaysAgo = useMemo(() => dayjs().subtract(2, 'day'), []);
-  const threeDaysAgo = useMemo(() => dayjs().subtract(3, 'day'), []);
-  const fourDaysAgo = useMemo(() => dayjs().subtract(4, 'day'), []);
+  const days: Dayjs[] = useMemo(() => {
+    const dates = getDateRange(dateRange).reverse();
+    dates.pop();
+    return dates;
+  }, [dateRange]);
+
+  const handleSegmentedAverage = useCallback(
+    (value: SegmentedLabeledOption['value']) => setDisplayAverage(value === 'average'),
+    [],
+  );
+
+  const handleSegmentedUnits = useCallback(
+    (value: SegmentedLabeledOption['value']) => setDisplayUnits(value === 'units'),
+    [],
+  );
 
   return (
     <Row1>
       <OverviewWrapper>
-        <DayOverview
-          date={today}
-          completedDaysData={lastWeekData}
-          selectedTaskListId={selectedTaskListId}
-        />
-        <DayOverview
-          date={yesterday}
-          completedDaysData={lastWeekData}
-          selectedTaskListId={selectedTaskListId}
-        />
-        <DayOverview
-          date={twoDaysAgo}
-          completedDaysData={lastWeekData}
-          selectedTaskListId={selectedTaskListId}
-        />
-        <DayOverview
-          date={threeDaysAgo}
-          completedDaysData={lastWeekData}
-          selectedTaskListId={selectedTaskListId}
-        />
-        <DayOverview
-          date={fourDaysAgo}
-          completedDaysData={lastWeekData}
-          selectedTaskListId={selectedTaskListId}
-        />
+        <RowGapCentered>
+          <Segmented
+            options={segmentedAverageOptions}
+            onChange={handleSegmentedAverage}
+            value={displayAverage ? 'average' : 'daily-trend'}
+            block
+          />
+          <Segmented
+            options={segmentedUnitOptions}
+            onChange={handleSegmentedUnits}
+            value={displayUnits ? 'units' : 'points'}
+            block
+          />
+        </RowGapCentered>
+        {days.map(day => (
+          <DayOverview
+            key={day.toString()}
+            date={day}
+            completedDaysData={lastWeekData}
+            selectedTaskListId={selectedTaskListId}
+            displayAverage={displayAverage}
+            displayUnits={displayUnits}
+          />
+        ))}
       </OverviewWrapper>
 
       <LineDashboardOverview
