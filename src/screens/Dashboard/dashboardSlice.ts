@@ -37,7 +37,7 @@ const initialState: DashboardState = {
     getItem(LSKey.DASHBOARD_SEGMENT_GROUPS_OR_TASKS) ?? DashboardGroupsOrTasks.GROUPS,
   segmentGraphView: getItem(LSKey.DASHBOARD_SEGMENT_GRAPHS_STACKED) ?? DashboardGraphView.STACKED,
   dateRange: getItem(LSKey.DASHBOARD_DATERANGE) ?? {
-    startDate: dayjs().subtract(6, 'day').format('YYYY-MM-DD'),
+    startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
   },
 };
