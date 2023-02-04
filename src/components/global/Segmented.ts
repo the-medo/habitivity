@@ -6,4 +6,8 @@ export const Segmented = styled(S)`
   .ant-segmented-item-icon {
     margin-right: 0.5rem;
   }
+
+  .ant-segmented-group {
+    flex-wrap: wrap;
+  }
 `;

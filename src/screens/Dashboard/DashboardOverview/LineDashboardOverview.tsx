@@ -3,8 +3,7 @@ import { CompletedDays } from '../../../helpers/types/CompletedDay';
 import { DateRange } from '../../../helpers/types/DateRange';
 import { Task } from '../../../types/Tasks';
 import { TaskGroup } from '../../../types/TaskGroup';
-import { Line, LineSvgProps, Serie } from '@nivo/line';
-import { Dimensions } from '@nivo/core';
+import { LineSvgProps, ResponsiveLine, Serie } from '@nivo/line';
 import { getDateRange } from '../../../helpers/date/getDateRange';
 import { linearGradient } from '../../../helpers/graphs/fillDefinitions';
 import { lineGraphCustomPointProps } from '../../../helpers/graphs/lineGraphCustomPointProps';
@@ -149,10 +148,10 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
     return dataSeries;
   }, [task, taskGroup, groupsOrTasks, completedDaysData, dateRange, taskInfo, taskGroupInfo]);
 
-  const properties: Partial<LineSvgProps> & Dimensions = useMemo(
+  const properties: Partial<LineSvgProps> = useMemo(
     () => ({
-      width: 600,
-      height: 400,
+      // width: 600,
+      // height: 400,
       margin: { top: 20, right: 20, bottom: 40, left: 40 },
       animate: true,
       enableArea: true,
@@ -182,7 +181,7 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
 
   if (!taskInfo || !taskGroupInfo) return null;
 
-  return <Line {...properties} {...lineGraphCustomPointProps} data={data} />;
+  return <ResponsiveLine {...properties} {...lineGraphCustomPointProps} data={data} />;
 };
 
 export default LineDashboardOverview;
