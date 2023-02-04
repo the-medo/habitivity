@@ -75,10 +75,7 @@ const ColOfSegments = styled.div`
 const SegmentedRow = styled(RowGap)`
   align-items: center;
   font-weight: 500;
-`;
-
-const Title = styled.span`
-  font-size: 120%;
+  flex-wrap: wrap;
 `;
 
 const ColoredSegmentedOption = styled.div<{ $color: CSSProperties['color'] }>`

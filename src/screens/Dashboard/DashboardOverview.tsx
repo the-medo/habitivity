@@ -19,23 +19,31 @@ const OverviewWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  width: 500px;
+  flex-basis: 33rem;
+  flex-grow: 1;
 `;
 
 const Row1 = styled(RowGap)`
   gap: 1rem;
+  flex-wrap: wrap;
+`;
+
+const LineWrapper = styled.div`
+  display: flex;
+  flex-grow: 3;
+  flex-basis: 20rem;
+  width: 100%;
+  height: 20rem;
 `;
 
 const segmentedAverageOptions: SegmentedLabeledOption[] = [
   {
     label: 'Daily trend',
     value: 'daily-trend',
-    // icon: <DynamicIcon icon="MdOutlineStackedLineChart" />,
   },
   {
     label: 'Average',
     value: 'average',
-    // icon: <DynamicIcon icon="MdOutlineStackedLineChart" />,
   },
 ];
 
@@ -43,12 +51,10 @@ const segmentedUnitOptions: SegmentedLabeledOption[] = [
   {
     label: 'Points',
     value: 'points',
-    // icon: <DynamicIcon icon="MdOutlineStackedLineChart" />,
   },
   {
     label: 'Values',
     value: 'units',
-    // icon: <DynamicIcon icon="MdOutlineStackedLineChart" />,
   },
 ];
 
@@ -72,10 +78,6 @@ const DashboardOverview: React.FC = () => {
     (state: ReduxState) => state.dashboard.segmentGraphView === DashboardGraphView.STACKED,
   );
   const { data: lastWeekData } = useGetCompletedDaysQuery(dateRange);
-
-  useEffect(() => {
-    console.log('completed daaaayyyys: ', lastWeekData);
-  }, [lastWeekData, selectedTaskListId]);
 
   useEffect(() => {
     dispatch(setSubpage(DashboardSubpage.OVERVIEW));
@@ -107,12 +109,14 @@ const DashboardOverview: React.FC = () => {
             value={displayAverage ? 'average' : 'daily-trend'}
             block
           />
-          <Segmented
-            options={segmentedUnitOptions}
-            onChange={handleSegmentedUnits}
-            value={displayUnits ? 'units' : 'points'}
-            block
-          />
+          {task !== 'all' && (
+            <Segmented
+              options={segmentedUnitOptions}
+              onChange={handleSegmentedUnits}
+              value={displayUnits ? 'units' : 'points'}
+              block
+            />
+          )}
         </RowGapCentered>
         {days.map(day => (
           <DayOverview
@@ -125,17 +129,18 @@ const DashboardOverview: React.FC = () => {
           />
         ))}
       </OverviewWrapper>
-
-      <LineDashboardOverview
-        taskGroup={taskGroup}
-        task={task}
-        groupsOrTasks={groupsOrTasks}
-        dateRange={dateRange}
-        completedDaysData={lastWeekData}
-        taskInfo={existingTasks}
-        taskGroupInfo={existingGroups}
-        stacked={stacked}
-      />
+      <LineWrapper>
+        <LineDashboardOverview
+          taskGroup={taskGroup}
+          task={task}
+          groupsOrTasks={groupsOrTasks}
+          dateRange={dateRange}
+          completedDaysData={lastWeekData}
+          taskInfo={existingTasks}
+          taskGroupInfo={existingGroups}
+          stacked={stacked}
+        />
+      </LineWrapper>
     </Row1>
   );
 };

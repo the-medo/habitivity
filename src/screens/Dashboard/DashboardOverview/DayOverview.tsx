@@ -55,6 +55,11 @@ const DayOverview: React.FC<DayOverviewProps> = ({
   const { data: existingTasks, isFetching: isFetchingTasks } =
     useGetTasksByTaskListQuery(selectedTaskListId);
 
+  const isLoading = useMemo(
+    () => isFetchingTasks || !completedDaysData || !selectedTaskListId,
+    [completedDaysData, isFetchingTasks, selectedTaskListId],
+  );
+
   const taskDefinition = useMemo(() => {
     return existingTasks?.find(t => t.id === task);
   }, [task, existingTasks]);
@@ -148,14 +153,16 @@ const DayOverview: React.FC<DayOverviewProps> = ({
   ]);
 
   return (
-    <Spin spinning={!completedDaysData || !selectedTaskListId}>
+    <Spin spinning={isLoading}>
       <StatisticRow
         date={date}
         valueCurrent={data?.currentValue}
         valueLast={data?.lastValue}
-        valueLastIsAverage={displayAverage}
+        isUnits={displayUnits}
+        isAverage={displayAverage}
         units={units}
         formatter={formatter}
+        taskType={taskDefinition?.taskType}
       />
     </Spin>
   );
