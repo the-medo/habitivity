@@ -93,7 +93,7 @@ const DayOverview: React.FC<DayOverviewProps> = ({
           selectedTaskListId,
           taskGroup,
           task,
-          takeUnits: displayUnits,
+          useUnits: displayUnits,
           includeLastDay: false,
         });
         lastValue = stats.avg ?? 0;

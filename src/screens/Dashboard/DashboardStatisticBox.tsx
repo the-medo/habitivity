@@ -53,7 +53,7 @@ const DashboardStatisticBox: React.FC<DashboardStatBoxProps> = ({
         selectedTaskListId,
         taskGroup,
         task,
-        takeUnits: isUnits,
+        useUnits: isUnits,
         includeLastDay: false,
       });
 
