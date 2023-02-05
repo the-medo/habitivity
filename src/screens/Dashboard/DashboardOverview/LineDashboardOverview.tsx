@@ -11,9 +11,24 @@ import { DashboardGroupsOrTasks } from '../dashboardSlice';
 import { COLORS } from '../../../styles/CustomStyles';
 import { chooseColorsBasedOnCount } from '../../../helpers/colors/chooseColorsBasedOnCount';
 import { getStatsInDateRange } from '../../../helpers/points/getStatsInDateRange';
-import { setSelectedTaskListId } from '../../../routes/routerSlice';
 import { useSelectedTaskListId } from '../../../hooks/useSelectedTaskListId';
 import { formatPoints } from '../../../helpers/numbers/formatPoints';
+import styled from 'styled-components';
+import DashboardDayWrapper from './DashboardDayWrapper';
+
+const WholeWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 3;
+  flex-basis: 20rem;
+  width: 100%;
+`;
+
+const LineWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  height: 20rem;
+`;
 
 interface LineDashboardOverviewProps {
   taskGroup: string;
@@ -215,7 +230,14 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
 
   if (!taskInfo || !taskGroupInfo) return null;
 
-  return <ResponsiveLine {...properties} {...lineGraphCustomPointProps} data={data} />;
+  return (
+    <WholeWrapper>
+      <LineWrapper>
+        <ResponsiveLine {...properties} {...lineGraphCustomPointProps} data={data} />
+      </LineWrapper>
+      <DashboardDayWrapper date={dateRange.endDate} />
+    </WholeWrapper>
+  );
 };
 
 export default LineDashboardOverview;

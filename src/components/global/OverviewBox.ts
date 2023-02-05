@@ -8,3 +8,7 @@ export const OverviewBox = styled.div`
   gap: 0.5rem;
   align-items: center;
 `;
+
+export const OverviewBoxColumn = styled(OverviewBox)`
+  flex-direction: column;
+`;

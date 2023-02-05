@@ -30,14 +30,6 @@ const Row1 = styled(RowGap)`
   flex-wrap: wrap;
 `;
 
-const LineWrapper = styled.div`
-  display: flex;
-  flex-grow: 3;
-  flex-basis: 20rem;
-  width: 100%;
-  height: 20rem;
-`;
-
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -154,18 +146,16 @@ const DashboardOverview: React.FC = () => {
           </Button>
         </ButtonWrapper>
       </OverviewWrapper>
-      <LineWrapper>
-        <LineDashboardOverview
-          taskGroup={taskGroup}
-          task={task}
-          groupsOrTasks={groupsOrTasks}
-          dateRange={dateRange}
-          completedDaysData={lastWeekData}
-          taskInfo={existingTasks}
-          taskGroupInfo={existingGroups}
-          stacked={stacked}
-        />
-      </LineWrapper>
+      <LineDashboardOverview
+        taskGroup={taskGroup}
+        task={task}
+        groupsOrTasks={groupsOrTasks}
+        dateRange={dateRange}
+        completedDaysData={lastWeekData}
+        taskInfo={existingTasks}
+        taskGroupInfo={existingGroups}
+        stacked={stacked}
+      />
     </Row1>
   );
 };
