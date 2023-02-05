@@ -1,13 +1,9 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Statistic } from 'antd';
-import { OverviewBox } from './OverviewBox';
+import { OverviewBoxColumn } from './OverviewBox';
 import { DateRange, dateRangeStringToDayjs } from '../../helpers/types/DateRange';
 import { RowGapCentered } from './RowGapCentered';
-
-const StatisticBoxStyled = styled(OverviewBox)`
-  flex-direction: column;
-`;
 
 const DateRow = styled.div`
   background-color: white;
@@ -60,7 +56,7 @@ const StatisticBox: React.FC<StatisticBoxProps> = ({
   const dates = useMemo(() => dateRangeStringToDayjs(dateRange), [dateRange]);
 
   return (
-    <StatisticBoxStyled>
+    <OverviewBoxColumn>
       <DateRow>
         <DateRowDates>
           {dates.startDate.format('MMMM DD')} - {dates.endDate.format('MMMM DD')}
@@ -73,7 +69,7 @@ const StatisticBox: React.FC<StatisticBoxProps> = ({
         {max !== undefined && <StatisticStyled title="Max" value={max} precision={2} />}
         {average !== undefined && <StatisticStyled title="Average" value={average} precision={2} />}
       </RowGapCentered>
-    </StatisticBoxStyled>
+    </OverviewBoxColumn>
   );
 };
 
