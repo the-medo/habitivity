@@ -87,7 +87,6 @@ export const apiTask = apiSlice
 
             const completedDaySnap = await getDoc(completedDayRef);
             if (completedDaySnap.exists()) {
-              console.log('== completedDaySnap exists!!!');
               return { data: completedDaySnap.data() };
             }
             return { data: false };
@@ -278,7 +277,6 @@ export const apiTask = apiSlice
 
             const completedDaySnap = await getDoc(completedDayRef);
             if (completedDaySnap.exists()) {
-              console.log('== completedDaySnap exists!!!');
               completedDay = completedDaySnap.data();
             }
             console.log('== completedDay ', completedDay);

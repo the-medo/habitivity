@@ -1,6 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DashboardGraphView, DashboardSubpage, setSubpage } from './dashboardSlice';
+import {
+  DashboardGraphView,
+  DashboardSubpage,
+  setDashboardSelectedDay,
+  setSubpage,
+} from './dashboardSlice';
 import styled from 'styled-components';
 import { ReduxState } from '../../store';
 import { useGetCompletedDaysQuery, useGetTasksByTaskListQuery } from '../../apis/apiTasks';
@@ -21,7 +26,7 @@ const OverviewWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  flex-basis: 33rem;
+  flex-basis: 20rem;
   flex-grow: 1;
 `;
 
@@ -77,6 +82,7 @@ const DashboardOverview: React.FC = () => {
   const stacked = useSelector(
     (state: ReduxState) => state.dashboard.segmentGraphView === DashboardGraphView.STACKED,
   );
+  const selectedDay = useSelector((state: ReduxState) => state.dashboard.selectedDay);
   const { data: lastWeekData } = useGetCompletedDaysQuery(dateRange);
 
   useEffect(() => {
@@ -100,6 +106,12 @@ const DashboardOverview: React.FC = () => {
   );
 
   const showWholeWeekHandler = useCallback(() => setShowAllDays(p => !p), []);
+  const setSelectedDay = useCallback(
+    (x: string) => {
+      dispatch(setDashboardSelectedDay(x));
+    },
+    [dispatch],
+  );
 
   return (
     <Row1>
@@ -155,6 +167,8 @@ const DashboardOverview: React.FC = () => {
         taskInfo={existingTasks}
         taskGroupInfo={existingGroups}
         stacked={stacked}
+        selectedDay={selectedDay}
+        setSelectedDay={setSelectedDay}
       />
     </Row1>
   );

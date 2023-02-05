@@ -27,6 +27,7 @@ export interface DashboardState {
   segmentGroupsOrTasks: DashboardGroupsOrTasks;
   segmentGraphView?: DashboardGraphView;
   dateRange: DateRange;
+  selectedDay: string;
 }
 
 const initialState: DashboardState = {
@@ -40,6 +41,7 @@ const initialState: DashboardState = {
     startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
   },
+  selectedDay: dayjs().format('YYYY-MM-DD'),
 };
 
 export const dashboardSlice = createSlice({
@@ -74,6 +76,9 @@ export const dashboardSlice = createSlice({
       setItem(LSKey.DASHBOARD_DATERANGE, action.payload);
       state.dateRange = action.payload;
     },
+    setDashboardSelectedDay: (state, action: PayloadAction<string>) => {
+      state.selectedDay = action.payload;
+    },
   },
 });
 
@@ -83,6 +88,7 @@ export const {
   setSegmentTask,
   setSegmentGroupsOrTasks,
   setSegmentGraphView,
+  setDashboardSelectedDay,
   setDateRange,
 } = dashboardSlice.actions;
 

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 import { useGetCompletedDayQuery, useGetTasksByTaskListQuery } from '../../apis/apiTasks';
 import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
 import SimpleOverviewTaskGroup from './SimpleOverviewTaskGroup';
 import { COLORS } from '../../styles/CustomStyles';
 import styled from 'styled-components';
+import { CompletedDay } from '../../helpers/types/CompletedDay';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 const GroupWrapper = styled.div`
   display: flex;
@@ -12,18 +14,27 @@ const GroupWrapper = styled.div`
   flex-grow: 3;
   gap: 0.5rem;
   padding: 0.5rem;
-  flex-basis: 25rem;
+  flex-basis: 10rem;
 `;
 
 interface DayStatsProps {
   date: string;
+  completedDayData?: false | CompletedDay;
 }
 
-const DayStats: React.FC<DayStatsProps> = ({ date }) => {
+const DayStats: React.FC<DayStatsProps> = ({ date, completedDayData }) => {
   const selectedTaskListId = useSelectedTaskListId();
   const { data: existingTasks } = useGetTasksByTaskListQuery(selectedTaskListId);
   const { data: existingGroups = [] } = useGetTaskGroupsByTaskListQuery(selectedTaskListId);
-  const { data: completedDay, isFetching: isFetchingDay } = useGetCompletedDayQuery({ date });
+
+  const { data: completedDayResult } = useGetCompletedDayQuery(
+    completedDayData ? skipToken : { date },
+  );
+
+  const completedDay = useMemo(
+    () => completedDayData ?? completedDayResult,
+    [completedDayData, completedDayResult],
+  );
 
   return (
     <GroupWrapper>

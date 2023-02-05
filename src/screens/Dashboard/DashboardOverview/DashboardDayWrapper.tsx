@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
 import { DashboardGroupsOrTasks } from '../dashboardSlice';
 import { DayPieGraphDisplayType } from '../../Day/TaskGroup/DayPieGraphWrapper';
+import { useGetCompletedDaysQuery } from '../../../apis/apiTasks';
 
 const TaskInfoWrapper = styled.div`
   display: flex;
@@ -28,13 +29,20 @@ const DayGraphWrapper = styled.div`
   justify-content: center;
 `;
 
-interface DashboardDayWrapperProps {
-  date: string;
-}
-
-const DashboardDayWrapper: React.FC<DashboardDayWrapperProps> = ({ date }) => {
+const DashboardDayWrapper: React.FC = () => {
+  const date = useSelector((state: ReduxState) => state.dashboard.selectedDay);
   const groupsOrTasks = useSelector((state: ReduxState) => state.dashboard.segmentGroupsOrTasks);
+
+  const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
+  const { data: lastWeekData } = useGetCompletedDaysQuery(dateRange);
+
   const dayjsDate = useMemo(() => dayjs(date), [date]);
+
+  const completedDayData = useMemo(() => {
+    if (lastWeekData) return lastWeekData[date];
+    return undefined;
+  }, [date, lastWeekData]);
+
   const dayPieGraphDisplayType = useMemo(
     () =>
       groupsOrTasks === DashboardGroupsOrTasks.TASKS
@@ -47,9 +55,13 @@ const DashboardDayWrapper: React.FC<DashboardDayWrapperProps> = ({ date }) => {
     <OverviewBoxColumn>
       <DateWrapper>{dayjsDate.format('dddd, MMMM D, YYYY')}</DateWrapper>
       <TaskInfoWrapper>
-        <DayStats date={date} />
+        <DayStats date={date} completedDayData={completedDayData} />
         <DayGraphWrapper>
-          <DayPieGraph dayPieGraphDisplayType={dayPieGraphDisplayType} selectedDate={dayjsDate} />
+          <DayPieGraph
+            dayPieGraphDisplayType={dayPieGraphDisplayType}
+            selectedDate={dayjsDate}
+            completedDayData={completedDayData}
+          />
         </DayGraphWrapper>
       </TaskInfoWrapper>
     </OverviewBoxColumn>

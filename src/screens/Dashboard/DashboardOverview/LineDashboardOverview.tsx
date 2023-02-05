@@ -1,9 +1,9 @@
-import React, { CSSProperties, useMemo } from 'react';
+import React, { CSSProperties, useCallback, useMemo } from 'react';
 import { CompletedDays } from '../../../helpers/types/CompletedDay';
 import { DateRange } from '../../../helpers/types/DateRange';
 import { Task } from '../../../types/Tasks';
 import { TaskGroup } from '../../../types/TaskGroup';
-import { LineSvgProps, ResponsiveLine, Serie } from '@nivo/line';
+import { LineSvgProps, ResponsiveLine, Serie, SliceTooltipProps } from '@nivo/line';
 import { getDateRange } from '../../../helpers/date/getDateRange';
 import { linearGradient } from '../../../helpers/graphs/fillDefinitions';
 import { lineGraphCustomPointProps } from '../../../helpers/graphs/lineGraphCustomPointProps';
@@ -19,14 +19,16 @@ import DashboardDayWrapper from './DashboardDayWrapper';
 const WholeWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  flex-grow: 3;
+  flex-grow: 2;
   flex-basis: 20rem;
+  padding: 1rem;
   width: 100%;
+  align-items: center;
 `;
 
 const LineWrapper = styled.div`
   display: flex;
-  width: 100%;
+  width: calc(100% - 4rem);
   height: 20rem;
 `;
 
@@ -39,6 +41,8 @@ interface LineDashboardOverviewProps {
   completedDaysData: CompletedDays | undefined;
   taskInfo: Task[] | undefined;
   taskGroupInfo: TaskGroup[] | undefined;
+  selectedDay: string;
+  setSelectedDay?: (x: string) => void;
 }
 
 export interface TaskLineData extends Serie {
@@ -111,6 +115,8 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
   completedDaysData,
   taskInfo,
   taskGroupInfo,
+  selectedDay,
+  setSelectedDay,
 }) => {
   const selectedTaskListId = useSelectedTaskListId();
 
@@ -185,10 +191,51 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
     }
   }, [completedDaysData, dateRange, selectedTaskListId, task, taskGroup]);
 
+  const markers = useMemo(() => {
+    const markers: LineSvgProps['markers'] = [];
+
+    if (avg !== undefined) {
+      markers.push({
+        axis: 'y',
+        value: avg,
+        lineStyle: { stroke: COLORS.BLUE_DARK, strokeWidth: 2 },
+        legend: `Avg. value: ${avg}`,
+        legendPosition: 'top-left',
+      });
+    }
+
+    if (selectedDay) {
+      markers.push({
+        axis: 'x',
+        value: new Date(`${selectedDay} 00:00:00`),
+        lineStyle: { stroke: COLORS.PRIMARY_DARK, strokeWidth: 2 },
+      });
+    }
+
+    return markers;
+  }, [avg, selectedDay]);
+
+  const yScale: LineSvgProps['yScale'] = useMemo(
+    () => ({
+      type: 'linear',
+      stacked,
+    }),
+    [stacked],
+  );
+
+  const sliceTooltip: LineSvgProps['sliceTooltip'] = useCallback(
+    (e: SliceTooltipProps | undefined) => {
+      if (e && e.slice.points.length > 0 && setSelectedDay) {
+        const p = e.slice.points[0]?.data.xFormatted;
+        if (p) setSelectedDay(`${p}`);
+      }
+      return null;
+    },
+    [setSelectedDay],
+  );
+
   const properties: Partial<LineSvgProps> = useMemo(
     () => ({
-      // width: 600,
-      // height: 400,
       margin: { top: 20, right: 20, bottom: 40, left: 40 },
       animate: true,
       enableArea: true,
@@ -201,10 +248,6 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
         useUTC: false,
         precision: 'day',
       },
-      yScale: {
-        type: 'linear',
-        stacked,
-      },
       colors: { datum: 'color' },
       axisBottom: {
         format: '%b %d',
@@ -212,20 +255,8 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
       },
       defs: [linearGradient],
       fill: [{ match: '*', id: 'gradientA' }],
-      markers:
-        avg !== undefined
-          ? [
-              {
-                axis: 'y',
-                value: avg,
-                lineStyle: { stroke: '#b0413e', strokeWidth: 2 },
-                legend: `Avg. value: ${avg}`,
-                legendPosition: 'bottom-left',
-              },
-            ]
-          : undefined,
     }),
-    [avg, stacked],
+    [],
   );
 
   if (!taskInfo || !taskGroupInfo) return null;
@@ -233,9 +264,16 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
   return (
     <WholeWrapper>
       <LineWrapper>
-        <ResponsiveLine {...properties} {...lineGraphCustomPointProps} data={data} />
+        <ResponsiveLine
+          {...properties}
+          {...lineGraphCustomPointProps}
+          markers={markers}
+          yScale={yScale}
+          data={data}
+          sliceTooltip={sliceTooltip}
+        />
       </LineWrapper>
-      <DashboardDayWrapper date={dateRange.endDate} />
+      <DashboardDayWrapper />
     </WholeWrapper>
   );
 };
