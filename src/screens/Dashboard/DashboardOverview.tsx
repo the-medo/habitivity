@@ -4,12 +4,13 @@ import {
   DashboardGraphView,
   DashboardSubpage,
   setDashboardSelectedDay,
+  setDateRange,
   setSubpage,
 } from './dashboardSlice';
 import styled from 'styled-components';
 import { ReduxState } from '../../store';
 import { useGetCompletedDaysQuery, useGetTasksByTaskListQuery } from '../../apis/apiTasks';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 import DayOverview from './DashboardOverview/DayOverview';
 import { RowGap } from '../../components/global/RowGap';
@@ -66,14 +67,22 @@ const DashboardOverview: React.FC = () => {
   const dispatch = useDispatch();
   const selectedTaskListId = useSelectedTaskListId();
 
-  const { data: existingTasks, isFetching: isFetchingTasks } =
-    useGetTasksByTaskListQuery(selectedTaskListId);
-  const { data: existingGroups, isFetching: isFetchingGroups } =
-    useGetTaskGroupsByTaskListQuery(selectedTaskListId);
+  const { data: existingTasks } = useGetTasksByTaskListQuery(selectedTaskListId);
+  const { data: existingGroups } = useGetTaskGroupsByTaskListQuery(selectedTaskListId);
 
   const [displayAverage, setDisplayAverage] = useState(false);
   const [displayUnits, setDisplayUnits] = useState(false);
   const [showAllDays, setShowAllDays] = useState(false);
+
+  useEffect(() => {
+    dispatch(setSubpage(DashboardSubpage.OVERVIEW));
+    dispatch(
+      setDateRange({
+        startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
+        endDate: dayjs().format('YYYY-MM-DD'),
+      }),
+    );
+  }, [dispatch]);
 
   const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
   const taskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
@@ -84,10 +93,6 @@ const DashboardOverview: React.FC = () => {
   );
   const selectedDay = useSelector((state: ReduxState) => state.dashboard.selectedDay);
   const { data: lastWeekData } = useGetCompletedDaysQuery(dateRange);
-
-  useEffect(() => {
-    dispatch(setSubpage(DashboardSubpage.OVERVIEW));
-  }, [dispatch]);
 
   const days: Dayjs[] = useMemo(() => {
     const dates = getDateRange(dateRange).reverse();
