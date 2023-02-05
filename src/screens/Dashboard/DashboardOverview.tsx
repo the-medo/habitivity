@@ -15,6 +15,7 @@ import { SegmentedLabeledOption } from 'antd/es/segmented';
 import { Segmented } from '../../components/global/Segmented';
 import { RowGapCentered } from '../../components/global/RowGapCentered';
 import DashboardStatisticBox from './DashboardStatisticBox';
+import { Button } from 'antd';
 
 const OverviewWrapper = styled.div`
   display: flex;
@@ -35,6 +36,11 @@ const LineWrapper = styled.div`
   flex-basis: 20rem;
   width: 100%;
   height: 20rem;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const segmentedAverageOptions: SegmentedLabeledOption[] = [
@@ -70,6 +76,7 @@ const DashboardOverview: React.FC = () => {
 
   const [displayAverage, setDisplayAverage] = useState(false);
   const [displayUnits, setDisplayUnits] = useState(false);
+  const [showAllDays, setShowAllDays] = useState(false);
 
   const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
   const taskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
@@ -100,6 +107,8 @@ const DashboardOverview: React.FC = () => {
     [],
   );
 
+  const showWholeWeekHandler = useCallback(() => setShowAllDays(p => !p), []);
+
   return (
     <Row1>
       <OverviewWrapper>
@@ -126,16 +135,24 @@ const DashboardOverview: React.FC = () => {
           task={task}
           isUnits={displayUnits}
         />
-        {days.map(day => (
-          <DayOverview
-            key={day.toString()}
-            date={day}
-            completedDaysData={lastWeekData}
-            selectedTaskListId={selectedTaskListId}
-            displayAverage={displayAverage}
-            displayUnits={displayUnits}
-          />
-        ))}
+        {days.map(
+          (day, i) =>
+            (showAllDays || i < 3) && (
+              <DayOverview
+                key={day.toString()}
+                date={day}
+                completedDaysData={lastWeekData}
+                selectedTaskListId={selectedTaskListId}
+                displayAverage={displayAverage}
+                displayUnits={displayUnits}
+              />
+            ),
+        )}
+        <ButtonWrapper>
+          <Button onClick={showWholeWeekHandler}>
+            {showAllDays ? 'Hide last 4 days' : 'Show whole week'}
+          </Button>
+        </ButtonWrapper>
       </OverviewWrapper>
       <LineWrapper>
         <LineDashboardOverview
