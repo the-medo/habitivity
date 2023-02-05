@@ -30,7 +30,7 @@ const DayOverview: React.FC<DayOverviewProps> = ({
   const taskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
   const task = useSelector((state: ReduxState) => state.dashboard.segmentTask);
   const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
-  // const groupsOrTasks = useSelector((state: ReduxState) => state.dashboard.segmentGroupsOrTasks);
+  const selectedDay = useSelector((state: ReduxState) => state.dashboard.selectedDay);
 
   const { data: existingTasks, isFetching: isFetchingTasks } =
     useGetTasksByTaskListQuery(selectedTaskListId);
@@ -39,6 +39,8 @@ const DayOverview: React.FC<DayOverviewProps> = ({
     () => isFetchingTasks || !completedDaysData || !selectedTaskListId,
     [completedDaysData, isFetchingTasks, selectedTaskListId],
   );
+
+  const isActive = useMemo(() => selectedDay === date.format('YYYY-MM-DD'), [selectedDay, date]);
 
   const taskDefinition = useMemo(() => {
     return existingTasks?.find(t => t.id === task);
@@ -125,6 +127,7 @@ const DayOverview: React.FC<DayOverviewProps> = ({
         valueLast={data?.lastValue}
         isUnits={displayUnits}
         isAverage={displayAverage}
+        isActive={isActive}
         units={units}
         formatter={formatter}
         taskType={taskDefinition?.taskType}

@@ -33,11 +33,11 @@ const segmentedViewOptions: SegmentedLabeledOption[] = [
     value: DashboardSubpage.MONTH,
     icon: <DynamicIcon icon="AiOutlineCalendar" />,
   },
-  {
+  /*{
     label: 'Targets',
     value: DashboardSubpage.TARGETS,
     icon: <DynamicIcon icon="BiTask" />,
-  },
+  },*/
 ];
 
 const segmentedGroupsOrTasksOptions: SegmentedLabeledOption[] = [
@@ -86,7 +86,7 @@ const ColoredSegmentedOption = styled.div<{ $color: CSSProperties['color'] }>`
   font-size: 1rem;
 `;
 
-const AllSegment: SegmentedLabeledOption = {
+const allSegment: SegmentedLabeledOption = {
   label: (
     <ColoredSegmentedOption $color={COLORS.PRIMARY_DARK}>
       <DynamicIcon icon="IoApps" />
@@ -108,13 +108,11 @@ const DashboardSegments: React.FC = () => {
   const segmentGraphView = useSelector((state: ReduxState) => state.dashboard.segmentGraphView);
 
   const selectedTaskListId = useSelectedTaskListId();
-  const { data: existingGroups = [], isFetching: isFetchingTaskGroups } =
-    useGetTaskGroupsByTaskListQuery(selectedTaskListId);
-  const { data: existingTasks = [], isFetching: isFetchingTasks } =
-    useGetTasksByTaskListQuery(selectedTaskListId);
+  const { data: existingGroups = [] } = useGetTaskGroupsByTaskListQuery(selectedTaskListId);
+  const { data: existingTasks = [] } = useGetTasksByTaskListQuery(selectedTaskListId);
 
   const segmentsTaskGroups = useMemo(() => {
-    const segments: SegmentedLabeledOption[] = [AllSegment];
+    const segments: SegmentedLabeledOption[] = [allSegment];
 
     existingGroups.forEach(taskGroup => {
       segments.push({
@@ -122,7 +120,6 @@ const DashboardSegments: React.FC = () => {
           <ColoredSegmentedOption $color={taskGroup.color}>
             &nbsp;
             <DynamicIcon icon={taskGroup.icon ?? 'AiOutlineRightCircle'} />
-            {/*{taskGroup.name}*/}
             &nbsp;
           </ColoredSegmentedOption>
         ),
@@ -137,7 +134,7 @@ const DashboardSegments: React.FC = () => {
     if (segmentTaskGroup === 'all') return [];
 
     const g = existingGroups.find(g => g.id === segmentTaskGroup);
-    const segments: SegmentedLabeledOption[] = [AllSegment];
+    const segments: SegmentedLabeledOption[] = [allSegment];
     if (g) {
       const tasks = existingTasks.filter(t => t.taskGroupId === g.id);
 

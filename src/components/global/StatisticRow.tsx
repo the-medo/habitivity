@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from 'react';
+import React, { Fragment, useCallback, useMemo } from 'react';
 import { RowGapCentered } from './RowGapCentered';
 import { Divider, Statistic } from 'antd';
 import Overview from './Overview';
@@ -8,9 +8,12 @@ import { formatPoints } from '../../helpers/numbers/formatPoints';
 import DynamicIcon from './DynamicIcon';
 import styled from 'styled-components';
 import { TaskType } from '../../types/Tasks';
+import { useDispatch } from 'react-redux';
+import { setSelectedDate } from '../../screens/Day/daySlice';
+import { setDashboardSelectedDay } from '../../screens/Dashboard/dashboardSlice';
 
 const StatisticStyled = styled(Statistic)`
-  min-width: 8rem;
+  min-width: 7rem;
 
   .ant-statistic-content {
     font-size: 1.25rem;
@@ -40,8 +43,10 @@ interface StatisticRowProps {
   valueLast: number | undefined;
   isUnits?: boolean;
   isAverage?: boolean;
+  isActive?: boolean;
   formatter?: (value: number) => string;
   taskType?: TaskType;
+  selectDayOnClick?: boolean;
 }
 
 const StatisticRow: React.FC<StatisticRowProps> = ({
@@ -51,9 +56,12 @@ const StatisticRow: React.FC<StatisticRowProps> = ({
   valueLast,
   isUnits = false,
   isAverage = false,
+  isActive = false,
   formatter = formatPoints,
   taskType,
+  selectDayOnClick = true,
 }) => {
+  const dispatch = useDispatch();
   const dateDisplay = useMemo(() => <DateDisplay date={date.format('YYYY-MM-DD')} />, [date]);
 
   const iconUp = useMemo(() => <DynamicIcon icon="AiOutlineArrowUp" />, []);
@@ -148,8 +156,16 @@ const StatisticRow: React.FC<StatisticRowProps> = ({
     return boxes;
   }, [valueCurrent, valueLast, iconDown, iconUp, units, isUnits, formatter, isAverage, taskType]);
 
+  const handleOnClick = useCallback(() => {
+    dispatch(setDashboardSelectedDay(date.format('YYYY-MM-DD')));
+  }, [date, dispatch]);
+
   return (
-    <Overview arrowContent={dateDisplay}>
+    <Overview
+      arrowContent={dateDisplay}
+      onClick={selectDayOnClick ? handleOnClick : undefined}
+      isActive={isActive}
+    >
       <RowGapCentered>
         {data.map((box, i) => (
           <Fragment key={box.key}>

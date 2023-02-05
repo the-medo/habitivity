@@ -25,10 +25,12 @@ import { formatPoints } from '../../../helpers/numbers/formatPoints';
 import { createFillMatch, fillDefinitions } from '../../../helpers/graphs/fillDefinitions';
 import { SvgDefsAndFill } from '@nivo/core';
 import { CenteredMetricGroups, CenteredMetricTasks } from '../../../helpers/graphs/CenteredMetric';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 interface DayPieGraphProps {
   selectedDate?: Dayjs;
   dayPieGraphDisplayType: DayPieGraphDisplayType;
+  completedDayData?: false | CompletedDay;
 }
 
 export interface GroupRawData extends DefaultRawDatum {
@@ -59,15 +61,29 @@ interface DataInterface {
   taskLayers: PieLayer<TaskRawData>[];
 }
 
-const DayPieGraph: React.FC<DayPieGraphProps> = ({ selectedDate, dayPieGraphDisplayType }) => {
+const DayPieGraph: React.FC<DayPieGraphProps> = ({
+  selectedDate,
+  dayPieGraphDisplayType,
+  completedDayData,
+}) => {
   const selectedTaskListId = useSelectedTaskListId();
   const { data: existingTasks = [], isFetching: isFetchingTasks } =
     useGetTasksByTaskListQuery(selectedTaskListId);
   const { data: existingGroups = [], isFetching: isFetchingGroups } =
     useGetTaskGroupsByTaskListQuery(selectedTaskListId);
-  const { data: completedDay, isFetching: isFetchingDay } = useGetCompletedDayQuery({
-    date: selectedDate?.format('YYYY-MM-DD'),
-  });
+
+  const { data: completedDayResult, isFetching: isFetchingDay } = useGetCompletedDayQuery(
+    completedDayData
+      ? skipToken
+      : {
+          date: selectedDate?.format('YYYY-MM-DD'),
+        },
+  );
+
+  const completedDay = useMemo(
+    () => completedDayData ?? completedDayResult,
+    [completedDayData, completedDayResult],
+  );
 
   const isLoading = useMemo(
     () => isFetchingTasks || isFetchingGroups || isFetchingDay,
