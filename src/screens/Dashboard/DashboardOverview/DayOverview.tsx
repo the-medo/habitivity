@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react';
 import { Dayjs } from 'dayjs';
-import { CompletedDay, CompletedDays } from '../../../helpers/types/CompletedDay';
+import { CompletedDays } from '../../../helpers/types/CompletedDay';
 import { Spin } from 'antd';
 import StatisticRow from '../../../components/global/StatisticRow';
 import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
-import { getDateRange } from '../../../helpers/date/getDateRange';
 import { useGetTasksByTaskListQuery } from '../../../apis/apiTasks';
 import { TaskType } from '../../../types/Tasks';
-import { capitalizeFirstLetter } from '../../../helpers/capitalizeFirstLetter';
 import { formatUnits } from '../../../helpers/numbers/formatUnits';
+import { getValueFromDay } from '../../../helpers/points/getValueFromDay';
+import { getStatsInDateRange } from '../../../helpers/points/getStatsInDateRange';
+import { getTaskUnit } from '../../../helpers/tasks/getTaskUnit';
 
 interface DayOverviewProps {
   date: Dayjs;
@@ -18,27 +19,6 @@ interface DayOverviewProps {
   completedDaysData: CompletedDays | undefined;
   selectedTaskListId: string | undefined;
 }
-
-const getValueFromDay = (
-  data: false | CompletedDay | undefined,
-  selectedTaskListId: string,
-  taskGroup: string,
-  task: string,
-  takeUnits: boolean,
-) => {
-  let val;
-  if (taskGroup === 'all') {
-    val = data ? data.taskLists[selectedTaskListId] ?? 0 : 0;
-  } else {
-    if (task === 'all') {
-      val = data ? data.taskGroups[taskGroup] ?? 0 : 0;
-    } else {
-      val = data ? (takeUnits ? data.tasks[task]?.value : data.tasks[task]?.points) ?? 0 : 0;
-    }
-  }
-
-  return val;
-};
 
 const DayOverview: React.FC<DayOverviewProps> = ({
   date,
@@ -78,21 +58,8 @@ const DayOverview: React.FC<DayOverviewProps> = ({
   }, [taskDefinition]);
 
   const units = useMemo(() => {
-    if (!displayUnits || task === 'all') {
-      return 'Points';
-    }
-
-    if (taskDefinition) {
-      if (taskDefinition.taskType === TaskType.TIME) {
-        return 'Time';
-      } else if (taskDefinition.taskType === TaskType.CHECKBOX) {
-        return 'Completion';
-      } else if (taskDefinition.taskType === TaskType.OPTIONS) {
-        return 'Points';
-      } else {
-        return capitalizeFirstLetter(taskDefinition.taskUnits.twoAndMore);
-      }
-    }
+    if (!displayUnits || task === 'all') return 'Points';
+    if (taskDefinition) return getTaskUnit(taskDefinition);
     return 'Points';
   }, [displayUnits, task, taskDefinition]);
 
@@ -119,20 +86,18 @@ const DayOverview: React.FC<DayOverviewProps> = ({
         displayUnits,
       );
 
-      let sum = 0;
-      let count = 0;
       if (displayAverage) {
-        getDateRange(dateRange).forEach(date => {
-          const completedDay = completedDaysData[date.format('YYYY-MM-DD')];
-          if (completedDay !== undefined) {
-            sum += getValueFromDay(completedDay, selectedTaskListId, taskGroup, task, displayUnits);
-            count++;
-          }
+        const stats = getStatsInDateRange({
+          dateRange,
+          completedDaysData,
+          selectedTaskListId,
+          taskGroup,
+          task,
+          takeUnits: displayUnits,
+          includeLastDay: false,
         });
-
-        lastValue = count > 0 ? sum / count : 0;
-      } /*else {
-      }*/
+        lastValue = stats.avg ?? 0;
+      }
 
       return {
         currentValue: currentValue,

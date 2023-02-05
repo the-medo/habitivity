@@ -20,7 +20,15 @@ export const formatUnits = (task: Task, p: number | undefined): string => {
     case TaskType.DURATION:
       return `${num} ${countableString(p, task.taskUnits)}`;
     case TaskType.CHECKBOX:
-      return p === 1 ? `Done` : `Not done`;
+      if (p === 1) {
+        return 'Done';
+      } else if (p === 0) {
+        return 'Not done';
+      } else if (p) {
+        return `${p}x done`;
+      } else {
+        return '-';
+      }
     case TaskType.TIME:
       return p ? minutesToDayjs(p).format('HH:mm') : '-';
     case TaskType.UNITS:
