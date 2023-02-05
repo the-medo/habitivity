@@ -19,7 +19,7 @@ interface GetStatsInDateRangeParams {
   selectedTaskListId: string;
   taskGroup: string;
   task: string;
-  takeUnits: boolean;
+  useUnits: boolean;
 }
 
 export const getStatsInDateRange = ({
@@ -29,7 +29,7 @@ export const getStatsInDateRange = ({
   selectedTaskListId,
   taskGroup,
   task,
-  takeUnits,
+  useUnits,
 }: GetStatsInDateRangeParams): DateRangeStats => {
   let sum = 0;
   let count = 0;
@@ -44,7 +44,7 @@ export const getStatsInDateRange = ({
   getDateRange(range).forEach(date => {
     const completedDay = completedDaysData[date.format('YYYY-MM-DD')];
     if (completedDay !== undefined) {
-      const v = getValueFromDay(completedDay, selectedTaskListId, taskGroup, task, takeUnits);
+      const v = getValueFromDay(completedDay, selectedTaskListId, taskGroup, task, useUnits);
       sum += v;
       count++;
       if (v > max) max = v;

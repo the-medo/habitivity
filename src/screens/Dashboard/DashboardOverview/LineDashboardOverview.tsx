@@ -10,6 +10,10 @@ import { lineGraphCustomPointProps } from '../../../helpers/graphs/lineGraphCust
 import { DashboardGroupsOrTasks } from '../dashboardSlice';
 import { COLORS } from '../../../styles/CustomStyles';
 import { chooseColorsBasedOnCount } from '../../../helpers/colors/chooseColorsBasedOnCount';
+import { getStatsInDateRange } from '../../../helpers/points/getStatsInDateRange';
+import { setSelectedTaskListId } from '../../../routes/routerSlice';
+import { useSelectedTaskListId } from '../../../hooks/useSelectedTaskListId';
+import { formatPoints } from '../../../helpers/numbers/formatPoints';
 
 interface LineDashboardOverviewProps {
   taskGroup: string;
@@ -93,6 +97,8 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
   taskInfo,
   taskGroupInfo,
 }) => {
+  const selectedTaskListId = useSelectedTaskListId();
+
   const data = useMemo(() => {
     const dataSeries: TaskLineData[] = [];
 
@@ -148,6 +154,22 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
     return dataSeries;
   }, [task, taskGroup, groupsOrTasks, completedDaysData, dateRange, taskInfo, taskGroupInfo]);
 
+  const avg = useMemo(() => {
+    if (completedDaysData && selectedTaskListId) {
+      const stats = getStatsInDateRange({
+        dateRange,
+        completedDaysData,
+        selectedTaskListId,
+        taskGroup,
+        task,
+        useUnits: false,
+        includeLastDay: false,
+      });
+
+      return formatPoints(stats.avg);
+    }
+  }, [completedDaysData, dateRange, selectedTaskListId, task, taskGroup]);
+
   const properties: Partial<LineSvgProps> = useMemo(
     () => ({
       // width: 600,
@@ -175,8 +197,20 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
       },
       defs: [linearGradient],
       fill: [{ match: '*', id: 'gradientA' }],
+      markers:
+        avg !== undefined
+          ? [
+              {
+                axis: 'y',
+                value: avg,
+                lineStyle: { stroke: '#b0413e', strokeWidth: 2 },
+                legend: `Avg. value: ${avg}`,
+                legendPosition: 'bottom-left',
+              },
+            ]
+          : undefined,
     }),
-    [stacked],
+    [avg, stacked],
   );
 
   if (!taskInfo || !taskGroupInfo) return null;
