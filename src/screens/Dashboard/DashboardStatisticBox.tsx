@@ -17,6 +17,7 @@ import {
 
 interface DashboardStatBoxProps {
   dateRange: DateRange;
+  description: string;
   completedDaysData: CompletedDays | undefined;
   taskGroup: string;
   task: string;
@@ -25,6 +26,7 @@ interface DashboardStatBoxProps {
 
 const DashboardStatisticBox: React.FC<DashboardStatBoxProps> = ({
   dateRange,
+  description,
   completedDaysData,
   taskGroup,
   task,
@@ -88,7 +90,7 @@ const DashboardStatisticBox: React.FC<DashboardStatBoxProps> = ({
     <Spin spinning={loading}>
       <StatisticBox
         dateRange={data?.dateRange ?? dateRange}
-        description="Data for last 7 days, up until yesterday"
+        description={description}
         units={isUnits ? units : 'Points'}
         total={data?.total !== undefined ? formatter(data.total) : '-'}
         max={data?.max !== undefined ? formatter(data.max) : '-'}

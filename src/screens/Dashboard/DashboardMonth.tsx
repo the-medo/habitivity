@@ -13,6 +13,7 @@ import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
 import { ReduxState } from '../../store';
 import dayjs from 'dayjs';
 import LineDashboardOverview from './DashboardOverview/LineDashboardOverview';
+import DashboardStatisticBox from './DashboardStatisticBox';
 
 const DashboardMonth: React.FC = () => {
   const dispatch = useDispatch();
@@ -49,18 +50,28 @@ const DashboardMonth: React.FC = () => {
   );
 
   return (
-    <LineDashboardOverview
-      taskGroup={taskGroup}
-      task={task}
-      groupsOrTasks={groupsOrTasks}
-      dateRange={dateRange}
-      completedDaysData={lastMonthData}
-      taskInfo={existingTasks}
-      taskGroupInfo={existingGroups}
-      stacked={stacked}
-      selectedDay={selectedDay}
-      setSelectedDay={setSelectedDay}
-    />
+    <>
+      <DashboardStatisticBox
+        dateRange={dateRange}
+        completedDaysData={lastMonthData}
+        taskGroup={taskGroup}
+        task={task}
+        isUnits={false}
+        description="Data for last 30 days, up until yesterday"
+      />
+      <LineDashboardOverview
+        taskGroup={taskGroup}
+        task={task}
+        groupsOrTasks={groupsOrTasks}
+        dateRange={dateRange}
+        completedDaysData={lastMonthData}
+        taskInfo={existingTasks}
+        taskGroupInfo={existingGroups}
+        stacked={stacked}
+        selectedDay={selectedDay}
+        setSelectedDay={setSelectedDay}
+      />
+    </>
   );
 };
 
