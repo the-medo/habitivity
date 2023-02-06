@@ -143,6 +143,7 @@ const DashboardOverview: React.FC = () => {
           taskGroup={taskGroup}
           task={task}
           isUnits={displayUnits}
+          description="Data for last 7 days, up until yesterday"
         />
         {days.map(
           (day, i) =>
