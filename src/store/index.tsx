@@ -10,6 +10,7 @@ import { dayReducer } from '../screens/Day/daySlice';
 import { appReducer } from './appSlice';
 import { routerReducer, routerSlice } from '../routes/routerSlice';
 import { dashboardReducer, dashboardSlice } from '../screens/Dashboard/dashboardSlice';
+import { screenReducer, screenSlice } from '../screens/screenSlice';
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     notificationReducer,
     taskCreationReducer,
     dayReducer,
+    [screenSlice.name]: screenReducer,
     [dashboardSlice.name]: dashboardReducer,
     [routerSlice.name]: routerReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,

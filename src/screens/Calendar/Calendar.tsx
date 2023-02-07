@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Header1 } from '../../components/global/Headers';
 import { useDispatch } from 'react-redux';
 import { AvailablePages, setOpenedPage } from '../../routes/routerSlice';
+import ScreenSegments from '../../components/global/ScreenSegments';
 
 const Calendar: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const Calendar: React.FC = () => {
 
   return (
     <div>
-      <Header1>This is page called CALENDAR</Header1>
+      <ScreenSegments displayGraphView={false} />
       <Outlet />
     </div>
   );

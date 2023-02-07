@@ -1,28 +1,28 @@
 import React, { CSSProperties, useCallback, useMemo } from 'react';
 import { SegmentedLabeledOption } from 'antd/es/segmented';
-import DynamicIcon from '../../components/global/DynamicIcon';
+import DynamicIcon from './DynamicIcon';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../store';
-import {
-  DashboardGraphView,
-  DashboardGroupsOrTasks,
-  DashboardSubpage,
-  setSegmentGraphView,
-  setSegmentGroupsOrTasks,
-  setSegmentTask,
-  setSegmentTaskGroup,
-} from './dashboardSlice';
+import { DashboardSubpage } from '../../screens/Dashboard/dashboardSlice';
 import { useNavigate } from 'react-router-dom';
-import { Segmented } from '../../components/global/Segmented';
-import { RowGap } from '../../components/global/RowGap';
+import { Segmented } from './Segmented';
+import { RowGap } from './RowGap';
 import styled from 'styled-components';
 import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 import { COLORS } from '../../styles/CustomStyles';
 import { Divider } from 'antd';
 import { useGetTasksByTaskListQuery } from '../../apis/apiTasks';
+import { GroupsOrTasks } from '../../types/GroupsOrTasks';
+import { GraphView } from '../../types/GraphView';
+import {
+  setSegmentGraphView,
+  setSegmentGroupsOrTasks,
+  setSegmentTask,
+  setSegmentTaskGroup,
+} from '../../screens/screenSlice';
 
-const segmentedViewOptions: SegmentedLabeledOption[] = [
+const segmentedDashboardViewOptions: SegmentedLabeledOption[] = [
   {
     label: 'Overview',
     value: DashboardSubpage.OVERVIEW,
@@ -43,12 +43,12 @@ const segmentedViewOptions: SegmentedLabeledOption[] = [
 const segmentedGroupsOrTasksOptions: SegmentedLabeledOption[] = [
   {
     label: 'Task groups',
-    value: DashboardGroupsOrTasks.GROUPS,
+    value: GroupsOrTasks.GROUPS,
     icon: <DynamicIcon icon="AiOutlineGroup" />,
   },
   {
     label: 'Tasks',
-    value: DashboardGroupsOrTasks.TASKS,
+    value: GroupsOrTasks.TASKS,
     icon: <DynamicIcon icon="FaTasks" />,
   },
 ];
@@ -56,12 +56,12 @@ const segmentedGroupsOrTasksOptions: SegmentedLabeledOption[] = [
 const segmentedGraphViewOptions: SegmentedLabeledOption[] = [
   {
     label: 'Stacked',
-    value: DashboardGraphView.STACKED,
+    value: GraphView.STACKED,
     icon: <DynamicIcon icon="MdOutlineStackedLineChart" />,
   },
   {
     label: 'Not stacked',
-    value: DashboardGraphView.NOTSTACKED,
+    value: GraphView.NOTSTACKED,
     icon: <DynamicIcon icon="MdOutlineStackedLineChart" />,
   },
 ];
@@ -96,16 +96,30 @@ const allSegment: SegmentedLabeledOption = {
   value: 'all',
 };
 
-const DashboardSegments: React.FC = () => {
+interface ScreenSegmentsProps {
+  displayDashboardViewOptions?: boolean;
+  displayGroupsOrTasks?: boolean;
+  displayGraphView?: boolean;
+  displayTaskGroups?: boolean;
+  displayTasks?: boolean;
+}
+
+const ScreenSegments: React.FC<ScreenSegmentsProps> = ({
+  displayDashboardViewOptions = false,
+  displayGroupsOrTasks = true,
+  displayGraphView = true,
+  displayTaskGroups = true,
+  displayTasks = true,
+}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const subpage = useSelector((state: ReduxState) => state.dashboard.subpage);
-  const segmentTaskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
-  const segmentTask = useSelector((state: ReduxState) => state.dashboard.segmentTask);
+  const dashboardSubpage = useSelector((state: ReduxState) => state.dashboard.subpage);
+  const segmentTaskGroup = useSelector((state: ReduxState) => state.screen.segmentTaskGroup);
+  const segmentTask = useSelector((state: ReduxState) => state.screen.segmentTask);
   const segmentGroupsOrTasks = useSelector(
-    (state: ReduxState) => state.dashboard.segmentGroupsOrTasks,
+    (state: ReduxState) => state.screen.segmentGroupsOrTasks,
   );
-  const segmentGraphView = useSelector((state: ReduxState) => state.dashboard.segmentGraphView);
+  const segmentGraphView = useSelector((state: ReduxState) => state.screen.segmentGraphView);
 
   const selectedTaskListId = useSelectedTaskListId();
   const { data: existingGroups = [] } = useGetTaskGroupsByTaskListQuery(selectedTaskListId);
@@ -173,7 +187,7 @@ const DashboardSegments: React.FC = () => {
   const handleSegmentedGroupsOrTasksChange = useCallback(
     (value: SegmentedLabeledOption['value']) => {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      dispatch(setSegmentGroupsOrTasks(value as DashboardGroupsOrTasks));
+      dispatch(setSegmentGroupsOrTasks(value as GroupsOrTasks));
     },
     [dispatch],
   );
@@ -181,7 +195,7 @@ const DashboardSegments: React.FC = () => {
   const handleSegmentedGraphView = useCallback(
     (value: SegmentedLabeledOption['value']) => {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      dispatch(setSegmentGraphView(value as DashboardGraphView));
+      dispatch(setSegmentGraphView(value as GraphView));
     },
     [dispatch],
   );
@@ -189,41 +203,55 @@ const DashboardSegments: React.FC = () => {
   return (
     <>
       <ColOfSegments>
-        <SegmentedRow>
-          {subpage && (
-            <Segmented
-              options={segmentedViewOptions}
-              onChange={handleSegmentedViewChange}
-              value={subpage}
-            />
-          )}
-          <Segmented
-            options={segmentedGroupsOrTasksOptions}
-            onChange={handleSegmentedGroupsOrTasksChange}
-            value={segmentGroupsOrTasks}
-          />
-          <Segmented
-            options={segmentedGraphViewOptions}
-            onChange={handleSegmentedGraphView}
-            value={segmentGraphView}
-          />
-        </SegmentedRow>
-        <SegmentedRow>
-          <Segmented
-            options={segmentsTaskGroups}
-            onChange={handleSegmentedTaskGroupChange}
-            value={segmentTaskGroup}
-          />
-          <Segmented
-            options={segmentsTasks}
-            onChange={handleSegmentedTaskChange}
-            value={segmentTask}
-          />
-        </SegmentedRow>
+        {((displayDashboardViewOptions && dashboardSubpage) ||
+          displayGroupsOrTasks ||
+          displayGraphView) && (
+          <SegmentedRow>
+            {displayDashboardViewOptions && dashboardSubpage && (
+              <Segmented
+                options={segmentedDashboardViewOptions}
+                onChange={handleSegmentedViewChange}
+                value={dashboardSubpage}
+              />
+            )}
+            {displayGroupsOrTasks && (
+              <Segmented
+                options={segmentedGroupsOrTasksOptions}
+                onChange={handleSegmentedGroupsOrTasksChange}
+                value={segmentGroupsOrTasks}
+              />
+            )}
+            {displayGraphView && (
+              <Segmented
+                options={segmentedGraphViewOptions}
+                onChange={handleSegmentedGraphView}
+                value={segmentGraphView}
+              />
+            )}
+          </SegmentedRow>
+        )}
+        {(displayTaskGroups || displayTasks) && (
+          <SegmentedRow>
+            {displayTaskGroups && (
+              <Segmented
+                options={segmentsTaskGroups}
+                onChange={handleSegmentedTaskGroupChange}
+                value={segmentTaskGroup}
+              />
+            )}
+            {displayTasks && (
+              <Segmented
+                options={segmentsTasks}
+                onChange={handleSegmentedTaskChange}
+                value={segmentTask}
+              />
+            )}
+          </SegmentedRow>
+        )}
       </ColOfSegments>
       <Divider />
     </>
   );
 };
 
-export default DashboardSegments;
+export default ScreenSegments;

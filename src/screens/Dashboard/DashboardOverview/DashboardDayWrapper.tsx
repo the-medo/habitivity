@@ -6,9 +6,9 @@ import DayPieGraph from '../../Day/TaskGroup/DayPieGraph';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { ReduxState } from '../../../store';
-import { DashboardGroupsOrTasks } from '../dashboardSlice';
 import { DayPieGraphDisplayType } from '../../Day/TaskGroup/DayPieGraphWrapper';
 import { useGetCompletedDaysQuery } from '../../../apis/apiTasks';
+import { GroupsOrTasks } from '../../../types/GroupsOrTasks';
 
 const TaskInfoWrapper = styled.div`
   display: flex;
@@ -30,10 +30,10 @@ const DayGraphWrapper = styled.div`
 `;
 
 const DashboardDayWrapper: React.FC = () => {
-  const date = useSelector((state: ReduxState) => state.dashboard.selectedDay);
-  const groupsOrTasks = useSelector((state: ReduxState) => state.dashboard.segmentGroupsOrTasks);
+  const date = useSelector((state: ReduxState) => state.screen.selectedDay);
+  const groupsOrTasks = useSelector((state: ReduxState) => state.screen.segmentGroupsOrTasks);
 
-  const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
+  const dateRange = useSelector((state: ReduxState) => state.screen.dateRange);
   const { data: lastWeekData } = useGetCompletedDaysQuery(dateRange);
 
   const dayjsDate = useMemo(() => dayjs(date), [date]);
@@ -45,7 +45,7 @@ const DashboardDayWrapper: React.FC = () => {
 
   const dayPieGraphDisplayType = useMemo(
     () =>
-      groupsOrTasks === DashboardGroupsOrTasks.TASKS
+      groupsOrTasks === GroupsOrTasks.TASKS
         ? DayPieGraphDisplayType.TASKS
         : DayPieGraphDisplayType.GROUPS,
     [groupsOrTasks],

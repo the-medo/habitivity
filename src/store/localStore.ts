@@ -1,12 +1,10 @@
 import { HabitivityUser } from '../types/HabitivityUser';
 import { RightDrawerStatus } from '../components/menu/DrawerRight/RightDrawer';
 import { TaskDisplayMode } from '../components/global/TaskComponent/TaskComponent';
-import {
-  DashboardSubpage,
-  DashboardGroupsOrTasks,
-  DashboardGraphView,
-} from '../screens/Dashboard/dashboardSlice';
+import { DashboardSubpage } from '../screens/Dashboard/dashboardSlice';
 import { DateRange } from '../helpers/types/DateRange';
+import { GroupsOrTasks } from '../types/GroupsOrTasks';
+import { GraphView } from '../types/GraphView';
 
 export enum LSKey {
   USER = '1',
@@ -17,11 +15,11 @@ export enum LSKey {
   SELECTED_TASK_GROUPS = '6',
   SELECTED_DATE_SCREEN_DAY = '7',
   DASHBOARD_SUBPAGE = '8',
-  DASHBOARD_DATERANGE = '9',
-  DASHBOARD_SEGMENT_TASK_GROUP = '10',
-  DASHBOARD_SEGMENT_GROUPS_OR_TASKS = '11',
-  DASHBOARD_SEGMENT_GRAPHS_STACKED = '12',
-  DASHBOARD_SEGMENT_TASK = '13',
+  SCREEN_SEGMENT_GRAPHS_VIEW = '12',
+  SCREEN_DATERANGE = '9',
+  SCREEN_SEGMENT_TASK_GROUP = '10',
+  SCREEN_SEGMENT_GROUPS_OR_TASKS = '11',
+  SCREEN_SEGMENT_TASK = '13',
 }
 
 export interface LSValues {
@@ -33,11 +31,11 @@ export interface LSValues {
   [LSKey.SELECTED_TASK_GROUPS]?: Record<string, boolean | undefined>;
   [LSKey.SELECTED_DATE_SCREEN_DAY]?: Record<string, string | undefined>;
   [LSKey.DASHBOARD_SUBPAGE]?: DashboardSubpage;
-  [LSKey.DASHBOARD_DATERANGE]?: DateRange;
-  [LSKey.DASHBOARD_SEGMENT_TASK_GROUP]?: string;
-  [LSKey.DASHBOARD_SEGMENT_GROUPS_OR_TASKS]?: DashboardGroupsOrTasks;
-  [LSKey.DASHBOARD_SEGMENT_GRAPHS_STACKED]?: DashboardGraphView;
-  [LSKey.DASHBOARD_SEGMENT_TASK]?: string;
+  [LSKey.SCREEN_DATERANGE]?: DateRange;
+  [LSKey.SCREEN_SEGMENT_TASK_GROUP]?: string;
+  [LSKey.SCREEN_SEGMENT_GROUPS_OR_TASKS]?: GroupsOrTasks;
+  [LSKey.SCREEN_SEGMENT_GRAPHS_VIEW]?: GraphView;
+  [LSKey.SCREEN_SEGMENT_TASK]?: string;
 }
 
 export function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {
