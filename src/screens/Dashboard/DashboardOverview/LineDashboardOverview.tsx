@@ -7,7 +7,6 @@ import { LineSvgProps, ResponsiveLine, Serie, SliceTooltipProps } from '@nivo/li
 import { getDateRange } from '../../../helpers/date/getDateRange';
 import { linearGradient } from '../../../helpers/graphs/fillDefinitions';
 import { lineGraphCustomPointProps } from '../../../helpers/graphs/lineGraphCustomPointProps';
-import { DashboardGroupsOrTasks } from '../dashboardSlice';
 import { COLORS } from '../../../styles/CustomStyles';
 import { chooseColorsBasedOnCount } from '../../../helpers/colors/chooseColorsBasedOnCount';
 import { getStatsInDateRange } from '../../../helpers/points/getStatsInDateRange';
@@ -15,6 +14,7 @@ import { useSelectedTaskListId } from '../../../hooks/useSelectedTaskListId';
 import { formatPoints } from '../../../helpers/numbers/formatPoints';
 import styled from 'styled-components';
 import DashboardDayWrapper from './DashboardDayWrapper';
+import { GroupsOrTasks } from '../../../types/GroupsOrTasks';
 
 const WholeWrapper = styled.div`
   display: flex;
@@ -35,7 +35,7 @@ const LineWrapper = styled.div`
 interface LineDashboardOverviewProps {
   taskGroup: string;
   task: string;
-  groupsOrTasks: DashboardGroupsOrTasks;
+  groupsOrTasks: GroupsOrTasks;
   stacked: boolean;
   dateRange: DateRange;
   completedDaysData: CompletedDays | undefined;
@@ -125,13 +125,13 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
 
     if (taskGroupInfo && taskInfo) {
       if (taskGroup === 'all') {
-        if (groupsOrTasks === DashboardGroupsOrTasks.GROUPS) {
+        if (groupsOrTasks === GroupsOrTasks.GROUPS) {
           taskGroupInfo.forEach(g =>
             dataSeries.push(createLineFromGroup(g, completedDaysData, dateRange)),
           );
 
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        } else if (groupsOrTasks === DashboardGroupsOrTasks.TASKS) {
+        } else if (groupsOrTasks === GroupsOrTasks.TASKS) {
           taskGroupInfo.forEach(g => {
             const baseColor = g.color ?? COLORS.PRIMARY;
             const tasks = taskInfo.filter(t => t.taskGroupId === g.id);
@@ -154,10 +154,10 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
               dataSeries.push(createLineFromTask(t, g.color, g, completedDaysData, dateRange));
             }
           } else {
-            if (groupsOrTasks === DashboardGroupsOrTasks.GROUPS) {
+            if (groupsOrTasks === GroupsOrTasks.GROUPS) {
               dataSeries.push(createLineFromGroup(g, completedDaysData, dateRange));
               // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            } else if (groupsOrTasks === DashboardGroupsOrTasks.TASKS) {
+            } else if (groupsOrTasks === GroupsOrTasks.TASKS) {
               const baseColor = g.color ?? COLORS.PRIMARY;
               const tasks = taskInfo.filter(t => t.taskGroupId === g.id);
               const taskColors = chooseColorsBasedOnCount(baseColor, tasks.length);

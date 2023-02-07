@@ -27,10 +27,10 @@ const DayOverview: React.FC<DayOverviewProps> = ({
   completedDaysData,
   selectedTaskListId,
 }) => {
-  const taskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
-  const task = useSelector((state: ReduxState) => state.dashboard.segmentTask);
-  const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
-  const selectedDay = useSelector((state: ReduxState) => state.dashboard.selectedDay);
+  const taskGroup = useSelector((state: ReduxState) => state.screen.segmentTaskGroup);
+  const task = useSelector((state: ReduxState) => state.screen.segmentTask);
+  const dateRange = useSelector((state: ReduxState) => state.screen.dateRange);
+  const selectedDay = useSelector((state: ReduxState) => state.screen.selectedDay);
 
   const { data: existingTasks, isFetching: isFetchingTasks } =
     useGetTasksByTaskListQuery(selectedTaskListId);

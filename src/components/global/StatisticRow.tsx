@@ -9,8 +9,7 @@ import DynamicIcon from './DynamicIcon';
 import styled from 'styled-components';
 import { TaskType } from '../../types/Tasks';
 import { useDispatch } from 'react-redux';
-import { setSelectedDate } from '../../screens/Day/daySlice';
-import { setDashboardSelectedDay } from '../../screens/Dashboard/dashboardSlice';
+import { setSelectedDay } from '../../screens/screenSlice';
 
 const StatisticStyled = styled(Statistic)`
   min-width: 7rem;
@@ -157,7 +156,7 @@ const StatisticRow: React.FC<StatisticRowProps> = ({
   }, [valueCurrent, valueLast, iconDown, iconUp, units, isUnits, formatter, isAverage, taskType]);
 
   const handleOnClick = useCallback(() => {
-    dispatch(setDashboardSelectedDay(date.format('YYYY-MM-DD')));
+    dispatch(setSelectedDay(date.format('YYYY-MM-DD')));
   }, [date, dispatch]);
 
   return (

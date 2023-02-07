@@ -1,12 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  DashboardGraphView,
-  DashboardSubpage,
-  setDashboardSelectedDay,
-  setDateRange,
-  setSubpage,
-} from './dashboardSlice';
+import { DashboardSubpage, setSubpage } from './dashboardSlice';
 import styled from 'styled-components';
 import { ReduxState } from '../../store';
 import { useGetCompletedDaysQuery, useGetTasksByTaskListQuery } from '../../apis/apiTasks';
@@ -22,6 +16,8 @@ import { Segmented } from '../../components/global/Segmented';
 import { RowGapCentered } from '../../components/global/RowGapCentered';
 import DashboardStatisticBox from './DashboardStatisticBox';
 import { Button } from 'antd';
+import { GraphView } from '../../types/GraphView';
+import { setDateRange, setSelectedDay } from '../screenSlice';
 
 const OverviewWrapper = styled.div`
   display: flex;
@@ -84,14 +80,14 @@ const DashboardOverview: React.FC = () => {
     );
   }, [dispatch]);
 
-  const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
-  const taskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
-  const task = useSelector((state: ReduxState) => state.dashboard.segmentTask);
-  const groupsOrTasks = useSelector((state: ReduxState) => state.dashboard.segmentGroupsOrTasks);
+  const dateRange = useSelector((state: ReduxState) => state.screen.dateRange);
+  const taskGroup = useSelector((state: ReduxState) => state.screen.segmentTaskGroup);
+  const task = useSelector((state: ReduxState) => state.screen.segmentTask);
+  const groupsOrTasks = useSelector((state: ReduxState) => state.screen.segmentGroupsOrTasks);
   const stacked = useSelector(
-    (state: ReduxState) => state.dashboard.segmentGraphView === DashboardGraphView.STACKED,
+    (state: ReduxState) => state.screen.segmentGraphView === GraphView.STACKED,
   );
-  const selectedDay = useSelector((state: ReduxState) => state.dashboard.selectedDay);
+  const selectedDay = useSelector((state: ReduxState) => state.screen.selectedDay);
   const { data: lastWeekData } = useGetCompletedDaysQuery(dateRange);
 
   const days: Dayjs[] = useMemo(() => {
@@ -111,9 +107,9 @@ const DashboardOverview: React.FC = () => {
   );
 
   const showWholeWeekHandler = useCallback(() => setShowAllDays(p => !p), []);
-  const setSelectedDay = useCallback(
+  const setSelectedDayHandler = useCallback(
     (x: string) => {
-      dispatch(setDashboardSelectedDay(x));
+      dispatch(setSelectedDay(x));
     },
     [dispatch],
   );
@@ -174,7 +170,7 @@ const DashboardOverview: React.FC = () => {
         taskGroupInfo={existingGroups}
         stacked={stacked}
         selectedDay={selectedDay}
-        setSelectedDay={setSelectedDay}
+        setSelectedDay={setSelectedDayHandler}
       />
     </Row1>
   );

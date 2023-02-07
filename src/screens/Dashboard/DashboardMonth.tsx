@@ -1,12 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  DashboardGraphView,
-  DashboardSubpage,
-  setDashboardSelectedDay,
-  setDateRange,
-  setSubpage,
-} from './dashboardSlice';
+import { DashboardSubpage, setSubpage } from './dashboardSlice';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 import { useGetCompletedDaysQuery, useGetTasksByTaskListQuery } from '../../apis/apiTasks';
 import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
@@ -14,6 +8,8 @@ import { ReduxState } from '../../store';
 import dayjs from 'dayjs';
 import LineDashboardOverview from './DashboardOverview/LineDashboardOverview';
 import DashboardStatisticBox from './DashboardStatisticBox';
+import { setDateRange, setSelectedDay } from '../screenSlice';
+import { GraphView } from '../../types/GraphView';
 
 const DashboardMonth: React.FC = () => {
   const dispatch = useDispatch();
@@ -32,19 +28,19 @@ const DashboardMonth: React.FC = () => {
     );
   }, [dispatch]);
 
-  const dateRange = useSelector((state: ReduxState) => state.dashboard.dateRange);
-  const taskGroup = useSelector((state: ReduxState) => state.dashboard.segmentTaskGroup);
-  const task = useSelector((state: ReduxState) => state.dashboard.segmentTask);
-  const groupsOrTasks = useSelector((state: ReduxState) => state.dashboard.segmentGroupsOrTasks);
+  const dateRange = useSelector((state: ReduxState) => state.screen.dateRange);
+  const taskGroup = useSelector((state: ReduxState) => state.screen.segmentTaskGroup);
+  const task = useSelector((state: ReduxState) => state.screen.segmentTask);
+  const groupsOrTasks = useSelector((state: ReduxState) => state.screen.segmentGroupsOrTasks);
   const stacked = useSelector(
-    (state: ReduxState) => state.dashboard.segmentGraphView === DashboardGraphView.STACKED,
+    (state: ReduxState) => state.screen.segmentGraphView === GraphView.STACKED,
   );
-  const selectedDay = useSelector((state: ReduxState) => state.dashboard.selectedDay);
+  const selectedDay = useSelector((state: ReduxState) => state.screen.selectedDay);
   const { data: lastMonthData } = useGetCompletedDaysQuery(dateRange);
 
-  const setSelectedDay = useCallback(
+  const setSelectedDayHandler = useCallback(
     (x: string) => {
-      dispatch(setDashboardSelectedDay(x));
+      dispatch(setSelectedDay(x));
     },
     [dispatch],
   );
@@ -69,7 +65,7 @@ const DashboardMonth: React.FC = () => {
         taskGroupInfo={existingGroups}
         stacked={stacked}
         selectedDay={selectedDay}
-        setSelectedDay={setSelectedDay}
+        setSelectedDay={setSelectedDayHandler}
       />
     </>
   );
