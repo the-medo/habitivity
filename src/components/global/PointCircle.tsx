@@ -6,6 +6,7 @@ interface PointCircleProps {
   $visible?: boolean;
   $size?: 'small' | 'default' | 'large' | 'ultra';
   $color?: string;
+  $colorText?: string;
   $mode?: 'dark' | 'light';
   $shape?: 'circle' | 'square';
 }
@@ -19,15 +20,15 @@ export const PointCircle = styled.div<PointCircleProps>`
     let size = 2;
     let fontSize = 0.8;
     let fontWeight = 'normal';
-    let colorBg = p.$color ? p.$color : COLORS.PRIMARY_DARK;
-    let colorText = generateColor(colorBg, 0);
+    let colorBg = p.$color ?? COLORS.PRIMARY_DARK;
+    let colorText = p.$colorText ?? generateColor(colorBg, 0);
 
     if (p.$mode === 'light') {
       const temp = colorBg;
       colorBg = colorText;
       colorText = temp;
     } else {
-      colorText = 'white';
+      colorText = p.$colorText ?? 'white';
     }
 
     if (p.$size === 'small') {
