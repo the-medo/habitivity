@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { COLORS } from '../../styles/CustomStyles';
 import { generateColor } from '../../helpers/colors/generateColor';
+import { CSSProperties } from 'react';
 
 interface PointCircleProps {
   $visible?: boolean;
@@ -9,6 +10,7 @@ interface PointCircleProps {
   $colorText?: string;
   $mode?: 'dark' | 'light';
   $shape?: 'circle' | 'square';
+  $border?: CSSProperties['border'];
 }
 
 export const PointCircle = styled.div<PointCircleProps>`
@@ -52,6 +54,7 @@ export const PointCircle = styled.div<PointCircleProps>`
       color: ${colorText};
       font-size: ${fontSize}rem;
       font-weight: ${fontWeight};
+      border: ${p.$border};
     `;
   }}
 `;

@@ -14,7 +14,7 @@ import { getDateRange } from '../../helpers/date/getDateRange';
 import { SegmentedLabeledOption } from 'antd/es/segmented';
 import { Segmented } from '../../components/global/Segmented';
 import { RowGapCentered } from '../../components/global/RowGapCentered';
-import DashboardStatisticBox from './DashboardStatisticBox';
+import StatisticBox from '../../components/global/StatisticBox';
 import { Button } from 'antd';
 import { GraphView } from '../../types/GraphView';
 import { setDateRange, setSelectedDay } from '../screenSlice';
@@ -133,13 +133,10 @@ const DashboardOverview: React.FC = () => {
             />
           )}
         </RowGapCentered>
-        <DashboardStatisticBox
-          dateRange={dateRange}
-          completedDaysData={lastWeekData}
-          taskGroup={taskGroup}
-          task={task}
+        <StatisticBox
           isUnits={displayUnits}
           description="Data for last 7 days, up until yesterday"
+          includeLastDay={false}
         />
         {days.map(
           (day, i) =>
