@@ -8,9 +8,8 @@ import { CompletedDay } from '../../helpers/types/CompletedDay';
 import { Task } from '../../types/Tasks';
 import { chooseColorsBasedOnCount } from '../../helpers/colors/chooseColorsBasedOnCount';
 import { DatumId } from '@nivo/pie';
-import { Statistic } from 'antd';
 
-const TooltipRow = styled.div`
+export const SimpleOverviewTooltipRow = styled.div`
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
@@ -18,7 +17,7 @@ const TooltipRow = styled.div`
   justify-content: space-between;
 `;
 
-const TitleWithColor = styled(TooltipRow)`
+export const TitleWithColor = styled(SimpleOverviewTooltipRow)`
   justify-content: flex-start;
 `;
 
@@ -56,7 +55,7 @@ const ColorCircle = styled.div<{ $color: string }>`
   background-color: ${p => p.$color};
 `;
 
-const TaskGroupHeader = styled.div<{ $color: string }>`
+export const SimpleOverviewTaskGroupHeader = styled.div<{ $color: string }>`
   display: flex;
   gap: 0.5rem;
   font-size: 1rem;
@@ -70,20 +69,8 @@ const TaskGroupHeader = styled.div<{ $color: string }>`
   justify-content: space-between;
 `;
 
-// const SingleTaskWrapper
-
-const SingleTaskHeader = styled(TaskGroupHeader)`
-  font-size: 1.5rem;
-  padding: 0.5rem;
-`;
-
-const SingleTaskRow = styled(TooltipRow)`
-  justify-content: space-evenly;
-`;
-
 interface SimpleOverviewTaskGroupProps {
   completedDay: false | CompletedDay | undefined;
-  singleTask?: Task;
   tasks: Task[];
   groupId: DatumId;
   groupName: DatumId;
@@ -94,7 +81,6 @@ interface SimpleOverviewTaskGroupProps {
 
 const SimpleOverviewTaskGroup: React.FC<SimpleOverviewTaskGroupProps> = ({
   completedDay,
-  singleTask,
   tasks,
   groupId,
   groupName,
@@ -107,41 +93,16 @@ const SimpleOverviewTaskGroup: React.FC<SimpleOverviewTaskGroupProps> = ({
     [groupColor, tasks.length],
   );
 
-  if (singleTask !== undefined) {
-    return (
-      <>
-        <SingleTaskHeader $color={groupColor}>
-          <TitleWithColor>
-            <ColumnCell>{singleTask.taskName}</ColumnCell>
-          </TitleWithColor>
-        </SingleTaskHeader>
-        <SingleTaskRow>
-          <Statistic
-            title="Points"
-            value={completedDay ? formatPoints(completedDay.tasks[singleTask.id]?.points) : '-'}
-          />
-          <Statistic
-            title="Units"
-            value={formatUnits(
-              singleTask,
-              completedDay ? completedDay.tasks[singleTask.id]?.value : undefined,
-            )}
-          />
-        </SingleTaskRow>
-      </>
-    );
-  }
-
   return (
     <>
-      <TaskGroupHeader $color={groupColor}>
-        <TooltipRow>
+      <SimpleOverviewTaskGroupHeader $color={groupColor}>
+        <SimpleOverviewTooltipRow>
           <DynamicIcon icon={groupIcon} />
           {groupName}
-        </TooltipRow>
+        </SimpleOverviewTooltipRow>
         <span>{completedDay ? formatPoints(completedDay.taskGroups[groupId]) : '-'}</span>
-      </TaskGroupHeader>
-      <TooltipRow>
+      </SimpleOverviewTaskGroupHeader>
+      <SimpleOverviewTooltipRow>
         <TooltipColumn $minWidth={applyMinWidths ? '10rem' : undefined}>
           {tasks.map((task, i) => (
             <TitleWithColor key={`color-${task.id}`}>
@@ -164,7 +125,7 @@ const SimpleOverviewTaskGroup: React.FC<SimpleOverviewTaskGroupProps> = ({
             </ColumnCellUnits>
           ))}
         </TooltipColumn>
-      </TooltipRow>
+      </SimpleOverviewTooltipRow>
     </>
   );
 };
