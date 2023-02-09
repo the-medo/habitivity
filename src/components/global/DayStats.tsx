@@ -7,6 +7,8 @@ import { COLORS } from '../../styles/CustomStyles';
 import styled from 'styled-components';
 import { CompletedDay } from '../../helpers/types/CompletedDay';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useSelector } from 'react-redux';
+import { ReduxState } from '../../store';
 
 const GroupWrapper = styled.div`
   display: flex;
@@ -15,6 +17,8 @@ const GroupWrapper = styled.div`
   gap: 0.5rem;
   padding: 0.5rem;
   flex-basis: 10rem;
+  background-color: white;
+  border-radius: 0.5rem;
 `;
 
 interface DayStatsProps {
@@ -24,9 +28,12 @@ interface DayStatsProps {
 
 const DayStats: React.FC<DayStatsProps> = ({ date, completedDayData }) => {
   const selectedTaskListId = useSelectedTaskListId();
+
+  const taskGroup = useSelector((state: ReduxState) => state.screen.segmentTaskGroup);
+  const task = useSelector((state: ReduxState) => state.screen.segmentTask);
+
   const { data: existingTasks } = useGetTasksByTaskListQuery(selectedTaskListId);
   const { data: existingGroups = [] } = useGetTaskGroupsByTaskListQuery(selectedTaskListId);
-
   const { data: completedDayResult } = useGetCompletedDayQuery(
     completedDayData ? skipToken : { date },
   );
@@ -36,9 +43,14 @@ const DayStats: React.FC<DayStatsProps> = ({ date, completedDayData }) => {
     [completedDayData, completedDayResult],
   );
 
+  const groupsToIterate = useMemo(() => {
+    if (taskGroup === 'all') return existingGroups;
+    return existingGroups.filter(group => group.id === taskGroup);
+  }, [taskGroup, existingGroups]);
+
   return (
     <GroupWrapper>
-      {existingGroups.map(group => {
+      {groupsToIterate.map(group => {
         return (
           <SimpleOverviewTaskGroup
             key={group.id}
@@ -46,6 +58,7 @@ const DayStats: React.FC<DayStatsProps> = ({ date, completedDayData }) => {
             groupColor={group.color ?? COLORS.PRIMARY_DARK}
             groupIcon={group.icon ?? 'AiOutlineRightCircle'}
             groupId={group.id}
+            singleTask={task !== 'all' ? existingTasks?.find(t => t.id === task) : undefined}
             tasks={existingTasks?.filter(task => task.taskGroupId === group.id) ?? []}
             completedDay={completedDay}
             applyMinWidths={true}

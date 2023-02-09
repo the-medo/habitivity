@@ -6,11 +6,12 @@ import { PointCircle } from '../../components/global/PointCircle';
 import dayjs from 'dayjs';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 import { useGetCompletedDaysQuery } from '../../apis/apiTasks';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../store';
 import StatisticBox from '../../components/global/StatisticBox';
 import { getValueFromDay } from '../../helpers/points/getValueFromDay';
 import { formatPoints } from '../../helpers/numbers/formatPoints';
+import { setSelectedDay } from '../screenSlice';
 
 const CalendarStyled = styled(Calendar)`
   .ant-picker-cell {
@@ -22,6 +23,7 @@ const CalendarStyled = styled(Calendar)`
       border-left: 2px solid transparent !important;
       border-right: 2px solid transparent !important;
       border-bottom: 2px solid transparent !important;
+      border-radius: 0.5rem;
     }
 
     &.ant-picker-cell-selected {
@@ -53,12 +55,20 @@ const CalendarDayPoints = styled(PointCircle)`
 `;
 
 const CalendarComponent: React.FC = () => {
+  const dispatch = useDispatch();
   const selectedTaskListId = useSelectedTaskListId();
   const dateRange = useSelector((state: ReduxState) => state.screen.dateRange);
   const selectedDay = useSelector((state: ReduxState) => state.screen.selectedDay);
   const { data: monthlyData, isFetching } = useGetCompletedDaysQuery(dateRange);
   const taskGroup = useSelector((state: ReduxState) => state.screen.segmentTaskGroup);
   const task = useSelector((state: ReduxState) => state.screen.segmentTask);
+
+  const onSelectHandler = useCallback(
+    (day: dayjs.Dayjs) => {
+      dispatch(setSelectedDay(day.format('YYYY-MM-DD')));
+    },
+    [dispatch],
+  );
 
   const dateCellRender: CalendarProps<dayjs.Dayjs>['dateCellRender'] = useCallback(
     (day: dayjs.Dayjs) => {
@@ -89,7 +99,7 @@ const CalendarComponent: React.FC = () => {
   return (
     <Spin spinning={isFetching}>
       <StatisticBox description="" isUnits={false} />
-      <CalendarStyled dateCellRender={dateCellRender} />
+      <CalendarStyled dateCellRender={dateCellRender} onSelect={onSelectHandler} />
     </Spin>
   );
 };
