@@ -8,6 +8,7 @@ import { CompletedDay } from '../../helpers/types/CompletedDay';
 import { Task } from '../../types/Tasks';
 import { chooseColorsBasedOnCount } from '../../helpers/colors/chooseColorsBasedOnCount';
 import { DatumId } from '@nivo/pie';
+import { Statistic } from 'antd';
 
 const TooltipRow = styled.div`
   display: flex;
@@ -69,8 +70,20 @@ const TaskGroupHeader = styled.div<{ $color: string }>`
   justify-content: space-between;
 `;
 
+// const SingleTaskWrapper
+
+const SingleTaskHeader = styled(TaskGroupHeader)`
+  font-size: 1.5rem;
+  padding: 0.5rem;
+`;
+
+const SingleTaskRow = styled(TooltipRow)`
+  justify-content: space-evenly;
+`;
+
 interface SimpleOverviewTaskGroupProps {
   completedDay: false | CompletedDay | undefined;
+  singleTask?: Task;
   tasks: Task[];
   groupId: DatumId;
   groupName: DatumId;
@@ -81,6 +94,7 @@ interface SimpleOverviewTaskGroupProps {
 
 const SimpleOverviewTaskGroup: React.FC<SimpleOverviewTaskGroupProps> = ({
   completedDay,
+  singleTask,
   tasks,
   groupId,
   groupName,
@@ -92,6 +106,31 @@ const SimpleOverviewTaskGroup: React.FC<SimpleOverviewTaskGroupProps> = ({
     () => chooseColorsBasedOnCount(groupColor, tasks.length),
     [groupColor, tasks.length],
   );
+
+  if (singleTask !== undefined) {
+    return (
+      <>
+        <SingleTaskHeader $color={groupColor}>
+          <TitleWithColor>
+            <ColumnCell>{singleTask.taskName}</ColumnCell>
+          </TitleWithColor>
+        </SingleTaskHeader>
+        <SingleTaskRow>
+          <Statistic
+            title="Points"
+            value={completedDay ? formatPoints(completedDay.tasks[singleTask.id]?.points) : '-'}
+          />
+          <Statistic
+            title="Units"
+            value={formatUnits(
+              singleTask,
+              completedDay ? completedDay.tasks[singleTask.id]?.value : undefined,
+            )}
+          />
+        </SingleTaskRow>
+      </>
+    );
+  }
 
   return (
     <>

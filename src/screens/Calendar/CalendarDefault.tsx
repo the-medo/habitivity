@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../store';
 import { setDateRange } from '../screenSlice';
 import CalendarComponent from './CalendarComponent';
+import DashboardDayWrapper from '../Dashboard/DashboardOverview/DashboardDayWrapper';
 
 const AllWrapper = styled.div`
   display: flex;
@@ -23,7 +24,6 @@ const DayOverviewWrapper = styled.div`
   display: flex;
   flex-basis: 20rem;
   flex-grow: 1;
-  border: 1px solid black;
 `;
 
 const CalendarDefault: React.FC = () => {
@@ -44,7 +44,9 @@ const CalendarDefault: React.FC = () => {
       <CalendarWrapper>
         <CalendarComponent />
       </CalendarWrapper>
-      <DayOverviewWrapper>Day Overview</DayOverviewWrapper>
+      <DayOverviewWrapper>
+        <DashboardDayWrapper />
+      </DayOverviewWrapper>
     </AllWrapper>
   );
 };
