@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { Statistic } from 'antd';
 import { OverviewBoxColumn } from './OverviewBox';
 import { DateRange, dateRangeStringToDayjs } from '../../helpers/types/DateRange';
 import { RowGapCentered } from './RowGapCentered';
+import { StyledStatistic } from './StyledStatistic';
 
 const DateRow = styled.div`
   background-color: white;
@@ -25,15 +25,6 @@ const DateRowDates = styled.span`
 const DateRowDescription = styled.span`
   font-size: 0.9rem;
   font-style: italic;
-`;
-
-const StatisticStyled = styled(Statistic)`
-  min-width: 8rem;
-  text-align: center;
-
-  .ant-statistic-content {
-    font-size: 1.25rem;
-  }
 `;
 
 interface StatisticBoxProps {
@@ -64,10 +55,10 @@ const StatisticBoxDisplay: React.FC<StatisticBoxProps> = ({
         {description && <DateRowDescription>{description}</DateRowDescription>}
       </DateRow>
       <RowGapCentered>
-        <StatisticStyled title="&nbsp;" value={`${units}:`} />
-        {total !== undefined && <StatisticStyled title="Total" value={total} precision={2} />}
-        {max !== undefined && <StatisticStyled title="Max" value={max} precision={2} />}
-        {average !== undefined && <StatisticStyled title="Average" value={average} precision={2} />}
+        <StyledStatistic title="&nbsp;" value={`${units}:`} />
+        {total !== undefined && <StyledStatistic title="Total" value={total} precision={2} />}
+        {max !== undefined && <StyledStatistic title="Max" value={max} precision={2} />}
+        {average !== undefined && <StyledStatistic title="Average" value={average} precision={2} />}
       </RowGapCentered>
     </OverviewBoxColumn>
   );

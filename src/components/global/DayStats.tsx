@@ -9,6 +9,7 @@ import { CompletedDay } from '../../helpers/types/CompletedDay';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useSelector } from 'react-redux';
 import { ReduxState } from '../../store';
+import SimpleOverviewSingleTask from './SimpleOverviewSingleTask';
 
 const GroupWrapper = styled.div`
   display: flex;
@@ -50,21 +51,39 @@ const DayStats: React.FC<DayStatsProps> = ({ date, completedDayData }) => {
 
   return (
     <GroupWrapper>
-      {groupsToIterate.map(group => {
-        return (
-          <SimpleOverviewTaskGroup
-            key={group.id}
-            groupName={group.name}
-            groupColor={group.color ?? COLORS.PRIMARY_DARK}
-            groupIcon={group.icon ?? 'AiOutlineRightCircle'}
-            groupId={group.id}
-            singleTask={task !== 'all' ? existingTasks?.find(t => t.id === task) : undefined}
-            tasks={existingTasks?.filter(task => task.taskGroupId === group.id) ?? []}
+      {task !== 'all' && (
+        <SimpleOverviewSingleTask
+          groupColor={groupsToIterate[0].color ?? COLORS.PRIMARY_DARK}
+          completedDay={completedDay}
+          singleTask={existingTasks?.find(t => t.id === task)}
+        />
+      )}
+      {task === 'all' &&
+        taskGroup !== 'all' &&
+        (existingTasks?.filter(task => task.taskGroupId === taskGroup) ?? []).map(task => (
+          <SimpleOverviewSingleTask
+            key={task.id}
+            groupColor={groupsToIterate[0].color ?? COLORS.PRIMARY_DARK}
             completedDay={completedDay}
-            applyMinWidths={true}
+            singleTask={task}
           />
-        );
-      })}
+        ))}
+      {task === 'all' &&
+        taskGroup === 'all' &&
+        groupsToIterate.map(group => {
+          return (
+            <SimpleOverviewTaskGroup
+              key={group.id}
+              groupName={group.name}
+              groupColor={group.color ?? COLORS.PRIMARY_DARK}
+              groupIcon={group.icon ?? 'AiOutlineRightCircle'}
+              groupId={group.id}
+              tasks={existingTasks?.filter(task => task.taskGroupId === group.id) ?? []}
+              completedDay={completedDay}
+              applyMinWidths={true}
+            />
+          );
+        })}
     </GroupWrapper>
   );
 };
