@@ -31,6 +31,7 @@ interface DayPieGraphProps {
   selectedDate?: Dayjs;
   dayPieGraphDisplayType: DayPieGraphDisplayType;
   completedDayData?: false | CompletedDay;
+  taskGroup?: string;
 }
 
 export interface GroupRawData extends DefaultRawDatum {
@@ -65,6 +66,7 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({
   selectedDate,
   dayPieGraphDisplayType,
   completedDayData,
+  taskGroup = 'all',
 }) => {
   const selectedTaskListId = useSelectedTaskListId();
   const { data: existingTasks = [], isFetching: isFetchingTasks } =
@@ -100,9 +102,11 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({
       taskFills: [],
       taskLayers: [...baseLayers, CenteredMetricTasks],
     };
+    const groupsToUse =
+      taskGroup === 'all' ? existingGroups : existingGroups.filter(g => g.id === taskGroup);
 
     let totalPointsAbs = 0;
-    existingGroups.forEach(
+    groupsToUse.forEach(
       g =>
         (totalPointsAbs += Math.abs(
           completedDay ? Math.round((completedDay.taskGroups[g.id] ?? 0) * 100) / 100 : 0,
@@ -110,7 +114,7 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({
     );
     const twoDegreeAnglePoints = totalPointsAbs > 0 ? (totalPointsAbs / 360) * 2 : 0.1;
 
-    existingGroups.forEach(g => {
+    groupsToUse.forEach(g => {
       const value = completedDay ? Math.round((completedDay.taskGroups[g.id] ?? 0) * 100) / 100 : 0;
       const baseColor = g.color ?? COLORS.PRIMARY;
       const tasks = existingTasks.filter(t => t.taskGroupId === g.id);
@@ -154,7 +158,7 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({
     });
 
     return d;
-  }, [existingTasks, existingGroups, completedDay]);
+  }, [existingTasks, existingGroups, completedDay, taskGroup]);
 
   const arcLabelCallback = useCallback(
     (e: ComputedDatum<GroupRawData | TaskRawData>) => e.data.realValue.toString(),
@@ -217,7 +221,7 @@ const DayPieGraph: React.FC<DayPieGraphProps> = ({
 
   if (completedDay === undefined || selectedDate === undefined) return null;
 
-  switch (dayPieGraphDisplayType) {
+  switch (taskGroup === 'all' ? dayPieGraphDisplayType : DayPieGraphDisplayType.TASKS) {
     case DayPieGraphDisplayType.GROUPS:
       return (
         <Spin spinning={isLoading}>
