@@ -31,7 +31,7 @@ const DayGraphWrapper = styled.div`
 const DashboardDayWrapper: React.FC = () => {
   const date = useSelector((state: ReduxState) => state.screen.selectedDay);
   const groupsOrTasks = useSelector((state: ReduxState) => state.screen.segmentGroupsOrTasks);
-
+  const taskGroup = useSelector((state: ReduxState) => state.screen.segmentTaskGroup);
   const dateRange = useSelector((state: ReduxState) => state.screen.dateRange);
   const { data: lastWeekData } = useGetCompletedDaysQuery(dateRange);
 
@@ -60,6 +60,7 @@ const DashboardDayWrapper: React.FC = () => {
             dayPieGraphDisplayType={dayPieGraphDisplayType}
             selectedDate={dayjsDate}
             completedDayData={completedDayData}
+            taskGroup={taskGroup}
           />
         </DayGraphWrapper>
       </TaskInfoWrapper>
