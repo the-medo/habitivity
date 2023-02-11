@@ -1,5 +1,4 @@
 import React, { Fragment, useCallback, useMemo } from 'react';
-import { RowGapCentered } from './RowGapCentered';
 import { Divider, Statistic } from 'antd';
 import Overview from './Overview';
 import { Dayjs } from 'dayjs';
@@ -10,6 +9,7 @@ import styled from 'styled-components';
 import { TaskType } from '../../types/Tasks';
 import { useDispatch } from 'react-redux';
 import { setSelectedDay } from '../../screens/screenSlice';
+import { RowGapCentered } from './RowGap';
 
 const StatisticStyled = styled(Statistic)`
   min-width: 7rem;

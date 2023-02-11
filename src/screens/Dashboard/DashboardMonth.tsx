@@ -10,6 +10,9 @@ import LineDashboardOverview from './DashboardOverview/LineDashboardOverview';
 import StatisticBox from '../../components/global/StatisticBox';
 import { setDateRange, setSelectedDay } from '../screenSlice';
 import { GraphView } from '../../types/GraphView';
+import DashboardDayWrapper from './DashboardOverview/DashboardDayWrapper';
+import { RowGapWrap } from '../../components/global/RowGap';
+import { WrapperColumn } from '../../components/global/Wrapper';
 
 const DashboardMonth: React.FC = () => {
   const dispatch = useDispatch();
@@ -46,25 +49,30 @@ const DashboardMonth: React.FC = () => {
   );
 
   return (
-    <>
-      <StatisticBox
-        isUnits={false}
-        description="Data for last 30 days, up until yesterday"
-        includeLastDay={false}
-      />
-      <LineDashboardOverview
-        taskGroup={taskGroup}
-        task={task}
-        groupsOrTasks={groupsOrTasks}
-        dateRange={dateRange}
-        completedDaysData={lastMonthData}
-        taskInfo={existingTasks}
-        taskGroupInfo={existingGroups}
-        stacked={stacked}
-        selectedDay={selectedDay}
-        setSelectedDay={setSelectedDayHandler}
-      />
-    </>
+    <RowGapWrap $gap="1rem">
+      <WrapperColumn $gap="1rem" $basis="45rem" $grow={1}>
+        <LineDashboardOverview
+          taskGroup={taskGroup}
+          task={task}
+          groupsOrTasks={groupsOrTasks}
+          dateRange={dateRange}
+          completedDaysData={lastMonthData}
+          taskInfo={existingTasks}
+          taskGroupInfo={existingGroups}
+          stacked={stacked}
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDayHandler}
+        />
+        <StatisticBox
+          isUnits={false}
+          description="Data for last 30 days, up until yesterday"
+          includeLastDay={false}
+        />
+      </WrapperColumn>
+      <WrapperColumn $gap="1rem" $basis="20rem" $grow={15}>
+        <DashboardDayWrapper />
+      </WrapperColumn>
+    </RowGapWrap>
   );
 };
 

@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { OverviewBoxColumn } from './OverviewBox';
 import { DateRange, dateRangeStringToDayjs } from '../../helpers/types/DateRange';
-import { RowGapCentered } from './RowGapCentered';
 import { StyledStatistic } from './StyledStatistic';
+import { RowGapCentered } from './RowGap';
 
 const DateRow = styled.div`
   background-color: white;

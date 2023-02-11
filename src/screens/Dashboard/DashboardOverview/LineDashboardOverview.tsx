@@ -13,13 +13,11 @@ import { getStatsInDateRange } from '../../../helpers/points/getStatsInDateRange
 import { useSelectedTaskListId } from '../../../hooks/useSelectedTaskListId';
 import { formatPoints } from '../../../helpers/numbers/formatPoints';
 import styled from 'styled-components';
-import DashboardDayWrapper from './DashboardDayWrapper';
 import { GroupsOrTasks } from '../../../types/GroupsOrTasks';
 
 const WholeWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  flex-grow: 2;
   flex-basis: 20rem;
   padding: 1rem;
   width: 100%;
@@ -252,6 +250,7 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
       axisBottom: {
         format: '%b %d',
         tickValues: 'every 1 day',
+        tickRotation: -45,
       },
       defs: [linearGradient],
       fill: [{ match: '*', id: 'gradientA' }],
@@ -273,7 +272,6 @@ const LineDashboardOverview: React.FC<LineDashboardOverviewProps> = ({
           sliceTooltip={sliceTooltip}
         />
       </LineWrapper>
-      <DashboardDayWrapper />
     </WholeWrapper>
   );
 };

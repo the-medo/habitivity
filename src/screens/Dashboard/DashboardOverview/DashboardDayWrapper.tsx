@@ -54,7 +54,6 @@ const DashboardDayWrapper: React.FC = () => {
     <OverviewBoxColumn>
       <DateWrapper>{dayjsDate.format('dddd, MMMM D, YYYY')}</DateWrapper>
       <TaskInfoWrapper>
-        <DayStats date={date} completedDayData={completedDayData} />
         <DayGraphWrapper>
           <DayPieGraph
             dayPieGraphDisplayType={dayPieGraphDisplayType}
@@ -63,6 +62,7 @@ const DashboardDayWrapper: React.FC = () => {
             taskGroup={taskGroup}
           />
         </DayGraphWrapper>
+        <DayStats date={date} completedDayData={completedDayData} />
       </TaskInfoWrapper>
     </OverviewBoxColumn>
   );

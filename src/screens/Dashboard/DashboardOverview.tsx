@@ -7,30 +7,18 @@ import { useGetCompletedDaysQuery, useGetTasksByTaskListQuery } from '../../apis
 import dayjs, { Dayjs } from 'dayjs';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 import DayOverview from './DashboardOverview/DayOverview';
-import { RowGap } from '../../components/global/RowGap';
+import { RowGapCentered, RowGapWrap } from '../../components/global/RowGap';
 import { useGetTaskGroupsByTaskListQuery } from '../../apis/apiTaskGroup';
 import LineDashboardOverview from './DashboardOverview/LineDashboardOverview';
 import { getDateRange } from '../../helpers/date/getDateRange';
 import { SegmentedLabeledOption } from 'antd/es/segmented';
 import { Segmented } from '../../components/global/Segmented';
-import { RowGapCentered } from '../../components/global/RowGapCentered';
 import StatisticBox from '../../components/global/StatisticBox';
 import { Button } from 'antd';
 import { GraphView } from '../../types/GraphView';
 import { setDateRange, setSelectedDay } from '../screenSlice';
-
-const OverviewWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex-basis: 20rem;
-  flex-grow: 1;
-`;
-
-const Row1 = styled(RowGap)`
-  gap: 1rem;
-  flex-wrap: wrap;
-`;
+import DashboardDayWrapper from './DashboardOverview/DashboardDayWrapper';
+import { WrapperColumn } from '../../components/global/Wrapper';
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -115,8 +103,25 @@ const DashboardOverview: React.FC = () => {
   );
 
   return (
-    <Row1>
-      <OverviewWrapper>
+    <RowGapWrap $gap="1rem">
+      <WrapperColumn $grow={1} $basis="45rem">
+        <LineDashboardOverview
+          taskGroup={taskGroup}
+          task={task}
+          groupsOrTasks={groupsOrTasks}
+          dateRange={dateRange}
+          completedDaysData={lastWeekData}
+          taskInfo={existingTasks}
+          taskGroupInfo={existingGroups}
+          stacked={stacked}
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDayHandler}
+        />
+        <StatisticBox
+          isUnits={displayUnits}
+          description="Data for last 7 days, up until yesterday"
+          includeLastDay={false}
+        />
         <RowGapCentered>
           <Segmented
             options={segmentedAverageOptions}
@@ -133,11 +138,6 @@ const DashboardOverview: React.FC = () => {
             />
           )}
         </RowGapCentered>
-        <StatisticBox
-          isUnits={displayUnits}
-          description="Data for last 7 days, up until yesterday"
-          includeLastDay={false}
-        />
         {days.map(
           (day, i) =>
             (showAllDays || i < 3) && (
@@ -156,20 +156,11 @@ const DashboardOverview: React.FC = () => {
             {showAllDays ? 'Hide last 4 days' : 'Show whole week'}
           </Button>
         </ButtonWrapper>
-      </OverviewWrapper>
-      <LineDashboardOverview
-        taskGroup={taskGroup}
-        task={task}
-        groupsOrTasks={groupsOrTasks}
-        dateRange={dateRange}
-        completedDaysData={lastWeekData}
-        taskInfo={existingTasks}
-        taskGroupInfo={existingGroups}
-        stacked={stacked}
-        selectedDay={selectedDay}
-        setSelectedDay={setSelectedDayHandler}
-      />
-    </Row1>
+      </WrapperColumn>
+      <WrapperColumn $basis="20rem" $grow={15}>
+        <DashboardDayWrapper />
+      </WrapperColumn>
+    </RowGapWrap>
   );
 };
 
