@@ -99,7 +99,11 @@ const CalendarComponent: React.FC = () => {
   return (
     <Spin spinning={isFetching}>
       <StatisticBox description="" isUnits={false} />
-      <CalendarStyled dateCellRender={dateCellRender} onSelect={onSelectHandler} />
+      <CalendarStyled
+        dateCellRender={dateCellRender}
+        onSelect={onSelectHandler}
+        value={dayjs(selectedDay)}
+      />
     </Spin>
   );
 };
