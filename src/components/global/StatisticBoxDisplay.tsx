@@ -4,6 +4,8 @@ import { OverviewBoxColumn } from './OverviewBox';
 import { DateRange, dateRangeStringToDayjs } from '../../helpers/types/DateRange';
 import { StyledStatistic } from './StyledStatistic';
 import { RowGapCentered } from './RowGap';
+import { SegmentedLabeledOption } from 'antd/es/segmented';
+import { Segmented } from './Segmented';
 
 const DateRow = styled.div`
   background-color: white;
@@ -27,6 +29,17 @@ const DateRowDescription = styled.span`
   font-style: italic;
 `;
 
+const segmentedUnitOptions: SegmentedLabeledOption[] = [
+  {
+    label: 'Show points',
+    value: 'points',
+  },
+  {
+    label: 'Show values',
+    value: 'units',
+  },
+];
+
 interface StatisticBoxProps {
   dateRange: DateRange;
   description?: string;
@@ -34,6 +47,8 @@ interface StatisticBoxProps {
   total?: number | string;
   max?: number | string;
   average?: number | string;
+  displayUnits?: boolean;
+  setDisplayUnits?: (value: SegmentedLabeledOption['value']) => void;
 }
 
 const StatisticBoxDisplay: React.FC<StatisticBoxProps> = ({
@@ -43,6 +58,8 @@ const StatisticBoxDisplay: React.FC<StatisticBoxProps> = ({
   total,
   max,
   average,
+  displayUnits,
+  setDisplayUnits,
 }) => {
   const dates = useMemo(() => dateRangeStringToDayjs(dateRange), [dateRange]);
 
@@ -54,6 +71,15 @@ const StatisticBoxDisplay: React.FC<StatisticBoxProps> = ({
         </DateRowDates>
         {description && <DateRowDescription>{description}</DateRowDescription>}
       </DateRow>
+
+      {setDisplayUnits !== undefined && (
+        <Segmented
+          options={segmentedUnitOptions}
+          onChange={setDisplayUnits}
+          value={displayUnits ? 'units' : 'points'}
+          block
+        />
+      )}
       <RowGapCentered>
         <StyledStatistic title="&nbsp;" value={`${units}:`} />
         {total !== undefined && <StyledStatistic title="Total" value={total} precision={2} />}

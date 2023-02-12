@@ -64,7 +64,6 @@ const DashboardMonth: React.FC = () => {
           setSelectedDay={setSelectedDayHandler}
         />
         <StatisticBox
-          isUnits={false}
           description="Data for last 30 days, up until yesterday"
           includeLastDay={false}
         />

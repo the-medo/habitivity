@@ -98,7 +98,7 @@ const CalendarComponent: React.FC = () => {
 
   return (
     <Spin spinning={isFetching}>
-      <StatisticBox description="" isUnits={false} />
+      <StatisticBox description="" />
       <CalendarStyled
         dateCellRender={dateCellRender}
         onSelect={onSelectHandler}

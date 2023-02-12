@@ -93,9 +93,6 @@ const MenuLeft: React.FC = () => {
 
   useEffect(() => {
     if (isReady) {
-      console.log('READY!');
-      console.log('completedDay', completedDay);
-
       const menuItems: MenuLeftItem[] = existingGroups
         .map(g => {
           const result: MenuLeftItem[] = [];

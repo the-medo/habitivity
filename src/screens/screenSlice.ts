@@ -12,6 +12,7 @@ export interface ScreenState {
   segmentGraphView?: GraphView;
   dateRange: DateRange;
   selectedDay: string;
+  displayUnits: boolean;
 }
 
 const initialState: ScreenState = {
@@ -24,6 +25,7 @@ const initialState: ScreenState = {
     endDate: dayjs().format('YYYY-MM-DD'),
   },
   selectedDay: dayjs().format('YYYY-MM-DD'),
+  displayUnits: false,
 };
 
 export const screenSlice = createSlice({
@@ -57,6 +59,9 @@ export const screenSlice = createSlice({
     setSelectedDay: (state, action: PayloadAction<string>) => {
       state.selectedDay = action.payload;
     },
+    setDisplayUnits: (state, action: PayloadAction<boolean>) => {
+      state.displayUnits = action.payload;
+    },
   },
 });
 
@@ -67,6 +72,7 @@ export const {
   setSegmentGraphView,
   setSelectedDay,
   setDateRange,
+  setDisplayUnits,
 } = screenSlice.actions;
 
 export const screenReducer = screenSlice.reducer;

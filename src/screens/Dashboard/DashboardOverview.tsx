@@ -55,7 +55,6 @@ const DashboardOverview: React.FC = () => {
   const { data: existingGroups } = useGetTaskGroupsByTaskListQuery(selectedTaskListId);
 
   const [displayAverage, setDisplayAverage] = useState(false);
-  const [displayUnits, setDisplayUnits] = useState(false);
   const [showAllDays, setShowAllDays] = useState(false);
 
   useEffect(() => {
@@ -68,6 +67,7 @@ const DashboardOverview: React.FC = () => {
     );
   }, [dispatch]);
 
+  const displayUnits = useSelector((state: ReduxState) => state.screen.displayUnits);
   const dateRange = useSelector((state: ReduxState) => state.screen.dateRange);
   const taskGroup = useSelector((state: ReduxState) => state.screen.segmentTaskGroup);
   const task = useSelector((state: ReduxState) => state.screen.segmentTask);
@@ -86,11 +86,6 @@ const DashboardOverview: React.FC = () => {
 
   const handleSegmentedAverage = useCallback(
     (value: SegmentedLabeledOption['value']) => setDisplayAverage(value === 'average'),
-    [],
-  );
-
-  const handleSegmentedUnits = useCallback(
-    (value: SegmentedLabeledOption['value']) => setDisplayUnits(value === 'units'),
     [],
   );
 
@@ -118,7 +113,6 @@ const DashboardOverview: React.FC = () => {
           setSelectedDay={setSelectedDayHandler}
         />
         <StatisticBox
-          isUnits={displayUnits}
           description="Data for last 7 days, up until yesterday"
           includeLastDay={false}
         />
@@ -129,14 +123,6 @@ const DashboardOverview: React.FC = () => {
             value={displayAverage ? 'average' : 'daily-trend'}
             block
           />
-          {task !== 'all' && (
-            <Segmented
-              options={segmentedUnitOptions}
-              onChange={handleSegmentedUnits}
-              value={displayUnits ? 'units' : 'points'}
-              block
-            />
-          )}
         </RowGapCentered>
         {days.map(
           (day, i) =>

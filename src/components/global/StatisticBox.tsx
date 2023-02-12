@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { getStatsInDateRange } from '../../helpers/points/getStatsInDateRange';
 import { useSelectedTaskListId } from '../../hooks/useSelectedTaskListId';
 import StatisticBoxDisplay from './StatisticBoxDisplay';
@@ -12,22 +12,21 @@ import {
   taskTypesWithUnitMax,
   taskTypesWithUnitTotal,
 } from '../../helpers/types/TaskTypeOperations';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../store';
+import { SegmentedLabeledOption } from 'antd/es/segmented';
+import { setDisplayUnits } from '../../screens/screenSlice';
 
 interface DashboardStatBoxProps {
   description: string;
-  isUnits: boolean;
   includeLastDay?: boolean;
 }
 
-const StatisticBox: React.FC<DashboardStatBoxProps> = ({
-  description,
-  isUnits,
-  includeLastDay = true,
-}) => {
+const StatisticBox: React.FC<DashboardStatBoxProps> = ({ description, includeLastDay = true }) => {
   const selectedTaskListId = useSelectedTaskListId();
+  const dispatch = useDispatch();
 
+  const displayUnits = useSelector((state: ReduxState) => state.screen.displayUnits);
   const dateRange = useSelector((state: ReduxState) => state.screen.dateRange);
   const taskGroup = useSelector((state: ReduxState) => state.screen.segmentTaskGroup);
   const task = useSelector((state: ReduxState) => state.screen.segmentTask);
@@ -40,11 +39,18 @@ const StatisticBox: React.FC<DashboardStatBoxProps> = ({
     return existingTasks?.find(t => t.id === task);
   }, [task, existingTasks]);
 
+  const handleSegmentedUnits = useCallback(
+    (value: SegmentedLabeledOption['value']) => {
+      dispatch(setDisplayUnits(value === 'units'));
+    },
+    [dispatch],
+  );
+
   const units = useMemo(() => {
-    if (!isUnits || task === 'all') return 'Points';
+    if (!displayUnits || task === 'all') return 'Points';
     if (taskDefinition) return getTaskUnit(taskDefinition);
     return 'Points';
-  }, [isUnits, task, taskDefinition]);
+  }, [displayUnits, task, taskDefinition]);
 
   const data = useMemo(() => {
     if (selectedTaskListId && completedDaysData) {
@@ -54,13 +60,11 @@ const StatisticBox: React.FC<DashboardStatBoxProps> = ({
         selectedTaskListId,
         taskGroup,
         task,
-        useUnits: isUnits,
+        useUnits: displayUnits,
         includeLastDay,
       });
 
-      console.log('STATS:', task, taskGroup, stats);
-
-      if (isUnits && task !== 'all' && taskDefinition) {
+      if (displayUnits && task !== 'all' && taskDefinition) {
         if (!taskTypesWithUnitAverages.includes(taskDefinition.taskType)) stats.avg = undefined;
         if (!taskTypesWithUnitTotal.includes(taskDefinition.taskType)) stats.total = undefined;
         if (!taskTypesWithUnitMax.includes(taskDefinition.taskType)) stats.max = undefined;
@@ -71,7 +75,7 @@ const StatisticBox: React.FC<DashboardStatBoxProps> = ({
   }, [
     completedDaysData,
     dateRange,
-    isUnits,
+    displayUnits,
     selectedTaskListId,
     task,
     taskDefinition,
@@ -84,10 +88,11 @@ const StatisticBox: React.FC<DashboardStatBoxProps> = ({
       if (taskTypesWithNumericUnits.includes(taskDefinition.taskType)) {
         return (value: number) => value.toString();
       }
-      return (value: number) => (isUnits ? formatUnits(taskDefinition, value) : value.toString());
+      return (value: number) =>
+        displayUnits ? formatUnits(taskDefinition, value) : value.toString();
     }
     return (value: number) => value.toString();
-  }, [isUnits, taskDefinition]);
+  }, [displayUnits, taskDefinition]);
 
   const loading = useMemo(
     () => isFetchingTasks || !completedDaysData || !selectedTaskListId,
@@ -97,9 +102,11 @@ const StatisticBox: React.FC<DashboardStatBoxProps> = ({
   return (
     <Spin spinning={loading}>
       <StatisticBoxDisplay
+        displayUnits={task !== 'all' ? displayUnits : false}
+        setDisplayUnits={task !== 'all' ? handleSegmentedUnits : undefined}
         dateRange={data?.dateRange ?? dateRange}
         description={description}
-        units={isUnits ? units : 'Points'}
+        units={displayUnits ? units : 'Points'}
         total={data?.total !== undefined ? formatter(data.total) : '-'}
         max={data?.max !== undefined ? formatter(data.max) : '-'}
         average={data?.avg !== undefined ? formatter(data.avg) : '-'}
