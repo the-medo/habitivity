@@ -15,9 +15,11 @@ import dayjs from 'dayjs';
 //needed because of Antd datepicker
 import weekday from 'dayjs/plugin/weekday';
 import localeData from 'dayjs/plugin/localeData';
+import isBetween from 'dayjs/plugin/isBetween';
 
 dayjs.extend(weekday);
 dayjs.extend(localeData);
+dayjs.extend(isBetween);
 
 const App: React.FC = () => {
   const dispatch: ReduxDispatch = useDispatch();

@@ -21,8 +21,7 @@ import {
 import { DayEditModeFormFields } from '../screens/Day/TaskGroup/DayEditMode';
 import { CompletedDay, completedDayConverter, CompletedDays } from '../helpers/types/CompletedDay';
 import { DateRange } from '../helpers/types/DateRange';
-
-// import DocumentReference = firebase.firestore.DocumentReference;
+import dayjs from 'dayjs';
 
 interface CreateTaskPayload {
   newTask: Omit<Task, 'id'>;
@@ -58,7 +57,6 @@ export const apiTask = apiSlice
     endpoints: builder => ({
       getTasksByTaskList: builder.query<Task[], string | undefined>({
         queryFn: async (taskListId, api) => {
-          console.log('======== API ============ inside getTasks ====================');
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
 
@@ -101,6 +99,7 @@ export const apiTask = apiSlice
         queryFn: async ({ startDate, endDate }, api) => {
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
+          console.log('=== getCompletedDays ===', startDate, endDate);
 
           try {
             const data: CompletedDays = {};
@@ -131,7 +130,6 @@ export const apiTask = apiSlice
 
       createTask: builder.mutation<Task, CreateTaskPayload>({
         queryFn: async ({ newTask, taskId }, api) => {
-          console.log('======== API ============ inside createTask ====================');
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
 
@@ -232,7 +230,6 @@ export const apiTask = apiSlice
         queryFn: async ({ task, date, points, value, usedModifiers }, api) => {
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
-          console.log('=========== INSIDE completeTask ===========');
 
           const patch = {
             points,
@@ -241,23 +238,18 @@ export const apiTask = apiSlice
               percentage: null,
             },
           };
-          console.log('== patch ', patch);
 
           const completedTask: TaskCompleted = {
             ...task,
             ...patch,
             date,
           };
-          console.log('== completedTask ', completedTask);
 
           const completedTaskRefPath = `/Users/${userId}/CompletedTasks/${date}-${task.id}`;
           const completedDayRefPath = `/Users/${userId}/CompletedDays/${date}`;
 
           try {
             const batch = writeBatch(db);
-            console.log('== batch ', batch);
-            console.log('== refIds ', completedTaskRefPath, completedDayRefPath);
-
             const completedDayRef = doc(db, completedDayRefPath).withConverter(
               completedDayConverter,
             );
@@ -279,7 +271,6 @@ export const apiTask = apiSlice
             if (completedDaySnap.exists()) {
               completedDay = completedDaySnap.data();
             }
-            console.log('== completedDay ', completedDay);
 
             const taskCompletedRef = doc(db, completedTaskRefPath).withConverter(
               taskCompletedConverter,
@@ -288,16 +279,13 @@ export const apiTask = apiSlice
             const taskCompletedSnap = await getDoc(taskCompletedRef);
             let pointDifference;
             if (taskCompletedSnap.exists()) {
-              console.log('== taskCompletedSnap exists!!! - will update');
               const taskCompletedOld = taskCompletedSnap.data();
               batch.update(taskCompletedRef, patch);
               pointDifference = patch.points - taskCompletedOld.points;
             } else {
-              console.log('== taskCompletedSnap doesnt exist - will set');
               batch.set(taskCompletedRef, completedTask);
               pointDifference = patch.points;
             }
-            console.log('== pointDifference', pointDifference);
 
             if (pointDifference !== 0) {
               completedDay.taskLists[task.taskListId] =
@@ -309,7 +297,6 @@ export const apiTask = apiSlice
               ...completedDay.tasks,
               [task.id]: patch,
             };
-            console.log('== NEW completedDay ', completedDay);
 
             batch.set(completedDayRef, completedDay);
 
@@ -320,7 +307,35 @@ export const apiTask = apiSlice
             return { error: e };
           }
         },
-        invalidatesTags: (result, error, arg) => [{ type: 'CompletedDay', id: arg.date }],
+        invalidatesTags: (result, error, arg) => {
+          const invalidateThis: { type: 'CompletedDay'; id: string }[] = [];
+          const djs = dayjs(arg.date);
+          const today = dayjs();
+
+          invalidateThis.push({ type: 'CompletedDay', id: arg.date });
+          invalidateThis.push({
+            type: 'CompletedDay',
+            id: `${djs.startOf('month').format('YYYY-MM-DD')}-${djs
+              .endOf('month')
+              .format('YYYY-MM-DD')}`,
+          });
+
+          const rangesToCheck = [
+            { start: today.subtract(7, 'day'), end: today },
+            { start: today.subtract(31, 'day'), end: today },
+          ];
+
+          rangesToCheck.forEach(range => {
+            if (djs.isBetween(range.start, range.end, 'day', '[]')) {
+              invalidateThis.push({
+                type: 'CompletedDay',
+                id: `${range.start.format('YYYY-MM-DD')}-${range.end.format('YYYY-MM-DD')}`,
+              });
+            }
+          });
+
+          return invalidateThis;
+        },
       }),
     }),
   });
