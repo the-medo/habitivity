@@ -79,6 +79,15 @@ const MenuTop: React.FC = () => {
                 </TopMenuNavLink>
               ),
             },
+            {
+              key: 'journal',
+              label: (
+                <TopMenuNavLink to={`/${selectedTaskListId}/journal`}>
+                  <DynamicIcon icon="BsJournalText" />
+                  Journal
+                </TopMenuNavLink>
+              ),
+            },
           ]
         : [],
     [selectedTaskListId],

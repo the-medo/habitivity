@@ -17,6 +17,8 @@ import DashboardMonth from '../screens/Dashboard/DashboardMonth';
 import DashboardTargets from '../screens/Dashboard/DashboardTargets';
 import DashboardDefault from '../screens/Dashboard/DashboardDefault';
 import CalendarDefault from '../screens/Calendar/CalendarDefault';
+import Journal from '../screens/Journal/Journal';
+import JournalDefault from '../screens/Journal/JournalDefault';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,6 +35,9 @@ export const router = createBrowserRouter(
         </Route>
         <Route path="day" element={<Day />}>
           <Route index element={<DayDefault />} />
+        </Route>
+        <Route path="journal" element={<Journal />}>
+          <Route index element={<JournalDefault />} />
         </Route>
         <Route path="new-task/:taskGroupId?" element={<TaskCreate />}></Route>
         <Route path="calendar" element={<Calendar />}>
