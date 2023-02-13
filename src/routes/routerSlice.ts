@@ -8,6 +8,7 @@ export enum AvailablePages {
   NEW_TASK = 'new-task',
   CALENDAR = 'calendar',
   SETTINGS = 'settings',
+  JOURNAL = 'journal',
 }
 
 export interface RouterState {

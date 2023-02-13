@@ -6,7 +6,7 @@ import DayTaskGroup from './TaskGroup/DayTaskGroup';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../../store';
 import Title from 'antd/es/typography/Title';
-import { Avatar, Button, Card, DatePicker, Radio, RadioChangeEvent, Tooltip } from 'antd';
+import { Button, DatePicker, Radio, RadioChangeEvent, Tooltip } from 'antd';
 import { setDisplayMode, setSelectedDate, toggleEditMode } from './daySlice';
 import { RowGap } from '../../components/global/RowGap';
 import { TaskDisplayMode } from '../../components/global/TaskComponent/TaskComponent';
@@ -21,7 +21,6 @@ import TaskComponentWrapper, {
   TaskComponentWrapperRow,
 } from '../../components/global/TaskComponent/TaskComponentWrapper';
 import DayPieGraphWrapper from './TaskGroup/DayPieGraphWrapper';
-import TaskUserInputTime from '../../components/global/TaskComponent/TaskUserInput/TaskUserInputTime';
 
 const DayTaskGroupWrapper = styled.div`
   display: flex;
@@ -63,10 +62,13 @@ const DayDefault: React.FC = () => {
   );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onDateChange = useCallback((value: any) => {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    if (value !== null) dispatch(setSelectedDate((value as Dayjs).format('YYYY-MM-DD')));
-  }, []);
+  const onDateChange = useCallback(
+    (value: any) => {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      if (value !== null) dispatch(setSelectedDate((value as Dayjs).format('YYYY-MM-DD')));
+    },
+    [dispatch],
+  );
 
   return (
     <DayTaskGroupWrapper>
