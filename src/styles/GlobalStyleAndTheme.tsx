@@ -4,6 +4,7 @@ import { TopMenuNavLink } from '../components/menu/MenuTop/MenuTopComponents';
 import { COLORS, STYLE } from './CustomStyles';
 import { ConfigProvider } from 'antd';
 import { ConfigProviderProps } from 'antd/es/config-provider';
+import { EditorStyle } from '../components/global/Editor/EditorStyle';
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -101,6 +102,7 @@ const GlobalStyleAndTheme: React.FC<GlobalStyleAndThemeProps> = ({ children }) =
   return (
     <ConfigProvider theme={theme}>
       <GlobalStyle to="/" />
+      <EditorStyle />
       {children}
     </ConfigProvider>
   );
