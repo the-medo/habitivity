@@ -6,10 +6,11 @@ import {
   $isRangeSelection,
   INDENT_CONTENT_COMMAND,
   COMMAND_PRIORITY_HIGH,
+  RangeSelection,
 } from 'lexical';
 import { useEffect } from 'react';
 
-function getElementNodesInSelection(selection) {
+function getElementNodesInSelection(selection: RangeSelection) {
   const nodesInSelection = selection.getNodes();
 
   if (nodesInSelection.length === 0) {
@@ -22,7 +23,7 @@ function getElementNodesInSelection(selection) {
   return new Set(nodesInSelection.map(n => ($isElementNode(n) ? n : n.getParentOrThrow())));
 }
 
-function isIndentPermitted(maxDepth) {
+function isIndentPermitted(maxDepth: number) {
   const selection = $getSelection();
 
   if (!$isRangeSelection(selection)) {
@@ -51,7 +52,11 @@ function isIndentPermitted(maxDepth) {
   return totalDepth <= maxDepth;
 }
 
-export default function ListMaxIndentLevelPlugin({ maxDepth }) {
+interface ListMaxIndentLevelPluginProps {
+  maxDepth?: number;
+}
+
+const ListMaxIndentLevelPlugin = ({ maxDepth }: ListMaxIndentLevelPluginProps): null => {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
@@ -63,4 +68,6 @@ export default function ListMaxIndentLevelPlugin({ maxDepth }) {
   }, [editor, maxDepth]);
 
   return null;
-}
+};
+
+export default ListMaxIndentLevelPlugin;
