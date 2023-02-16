@@ -295,10 +295,12 @@ export const EditorStyle = createGlobalStyle`
     padding: 8px;
     cursor: pointer;
     vertical-align: middle;
+    font-size: 18px;
   }
 
   .toolbar button.toolbar-item:disabled {
     cursor: not-allowed;
+    opacity: 0.2;
   }
 
   .toolbar button.toolbar-item.spaced {
@@ -307,7 +309,7 @@ export const EditorStyle = createGlobalStyle`
 
   .toolbar button.toolbar-item i.format {
     background-size: contain;
-    display: inline-block;
+    //display: inline-block;
     height: 18px;
     width: 18px;
     margin-top: 2px;

@@ -8,6 +8,15 @@ import {
 } from '@lexical/list';
 import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
 import { $createCodeNode } from '@lexical/code';
+import {
+  BsChatSquareQuote,
+  BsCode,
+  BsListOl,
+  BsListUl,
+  BsTextParagraph,
+  BsTypeH1,
+  BsTypeH2,
+} from 'react-icons/bs';
 
 interface BlockOptionsDropdownListProps {
   editor: LexicalEditor;
@@ -142,37 +151,51 @@ const BlockOptionsDropdownList = ({
   return (
     <div className="dropdown" ref={dropDownRef}>
       <button className="item" onClick={formatParagraph}>
-        <span className="icon paragraph" />
+        <span className="icon">
+          <BsTextParagraph />
+        </span>
         <span className="text">Normal</span>
         {blockType === 'paragraph' && <span className="active" />}
       </button>
       <button className="item" onClick={formatLargeHeading}>
-        <span className="icon large-heading" />
+        <span className="icon">
+          <BsTypeH1 />
+        </span>
         <span className="text">Large Heading</span>
         {blockType === 'h1' && <span className="active" />}
       </button>
       <button className="item" onClick={formatSmallHeading}>
-        <span className="icon small-heading" />
+        <span className="icon">
+          <BsTypeH2 />
+        </span>
         <span className="text">Small Heading</span>
         {blockType === 'h2' && <span className="active" />}
       </button>
       <button className="item" onClick={formatBulletList}>
-        <span className="icon bullet-list" />
+        <span className="icon">
+          <BsListUl />
+        </span>
         <span className="text">Bullet List</span>
         {blockType === 'ul' && <span className="active" />}
       </button>
       <button className="item" onClick={formatNumberedList}>
-        <span className="icon numbered-list" />
+        <span className="icon">
+          <BsListOl />
+        </span>
         <span className="text">Numbered List</span>
         {blockType === 'ol' && <span className="active" />}
       </button>
       <button className="item" onClick={formatQuote}>
-        <span className="icon quote" />
+        <span className="icon">
+          <BsChatSquareQuote />
+        </span>
         <span className="text">Quote</span>
         {blockType === 'quote' && <span className="active" />}
       </button>
       <button className="item" onClick={formatCode}>
-        <span className="icon code" />
+        <span className="icon">
+          <BsCode />
+        </span>
         <span className="text">Code Block</span>
         {blockType === 'code' && <span className="active" />}
       </button>
