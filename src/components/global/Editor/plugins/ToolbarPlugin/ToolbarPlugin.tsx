@@ -22,23 +22,89 @@ import { $isCodeNode, getDefaultCodeLanguage, getCodeLanguages } from '@lexical/
 import BlockOptionsDropdownList from './BlockOptionsDropdownList';
 import { getSelectedNode } from './getSelectedNode';
 import FloatingLinkEditor from './FloatingLinkEditor';
+import {
+  BsArrowCounterclockwise,
+  BsChevronDown,
+  BsCode,
+  BsJustify,
+  BsLink,
+  BsTextCenter,
+  BsTextLeft,
+  BsTextRight,
+  BsTypeBold,
+  BsTypeItalic,
+  BsTypeStrikethrough,
+  BsTypeUnderline,
+} from 'react-icons/bs';
+import DynamicIcon from '../../../DynamicIcon';
 
 export const LOW_PRIORITY = 1;
 
 const supportedBlockTypes = new Set(['paragraph', 'quote', 'code', 'h1', 'h2', 'ul', 'ol']);
 
-const blockTypeToBlockName = {
-  code: 'Code Block',
-  h1: 'Large Heading',
-  h2: 'Small Heading',
-  h3: 'Heading',
-  h4: 'Heading',
-  h5: 'Heading',
-  h6: 'Heading',
-  ol: 'Numbered List',
-  paragraph: 'Normal',
-  quote: 'Quote',
-  ul: 'Bulleted List',
+type BlockType =
+  | 'code'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'ol'
+  | 'paragraph'
+  | 'quote'
+  | 'ul';
+
+interface BlockTypeInfo {
+  name: string;
+  iconName: string;
+}
+
+const blockTypeToBlockName: Record<BlockType, BlockTypeInfo> = {
+  code: {
+    name: 'Code Block',
+    iconName: 'BsCode',
+  },
+  h1: {
+    name: 'Large Heading',
+    iconName: 'BsTypeH1',
+  },
+  h2: {
+    name: 'Small Heading',
+    iconName: 'BsTypeH2',
+  },
+  h3: {
+    name: 'Heading',
+    iconName: 'BsTypeH3',
+  },
+  h4: {
+    name: 'Heading',
+    iconName: 'BsTypeH4',
+  },
+  h5: {
+    name: 'Heading',
+    iconName: 'BsTypeH5',
+  },
+  h6: {
+    name: 'Heading',
+    iconName: 'BsTypeH6',
+  },
+  ul: {
+    name: 'Bulleted List',
+    iconName: 'BsListUl',
+  },
+  ol: {
+    name: 'Numbered List',
+    iconName: 'BsListOl',
+  },
+  paragraph: {
+    name: 'Normal',
+    iconName: 'BsTextParagraph',
+  },
+  quote: {
+    name: 'Quote',
+    iconName: 'BsChatSquareQuote',
+  },
 };
 
 const Divider = () => <div className="divider" />;
@@ -62,8 +128,6 @@ const Select = ({ onChange, className, options, value }: SelectProps) => {
     </select>
   );
 };
-
-type BlockType = keyof typeof blockTypeToBlockName;
 
 const ToolbarPlugin = (): JSX.Element => {
   const [editor] = useLexicalComposerContext();
@@ -242,10 +306,11 @@ const ToolbarPlugin = (): JSX.Element => {
         className="toolbar-item spaced"
         aria-label="Undo"
       >
-        <i className="format undo" />
+        <BsArrowCounterclockwise />
+        {/*<DynamicIcon icon="BsArrowCounterclockwise" />*/}
       </button>
       <button disabled={!canRedo} onClick={redoCallback} className="toolbar-item" aria-label="Redo">
-        <i className="format redo" />
+        <DynamicIcon icon="BsArrowClockwise" small />
       </button>
       <Divider />
       {supportedBlockTypes.has(blockType) && (
@@ -255,9 +320,12 @@ const ToolbarPlugin = (): JSX.Element => {
             onClick={showBlockOptionsDropdownListCallback}
             aria-label="Formatting Options"
           >
-            <span className={'icon block-type ' + blockType} />
-            <span className="text">{blockTypeToBlockName[blockType]}</span>
-            <i className="chevron-down" />
+            <span className={'icon ' + blockType}>
+              <DynamicIcon icon={blockTypeToBlockName[blockType].iconName} />
+            </span>
+            <span className="text">{blockTypeToBlockName[blockType].name}</span>
+            <BsChevronDown />
+            {/*<i className="chevron-down" />*/}
           </button>
           {showBlockOptionsDropDown &&
             createPortal(
@@ -280,7 +348,8 @@ const ToolbarPlugin = (): JSX.Element => {
             options={codeLanguages}
             value={codeLanguage}
           />
-          <i className="chevron-down inside" />
+          <BsChevronDown />
+          {/*<i className="chevron-down inside" />*/}
         </>
       ) : (
         <>
@@ -289,42 +358,48 @@ const ToolbarPlugin = (): JSX.Element => {
             className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
             aria-label="Format Bold"
           >
-            <i className="format bold" />
+            <BsTypeBold />
+            {/*<i className="format bold" />*/}
           </button>
           <button
             onClick={italicTextCallback}
             className={'toolbar-item spaced ' + (isItalic ? 'active' : '')}
             aria-label="Format Italics"
           >
-            <i className="format italic" />
+            <BsTypeItalic />
+            {/*<i className="format italic" />*/}
           </button>
           <button
             onClick={underlineTextCallback}
             className={'toolbar-item spaced ' + (isUnderline ? 'active' : '')}
             aria-label="Format Underline"
           >
-            <i className="format underline" />
+            <BsTypeUnderline />
+            {/*<i className="format underline" />*/}
           </button>
           <button
             onClick={strikethroughTextCallback}
             className={'toolbar-item spaced ' + (isStrikethrough ? 'active' : '')}
             aria-label="Format Strikethrough"
           >
-            <i className="format strikethrough" />
+            <BsTypeStrikethrough />
+            {/*<i className="format strikethrough" />*/}
           </button>
           <button
             onClick={codeTextCallback}
             className={'toolbar-item spaced ' + (isCode ? 'active' : '')}
             aria-label="Insert Code"
           >
-            <i className="format code" />
+            <BsCode />
+            {/*<i className="format code" />*/}
           </button>
           <button
             onClick={insertLink}
             className={'toolbar-item spaced ' + (isLink ? 'active' : '')}
             aria-label="Insert Link"
           >
-            <i className="format link" />
+            <BsLink />
+            {/*<i className="format link" />*/}
           </button>
           {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
           <Divider />
@@ -333,28 +408,32 @@ const ToolbarPlugin = (): JSX.Element => {
             className="toolbar-item spaced"
             aria-label="Left Align"
           >
-            <i className="format left-align" />
+            <BsTextLeft />
+            {/*<i className="format left-align" />*/}
           </button>
           <button
             onClick={centerElementCallback}
             className="toolbar-item spaced"
             aria-label="Center Align"
           >
-            <i className="format center-align" />
+            <BsTextCenter />
+            {/*<i className="format center-align" />*/}
           </button>
           <button
             onClick={rightElementCallback}
             className="toolbar-item spaced"
             aria-label="Right Align"
           >
-            <i className="format right-align" />
+            <BsTextRight />
+            {/*<i className="format right-align" />*/}
           </button>
           <button
             onClick={justifyElementCallback}
             className="toolbar-item"
             aria-label="Justify Align"
           >
-            <i className="format justify-align" />
+            <BsJustify />
+            {/*<i className="format justify-align" />*/}
           </button>{' '}
         </>
       )}
