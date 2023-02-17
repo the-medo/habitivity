@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
@@ -10,7 +10,6 @@ import {
   FORMAT_ELEMENT_COMMAND,
   $getSelection,
   $isRangeSelection,
-  $getNodeByKey,
 } from 'lexical';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { $isParentElementRTL } from '@lexical/selection';
@@ -18,13 +17,11 @@ import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import { $isListNode, ListNode } from '@lexical/list';
 import { createPortal } from 'react-dom';
 import { $isHeadingNode } from '@lexical/rich-text';
-import { $isCodeNode, getDefaultCodeLanguage, getCodeLanguages } from '@lexical/code';
-import BlockOptionsDropdownList from './BlockOptionsDropdownList';
+import { $isCodeNode, getDefaultCodeLanguage } from '@lexical/code';
 import { getSelectedNode } from './getSelectedNode';
 import FloatingLinkEditor from './FloatingLinkEditor';
 import {
   BsArrowCounterclockwise,
-  BsChevronDown,
   BsCode,
   BsJustify,
   BsLink,
@@ -37,97 +34,11 @@ import {
   BsTypeUnderline,
 } from 'react-icons/bs';
 import DynamicIcon from '../../../DynamicIcon';
+import { Divider, Toolbar, ToolbarItemButton } from './toolbarComponents';
+import ToolbarBlockType, { BlockType } from './ToolbarBlockType';
+import SelectCodeLanguage from './SelectCodeLanguage';
 
 export const LOW_PRIORITY = 1;
-
-const supportedBlockTypes = new Set(['paragraph', 'quote', 'code', 'h1', 'h2', 'ul', 'ol']);
-
-type BlockType =
-  | 'code'
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6'
-  | 'ol'
-  | 'paragraph'
-  | 'quote'
-  | 'ul';
-
-interface BlockTypeInfo {
-  name: string;
-  iconName: string;
-}
-
-const blockTypeToBlockName: Record<BlockType, BlockTypeInfo> = {
-  code: {
-    name: 'Code Block',
-    iconName: 'BsCode',
-  },
-  h1: {
-    name: 'Large Heading',
-    iconName: 'BsTypeH1',
-  },
-  h2: {
-    name: 'Small Heading',
-    iconName: 'BsTypeH2',
-  },
-  h3: {
-    name: 'Heading',
-    iconName: 'BsTypeH3',
-  },
-  h4: {
-    name: 'Heading',
-    iconName: 'BsTypeH4',
-  },
-  h5: {
-    name: 'Heading',
-    iconName: 'BsTypeH5',
-  },
-  h6: {
-    name: 'Heading',
-    iconName: 'BsTypeH6',
-  },
-  ul: {
-    name: 'Bulleted List',
-    iconName: 'BsListUl',
-  },
-  ol: {
-    name: 'Numbered List',
-    iconName: 'BsListOl',
-  },
-  paragraph: {
-    name: 'Normal',
-    iconName: 'BsTextParagraph',
-  },
-  quote: {
-    name: 'Quote',
-    iconName: 'BsChatSquareQuote',
-  },
-};
-
-const Divider = () => <div className="divider" />;
-
-interface SelectProps {
-  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  className?: string;
-  options: string[];
-  value: string;
-}
-
-const Select = ({ onChange, className, options, value }: SelectProps) => {
-  return (
-    <select className={className} onChange={onChange} value={value}>
-      <option hidden={true} value="" />
-      {options.map(option => (
-        <option key={option} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  );
-};
 
 const ToolbarPlugin = (): JSX.Element => {
   const [editor] = useLexicalComposerContext();
@@ -136,7 +47,6 @@ const ToolbarPlugin = (): JSX.Element => {
   const [canRedo, setCanRedo] = useState(false);
   const [blockType, setBlockType] = useState<BlockType>('paragraph');
   const [selectedElementKey, setSelectedElementKey] = useState<string | null>(null);
-  const [showBlockOptionsDropDown, setShowBlockOptionsDropDown] = useState(false);
   const [codeLanguage, setCodeLanguage] = useState('');
   const [_, setIsRTL] = useState(false);
   const [isLink, setIsLink] = useState(false);
@@ -225,22 +135,6 @@ const ToolbarPlugin = (): JSX.Element => {
     );
   }, [editor, updateToolbar]);
 
-  const codeLanguages = useMemo(() => getCodeLanguages(), []);
-
-  const onCodeLanguageSelect = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      editor.update(() => {
-        if (selectedElementKey !== null) {
-          const node = $getNodeByKey(selectedElementKey);
-          if ($isCodeNode(node)) {
-            node.setLanguage(e.target.value);
-          }
-        }
-      });
-    },
-    [editor, selectedElementKey],
-  );
-
   const insertLink = useCallback(() => {
     if (!isLink) {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://');
@@ -293,151 +187,71 @@ const ToolbarPlugin = (): JSX.Element => {
     editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify');
   }, [editor]);
 
-  const showBlockOptionsDropdownListCallback = useCallback(
-    () => setShowBlockOptionsDropDown(p => !p),
-    [],
-  );
-
   return (
-    <div className="toolbar" ref={toolbarRef}>
-      <button
-        disabled={!canUndo}
-        onClick={undoCallback}
-        className="toolbar-item spaced"
-        aria-label="Undo"
-      >
+    <Toolbar ref={toolbarRef}>
+      <ToolbarItemButton disabled={!canUndo} onClick={undoCallback} aria-label="Undo">
         <BsArrowCounterclockwise />
-        {/*<DynamicIcon icon="BsArrowCounterclockwise" />*/}
-      </button>
-      <button disabled={!canRedo} onClick={redoCallback} className="toolbar-item" aria-label="Redo">
+      </ToolbarItemButton>
+      <ToolbarItemButton disabled={!canRedo} onClick={redoCallback} aria-label="Redo">
         <DynamicIcon icon="BsArrowClockwise" small />
-      </button>
+      </ToolbarItemButton>
       <Divider />
-      {supportedBlockTypes.has(blockType) && (
-        <>
-          <button
-            className="toolbar-item block-controls"
-            onClick={showBlockOptionsDropdownListCallback}
-            aria-label="Formatting Options"
-          >
-            <span className={'icon ' + blockType}>
-              <DynamicIcon icon={blockTypeToBlockName[blockType].iconName} />
-            </span>
-            <span className="text">{blockTypeToBlockName[blockType].name}</span>
-            <BsChevronDown />
-            {/*<i className="chevron-down" />*/}
-          </button>
-          {showBlockOptionsDropDown &&
-            createPortal(
-              <BlockOptionsDropdownList
-                editor={editor}
-                blockType={blockType}
-                toolbarRef={toolbarRef}
-                setShowBlockOptionsDropDown={setShowBlockOptionsDropDown}
-              />,
-              document.body,
-            )}
-          <Divider />
-        </>
-      )}
+      <ToolbarBlockType blockType={blockType} editor={editor} toolbarRef={toolbarRef} />
       {blockType === 'code' ? (
-        <>
-          <Select
-            className="toolbar-item code-language"
-            onChange={onCodeLanguageSelect}
-            options={codeLanguages}
-            value={codeLanguage}
-          />
-          <BsChevronDown />
-          {/*<i className="chevron-down inside" />*/}
-        </>
+        <SelectCodeLanguage
+          selectedElementKey={selectedElementKey}
+          editor={editor}
+          codeLanguage={codeLanguage}
+        />
       ) : (
         <>
-          <button
-            onClick={boldTextCallback}
-            className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
-            aria-label="Format Bold"
-          >
+          <ToolbarItemButton onClick={boldTextCallback} $active={isBold} aria-label="Format Bold">
             <BsTypeBold />
-            {/*<i className="format bold" />*/}
-          </button>
-          <button
+          </ToolbarItemButton>
+          <ToolbarItemButton
             onClick={italicTextCallback}
-            className={'toolbar-item spaced ' + (isItalic ? 'active' : '')}
+            $active={isItalic}
             aria-label="Format Italics"
           >
             <BsTypeItalic />
-            {/*<i className="format italic" />*/}
-          </button>
-          <button
+          </ToolbarItemButton>
+          <ToolbarItemButton
             onClick={underlineTextCallback}
-            className={'toolbar-item spaced ' + (isUnderline ? 'active' : '')}
+            $active={isUnderline}
             aria-label="Format Underline"
           >
             <BsTypeUnderline />
-            {/*<i className="format underline" />*/}
-          </button>
-          <button
+          </ToolbarItemButton>
+          <ToolbarItemButton
             onClick={strikethroughTextCallback}
-            className={'toolbar-item spaced ' + (isStrikethrough ? 'active' : '')}
+            $active={isStrikethrough}
             aria-label="Format Strikethrough"
           >
             <BsTypeStrikethrough />
-            {/*<i className="format strikethrough" />*/}
-          </button>
-          <button
-            onClick={codeTextCallback}
-            className={'toolbar-item spaced ' + (isCode ? 'active' : '')}
-            aria-label="Insert Code"
-          >
+          </ToolbarItemButton>
+          <ToolbarItemButton onClick={codeTextCallback} $active={isCode} aria-label="Insert Code">
             <BsCode />
-            {/*<i className="format code" />*/}
-          </button>
-          <button
-            onClick={insertLink}
-            className={'toolbar-item spaced ' + (isLink ? 'active' : '')}
-            aria-label="Insert Link"
-          >
+          </ToolbarItemButton>
+          <ToolbarItemButton onClick={insertLink} $active={isLink} aria-label="Insert Link">
             <BsLink />
-            {/*<i className="format link" />*/}
-          </button>
+          </ToolbarItemButton>
           {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
           <Divider />
-          <button
-            onClick={leftElementCallback}
-            className="toolbar-item spaced"
-            aria-label="Left Align"
-          >
+          <ToolbarItemButton onClick={leftElementCallback} aria-label="Left Align">
             <BsTextLeft />
-            {/*<i className="format left-align" />*/}
-          </button>
-          <button
-            onClick={centerElementCallback}
-            className="toolbar-item spaced"
-            aria-label="Center Align"
-          >
+          </ToolbarItemButton>
+          <ToolbarItemButton onClick={centerElementCallback} aria-label="Center Align">
             <BsTextCenter />
-            {/*<i className="format center-align" />*/}
-          </button>
-          <button
-            onClick={rightElementCallback}
-            className="toolbar-item spaced"
-            aria-label="Right Align"
-          >
+          </ToolbarItemButton>
+          <ToolbarItemButton onClick={rightElementCallback} aria-label="Right Align">
             <BsTextRight />
-            {/*<i className="format right-align" />*/}
-          </button>
-          <button
-            onClick={justifyElementCallback}
-            className="toolbar-item"
-            aria-label="Justify Align"
-          >
+          </ToolbarItemButton>
+          <ToolbarItemButton onClick={justifyElementCallback} aria-label="Justify Align">
             <BsJustify />
-            {/*<i className="format justify-align" />*/}
-          </button>{' '}
+          </ToolbarItemButton>{' '}
         </>
       )}
-    </div>
+    </Toolbar>
   );
 };
 

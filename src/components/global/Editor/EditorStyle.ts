@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const EditorStyle = createGlobalStyle`
-  
+
   .other h2 {
     font-size: 18px;
     color: #444;
@@ -33,48 +33,16 @@ export const EditorStyle = createGlobalStyle`
     text-align: right;
   }
 
-  .editor-container {
-    margin: 20px auto 20px auto;
-    border: 1px solid #ddd;
-    border-radius: 2px;
-    max-width: 600px;
-    color: #000;
-    position: relative;
-    line-height: 20px;
-    font-weight: 400;
-    text-align: left;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
-
-  .editor-inner {
-    background: #fff;
-    position: relative;
-  }
-
   .editor-input {
     min-height: 150px;
     resize: none;
     font-size: 15px;
-    caret-color: rgb(5, 5, 5);
+    //caret-color: rgb(5, 5, 5);
     position: relative;
     tab-size: 1;
     outline: 0;
     padding: 15px 10px;
     caret-color: #444;
-  }
-
-  .editor-placeholder {
-    color: #999;
-    overflow: hidden;
-    position: absolute;
-    text-overflow: ellipsis;
-    top: 15px;
-    left: 10px;
-    font-size: 15px;
-    user-select: none;
-    display: inline-block;
-    pointer-events: none;
   }
 
   .editor-text-bold {
@@ -116,9 +84,7 @@ export const EditorStyle = createGlobalStyle`
     padding: 8px 8px 8px 52px;
     line-height: 1.53;
     font-size: 13px;
-    margin: 0;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin: 8px 0;
     tab-size: 2;
     /* white-space: pre; */
     overflow-x: auto;
@@ -138,6 +104,7 @@ export const EditorStyle = createGlobalStyle`
     text-align: right;
     min-width: 25px;
   }
+
   .editor-code:after {
     content: attr(data-highlight-language);
     top: 0;
@@ -182,8 +149,7 @@ export const EditorStyle = createGlobalStyle`
   }
 
   .editor-paragraph {
-    margin: 0;
-    margin-bottom: 8px;
+    margin: 0 0 8px;
     position: relative;
   }
 
@@ -195,8 +161,7 @@ export const EditorStyle = createGlobalStyle`
     font-size: 24px;
     color: rgb(5, 5, 5);
     font-weight: 400;
-    margin: 0;
-    margin-bottom: 12px;
+    margin: 0 0 12px;
     padding: 0;
   }
 
@@ -204,15 +169,13 @@ export const EditorStyle = createGlobalStyle`
     font-size: 15px;
     color: rgb(101, 103, 107);
     font-weight: 700;
-    margin: 0;
-    margin-top: 10px;
+    margin: 10px 0 0;
     padding: 0;
     text-transform: uppercase;
   }
 
   .editor-quote {
-    margin: 0;
-    margin-left: 20px;
+    margin: 0 0 0 20px;
     font-size: 15px;
     color: rgb(101, 103, 107);
     border-left-color: rgb(206, 208, 212);
@@ -223,14 +186,12 @@ export const EditorStyle = createGlobalStyle`
 
   .editor-list-ol {
     padding: 0;
-    margin: 0;
-    margin-left: 16px;
+    margin: 0 0 0 16px;
   }
 
   .editor-list-ul {
     padding: 0;
-    margin: 0;
-    margin-left: 16px;
+    margin: 0 0 0 16px;
   }
 
   .editor-listitem {
@@ -248,211 +209,6 @@ export const EditorStyle = createGlobalStyle`
 
   pre::-webkit-scrollbar-thumb {
     background: #999;
-  }
-
-  .emoji {
-    color: transparent;
-    background-size: 16px 16px;
-    background-position: center;
-    background-repeat: no-repeat;
-    vertical-align: middle;
-    margin: 0 -1px;
-  }
-
-  .emoji-inner {
-    padding: 0 0.15em;
-  }
-
-  .emoji-inner::selection {
-    color: transparent;
-    background-color: rgba(150, 150, 150, 0.4);
-  }
-
-  .emoji-inner::moz-selection {
-    color: transparent;
-    background-color: rgba(150, 150, 150, 0.4);
-  }
-
-  .emoji.happysmile {
-    background-image: url(./images/emoji/1F642.png);
-  }
-
-  .toolbar {
-    display: flex;
-    margin-bottom: 1px;
-    background: #fff;
-    padding: 4px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    vertical-align: middle;
-  }
-
-  .toolbar button.toolbar-item {
-    border: 0;
-    display: flex;
-    background: none;
-    border-radius: 10px;
-    padding: 8px;
-    cursor: pointer;
-    vertical-align: middle;
-    font-size: 18px;
-  }
-
-  .toolbar button.toolbar-item:disabled {
-    cursor: not-allowed;
-    opacity: 0.2;
-  }
-
-  .toolbar button.toolbar-item.spaced {
-    margin-right: 2px;
-  }
-
-  .toolbar button.toolbar-item i.format {
-    background-size: contain;
-    //display: inline-block;
-    height: 18px;
-    width: 18px;
-    margin-top: 2px;
-    vertical-align: -0.25em;
-    display: flex;
-    opacity: 0.6;
-  }
-
-  .toolbar button.toolbar-item:disabled i.format {
-    opacity: 0.2;
-  }
-
-  .toolbar button.toolbar-item.active {
-    background-color: rgba(223, 232, 250, 0.3);
-  }
-
-  .toolbar button.toolbar-item.active i {
-    opacity: 1;
-  }
-
-  .toolbar .toolbar-item:hover:not([disabled]) {
-    background-color: #eee;
-  }
-
-  .toolbar .divider {
-    width: 1px;
-    background-color: #eee;
-    margin: 0 4px;
-  }
-
-  .toolbar select.toolbar-item {
-    border: 0;
-    display: flex;
-    background: none;
-    border-radius: 10px;
-    padding: 8px;
-    vertical-align: middle;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 70px;
-    font-size: 14px;
-    color: #777;
-    text-overflow: ellipsis;
-  }
-
-  .toolbar select.code-language {
-    text-transform: capitalize;
-    width: 130px;
-  }
-
-  .toolbar .toolbar-item .text {
-    display: flex;
-    line-height: 20px;
-    width: 200px;
-    vertical-align: middle;
-    font-size: 14px;
-    color: #777;
-    text-overflow: ellipsis;
-    width: 70px;
-    overflow: hidden;
-    height: 20px;
-    text-align: left;
-  }
-
-  .toolbar .toolbar-item .icon {
-    display: flex;
-    width: 20px;
-    height: 20px;
-    user-select: none;
-    margin-right: 8px;
-    line-height: 16px;
-    background-size: contain;
-  }
-
-  .toolbar i.chevron-down {
-    margin-top: 3px;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    user-select: none;
-  }
-
-  .toolbar i.chevron-down.inside {
-    width: 16px;
-    height: 16px;
-    display: flex;
-    margin-left: -25px;
-    margin-top: 11px;
-    margin-right: 10px;
-    pointer-events: none;
-  }
-
-  i.chevron-down {
-    background-color: transparent;
-    background-size: contain;
-    display: inline-block;
-    height: 8px;
-    width: 8px;
-    background-image: url(images/icons/chevron-down.svg);
-  }
-
-  #block-controls button:hover {
-    background-color: #efefef;
-  }
-
-  #block-controls button:focus-visible {
-    border-color: blue;
-  }
-
-  #block-controls span.block-type {
-    background-size: contain;
-    display: block;
-    width: 18px;
-    height: 18px;
-    margin: 2px;
-  }
-
-  #block-controls span.block-type.paragraph {
-    background-image: url(images/icons/text-paragraph.svg);
-  }
-
-  #block-controls span.block-type.h1 {
-    background-image: url(images/icons/type-h1.svg);
-  }
-
-  #block-controls span.block-type.h2 {
-    background-image: url(images/icons/type-h2.svg);
-  }
-
-  #block-controls span.block-type.quote {
-    background-image: url(images/icons/chat-square-quote.svg);
-  }
-
-  #block-controls span.block-type.ul {
-    background-image: url(images/icons/list-ul.svg);
-  }
-
-  #block-controls span.block-type.ol {
-    background-image: url(images/icons/list-ol.svg);
-  }
-
-  #block-controls span.block-type.code {
-    background-image: url(images/icons/code.svg);
   }
 
   .dropdown {
@@ -604,86 +360,6 @@ export const EditorStyle = createGlobalStyle`
     height: 20px;
     width: 20px;
     vertical-align: -0.25em;
-  }
-
-  i.undo {
-    background-image: url(images/icons/arrow-counterclockwise.svg);
-  }
-
-  i.redo {
-    background-image: url(images/icons/arrow-clockwise.svg);
-  }
-
-  .icon.paragraph {
-    background-image: url(images/icons/text-paragraph.svg);
-  }
-
-  .icon.large-heading,
-  .icon.h1 {
-    background-image: url(images/icons/type-h1.svg);
-  }
-
-  .icon.small-heading,
-  .icon.h2 {
-    background-image: url(images/icons/type-h2.svg);
-  }
-
-  .icon.bullet-list,
-  .icon.ul {
-    background-image: url(images/icons/list-ul.svg);
-  }
-
-  .icon.numbered-list,
-  .icon.ol {
-    background-image: url(images/icons/list-ol.svg);
-  }
-
-  .icon.quote {
-    background-image: url(images/icons/chat-square-quote.svg);
-  }
-
-  .icon.code {
-    background-image: url(images/icons/code.svg);
-  }
-
-  i.bold {
-    background-image: url(images/icons/type-bold.svg);
-  }
-
-  i.italic {
-    background-image: url(images/icons/type-italic.svg);
-  }
-
-  i.underline {
-    background-image: url(images/icons/type-underline.svg);
-  }
-
-  i.strikethrough {
-    background-image: url(images/icons/type-strikethrough.svg);
-  }
-
-  i.code {
-    background-image: url(images/icons/code.svg);
-  }
-
-  i.link {
-    background-image: url(images/icons/link.svg);
-  }
-
-  i.left-align {
-    background-image: url(images/icons/text-left.svg);
-  }
-
-  i.center-align {
-    background-image: url(images/icons/text-center.svg);
-  }
-
-  i.right-align {
-    background-image: url(images/icons/text-right.svg);
-  }
-
-  i.justify-align {
-    background-image: url(images/icons/justify.svg);
   }
 
 `;

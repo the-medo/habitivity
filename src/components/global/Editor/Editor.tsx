@@ -14,11 +14,11 @@ import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
 import { TRANSFORMERS } from '@lexical/markdown';
-
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin/ListMaxIndentLevelPlugin';
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin/CodeHighlightPlugin';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin/AutoLinkPlugin';
 import { useMemo } from 'react';
+import { EditorContainer, EditorInner, Placeholder } from './editorComponents';
 
 const editorConfig: InitialConfigType = {
   // The editor theme
@@ -47,16 +47,13 @@ const editorConfig: InitialConfigType = {
 
 const Editor = (): JSX.Element => {
   const contentEditable = useMemo(() => <ContentEditable className="editor-input" />, []);
-  const placeholder = useMemo(
-    () => <div className="editor-placeholder">Enter some rich text...</div>,
-    [],
-  );
+  const placeholder = useMemo(() => <Placeholder>Enter some rich text...</Placeholder>, []);
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="editor-container">
+      <EditorContainer>
         <ToolbarPlugin />
-        <div className="editor-inner">
+        <EditorInner>
           <RichTextPlugin
             contentEditable={contentEditable}
             placeholder={placeholder}
@@ -69,8 +66,8 @@ const Editor = (): JSX.Element => {
           <AutoLinkPlugin />
           <ListMaxIndentLevelPlugin maxDepth={7} />
           <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-        </div>
-      </div>
+        </EditorInner>
+      </EditorContainer>
     </LexicalComposer>
   );
 };
