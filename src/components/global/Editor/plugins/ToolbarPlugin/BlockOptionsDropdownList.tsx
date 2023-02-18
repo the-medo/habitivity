@@ -17,6 +17,12 @@ import {
   BsTypeH1,
   BsTypeH2,
 } from 'react-icons/bs';
+import {
+  DropdownContainer,
+  DropdownItem,
+  DropdownItemIcon,
+  DropdownItemText,
+} from './dropdownComponents';
 
 interface BlockOptionsDropdownListProps {
   editor: LexicalEditor;
@@ -149,57 +155,56 @@ const BlockOptionsDropdownList = ({
   }, [blockType, editor, setShowBlockOptionsDropDown]);
 
   return (
-    <div className="dropdown" ref={dropDownRef}>
-      <button className="item" onClick={formatParagraph}>
-        <span className="icon">
+    <DropdownContainer ref={dropDownRef}>
+      <DropdownItem $active={blockType === 'paragraph'} onClick={formatParagraph}>
+        <DropdownItemIcon>
           <BsTextParagraph />
-        </span>
-        <span className="text">Normal</span>
-        {blockType === 'paragraph' && <span className="active" />}
-      </button>
-      <button className="item" onClick={formatLargeHeading}>
-        <span className="icon">
+        </DropdownItemIcon>
+        <DropdownItemText>Normal</DropdownItemText>
+      </DropdownItem>
+
+      <DropdownItem $active={blockType === 'h1'} onClick={formatLargeHeading}>
+        <DropdownItemIcon>
           <BsTypeH1 />
-        </span>
-        <span className="text">Large Heading</span>
-        {blockType === 'h1' && <span className="active" />}
-      </button>
-      <button className="item" onClick={formatSmallHeading}>
-        <span className="icon">
+        </DropdownItemIcon>
+        <DropdownItemText>Large Heading</DropdownItemText>
+      </DropdownItem>
+
+      <DropdownItem $active={blockType === 'h2'} onClick={formatSmallHeading}>
+        <DropdownItemIcon>
           <BsTypeH2 />
-        </span>
-        <span className="text">Small Heading</span>
-        {blockType === 'h2' && <span className="active" />}
-      </button>
-      <button className="item" onClick={formatBulletList}>
-        <span className="icon">
+        </DropdownItemIcon>
+        <DropdownItemText>Small Heading</DropdownItemText>
+      </DropdownItem>
+
+      <DropdownItem $active={blockType === 'ul'} onClick={formatBulletList}>
+        <DropdownItemIcon>
           <BsListUl />
-        </span>
-        <span className="text">Bullet List</span>
-        {blockType === 'ul' && <span className="active" />}
-      </button>
-      <button className="item" onClick={formatNumberedList}>
-        <span className="icon">
+        </DropdownItemIcon>
+        <DropdownItemText>Bullet List</DropdownItemText>
+      </DropdownItem>
+
+      <DropdownItem $active={blockType === 'ol'} onClick={formatNumberedList}>
+        <DropdownItemIcon>
           <BsListOl />
-        </span>
-        <span className="text">Numbered List</span>
-        {blockType === 'ol' && <span className="active" />}
-      </button>
-      <button className="item" onClick={formatQuote}>
-        <span className="icon">
+        </DropdownItemIcon>
+        <DropdownItemText>Numbered List</DropdownItemText>
+      </DropdownItem>
+
+      <DropdownItem $active={blockType === 'quote'} onClick={formatQuote}>
+        <DropdownItemIcon>
           <BsChatSquareQuote />
-        </span>
-        <span className="text">Quote</span>
-        {blockType === 'quote' && <span className="active" />}
-      </button>
-      <button className="item" onClick={formatCode}>
-        <span className="icon">
+        </DropdownItemIcon>
+        <DropdownItemText>Quote</DropdownItemText>
+      </DropdownItem>
+
+      <DropdownItem $active={blockType === 'code'} onClick={formatCode}>
+        <DropdownItemIcon>
           <BsCode />
-        </span>
-        <span className="text">Code Block</span>
-        {blockType === 'code' && <span className="active" />}
-      </button>
-    </div>
+        </DropdownItemIcon>
+        <DropdownItemText>Code Block</DropdownItemText>
+      </DropdownItem>
+    </DropdownContainer>
   );
 };
 

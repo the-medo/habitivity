@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { COLORS } from '../../../../../styles/CustomStyles';
 
 interface ToolbarItemButtonProps {
   $active?: boolean;
@@ -7,7 +8,6 @@ interface ToolbarItemButtonProps {
 export const ToolbarItemButton = styled.button<ToolbarItemButtonProps>`
   border: 0;
   display: flex;
-  background: none;
   border-radius: 10px;
   padding: 8px;
   cursor: pointer;
@@ -15,7 +15,8 @@ export const ToolbarItemButton = styled.button<ToolbarItemButtonProps>`
   font-size: 18px;
   gap: 0.25rem;
 
-  ${p => p.$active && 'background-color: rgba(223, 232, 250, 0.3);'}
+  background-color: ${p => (p.$active ? COLORS.PRIMARY_LIGHT : '#fff')};
+
   &:disabled {
     cursor: not-allowed;
     opacity: 0.2;
