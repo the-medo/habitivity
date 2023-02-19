@@ -22,7 +22,7 @@ import {
   DropdownItem,
   DropdownItemIcon,
   DropdownItemText,
-} from './dropdownComponents';
+} from './componentsDropdown';
 
 interface BlockOptionsDropdownListProps {
   editor: LexicalEditor;

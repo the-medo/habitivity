@@ -3,7 +3,7 @@ import DynamicIcon from '../../../DynamicIcon';
 import { BsChevronDown } from 'react-icons/bs';
 import { createPortal } from 'react-dom';
 import BlockOptionsDropdownList from './BlockOptionsDropdownList';
-import { Divider, ToolbarItemButton } from './toolbarComponents';
+import { Divider, ToolbarItemButton } from './componentsToolbar';
 import styled from 'styled-components';
 import { LexicalEditor } from 'lexical';
 
