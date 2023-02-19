@@ -18,7 +18,7 @@ import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin/ListMax
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin/CodeHighlightPlugin';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin/AutoLinkPlugin';
 import { useMemo } from 'react';
-import { EditorContainer, EditorInner, Placeholder } from './editorComponents';
+import { EditorContainer, EditorInner, Placeholder } from './componentsEditor';
 
 const editorConfig: InitialConfigType = {
   // The editor theme

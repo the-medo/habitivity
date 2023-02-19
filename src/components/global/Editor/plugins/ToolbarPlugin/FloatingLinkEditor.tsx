@@ -12,6 +12,14 @@ import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { mergeRegister } from '@lexical/utils';
 import { getSelectedNode } from './getSelectedNode';
 import { LOW_PRIORITY } from './ToolbarPlugin';
+import {
+  LinkEditIcon,
+  LinkEditor,
+  LinkEditorDiv,
+  LinkEditorInput,
+  LinkEditorLink,
+} from './componentsLinkEditor';
+import { BsPencil } from 'react-icons/bs';
 
 function positionEditorElement(editor: HTMLDivElement, rect: DOMRect | null) {
   if (rect === null) {
@@ -157,30 +165,29 @@ const FloatingLinkEditor: React.FC<FloatingLinkEditorProps> = ({ editor }) => {
   const divOnClickHandler = useCallback(() => setEditMode(true), []);
 
   return (
-    <div ref={editorRef} className="link-editor">
+    <LinkEditor ref={editorRef}>
       {isEditMode ? (
-        <input
+        <LinkEditorInput
           ref={inputRef}
-          className="link-input"
           value={linkUrl}
           onChange={inputChangeHandler}
           onKeyDown={inputOnKeyDownHandler}
         />
       ) : (
-        <div className="link-input">
-          <a href={linkUrl} target="_blank" rel="noopener noreferrer">
+        <LinkEditorDiv>
+          <LinkEditorLink href={linkUrl} target="_blank" rel="noopener noreferrer">
             {linkUrl}
-          </a>
-          <div
-            className="link-edit"
-            role="button"
+          </LinkEditorLink>
+          <LinkEditIcon
             tabIndex={0}
-            onMouseDown={divOnMouseDownHandler}
+            // onMouseDown={divOnMouseDownHandler}
             onClick={divOnClickHandler}
-          />
-        </div>
+          >
+            <BsPencil />
+          </LinkEditIcon>
+        </LinkEditorDiv>
       )}
-    </div>
+    </LinkEditor>
   );
 };
 

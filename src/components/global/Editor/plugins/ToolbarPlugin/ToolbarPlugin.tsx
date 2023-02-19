@@ -34,7 +34,7 @@ import {
   BsTypeUnderline,
 } from 'react-icons/bs';
 import DynamicIcon from '../../../DynamicIcon';
-import { Divider, Toolbar, ToolbarItemButton } from './toolbarComponents';
+import { Divider, Toolbar, ToolbarItemButton } from './componentsToolbar';
 import ToolbarBlockType, { BlockType } from './ToolbarBlockType';
 import SelectCodeLanguage from './SelectCodeLanguage';
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { $getNodeByKey, LexicalEditor } from 'lexical';
 import { $isCodeNode, getCodeLanguages } from '@lexical/code';
-import { ToolbarSelect } from './toolbarComponents';
+import { ToolbarSelect } from './componentsToolbar';
 import styled from 'styled-components';
 
 export const ToolbarCodeLanguageSelect = styled(ToolbarSelect)`
