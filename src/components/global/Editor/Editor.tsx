@@ -19,6 +19,8 @@ import CodeHighlightPlugin from './plugins/CodeHighlightPlugin/CodeHighlightPlug
 import AutoLinkPlugin from './plugins/AutoLinkPlugin/AutoLinkPlugin';
 import { useMemo } from 'react';
 import { EditorContainer, EditorInner, Placeholder } from './componentsEditor';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import { EditorState, LexicalEditor } from 'lexical';
 
 const editorConfig: InitialConfigType = {
   // The editor theme
@@ -45,12 +47,26 @@ const editorConfig: InitialConfigType = {
   ],
 };
 
-const Editor = (): JSX.Element => {
+interface EditorProps {
+  onChange: (editorState: EditorState, editor: LexicalEditor) => void;
+  initialEditorState?: string;
+}
+
+const Editor = ({ onChange, initialEditorState }: EditorProps): JSX.Element => {
   const contentEditable = useMemo(() => <ContentEditable className="editor-input" />, []);
   const placeholder = useMemo(() => <Placeholder>Enter some rich text...</Placeholder>, []);
 
+  const initialConfig = useMemo(() => {
+    return {
+      ...editorConfig,
+      editorState: initialEditorState,
+    };
+  }, [initialEditorState]);
+
+  console.log('initialConfig: ', initialConfig);
+
   return (
-    <LexicalComposer initialConfig={editorConfig}>
+    <LexicalComposer initialConfig={initialConfig}>
       <EditorContainer>
         <ToolbarPlugin />
         <EditorInner>
@@ -59,6 +75,7 @@ const Editor = (): JSX.Element => {
             placeholder={placeholder}
             ErrorBoundary={LexicalErrorBoundary}
           />
+          <OnChangePlugin onChange={onChange} />
           <AutoFocusPlugin />
           <CodeHighlightPlugin />
           <ListPlugin />
