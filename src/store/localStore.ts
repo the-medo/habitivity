@@ -20,6 +20,7 @@ export enum LSKey {
   SCREEN_SEGMENT_TASK_GROUP = '10',
   SCREEN_SEGMENT_GROUPS_OR_TASKS = '11',
   SCREEN_SEGMENT_TASK = '13',
+  SELECTED_DATE_SCREEN_JOURNAL = '14',
 }
 
 export interface LSValues {
@@ -36,6 +37,7 @@ export interface LSValues {
   [LSKey.SCREEN_SEGMENT_GROUPS_OR_TASKS]?: GroupsOrTasks;
   [LSKey.SCREEN_SEGMENT_GRAPHS_VIEW]?: GraphView;
   [LSKey.SCREEN_SEGMENT_TASK]?: string;
+  [LSKey.SELECTED_DATE_SCREEN_JOURNAL]?: Record<string, string | undefined>;
 }
 
 export function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {

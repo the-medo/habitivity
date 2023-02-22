@@ -11,6 +11,7 @@ import { appReducer } from './appSlice';
 import { routerReducer, routerSlice } from '../routes/routerSlice';
 import { dashboardReducer, dashboardSlice } from '../screens/Dashboard/dashboardSlice';
 import { screenReducer, screenSlice } from '../screens/screenSlice';
+import { journalReducer, journalSlice } from '../screens/Journal/journalSlice';
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     [screenSlice.name]: screenReducer,
     [dashboardSlice.name]: dashboardReducer,
     [routerSlice.name]: routerReducer,
+    [journalSlice.name]: journalReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),

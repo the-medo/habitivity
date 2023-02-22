@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const EditorContainer = styled.div`
-  margin: 20px auto 20px auto;
+  //margin: 20px auto 20px auto;
   border: 1px solid #ddd;
-  max-width: 600px;
+  //max-width: 600px;
   color: #000;
   position: relative;
   line-height: 20px;
