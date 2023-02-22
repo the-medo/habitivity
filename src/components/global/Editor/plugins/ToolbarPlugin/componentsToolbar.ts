@@ -35,6 +35,7 @@ export const Divider = styled.div`
 
 export const Toolbar = styled.div`
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: 1px;
   background: #fff;
   padding: 4px;

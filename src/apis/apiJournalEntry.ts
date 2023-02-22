@@ -85,6 +85,8 @@ export const apiJournalEntry = apiSlice
       >({
         queryFn: async ({ id, ...patch }, api) => {
           console.log('======== API ============ inside updateJournalEntry ====================');
+          console.log('patch: ', patch);
+
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const userId = (api.getState() as ReduxState).userReducer.user?.id ?? 'no-user-id';
 
@@ -93,13 +95,15 @@ export const apiJournalEntry = apiSlice
               db,
               '/Users/' + userId + '/JournalEntries/' + id,
             ).withConverter(journalEntryConverter);
+
             await updateDoc(journalEntryRef, patch);
+
             return { data: undefined };
           } catch (e) {
             return { error: e };
           }
         },
-        invalidatesTags: (result, error, { id }) => [{ type: 'JournalEntry', id }],
+        // invalidatesTags: (result, error, { id }) => [{ type: 'JournalEntry', id }],
       }),
 
       deleteJournalEntry: builder.mutation<JournalEntry, string>({
