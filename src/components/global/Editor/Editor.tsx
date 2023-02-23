@@ -22,8 +22,6 @@ import { EditorContainer, EditorInner, Placeholder } from './componentsEditor';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { EditorState, LexicalEditor } from 'lexical';
 import { Spin } from 'antd';
-import { useLexicalEditor } from '@lexical/react/DEPRECATED_useLexicalEditor';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import debounce from 'lodash.debounce';
 
 const editorConfig: InitialConfigType = {
@@ -71,7 +69,7 @@ const Editor = ({
   const editorRef = useRef<LexicalEditor>();
   const placeholder = useMemo(() => <Placeholder>Enter some rich text...</Placeholder>, []);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const [contentSaved, setContentSaved] = useState(false);
+  const [contentSaved, setContentSaved] = useState(true);
 
   const initialConfig = useMemo(() => {
     return {
@@ -82,35 +80,44 @@ const Editor = ({
   }, [disabled, initialEditorState]);
 
   useEffect(() => {
+    window.onbeforeunload = contentSaved
+      ? null
+      : (e: BeforeUnloadEvent) => {
+          e.preventDefault();
+          e.returnValue = '';
+
+          if (editorStateRef.current && editorRef.current) {
+            console.log('IN saveOnLeave !!!!!!!', editorRef.current.getEditorState());
+            onChange(editorStateRef.current, editorRef.current);
+          }
+        };
+
     return () => {
-      console.log('IN RETURN!!!!!!!', editorRef.current?.getEditorState());
-      if (editorStateRef.current && editorRef.current) {
-        onChange(editorStateRef.current, editorRef.current);
-      }
+      window.onbeforeunload = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [contentSaved, onChange]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChangeHandlerDebounced = useCallback(
     debounce((editorState: EditorState, editor: LexicalEditor) => {
-      if (!contentSaved) {
-        editorStateRef.current = editorState;
-        editorRef.current = editor;
-        onChange(editorState, editor);
-        setContentSaved(true);
-      }
+      editorStateRef.current = editorState;
+      editorRef.current = editor;
+      onChange(editorState, editor);
+      setContentSaved(true);
     }, debounceTime),
-    [onChange, contentSaved],
+    [onChange],
   );
 
   const onChangeHandler = useCallback(
     (editorState: EditorState, editor: LexicalEditor) => {
-      console.log('On change detected!!!');
       if (isInitialLoad) {
+        console.log('EDITOR - Initial load');
+        editorStateRef.current = editorState;
+        editorRef.current = editor;
         setIsInitialLoad(false);
         return;
       }
+      console.log('EDITOR - ON CHANGE DETECTED');
 
       setContentSaved(false);
       onChangeHandlerDebounced(editorState, editor);
