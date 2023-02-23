@@ -26,15 +26,15 @@ const JournalDefault: React.FC = () => {
   const selectedDate = useSelector((state: ReduxState) => state.journal.selectedDate);
   const selectedDateDayjs = useMemo(() => dayjs(selectedDate), [selectedDate]);
 
-  const [createJournalEntry, { isLoading: isLoadingCreate, isSuccess: isSuccessCreate }] =
+  const [createJournalEntry /*{ isLoading: isLoadingCreate, isSuccess: isSuccessCreate }*/] =
     useCreateJournalEntryMutation();
-  const [updateJournalEntry, { isLoading: isLoadingUpdate, isSuccess: isSuccessUpdate }] =
+  const [updateJournalEntry /* { isLoading: isLoadingUpdate, isSuccess: isSuccessUpdate } */] =
     useUpdateJournalEntryMutation();
   const {
     data: activeJournalEntry,
-    isLoading: isLoadingJournalEntry,
+    // isLoading: isLoadingJournalEntry,
     isFetching: isFetchingJournalEntry,
-  } = useGetJournalEntryByIdQuery(selectedDate);
+  } = useGetJournalEntryByIdQuery(selectedDate, { refetchOnMountOrArgChange: true });
 
   const onChangeHandler = useCallback(
     (editorState: EditorState, _editor: LexicalEditor) => {
