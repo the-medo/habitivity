@@ -5,6 +5,7 @@ import { Dayjs } from 'dayjs';
 import DynamicIcon from '../../../components/global/DynamicIcon';
 import { Segmented } from '../../../components/global/Segmented';
 import { SegmentedLabeledOption } from 'antd/es/segmented';
+import JournalEditor from '../../Journal/JournalEditor';
 
 const DayGraphWrapper = styled.div`
   display: flex;
@@ -58,6 +59,7 @@ const DayPieGraphWrapper: React.FC<DayPieGraphWrapperProps> = ({ selectedDate })
         onChange={handleDisplayTypeChange}
       />
       <DayPieGraph selectedDate={selectedDate} dayPieGraphDisplayType={displayType} />
+      {selectedDate && <JournalEditor selectedDate={selectedDate.format('YYYY-MM-DD')} />}
     </DayGraphWrapper>
   );
 };

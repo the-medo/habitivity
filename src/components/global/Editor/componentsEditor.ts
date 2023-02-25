@@ -3,7 +3,13 @@ import styled from 'styled-components';
 export const EditorContainer = styled.div`
   //margin: 20px auto 20px auto;
   border: 1px solid #ddd;
-  //max-width: 600px;
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-self: stretch;
+
+  //max-width: 400px;
   color: #000;
   position: relative;
   line-height: 20px;

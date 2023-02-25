@@ -4,12 +4,14 @@ import { DateRange } from '../helpers/types/DateRange';
 import dayjs from 'dayjs';
 import { GroupsOrTasks } from '../types/GroupsOrTasks';
 import { GraphView } from '../types/GraphView';
+import { OverviewOrJournal } from './Dashboard/DashboardOverview/DashboardDayWrapper';
 
 export interface ScreenState {
   segmentTaskGroup: string;
   segmentTask: string;
   segmentGroupsOrTasks: GroupsOrTasks;
   segmentGraphView?: GraphView;
+  segmentOverviewOrJournal?: OverviewOrJournal;
   dateRange: DateRange;
   selectedDay: string;
   displayUnits: boolean;
@@ -20,6 +22,8 @@ const initialState: ScreenState = {
   segmentTask: getItem(LSKey.SCREEN_SEGMENT_TASK) ?? 'all',
   segmentGroupsOrTasks: getItem(LSKey.SCREEN_SEGMENT_GROUPS_OR_TASKS) ?? GroupsOrTasks.GROUPS,
   segmentGraphView: getItem(LSKey.SCREEN_SEGMENT_GRAPHS_VIEW) ?? GraphView.STACKED,
+  segmentOverviewOrJournal:
+    getItem(LSKey.SCREEN_SEGMENT_OVERVIEW_OR_JOURNAL) ?? OverviewOrJournal.OVERVIEW,
   dateRange: getItem(LSKey.SCREEN_DATERANGE) ?? {
     startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
@@ -52,6 +56,10 @@ export const screenSlice = createSlice({
       setItem(LSKey.SCREEN_SEGMENT_GRAPHS_VIEW, action.payload);
       state.segmentGraphView = action.payload;
     },
+    setSegmentOverviewOrJournal: (state, action: PayloadAction<OverviewOrJournal>) => {
+      setItem(LSKey.SCREEN_SEGMENT_OVERVIEW_OR_JOURNAL, action.payload);
+      state.segmentOverviewOrJournal = action.payload;
+    },
     setDateRange: (state, action: PayloadAction<DateRange>) => {
       setItem(LSKey.SCREEN_DATERANGE, action.payload);
       state.dateRange = action.payload;
@@ -70,6 +78,7 @@ export const {
   setSegmentTask,
   setSegmentGroupsOrTasks,
   setSegmentGraphView,
+  setSegmentOverviewOrJournal,
   setSelectedDay,
   setDateRange,
   setDisplayUnits,
