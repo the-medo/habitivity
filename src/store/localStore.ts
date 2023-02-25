@@ -5,6 +5,7 @@ import { DashboardSubpage } from '../screens/Dashboard/dashboardSlice';
 import { DateRange } from '../helpers/types/DateRange';
 import { GroupsOrTasks } from '../types/GroupsOrTasks';
 import { GraphView } from '../types/GraphView';
+import { OverviewOrJournal } from '../screens/Dashboard/DashboardOverview/DashboardDayWrapper';
 
 export enum LSKey {
   USER = '1',
@@ -21,6 +22,7 @@ export enum LSKey {
   SCREEN_SEGMENT_GROUPS_OR_TASKS = '11',
   SCREEN_SEGMENT_TASK = '13',
   SELECTED_DATE_SCREEN_JOURNAL = '14',
+  SCREEN_SEGMENT_OVERVIEW_OR_JOURNAL = '15',
 }
 
 export interface LSValues {
@@ -38,6 +40,7 @@ export interface LSValues {
   [LSKey.SCREEN_SEGMENT_GRAPHS_VIEW]?: GraphView;
   [LSKey.SCREEN_SEGMENT_TASK]?: string;
   [LSKey.SELECTED_DATE_SCREEN_JOURNAL]?: Record<string, string | undefined>;
+  [LSKey.SCREEN_SEGMENT_OVERVIEW_OR_JOURNAL]?: OverviewOrJournal;
 }
 
 export function setItem<T extends LSKey>(key: T, value: LSValues[T]): void {

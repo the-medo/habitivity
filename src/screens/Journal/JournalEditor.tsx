@@ -11,9 +11,13 @@ import {
 
 interface JournalEditorProps {
   selectedDate: string;
+  refetchOnMountOrArgChange?: boolean;
 }
 
-const JournalEditor: React.FC<JournalEditorProps> = ({ selectedDate }) => {
+const JournalEditor: React.FC<JournalEditorProps> = ({
+  selectedDate,
+  refetchOnMountOrArgChange = true,
+}) => {
   const [createJournalEntry /*{ isLoading: isLoadingCreate, isSuccess: isSuccessCreate }*/] =
     useCreateJournalEntryMutation();
   const [updateJournalEntry /* { isLoading: isLoadingUpdate, isSuccess: isSuccessUpdate } */] =
@@ -22,7 +26,7 @@ const JournalEditor: React.FC<JournalEditorProps> = ({ selectedDate }) => {
     data: activeJournalEntry,
     // isLoading: isLoadingJournalEntry,
     isFetching: isFetchingJournalEntry,
-  } = useGetJournalEntryByIdQuery(selectedDate, { refetchOnMountOrArgChange: true });
+  } = useGetJournalEntryByIdQuery(selectedDate, { refetchOnMountOrArgChange });
 
   const onChangeHandler = useCallback(
     (editorState: EditorState, _editor: LexicalEditor) => {
