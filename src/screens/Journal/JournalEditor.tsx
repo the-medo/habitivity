@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import Editor from '../../components/global/Editor/Editor';
 import { EditorState, LexicalEditor } from 'lexical';
 import { JournalEntry } from '../../types/JournalEntry';
@@ -11,13 +11,9 @@ import {
 
 interface JournalEditorProps {
   selectedDate: string;
-  refetchOnMountOrArgChange?: boolean;
 }
 
-const JournalEditor: React.FC<JournalEditorProps> = ({
-  selectedDate,
-  refetchOnMountOrArgChange = true,
-}) => {
+const JournalEditor: React.FC<JournalEditorProps> = ({ selectedDate }) => {
   const [createJournalEntry /*{ isLoading: isLoadingCreate, isSuccess: isSuccessCreate }*/] =
     useCreateJournalEntryMutation();
   const [updateJournalEntry /* { isLoading: isLoadingUpdate, isSuccess: isSuccessUpdate } */] =
@@ -26,7 +22,19 @@ const JournalEditor: React.FC<JournalEditorProps> = ({
     data: activeJournalEntry,
     // isLoading: isLoadingJournalEntry,
     isFetching: isFetchingJournalEntry,
-  } = useGetJournalEntryByIdQuery(selectedDate, { refetchOnMountOrArgChange });
+  } = useGetJournalEntryByIdQuery(selectedDate);
+
+  const [selectedDateChanged, setSelectedDateChanged] = React.useState(false);
+
+  useEffect(() => {
+    setSelectedDateChanged(true);
+  }, [selectedDate]);
+
+  useEffect(() => {
+    if (selectedDateChanged) {
+      setSelectedDateChanged(false);
+    }
+  }, [selectedDate, selectedDateChanged]);
 
   const onChangeHandler = useCallback(
     (editorState: EditorState, _editor: LexicalEditor) => {
@@ -58,13 +66,14 @@ const JournalEditor: React.FC<JournalEditorProps> = ({
   }, [activeJournalEntry]);
 
   if (isFetchingJournalEntry) return null;
+  if (selectedDateChanged) return null;
 
   return (
     <Editor
       onChange={onChangeHandler}
       initialEditorState={initialState}
       loading={isFetchingJournalEntry}
-      debounceTime={2000}
+      debounceTime={1000}
     />
   );
 };

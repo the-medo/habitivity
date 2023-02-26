@@ -95,7 +95,7 @@ const DashboardDayWrapper: React.FC = () => {
       />
       <TaskInfoWrapper>
         {segmentOverviewOrJournal === OverviewOrJournal.JOURNAL && (
-          <JournalEditor selectedDate={date} refetchOnMountOrArgChange={true} />
+          <JournalEditor selectedDate={date} />
         )}
         {segmentOverviewOrJournal === OverviewOrJournal.OVERVIEW && (
           <>

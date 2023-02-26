@@ -76,6 +76,14 @@ export const apiJournalEntry = apiSlice
             return { error: e };
           }
         },
+        onQueryStarted(entry, { dispatch, queryFulfilled }) {
+          const patchResult = dispatch(
+            apiJournalEntry.util.updateQueryData('getJournalEntryById', entry.id, draft => {
+              Object.assign(draft, entry);
+            }),
+          );
+          queryFulfilled.catch(patchResult.undo);
+        },
         invalidatesTags: [{ type: 'JournalEntry', id: 'LIST' }],
       }),
 
@@ -102,6 +110,14 @@ export const apiJournalEntry = apiSlice
           } catch (e) {
             return { error: e };
           }
+        },
+        onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+          const patchResult = dispatch(
+            apiJournalEntry.util.updateQueryData('getJournalEntryById', id, draft => {
+              Object.assign(draft, patch);
+            }),
+          );
+          queryFulfilled.catch(patchResult.undo);
         },
         // invalidatesTags: (result, error, { id }) => [{ type: 'JournalEntry', id }],
       }),
