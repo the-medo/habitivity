@@ -80,6 +80,13 @@ const Editor = ({
   }, [disabled, initialEditorState]);
 
   useEffect(() => {
+    if (editorRef.current) {
+      //TODO: solve
+      editorRef.current?.setEditorState(editorRef.current.parseEditorState(initialEditorState));
+    }
+  }, [initialEditorState]);
+
+  useEffect(() => {
     window.onbeforeunload = contentSaved
       ? null
       : (e: BeforeUnloadEvent) => {

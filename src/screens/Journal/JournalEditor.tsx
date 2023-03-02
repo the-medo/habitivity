@@ -57,21 +57,19 @@ const JournalEditor: React.FC<JournalEditorProps> = ({ selectedDate }) => {
     [selectedDate, activeJournalEntry, updateJournalEntry, createJournalEntry],
   );
 
-  const initialState = useMemo(() => {
-    if (activeJournalEntry) {
+  const editorState = useMemo(() => {
+    console.log('activeJournalEntry', activeJournalEntry);
+    if (!isFetchingJournalEntry && activeJournalEntry) {
       return activeJournalEntry.body;
     } else {
       return undefined;
     }
-  }, [activeJournalEntry]);
-
-  if (isFetchingJournalEntry) return null;
-  if (selectedDateChanged) return null;
+  }, [activeJournalEntry, isFetchingJournalEntry]);
 
   return (
     <Editor
       onChange={onChangeHandler}
-      initialEditorState={initialState}
+      initialEditorState={editorState}
       loading={isFetchingJournalEntry}
       debounceTime={1000}
     />
