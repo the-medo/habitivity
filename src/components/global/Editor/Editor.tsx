@@ -57,6 +57,9 @@ interface EditorProps {
   debounceTime?: number;
 }
 
+const emptyEditorState =
+  '{"root":{"children":[],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'; //{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"","type":"text","version":1}
+
 const Editor = ({
   onChange,
   initialEditorState,
@@ -81,8 +84,9 @@ const Editor = ({
 
   useEffect(() => {
     if (editorRef.current) {
-      //TODO: solve
-      editorRef.current?.setEditorState(editorRef.current.parseEditorState(initialEditorState));
+      editorRef.current?.setEditorState(
+        editorRef.current.parseEditorState(initialEditorState ?? emptyEditorState),
+      );
     }
   }, [initialEditorState]);
 
