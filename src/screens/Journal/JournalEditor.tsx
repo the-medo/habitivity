@@ -8,6 +8,7 @@ import {
   useGetJournalEntryByIdQuery,
   useUpdateJournalEntryMutation,
 } from '../../apis/apiJournalEntry';
+import { Spin } from 'antd';
 
 interface JournalEditorProps {
   selectedDate: string;
@@ -49,8 +50,10 @@ const JournalEditor: React.FC<JournalEditorProps> = ({ selectedDate }) => {
       console.log('SAVING!', journalEntry);
 
       if (activeJournalEntry) {
+        console.log('To update', journalEntry);
         updateJournalEntry(journalEntry);
       } else {
+        console.log('To create', journalEntry);
         createJournalEntry(journalEntry);
       }
     },
@@ -66,10 +69,25 @@ const JournalEditor: React.FC<JournalEditorProps> = ({ selectedDate }) => {
     }
   }, [activeJournalEntry, isFetchingJournalEntry]);
 
+  if (isFetchingJournalEntry || selectedDateChanged) {
+    return (
+      <Spin spinning={true}>
+        <Editor
+          editorState={undefined}
+          loading={true}
+          // eslint-disable-next-line react/jsx-no-bind,react-perf/jsx-no-new-function-as-prop
+          onChange={() => {
+            /* empty */
+          }}
+        />
+      </Spin>
+    );
+  }
+
   return (
     <Editor
       onChange={onChangeHandler}
-      initialEditorState={editorState}
+      editorState={editorState}
       loading={isFetchingJournalEntry}
       debounceTime={1000}
     />

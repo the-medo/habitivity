@@ -51,18 +51,17 @@ const editorConfig: InitialConfigType = {
 
 interface EditorProps {
   onChange: (editorState: EditorState, editor: LexicalEditor) => void;
-  initialEditorState?: string;
+  editorState?: string;
   disabled?: boolean;
   loading?: boolean;
   debounceTime?: number;
 }
 
-const emptyEditorState =
-  '{"root":{"children":[],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'; //{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"","type":"text","version":1}
+// const emptyEditorState = '{"root":{"children":[{"children":[],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}';
 
 const Editor = ({
   onChange,
-  initialEditorState,
+  editorState,
   disabled,
   loading,
   debounceTime = 2000,
@@ -77,18 +76,21 @@ const Editor = ({
   const initialConfig = useMemo(() => {
     return {
       ...editorConfig,
-      editorState: initialEditorState,
+      editorState: editorState,
       editable: !disabled,
     };
-  }, [disabled, initialEditorState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [disabled]); //, editorState
 
-  useEffect(() => {
+  /*useEffect(() => {
+    console.log('EDITOR - INITIAL EDITOR STATE CHANGED', editorState);
+
     if (editorRef.current) {
-      editorRef.current?.setEditorState(
-        editorRef.current.parseEditorState(initialEditorState ?? emptyEditorState),
+      editorRef.current.setEditorState(
+        editorRef.current.parseEditorState(editorState ?? emptyEditorState),
       );
     }
-  }, [initialEditorState]);
+  }, [editorState]);*/
 
   useEffect(() => {
     window.onbeforeunload = contentSaved

@@ -76,13 +76,9 @@ export const apiJournalEntry = apiSlice
             return { error: e };
           }
         },
-        onQueryStarted(entry, { dispatch, queryFulfilled }) {
-          const patchResult = dispatch(
-            apiJournalEntry.util.updateQueryData('getJournalEntryById', entry.id, draft => {
-              Object.assign(draft, entry);
-            }),
-          );
-          queryFulfilled.catch(patchResult.undo);
+        onQueryStarted(entry, { dispatch }) {
+          console.log('Updating cache - createJournalEntry', entry);
+          dispatch(apiJournalEntry.util.upsertQueryData('getJournalEntryById', entry.id, entry));
         },
         invalidatesTags: [{ type: 'JournalEntry', id: 'LIST' }],
       }),
@@ -112,6 +108,7 @@ export const apiJournalEntry = apiSlice
           }
         },
         onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+          console.log('Updating cache - updateJournalEntry');
           const patchResult = dispatch(
             apiJournalEntry.util.updateQueryData('getJournalEntryById', id, draft => {
               Object.assign(draft, patch);
